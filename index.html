@@ -627,7 +627,7 @@
               class="relative overflow-hidden rounded-xl aspect-square mb-2.5"
             >
               <img
-                   src="./assests/thai.png"
+                src="./assests/thai.png"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 alt="Italian"
               />
@@ -660,7 +660,7 @@
               class="relative overflow-hidden rounded-xl aspect-square mb-2.5"
             >
               <img
-                   src="./assests/thai.png"
+                src="./assests/thai.png"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 alt="French"
               />
@@ -693,7 +693,7 @@
               class="relative overflow-hidden rounded-xl aspect-square mb-2.5"
             >
               <img
-                 src="./assests/thai.png"
+                src="./assests/thai.png"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 alt="Japanese"
               />
@@ -726,7 +726,7 @@
               class="relative overflow-hidden rounded-xl aspect-square mb-2.5"
             >
               <img
-                  src="./assests/thai.png"
+                src="./assests/thai.png"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 alt="Dessert"
               />
@@ -756,7 +756,7 @@
         </div>
 
         <!-- ── Mobile: marquee infinite scroll ── -->
-        <div id="marqueeTrack" class="md:hidden overflow-hidden -mx-6">
+        <div id="marqueeTrack" class="md:hidden overflow-x-auto -mx-6">
           <div class="flex gap-3 w-max px-6">
             <!-- Set 1 -->
             <div class="group cursor-pointer w-[130px] flex-shrink-0">
@@ -764,7 +764,7 @@
                 class="relative overflow-hidden rounded-xl aspect-square mb-2"
               >
                 <img
-                   src="./assests/thai.png"
+                  src="./assests/thai.png"
                   class="w-full h-full object-cover"
                   alt="Thai"
                 />
@@ -786,7 +786,7 @@
                 class="relative overflow-hidden rounded-xl aspect-square mb-2"
               >
                 <img
-                     src="./assests/thai.png"
+                  src="./assests/thai.png"
                   class="w-full h-full object-cover"
                   alt="Italian"
                 />
@@ -808,7 +808,7 @@
                 class="relative overflow-hidden rounded-xl aspect-square mb-2"
               >
                 <img
-                     src="./assests/thai.png"
+                  src="./assests/thai.png"
                   class="w-full h-full object-cover"
                   alt="French"
                 />
@@ -830,7 +830,7 @@
                 class="relative overflow-hidden rounded-xl aspect-square mb-2"
               >
                 <img
-                    src="./assests/thai.png"
+                  src="./assests/thai.png"
                   class="w-full h-full object-cover"
                   alt="Japanese"
                 />
@@ -852,7 +852,7 @@
                 class="relative overflow-hidden rounded-xl aspect-square mb-2"
               >
                 <img
-                       src="./assests/thai.png"
+                  src="./assests/thai.png"
                   class="w-full h-full object-cover"
                   alt="Dessert"
                 />
@@ -876,7 +876,7 @@
                 class="relative overflow-hidden rounded-xl aspect-square mb-2"
               >
                 <img
-                     src="./assests/thai.png"
+                  src="./assests/thai.png"
                   class="w-full h-full object-cover"
                   alt="Thai"
                 />
@@ -898,7 +898,7 @@
                 class="relative overflow-hidden rounded-xl aspect-square mb-2"
               >
                 <img
-                    src="./assests/thai.png"
+                  src="./assests/thai.png"
                   class="w-full h-full object-cover"
                   alt="Italian"
                 />
@@ -920,7 +920,7 @@
                 class="relative overflow-hidden rounded-xl aspect-square mb-2"
               >
                 <img
-                     src="./assests/thai.png"
+                  src="./assests/thai.png"
                   class="w-full h-full object-cover"
                   alt="French"
                 />
@@ -942,7 +942,7 @@
                 class="relative overflow-hidden rounded-xl aspect-square mb-2"
               >
                 <img
-                    src="./assests/thai.png"
+                  src="./assests/thai.png"
                   class="w-full h-full object-cover"
                   alt="Japanese"
                 />
@@ -964,7 +964,7 @@
                 class="relative overflow-hidden rounded-xl aspect-square mb-2"
               >
                 <img
-                     src="./assests/thai.png"
+                  src="./assests/thai.png"
                   class="w-full h-full object-cover"
                   alt="Dessert"
                 />
@@ -988,39 +988,45 @@
 
     <script src="./static/js/main.js"></script>
     <script>
-      // ── Manual Touch Drag Scroll ──
-      const track = document.getElementById("marqueeTrack");
-      const wrapper = track.parentElement;
+      const wrapper = document.getElementById("marqueeTrack");
+      const track = wrapper.querySelector("div");
 
       let isDown = false;
-      let startX = 0;
-      let scrollLeft = 0;
+      let startX;
+      let scrollLeft;
 
-      // Touch events (mobile)
-      track.addEventListener(
-        "touchstart",
-        (e) => {
-          isDown = true;
-          startX = e.touches[0].pageX;
-          scrollLeft = wrapper.scrollLeft;
-        },
-        { passive: true },
-      );
+      wrapper.addEventListener("touchstart", (e) => {
+        isDown = true;
+        startX = e.touches[0].pageX - wrapper.offsetLeft;
+        scrollLeft = wrapper.scrollLeft;
+      });
 
-      track.addEventListener(
-        "touchmove",
-        (e) => {
-          if (!isDown) return;
-          const x = e.touches[0].pageX;
-          const walk = startX - x;
-          wrapper.scrollLeft = scrollLeft + walk;
-        },
-        { passive: true },
-      );
+      wrapper.addEventListener("touchmove", (e) => {
+        if (!isDown) return;
 
-      track.addEventListener("touchend", () => {
+        const x = e.touches[0].pageX - wrapper.offsetLeft;
+        const walk = (x - startX) * 1.2;
+
+        wrapper.scrollLeft = scrollLeft - walk;
+
+        checkInfinite();
+      });
+
+      wrapper.addEventListener("touchend", () => {
         isDown = false;
       });
+
+      function checkInfinite() {
+        const scrollWidth = track.scrollWidth / 2;
+
+        if (wrapper.scrollLeft >= scrollWidth) {
+          wrapper.scrollLeft -= scrollWidth;
+        }
+
+        if (wrapper.scrollLeft <= 0) {
+          wrapper.scrollLeft += scrollWidth;
+        }
+      }
     </script>
   </body>
 </html>
