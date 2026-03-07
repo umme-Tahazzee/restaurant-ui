@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Savoria — Fine Dining Experience</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./static/css/home.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              redPrimary: "#c0392b",
+              redDeep: "#96281b",
+              redPale: "#fdf0ee",
+              cream: "#f5f0eb",
+              textDark: "#1a1210",
+              textMid: "#4a3830",
+              borderSoft: "#e8ddd8",
+              gold: "#b8963e",
+              goldLight: "#d4af6a",
+            },
+            fontFamily: {
+              playfair: ["Playfair Display", "serif"],
+              jost: ["Jost", "sans-serif"],
+              cormorant: ["Cormorant Garamond", "serif"],
+            },
+            animation: {
+              marquee: "marquee 30s linear infinite",
+              fadeIn: "fadeIn 0.4s ease forwards",
+              slideLeft: "slideLeft 0.4s cubic-bezier(.4,0,.2,1) forwards",
+              slideRight: "slideRight 0.4s cubic-bezier(.4,0,.2,1) forwards",
+              marquee: "marquee 18s linear infinite",
+            },
+            keyframes: {
+              marquee: {
+                "0%": { transform: "translateX(0)" },
+                "100%": { transform: "translateX(-50%)" },
+              },
+              fadeIn: { "0%": { opacity: 0 }, "100%": { opacity: 1 } },
+              slideLeft: {
+                "0%": { transform: "translateX(100%)" },
+                "100%": { transform: "translateX(0)" },
+              },
+              slideRight: {
+                "0%": { transform: "translateX(0)" },
+                "100%": { transform: "translateX(100%)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+
+  <body class="font-jost bg-white text-textDark overflow-x-hidden">
+    <!-- ═══════════ OVERLAY ═══════════ -->
+    <div
+      id="overlay"
+      class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]"
+      onclick="closeAll()"
+    ></div>
+
+    <!-- ═══════════ MOBILE MENU ═══════════ -->
+    <div
+      id="mobileMenu"
+      class="fixed inset-0 z-[1100] flex-col p-10 hidden"
+      style="
+        transform: translateX(100%);
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      "
+    >
+      <div class="flex justify-between items-center mb-10">
+        <div>
+          <span class="font-playfair text-2xl font-black text-white"
+            >Sav<span class="italic font-light text-redPrimary">o</span
+            >ria</span
+          >
+          <p
+            class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5"
+          >
+            Fine Dining
+          </p>
+        </div>
+        <button
+          onclick="toggleMenu()"
+          class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Gold divider -->
+      <div class="gold-line h-[1px] w-full mb-8"></div>
+
+      <ul class="flex flex-col gap-1 flex-1">
+        <li>
+          <a
+            href="#"
+            onclick="toggleMenu()"
+            class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            href="#menu"
+            onclick="toggleMenu()"
+            class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold"
+            >Menu</a
+          >
+        </li>
+        <li>
+          <a
+            href="#about"
+            onclick="toggleMenu()"
+            class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold"
+            >About</a
+          >
+        </li>
+        <li>
+          <a
+            href="#reservation"
+            onclick="toggleMenu()"
+            class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold"
+            >Reserve</a
+          >
+        </li>
+        <li>
+          <a
+            href="#contact"
+            onclick="toggleMenu()"
+            class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold"
+            >Contact</a
+          >
+        </li>
+      </ul>
+
+      <div class="mt-auto space-y-3">
+        <a
+          href="#reservation"
+          onclick="toggleMenu()"
+          class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]"
+        >
+          <i class="fa-regular fa-calendar-check"></i> Book a Table
+        </a>
+        <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
+          <span>📞 +1 (555) 920-4200</span>
+          <span>·</span>
+          <span>Mon–Sun 12–11pm</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ CART PANEL ═══════════ -->
+    <div
+      id="cartPanel"
+      class="fixed top-0 right-0 h-full z-[1200] w-full sm:w-[400px] bg-white flex flex-col shadow-2xl"
+    >
+      <!-- Cart Header -->
+      <div
+        class="flex items-center justify-between px-6 py-5 border-b border-borderSoft bg-cream/50"
+      >
+        <div>
+          <h2 class="font-playfair text-xl font-bold text-textDark">
+            Your Order
+          </h2>
+          <p
+            class="font-cormorant italic text-gold text-[13px] tracking-wide mt-0.5"
+          >
+            3 items selected
+          </p>
+        </div>
+        <button
+          onclick="toggleCart()"
+          class="w-9 h-9 rounded-full bg-redPale text-redPrimary hover:bg-redPrimary hover:text-white transition flex items-center justify-center text-sm"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Gold line -->
+      <div class="gold-line h-[2px]"></div>
+
+      <!-- Cart Items -->
+      <div class="cart-items flex-1 overflow-y-auto px-6 py-5 space-y-4">
+        <!-- Item 1 -->
+        <div class="flex gap-4 pb-4 border-b border-borderSoft/60">
+          <div class="cart-img w-[72px] h-[72px] rounded-xl flex-shrink-0">
+            🍝
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="font-playfair font-bold text-textDark text-[15px] leading-tight"
+                >
+                  Tagliatelle al Ragù
+                </p>
+                <p
+                  class="text-[11px] text-textMid/60 mt-0.5 font-cormorant italic"
+                >
+                  House-made pasta · slow-cooked beef
+                </p>
+              </div>
+              <button
+                class="text-white/0 hover:text-redPrimary transition text-xs text-textMid/30 hover:text-redPrimary flex-shrink-0"
+                onclick="removeItem(this)"
+              >
+                <i class="fa-solid fa-trash-can text-xs"></i>
+              </button>
+            </div>
+            <div class="flex items-center justify-between mt-3">
+              <div
+                class="flex items-center gap-1 border border-borderSoft rounded-lg overflow-hidden"
+              >
+                <button
+                  class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
+                  onclick="changeQty(this, -1)"
+                >
+                  −
+                </button>
+                <span
+                  class="qty-value w-8 text-center text-sm font-semibold text-textDark"
+                  >1</span
+                >
+                <button
+                  class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
+                  onclick="changeQty(this, 1)"
+                >
+                  +
+                </button>
+              </div>
+              <span class="font-bold text-textDark text-[15px]">$28.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="flex gap-4 pb-4 border-b border-borderSoft/60">
+          <div class="cart-img w-[72px] h-[72px] rounded-xl flex-shrink-0">
+            🥩
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="font-playfair font-bold text-textDark text-[15px] leading-tight"
+                >
+                  Bistecca Fiorentina
+                </p>
+                <p
+                  class="text-[11px] text-textMid/60 mt-0.5 font-cormorant italic"
+                >
+                  Dry-aged T-bone · rosemary butter
+                </p>
+              </div>
+              <button
+                class="text-textMid/30 hover:text-redPrimary transition text-xs flex-shrink-0"
+                onclick="removeItem(this)"
+              >
+                <i class="fa-solid fa-trash-can text-xs"></i>
+              </button>
+            </div>
+            <div class="flex items-center justify-between mt-3">
+              <div
+                class="flex items-center gap-1 border border-borderSoft rounded-lg overflow-hidden"
+              >
+                <button
+                  class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
+                  onclick="changeQty(this, -1)"
+                >
+                  −
+                </button>
+                <span
+                  class="qty-value w-8 text-center text-sm font-semibold text-textDark"
+                  >2</span
+                >
+                <button
+                  class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
+                  onclick="changeQty(this, 1)"
+                >
+                  +
+                </button>
+              </div>
+              <span class="font-bold text-textDark text-[15px]">$96.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="flex gap-4 pb-4 border-b border-borderSoft/60">
+          <div class="cart-img w-[72px] h-[72px] rounded-xl flex-shrink-0">
+            🍮
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="font-playfair font-bold text-textDark text-[15px] leading-tight"
+                >
+                  Panna Cotta
+                </p>
+                <p
+                  class="text-[11px] text-textMid/60 mt-0.5 font-cormorant italic"
+                >
+                  Vanilla bean · wild berry coulis
+                </p>
+              </div>
+              <button
+                class="text-textMid/30 hover:text-redPrimary transition text-xs flex-shrink-0"
+                onclick="removeItem(this)"
+              >
+                <i class="fa-solid fa-trash-can text-xs"></i>
+              </button>
+            </div>
+            <div class="flex items-center justify-between mt-3">
+              <div
+                class="flex items-center gap-1 border border-borderSoft rounded-lg overflow-hidden"
+              >
+                <button
+                  class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
+                  onclick="changeQty(this, -1)"
+                >
+                  −
+                </button>
+                <span
+                  class="qty-value w-8 text-center text-sm font-semibold text-textDark"
+                  >1</span
+                >
+                <button
+                  class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
+                  onclick="changeQty(this, 1)"
+                >
+                  +
+                </button>
+              </div>
+              <span class="font-bold text-textDark text-[15px]">$14.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upsell suggestion -->
+        <div class="bg-cream/70 rounded-xl p-4 border border-borderSoft">
+          <p
+            class="text-[11px] uppercase tracking-[0.2em] font-semibold text-gold mb-2"
+          >
+            Pair it with
+          </p>
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">🍷</span>
+              <div>
+                <p
+                  class="text-[13px] font-semibold text-textDark leading-tight"
+                >
+                  Chianti Classico
+                </p>
+                <p class="text-[11px] text-textMid/50 font-cormorant italic">
+                  2018 · Tuscany
+                </p>
+              </div>
+            </div>
+            <button
+              class="flex-shrink-0 text-[11px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white hover:border-transparent transition"
+            >
+              + Add $18
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cart Footer -->
+      <div class="border-t border-borderSoft bg-white px-6 py-5 space-y-3">
+        <!-- Order note -->
+        <div
+          class="flex items-center gap-2 text-[12px] text-textMid/50 bg-cream/60 rounded-lg px-3 py-2.5"
+        >
+          <i class="fa-regular fa-note-sticky text-gold/70"></i>
+          <input
+            type="text"
+            placeholder="Add a note for the kitchen…"
+            class="bg-transparent flex-1 outline-none placeholder-textMid/40 text-[12px]"
+          />
+        </div>
+
+        <!-- Totals -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-[13px] text-textMid/60">
+            <span>Subtotal</span><span>$138.00</span>
+          </div>
+          <div class="flex justify-between text-[13px] text-textMid/60">
+            <span>Service (10%)</span><span>$13.80</span>
+          </div>
+          <div class="gold-line h-[1px] my-2"></div>
+          <div class="flex justify-between font-bold text-textDark text-[16px]">
+            <span class="font-playfair">Total</span>
+            <span>$151.80</span>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <button
+          class="book-btn w-full text-white py-4 rounded text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2"
+        >
+          <i class="fa-regular fa-calendar-check"></i>
+          Proceed to Checkout
+        </button>
+
+        <button
+          onclick="toggleCart()"
+          class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1"
+        >
+          Continue Browsing
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══════════ PAGE CONTENT ═══════════ -->
+    <div id="pageContent">
+      <!-- NAVBAR -->
+      <nav
+        id="navbar"
+        class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
+        style="background: rgba(255, 255, 255, 0)"
+      >
+        <!-- Gold top accent -->
+        <div
+          id="goldAccent"
+          class="gold-line h-[2px] w-full transition-opacity duration-300"
+        ></div>
+
+        <div
+          id="navInner"
+          class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300"
+        >
+          <!-- Logo -->
+          <a href="#" class="flex flex-col leading-none group flex-shrink-0">
+            <span
+              class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300"
+            >
+              Sav<span class="italic font-light text-redPrimary">o</span>ria
+            </span>
+            <span
+              class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block"
+              style="margin-top: -2px"
+            >
+              Fine Dining
+            </span>
+          </a>
+
+          <!-- Desktop Nav Links (hidden on mobile) -->
+          <ul
+            class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid"
+          >
+            <li><a href="#" class="nav-link transition">Home</a></li>
+            <li><a href="#menu" class="nav-link transition">Menu</a></li>
+            <li><a href="#about" class="nav-link transition">About</a></li>
+            <li>
+              <a href="#reservation" class="nav-link transition">Reserve</a>
+            </li>
+            <li><a href="#contact" class="nav-link transition">Contact</a></li>
+          </ul>
+
+          <!-- Right Actions -->
+          <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Cart Button -->
+            <button
+              onclick="toggleCart()"
+              class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition"
+            >
+              <i class="fa-solid fa-bag-shopping text-[15px]"></i>
+              <span
+                id="cartBadge"
+                class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full flex items-center justify-center"
+              >
+                3
+              </span>
+            </button>
+
+            <!-- Login (desktop) -->
+            <button
+              class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1"
+            >
+              <i class="fa-regular fa-circle-user"></i> Login
+            </button>
+
+            <!-- Book CTA (desktop) -->
+            <a
+              href="#reservation"
+              class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1"
+            >
+              <i class="fa-regular fa-calendar-check text-[11px]"></i>
+              Book a Table
+            </a>
+
+            <!-- Hamburger (mobile) -->
+            <button
+              onclick="toggleMenu()"
+              class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition"
+            >
+              <span
+                class="w-[18px] h-[1.5px] bg-textDark block rounded-full"
+              ></span>
+              <span
+                class="w-[18px] h-[1.5px] bg-textDark block rounded-full"
+              ></span>
+              <span
+                class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"
+              ></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="h-px bg-borderSoft/80"></div>
+      </nav>
+    </div>
+
+    <main>
+      <!-- HERO placeholder -->
+      <section
+        class="min-h-[80vh] flex flex-col items-center justify-center gap-4 bg-cream/30 px-6 text-center"
+      >
+        <p
+          class="text-[11px] uppercase tracking-[0.35em] text-gold font-semibold"
+        >
+          Est. 2010 · New York
+        </p>
+        <h1
+          class="text-4xl sm:text-5xl lg:text-7xl font-playfair font-bold text-textDark leading-tight"
+        >
+          Welcome to <em class="text-redPrimary not-italic">Savoria</em>
+        </h1>
+        <p
+          class="font-cormorant italic text-lg sm:text-xl text-textMid/60 tracking-wide"
+        >
+          Where every dish tells a story
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 mt-4">
+          <a
+            href="#menu"
+            class="book-btn text-white px-8 py-3.5 rounded text-[11px] font-bold tracking-[0.2em] uppercase"
+          >
+            Explore Menu
+          </a>
+          <a
+            href="#reservation"
+            class="border border-textDark/20 text-textDark px-8 py-3.5 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition"
+          >
+            Reserve a Table
+          </a>
+        </div>
+      </section>
+
+      <!-- top category section  -->
+      <section class="w-full md:max-w-7xl mx-auto px-6 py-16">
+        <div
+          class="flex justify-between items-end mb-10 border-b border-borderSoft pb-4"
+        >
+          <div>
+            <span
+              class="text-redPrimary uppercase tracking-[0.3em] text-[10px] font-bold"
+              >Our Specialties</span
+            >
+            <h2
+              class="text-textDark text-3xl md:text-4xl font-playfair font-black mt-1"
+            >
+              Most Popular
+            </h2>
+          </div>
+          <button
+            class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-textMid hover:text-redPrimary transition-all"
+          >
+            See All
+            <i
+              class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1.5 transition-transform"
+            ></i>
+          </button>
+        </div>
+
+        <!-- ── Desktop: 5-column grid ── -->
+        <div class="hidden md:grid grid-cols-5 gap-4">
+          <div class="group cursor-pointer">
+            <div
+              class="relative overflow-hidden rounded-xl aspect-square mb-2.5"
+            >
+              <img
+                src="./assests/thai.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                alt="Thai"
+              />
+              <div
+                class="absolute inset-0 bg-black/15 group-hover:bg-black/35 transition-colors duration-500"
+              ></div>
+              <div
+                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <span
+                  class="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/40 px-3 py-1 rounded-full backdrop-blur-sm bg-black/20"
+                  >Explore</span
+                >
+              </div>
+            </div>
+            <h3
+              class="font-playfair text-base font-bold text-textDark group-hover:text-redPrimary transition-colors leading-tight"
+            >
+              Thai
+            </h3>
+            <p
+              class="text-textMid text-[11px] mt-0.5 opacity-60 font-cormorant italic"
+            >
+              Flavors of the East
+            </p>
+          </div>
+
+          <div class="group cursor-pointer">
+            <div
+              class="relative overflow-hidden rounded-xl aspect-square mb-2.5"
+            >
+              <img
+                   src="./assests/thai.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                alt="Italian"
+              />
+              <div
+                class="absolute inset-0 bg-black/15 group-hover:bg-black/35 transition-colors duration-500"
+              ></div>
+              <div
+                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <span
+                  class="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/40 px-3 py-1 rounded-full backdrop-blur-sm bg-black/20"
+                  >Explore</span
+                >
+              </div>
+            </div>
+            <h3
+              class="font-playfair text-base font-bold text-textDark group-hover:text-redPrimary transition-colors leading-tight"
+            >
+              Italian
+            </h3>
+            <p
+              class="text-textMid text-[11px] mt-0.5 opacity-60 font-cormorant italic"
+            >
+              Pasta & fine wine
+            </p>
+          </div>
+
+          <div class="group cursor-pointer">
+            <div
+              class="relative overflow-hidden rounded-xl aspect-square mb-2.5"
+            >
+              <img
+                   src="./assests/thai.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                alt="French"
+              />
+              <div
+                class="absolute inset-0 bg-black/15 group-hover:bg-black/35 transition-colors duration-500"
+              ></div>
+              <div
+                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <span
+                  class="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/40 px-3 py-1 rounded-full backdrop-blur-sm bg-black/20"
+                  >Explore</span
+                >
+              </div>
+            </div>
+            <h3
+              class="font-playfair text-base font-bold text-textDark group-hover:text-redPrimary transition-colors leading-tight"
+            >
+              French
+            </h3>
+            <p
+              class="text-textMid text-[11px] mt-0.5 opacity-60 font-cormorant italic"
+            >
+              Gourmet pastry
+            </p>
+          </div>
+
+          <div class="group cursor-pointer">
+            <div
+              class="relative overflow-hidden rounded-xl aspect-square mb-2.5"
+            >
+              <img
+                 src="./assests/thai.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                alt="Japanese"
+              />
+              <div
+                class="absolute inset-0 bg-black/15 group-hover:bg-black/35 transition-colors duration-500"
+              ></div>
+              <div
+                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <span
+                  class="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/40 px-3 py-1 rounded-full backdrop-blur-sm bg-black/20"
+                  >Explore</span
+                >
+              </div>
+            </div>
+            <h3
+              class="font-playfair text-base font-bold text-textDark group-hover:text-redPrimary transition-colors leading-tight"
+            >
+              Japanese
+            </h3>
+            <p
+              class="text-textMid text-[11px] mt-0.5 opacity-60 font-cormorant italic"
+            >
+              Masterful sushi
+            </p>
+          </div>
+
+          <div class="group cursor-pointer">
+            <div
+              class="relative overflow-hidden rounded-xl aspect-square mb-2.5"
+            >
+              <img
+                  src="./assests/thai.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                alt="Dessert"
+              />
+              <div
+                class="absolute inset-0 bg-black/15 group-hover:bg-black/35 transition-colors duration-500"
+              ></div>
+              <div
+                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <span
+                  class="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/40 px-3 py-1 rounded-full backdrop-blur-sm bg-black/20"
+                  >Explore</span
+                >
+              </div>
+            </div>
+            <h3
+              class="font-playfair text-base font-bold text-textDark group-hover:text-redPrimary transition-colors leading-tight"
+            >
+              Dessert
+            </h3>
+            <p
+              class="text-textMid text-[11px] mt-0.5 opacity-60 font-cormorant italic"
+            >
+              Sweet endings
+            </p>
+          </div>
+        </div>
+
+        <!-- ── Mobile: marquee infinite scroll ── -->
+        <div id="marqueeTrack" class="md:hidden overflow-hidden -mx-6">
+          <div class="flex gap-3 w-max px-6">
+            <!-- Set 1 -->
+            <div class="group cursor-pointer w-[130px] flex-shrink-0">
+              <div
+                class="relative overflow-hidden rounded-xl aspect-square mb-2"
+              >
+                <img
+                   src="./assests/thai.png"
+                  class="w-full h-full object-cover"
+                  alt="Thai"
+                />
+                <div class="absolute inset-0 bg-black/20"></div>
+              </div>
+              <h3
+                class="font-playfair text-sm font-bold text-textDark leading-tight"
+              >
+                Thai
+              </h3>
+              <p
+                class="text-textMid text-[10px] mt-0.5 opacity-60 font-cormorant italic"
+              >
+                Flavors of the East
+              </p>
+            </div>
+            <div class="group cursor-pointer w-[130px] flex-shrink-0">
+              <div
+                class="relative overflow-hidden rounded-xl aspect-square mb-2"
+              >
+                <img
+                     src="./assests/thai.png"
+                  class="w-full h-full object-cover"
+                  alt="Italian"
+                />
+                <div class="absolute inset-0 bg-black/20"></div>
+              </div>
+              <h3
+                class="font-playfair text-sm font-bold text-textDark leading-tight"
+              >
+                Italian
+              </h3>
+              <p
+                class="text-textMid text-[10px] mt-0.5 opacity-60 font-cormorant italic"
+              >
+                Pasta & fine wine
+              </p>
+            </div>
+            <div class="group cursor-pointer w-[130px] flex-shrink-0">
+              <div
+                class="relative overflow-hidden rounded-xl aspect-square mb-2"
+              >
+                <img
+                     src="./assests/thai.png"
+                  class="w-full h-full object-cover"
+                  alt="French"
+                />
+                <div class="absolute inset-0 bg-black/20"></div>
+              </div>
+              <h3
+                class="font-playfair text-sm font-bold text-textDark leading-tight"
+              >
+                French
+              </h3>
+              <p
+                class="text-textMid text-[10px] mt-0.5 opacity-60 font-cormorant italic"
+              >
+                Gourmet pastry
+              </p>
+            </div>
+            <div class="group cursor-pointer w-[130px] flex-shrink-0">
+              <div
+                class="relative overflow-hidden rounded-xl aspect-square mb-2"
+              >
+                <img
+                    src="./assests/thai.png"
+                  class="w-full h-full object-cover"
+                  alt="Japanese"
+                />
+                <div class="absolute inset-0 bg-black/20"></div>
+              </div>
+              <h3
+                class="font-playfair text-sm font-bold text-textDark leading-tight"
+              >
+                Japanese
+              </h3>
+              <p
+                class="text-textMid text-[10px] mt-0.5 opacity-60 font-cormorant italic"
+              >
+                Masterful sushi
+              </p>
+            </div>
+            <div class="group cursor-pointer w-[130px] flex-shrink-0">
+              <div
+                class="relative overflow-hidden rounded-xl aspect-square mb-2"
+              >
+                <img
+                       src="./assests/thai.png"
+                  class="w-full h-full object-cover"
+                  alt="Dessert"
+                />
+                <div class="absolute inset-0 bg-black/20"></div>
+              </div>
+              <h3
+                class="font-playfair text-sm font-bold text-textDark leading-tight"
+              >
+                Dessert
+              </h3>
+              <p
+                class="text-textMid text-[10px] mt-0.5 opacity-60 font-cormorant italic"
+              >
+                Sweet endings
+              </p>
+            </div>
+
+            <!-- Set 2 (duplicate for seamless loop) -->
+            <div class="group cursor-pointer w-[130px] flex-shrink-0">
+              <div
+                class="relative overflow-hidden rounded-xl aspect-square mb-2"
+              >
+                <img
+                     src="./assests/thai.png"
+                  class="w-full h-full object-cover"
+                  alt="Thai"
+                />
+                <div class="absolute inset-0 bg-black/20"></div>
+              </div>
+              <h3
+                class="font-playfair text-sm font-bold text-textDark leading-tight"
+              >
+                Thai
+              </h3>
+              <p
+                class="text-textMid text-[10px] mt-0.5 opacity-60 font-cormorant italic"
+              >
+                Flavors of the East
+              </p>
+            </div>
+            <div class="group cursor-pointer w-[130px] flex-shrink-0">
+              <div
+                class="relative overflow-hidden rounded-xl aspect-square mb-2"
+              >
+                <img
+                    src="./assests/thai.png"
+                  class="w-full h-full object-cover"
+                  alt="Italian"
+                />
+                <div class="absolute inset-0 bg-black/20"></div>
+              </div>
+              <h3
+                class="font-playfair text-sm font-bold text-textDark leading-tight"
+              >
+                Italian
+              </h3>
+              <p
+                class="text-textMid text-[10px] mt-0.5 opacity-60 font-cormorant italic"
+              >
+                Pasta & fine wine
+              </p>
+            </div>
+            <div class="group cursor-pointer w-[130px] flex-shrink-0">
+              <div
+                class="relative overflow-hidden rounded-xl aspect-square mb-2"
+              >
+                <img
+                     src="./assests/thai.png"
+                  class="w-full h-full object-cover"
+                  alt="French"
+                />
+                <div class="absolute inset-0 bg-black/20"></div>
+              </div>
+              <h3
+                class="font-playfair text-sm font-bold text-textDark leading-tight"
+              >
+                French
+              </h3>
+              <p
+                class="text-textMid text-[10px] mt-0.5 opacity-60 font-cormorant italic"
+              >
+                Gourmet pastry
+              </p>
+            </div>
+            <div class="group cursor-pointer w-[130px] flex-shrink-0">
+              <div
+                class="relative overflow-hidden rounded-xl aspect-square mb-2"
+              >
+                <img
+                    src="./assests/thai.png"
+                  class="w-full h-full object-cover"
+                  alt="Japanese"
+                />
+                <div class="absolute inset-0 bg-black/20"></div>
+              </div>
+              <h3
+                class="font-playfair text-sm font-bold text-textDark leading-tight"
+              >
+                Japanese
+              </h3>
+              <p
+                class="text-textMid text-[10px] mt-0.5 opacity-60 font-cormorant italic"
+              >
+                Masterful sushi
+              </p>
+            </div>
+            <div class="group cursor-pointer w-[130px] flex-shrink-0">
+              <div
+                class="relative overflow-hidden rounded-xl aspect-square mb-2"
+              >
+                <img
+                     src="./assests/thai.png"
+                  class="w-full h-full object-cover"
+                  alt="Dessert"
+                />
+                <div class="absolute inset-0 bg-black/20"></div>
+              </div>
+              <h3
+                class="font-playfair text-sm font-bold text-textDark leading-tight"
+              >
+                Dessert
+              </h3>
+              <p
+                class="text-textMid text-[10px] mt-0.5 opacity-60 font-cormorant italic"
+              >
+                Sweet endings
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./static/js/main.js"></script>
+    <script>
+      // ── Manual Touch Drag Scroll ──
+      const track = document.getElementById("marqueeTrack");
+      const wrapper = track.parentElement;
+
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      // Touch events (mobile)
+      track.addEventListener(
+        "touchstart",
+        (e) => {
+          isDown = true;
+          startX = e.touches[0].pageX;
+          scrollLeft = wrapper.scrollLeft;
+        },
+        { passive: true },
+      );
+
+      track.addEventListener(
+        "touchmove",
+        (e) => {
+          if (!isDown) return;
+          const x = e.touches[0].pageX;
+          const walk = startX - x;
+          wrapper.scrollLeft = scrollLeft + walk;
+        },
+        { passive: true },
+      );
+
+      track.addEventListener("touchend", () => {
+        isDown = false;
+      });
+    </script>
+  </body>
+</html>

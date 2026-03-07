@@ -1,0 +1,136 @@
+
+        /* Nav link underline animation */
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: #b8963e;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #b8963e !important;
+        }
+
+        /* Book button */
+        .book-btn {
+            background: linear-gradient(135deg, #c0392b, #96281b);
+            box-shadow: 0 2px 14px rgba(192, 57, 43, 0.3);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .book-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.15),
+                    transparent);
+            transition: left 0.4s ease;
+        }
+
+        .book-btn:hover::before {
+            left: 100%;
+        }
+
+        .book-btn:hover {
+            box-shadow: 0 4px 22px rgba(192, 57, 43, 0.45);
+            transform: translateY(-1px);
+        }
+
+        /* Scrolled state */
+        #navbar.scrolled {
+            box-shadow: 0 4px 30px rgba(26, 18, 16, 0.1);
+            background: rgba(255, 255, 255, 0.98) !important;
+        }
+
+        /* Cart panel */
+        #cartPanel {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(100%);
+        }
+
+        #cartPanel.open {
+            transform: translateX(0);
+        }
+
+        /* Overlay */
+        #overlay {
+            transition: opacity 0.35s ease;
+        }
+
+        /* Cart item image placeholder */
+        .cart-img {
+            background: linear-gradient(135deg, #f5f0eb, #e8ddd8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        /* Mobile menu */
+        #mobileMenu {
+            background: linear-gradient(160deg, #1a1210 0%, #2d1f1b 100%);
+        }
+
+        #mobileMenu a {
+            color: rgba(255, 255, 255, 0.82);
+            transition: color 0.2s;
+        }
+
+        #mobileMenu a:hover {
+            color: #d4af6a;
+        }
+
+        /* Quantity btn */
+        .qty-btn {
+            transition: all 0.2s;
+        }
+
+        .qty-btn:hover {
+            background: #c0392b;
+            color: white;
+        }
+
+        /* Scrollbar for cart */
+        .cart-items::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .cart-items::-webkit-scrollbar-track {
+            background: #f5f0eb;
+        }
+
+        .cart-items::-webkit-scrollbar-thumb {
+            background: #e8ddd8;
+            border-radius: 2px;
+        }
+
+        /* Page push on desktop */
+        @media (min-width: 768px) {
+            body.cart-open #pageContent {
+                transform: translateX(-160px);
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+        }
+
+        #pageContent {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
