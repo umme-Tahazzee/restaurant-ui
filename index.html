@@ -1,712 +1,1206 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Savoria — Fine Dining Experience</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap"
-        rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="./static/css/home.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        redPrimary: "#c0392b",
-                        redDeep: "#96281b",
-                        redPale: "#fdf0ee",
-                        cream: "#f5f0eb",
-                        textDark: "#1a1210",
-                        textMid: "#4a3830",
-                        borderSoft: "#e8ddd8",
-                        gold: "#b8963e",
-                        goldLight: "#d4af6a",
-                    },
-                    fontFamily: {
-                        playfair: ["Playfair Display", "serif"],
-                        jost: ["Jost", "sans-serif"],
-                        cormorant: ["Cormorant Garamond", "serif"],
-                    },
-                    animation: {
-                        marquee: "marquee 30s linear infinite",
-                        fadeIn: "fadeIn 0.4s ease forwards",
-                        slideLeft: "slideLeft 0.4s cubic-bezier(.4,0,.2,1) forwards",
-                        slideRight: "slideRight 0.4s cubic-bezier(.4,0,.2,1) forwards",
-                        marquee: "marquee 18s linear infinite",
-                    },
-                    keyframes: {
-                        marquee: {
-                            "0%": { transform: "translateX(0)" },
-                            "100%": { transform: "translateX(-50%)" },
-                        },
-                        fadeIn: { "0%": { opacity: 0 }, "100%": { opacity: 1 } },
-                        slideLeft: {
-                            "0%": { transform: "translateX(100%)" },
-                            "100%": { transform: "translateX(0)" },
-                        },
-                        slideRight: {
-                            "0%": { transform: "translateX(0)" },
-                            "100%": { transform: "translateX(100%)" },
-                        },
-                    },
-                },
-            },
-        };
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Savoria — Fine Dining Experience</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link rel="stylesheet" href="./static/css/home.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            redPrimary: "#c0392b",
+            redDeep: "#96281b",
+            redPale: "#fdf0ee",
+            cream: "#f5f0eb",
+            textDark: "#1a1210",
+            textMid: "#4a3830",
+            borderSoft: "#e8ddd8",
+            gold: "#b8963e",
+            goldLight: "#d4af6a",
+          },
+          fontFamily: {
+            playfair: ["Playfair Display", "serif"],
+            jost: ["Jost", "sans-serif"],
+            cormorant: ["Cormorant Garamond", "serif"],
+          },
+          animation: {
+            fadeIn: "fadeIn 0.4s ease forwards",
+            slideLeft: "slideLeft 0.4s cubic-bezier(.4,0,.2,1) forwards",
+            slideRight: "slideRight 0.4s cubic-bezier(.4,0,.2,1) forwards",
+            slideUp: "slideUp 0.6s cubic-bezier(.4,0,.2,1) forwards",
+          },
+          keyframes: {
+            fadeIn: { "0%": { opacity: 0 }, "100%": { opacity: 1 } },
+            slideLeft: { "0%": { transform: "translateX(100%)" }, "100%": { transform: "translateX(0)" } },
+            slideRight: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(100%)" } },
+            slideUp: { "0%": { opacity: 0, transform: "translateY(20px)" }, "100%": { opacity: 1, transform: "translateY(0)" } },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ════ GLOBAL ════ */
+    :root {
+      --red: #c0392b;
+      --gold: #b8963e;
+      --cream: #f5f0eb;
+      --dark: #1a1210;
+    }
+
+    .gold-line { background: linear-gradient(90deg, transparent, #b8963e 30%, #d4af6a 50%, #b8963e 70%, transparent); }
+    .book-btn { background: linear-gradient(135deg, #c0392b, #96281b); }
+    .book-btn:hover { background: linear-gradient(135deg, #96281b, #7a1f14); }
+
+    /* ════ SCROLLBAR HIDE ════ */
+    .scroll-hide::-webkit-scrollbar { display: none; }
+    .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ════ HERO ════ */
+    .hero-bg {
+      background: linear-gradient(160deg, #fdf6f0 0%, #f5ede4 40%, #f0e6d8 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184,150,62,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(192,57,43,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ════ DESKTOP NAV LINK ════ */
+    .nav-link { position: relative; padding-bottom: 2px; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--red);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover { color: var(--red); }
+
+    /* ════ SECTION DIVIDER ════ */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ════ DESKTOP CATEGORY CARD ════ */
+    .cat-card-desk {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+    }
+    .cat-card-desk:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(192,57,43,0.15), 0 6px 16px rgba(0,0,0,0.1);
+    }
+    .cat-card-desk img { transition: transform 0.6s ease; }
+    .cat-card-desk:hover img { transform: scale(1.08); }
+    .cat-card-desk .explore-tag {
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.3s ease;
+    }
+    .cat-card-desk:hover .explore-tag {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ════ DESKTOP DISH CARD ════ */
+    .dish-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #efe8e2;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .dish-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+    }
+    .dish-card .add-btn {
+      width: 32px; height: 32px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 16px;
+      transition: transform 0.2s ease, background 0.2s ease;
+      flex-shrink: 0;
+    }
+    .dish-card:hover .add-btn {
+      transform: scale(1.1);
+      background: #96281b;
+    }
+
+    /* ════ PROMO BANNER ════ */
+    .promo-banner {
+      background: linear-gradient(135deg, #1a1210 0%, #2d1e18 50%, #1a1210 100%);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .promo-banner::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184,150,62,0.15) 0%, transparent 70%);
+    }
+    .promo-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 30%;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(192,57,43,0.1) 0%, transparent 70%);
+    }
+
+    /* ════ MOBILE: FOOD APP STYLES ════ */
+    /* Mobile bottom nav */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 900;
+      background: white;
+      border-top: 1px solid #efe8e2;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 10px 0 14px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    }
+    .mobile-bottom-nav .nav-item {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 4px;
+      font-size: 9px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: #9b8c86;
+      transition: color 0.2s;
+      cursor: pointer;
+      min-width: 48px;
+    }
+    .mobile-bottom-nav .nav-item.active { color: var(--red); }
+    .mobile-bottom-nav .nav-item i { font-size: 18px; }
+    .mobile-bottom-nav .nav-item.active i { color: var(--red); }
+
+    /* Cart FAB */
+    .cart-fab {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, #c0392b, #96281b);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 20px;
+      box-shadow: 0 4px 16px rgba(192,57,43,0.4);
+      margin-top: -24px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .cart-fab .badge {
+      position: absolute;
+      top: 0; right: 0;
+      width: 18px; height: 18px;
+      background: var(--gold);
+      border-radius: 50%;
+      font-size: 9px;
+      font-weight: 700;
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Mobile hero (app style) */
+    .mobile-hero {
+      background: linear-gradient(160deg, #fdf6f0 0%, #f5ede4 100%);
+      padding: 20px 20px 24px;
+    }
+
+    /* Mobile search bar */
+    .mobile-search {
+      background: white;
+      border-radius: 14px;
+      border: 1px solid #efe8e2;
+      display: flex; align-items: center;
+      gap: 10px;
+      padding: 13px 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    /* Mobile category pill */
+    .cat-pill {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .cat-pill .icon-wrap {
+      width: 60px; height: 60px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .cat-pill.active .icon-wrap {
+      border-color: var(--red);
+      transform: scale(1.05);
+    }
+    .cat-pill span {
+      font-size: 10px; font-weight: 600;
+      color: #4a3830;
+      font-family: 'Jost', sans-serif;
+    }
+    .cat-pill.active span { color: var(--red); }
+
+    /* Mobile dish card (app style) */
+    .app-dish-card {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #f0e8e4;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+    .app-dish-card:active { transform: scale(0.97); }
+
+    /* Mobile featured card */
+    .featured-card {
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    /* Mobile section title */
+    .mobile-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: #1a1210;
+    }
+
+    /* Rating badge */
+    .rating-badge {
+      background: rgba(184,150,62,0.12);
+      border-radius: 8px;
+      padding: 3px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--gold);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    /* ════ ANIMATIONS ════ */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .anim-1 { animation: fadeSlideUp 0.5s ease 0.1s both; }
+    .anim-2 { animation: fadeSlideUp 0.5s ease 0.2s both; }
+    .anim-3 { animation: fadeSlideUp 0.5s ease 0.3s both; }
+    .anim-4 { animation: fadeSlideUp 0.5s ease 0.4s both; }
+
+    /* ════ TESTIMONIAL ════ */
+    .testimonial-card {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #efe8e2;
+      padding: 24px;
+      transition: box-shadow 0.3s ease;
+    }
+    .testimonial-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+    }
+
+    /* ════ FOOTER ════ */
+    .footer-bg {
+      background: linear-gradient(160deg, #1a1210 0%, #2a1a14 100%);
+    }
+
+    /* Mobile bottom padding for nav */
+    @media (max-width: 767px) {
+      main { padding-bottom: 80px; }
+    }
+
+    /* Tag */
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .tag-red { background: #fdf0ee; color: #c0392b; }
+    .tag-gold { background: rgba(184,150,62,0.1); color: #b8963e; }
+    .tag-dark { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); }
+  </style>
 </head>
 
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
-    <!-- ═══════════ OVERLAY ═══════════ -->
-    <div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]"
-        onclick="closeAll()"></div>
 
-    <!-- ═══════════ MOBILE MENU ═══════════ -->
-    <div id="mobileMenu" class="fixed inset-0 z-[1100] flex-col p-10 hidden" style="
-        transform: translateX(100%);
-        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      ">
-        <div class="flex justify-between items-center mb-10">
+<!-- ═══════════ OVERLAY ═══════════ -->
+<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]" onclick="closeAll()"></div>
+
+<!-- ═══════════ MOBILE MENU ═══════════ -->
+<div id="mobileMenu" class="fixed inset-0 z-[1100] flex-col p-10 hidden" style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
+  <div class="flex justify-between items-center mb-10">
+    <div>
+      <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
+      <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
+    </div>
+    <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
+  </div>
+  <div class="gold-line h-[1px] w-full mb-8"></div>
+  <ul class="flex flex-col gap-1 flex-1">
+    <li><a href="#" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+    <li><a href="#menu" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
+    <li><a href="#about" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+    <li><a href="#reservation" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+    <li><a href="#contact" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+  </ul>
+  <div class="mt-auto space-y-3">
+    <a href="#reservation" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
+      <i class="fa-regular fa-calendar-check"></i> Book a Table
+    </a>
+    <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
+      <span>📞 +1 (555) 920-4200</span><span>·</span><span>Mon–Sun 12–11pm</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CART PANEL ═══════════ -->
+<div id="cartPanel" class="fixed top-0 right-0 h-full z-[1200] w-full sm:w-[400px] bg-white flex flex-col shadow-2xl" style="transform:translateX(100%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);">
+  <div class="flex items-center justify-between px-6 py-5 border-b border-borderSoft bg-cream/50">
+    <div>
+      <h2 class="font-playfair text-xl font-bold text-textDark">Your Order</h2>
+      <p class="font-cormorant italic text-gold text-[13px] tracking-wide mt-0.5">3 items selected</p>
+    </div>
+    <button onclick="toggleCart()" class="w-9 h-9 rounded-full bg-redPale text-redPrimary hover:bg-redPrimary hover:text-white transition flex items-center justify-center text-sm">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="gold-line h-[2px]"></div>
+  <div class="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+    <div class="flex gap-4 pb-4 border-b border-borderSoft/60">
+      <div class="w-[72px] h-[72px] rounded-xl flex-shrink-0 bg-cream flex items-center justify-center text-2xl">🍝</div>
+      <div class="flex-1 min-w-0">
+        <div class="flex justify-between items-start gap-2">
+          <div>
+            <p class="font-playfair font-bold text-textDark text-[15px] leading-tight">Tagliatelle al Ragù</p>
+            <p class="text-[11px] text-textMid/60 mt-0.5 font-cormorant italic">House-made pasta · slow-cooked beef</p>
+          </div>
+          <button class="text-textMid/30 hover:text-redPrimary transition text-xs flex-shrink-0" onclick="removeItem(this)"><i class="fa-solid fa-trash-can text-xs"></i></button>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <div class="flex items-center gap-1 border border-borderSoft rounded-lg overflow-hidden">
+            <button class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center" onclick="changeQty(this,-1)">−</button>
+            <span class="qty-value w-8 text-center text-sm font-semibold text-textDark">1</span>
+            <button class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center" onclick="changeQty(this,1)">+</button>
+          </div>
+          <span class="font-bold text-textDark text-[15px]">$28.00</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-4 pb-4 border-b border-borderSoft/60">
+      <div class="w-[72px] h-[72px] rounded-xl flex-shrink-0 bg-cream flex items-center justify-center text-2xl">🥩</div>
+      <div class="flex-1 min-w-0">
+        <div class="flex justify-between items-start gap-2">
+          <div>
+            <p class="font-playfair font-bold text-textDark text-[15px] leading-tight">Bistecca Fiorentina</p>
+            <p class="text-[11px] text-textMid/60 mt-0.5 font-cormorant italic">Dry-aged T-bone · rosemary butter</p>
+          </div>
+          <button class="text-textMid/30 hover:text-redPrimary transition text-xs flex-shrink-0" onclick="removeItem(this)"><i class="fa-solid fa-trash-can text-xs"></i></button>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <div class="flex items-center gap-1 border border-borderSoft rounded-lg overflow-hidden">
+            <button class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center" onclick="changeQty(this,-1)">−</button>
+            <span class="qty-value w-8 text-center text-sm font-semibold text-textDark">2</span>
+            <button class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center" onclick="changeQty(this,1)">+</button>
+          </div>
+          <span class="font-bold text-textDark text-[15px]">$96.00</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-cream/70 rounded-xl p-4 border border-borderSoft">
+      <p class="text-[11px] uppercase tracking-[0.2em] font-semibold text-gold mb-2">Pair it with</p>
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="text-xl">🍷</span>
+          <div>
+            <p class="text-[13px] font-semibold text-textDark leading-tight">Chianti Classico</p>
+            <p class="text-[11px] text-textMid/50 font-cormorant italic">2018 · Tuscany</p>
+          </div>
+        </div>
+        <button class="flex-shrink-0 text-[11px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white hover:border-transparent transition">+ Add $18</button>
+      </div>
+    </div>
+  </div>
+  <div class="border-t border-borderSoft bg-white px-6 py-5 space-y-3">
+    <div class="space-y-1.5">
+      <div class="flex justify-between text-[13px] text-textMid/60"><span>Subtotal</span><span>$138.00</span></div>
+      <div class="flex justify-between text-[13px] text-textMid/60"><span>Service (10%)</span><span>$13.80</span></div>
+      <div class="gold-line h-[1px] my-2"></div>
+      <div class="flex justify-between font-bold text-textDark text-[16px]"><span class="font-playfair">Total</span><span>$151.80</span></div>
+    </div>
+    <button class="book-btn w-full text-white py-4 rounded text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2">
+      <i class="fa-regular fa-calendar-check"></i> Proceed to Checkout
+    </button>
+    <button onclick="toggleCart()" class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">Continue Browsing</button>
+  </div>
+</div>
+
+<!-- ═══════════ NAVBAR (unchanged) ═══════════ -->
+<div id="pageContent">
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300" style="background:rgba(255,255,255,0)">
+    <div id="goldAccent" class="gold-line h-[2px] w-full transition-opacity duration-300"></div>
+    <div id="navInner" class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
+      <a href="#" class="flex flex-col leading-none group flex-shrink-0">
+        <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
+          Sav<span class="italic font-light text-redPrimary">o</span>ria
+        </span>
+        <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
+        <li><a href="#" class="nav-link transition">Home</a></li>
+        <li><a href="#menu" class="nav-link transition">Menu</a></li>
+        <li><a href="#about" class="nav-link transition">About</a></li>
+        <li><a href="#reservation" class="nav-link transition">Reserve</a></li>
+        <li><a href="#contact" class="nav-link transition">Contact</a></li>
+      </ul>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
+          <i class="fa-solid fa-bag-shopping text-[15px]"></i>
+          <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full flex items-center justify-center">3</span>
+        </button>
+        <button class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
+          <i class="fa-regular fa-circle-user"></i> Login
+        </button>
+        <a href="#reservation" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
+          <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
+        </a>
+        <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
+          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+          <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
+        </button>
+      </div>
+    </div>
+    <div class="h-px bg-borderSoft/80"></div>
+  </nav>
+</div>
+
+<main>
+
+  <!-- ══════════════════════════════════════
+       DESKTOP HERO
+  ══════════════════════════════════════ -->
+  <section class="hidden md:block hero-bg pt-[76px]">
+    <div class="max-w-7xl mx-auto px-8 lg:px-14 py-20 lg:py-28 grid grid-cols-2 gap-16 items-center">
+      <!-- Left -->
+      <div class="anim-1">
+        <div class="section-label mb-6">Est. 2010 · New York City</div>
+        <h1 class="font-playfair text-5xl lg:text-7xl font-black text-textDark leading-[1.05] mb-6">
+          The Art of<br/>
+          <em class="text-redPrimary not-italic" style="font-style:italic">Fine Dining</em><br/>
+          Redefined
+        </h1>
+        <p class="font-cormorant italic text-xl text-textMid/60 tracking-wide mb-8 leading-relaxed">
+          Where every dish is a canvas, every meal a memory worth keeping — crafted by Chef Marco with 20 years of passion.
+        </p>
+        <div class="flex items-center gap-4 mb-10">
+          <a href="#menu" class="book-btn text-white px-8 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase inline-flex items-center gap-2">
+            <i class="fa-solid fa-utensils text-[10px]"></i> Explore Menu
+          </a>
+          <a href="#reservation" class="border border-textDark/20 text-textDark px-8 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition">
+            Reserve a Table
+          </a>
+        </div>
+        <!-- Stats -->
+        <div class="flex gap-8 pt-8 border-t border-borderSoft">
+          <div>
+            <p class="font-playfair text-3xl font-black text-textDark">15+</p>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Years</p>
+          </div>
+          <div class="w-px bg-borderSoft"></div>
+          <div>
+            <p class="font-playfair text-3xl font-black text-textDark">80+</p>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Dishes</p>
+          </div>
+          <div class="w-px bg-borderSoft"></div>
+          <div>
+            <p class="font-playfair text-3xl font-black text-textDark">★ 4.9</p>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Rating</p>
+          </div>
+          <div class="w-px bg-borderSoft"></div>
+          <div>
+            <p class="font-playfair text-3xl font-black text-textDark">3</p>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Michelin Stars</p>
+          </div>
+        </div>
+      </div>
+      <!-- Right: image grid -->
+      <div class="grid grid-cols-2 gap-3 anim-2">
+        <div class="rounded-2xl overflow-hidden aspect-[3/4] bg-cream row-span-2">
+          <img src="./assests/thai.png" alt="Featured" class="w-full h-full object-cover"/>
+        </div>
+        <div class="rounded-2xl overflow-hidden aspect-square bg-cream">
+          <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/>
+        </div>
+        <div class="rounded-2xl overflow-hidden aspect-square bg-cream">
+          <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       MOBILE HERO (App Style)
+  ══════════════════════════════════════ -->
+  <div class="md:hidden pt-[76px]">
+    <!-- Greeting + search -->
+    <div class="mobile-hero">
+      <div class="flex items-center justify-between mb-4 anim-1">
+        <div>
+          <p class="text-[10px] uppercase tracking-[0.25em] text-gold font-semibold">Good Evening 👋</p>
+          <h1 class="font-playfair text-2xl font-black text-textDark mt-0.5">
+            What would you<br/><em class="text-redPrimary" style="font-style:italic">like to eat?</em>
+          </h1>
+        </div>
+        <div class="w-10 h-10 rounded-full bg-cream border border-borderSoft flex items-center justify-center">
+          <i class="fa-regular fa-bell text-textMid text-sm"></i>
+        </div>
+      </div>
+      <!-- Search -->
+      <div class="mobile-search anim-2">
+        <i class="fa-solid fa-magnifying-glass text-textMid/40 text-sm"></i>
+        <input type="text" placeholder="Search dishes, cuisines…" class="flex-1 bg-transparent outline-none text-sm text-textDark placeholder-textMid/40"/>
+        <div class="w-8 h-8 rounded-lg bg-redPrimary flex items-center justify-center flex-shrink-0">
+          <i class="fa-solid fa-sliders text-white text-xs"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promo Banner (mobile) -->
+    <div class="px-5 mt-5 anim-3">
+      <div class="promo-banner p-5 flex items-center justify-between gap-4">
+        <div class="relative z-10">
+          <span class="tag tag-dark mb-2 block w-fit">Limited Offer</span>
+          <p class="font-playfair text-xl font-black text-white leading-tight">30% Off<br/>Weekend Brunch</p>
+          <p class="text-white/50 text-[11px] font-cormorant italic mt-1">Valid Sat & Sun · 11am–3pm</p>
+          <button class="mt-3 bg-gold text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2 rounded-full">
+            Claim Offer
+          </button>
+        </div>
+        <div class="text-6xl relative z-10 flex-shrink-0">🍽️</div>
+      </div>
+    </div>
+
+    <!-- Mobile Categories -->
+    <div class="px-5 mt-6 anim-4">
+      <div class="flex justify-between items-center mb-4">
+        <p class="mobile-section-title">Categories</p>
+        <button class="text-[10px] font-bold uppercase tracking-widest text-redPrimary">See All</button>
+      </div>
+      <div id="catScroll" class="flex gap-3 overflow-x-auto scroll-hide pb-2" style="-webkit-overflow-scrolling:touch;">
+        <div class="cat-pill active">
+          <div class="icon-wrap">
+            <img src="./assests/thai.png" alt="Thai" class="w-full h-full object-cover"/>
+          </div>
+          <span>Thai</span>
+        </div>
+        <div class="cat-pill">
+          <div class="icon-wrap">
+            <img src="./assests/thai.png" alt="Italian" class="w-full h-full object-cover"/>
+          </div>
+          <span>Italian</span>
+        </div>
+        <div class="cat-pill">
+          <div class="icon-wrap">
+            <img src="./assests/thai.png" alt="French" class="w-full h-full object-cover"/>
+          </div>
+          <span>French</span>
+        </div>
+        <div class="cat-pill">
+          <div class="icon-wrap">
+            <img src="./assests/thai.png" alt="Japanese" class="w-full h-full object-cover"/>
+          </div>
+          <span>Japanese</span>
+        </div>
+        <div class="cat-pill">
+          <div class="icon-wrap">
+            <img src="./assests/thai.png" alt="Dessert" class="w-full h-full object-cover"/>
+          </div>
+          <span>Desserts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile: Featured Dish -->
+    <div class="px-5 mt-6">
+      <div class="flex justify-between items-center mb-4">
+        <p class="mobile-section-title">Chef's Special</p>
+        <div class="rating-badge"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
+      </div>
+      <div class="featured-card">
+        <img src="./assests/thai.png" alt="Featured" class="w-full h-[200px] object-cover"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between">
+          <div>
+            <span class="tag tag-gold mb-2 block w-fit">Signature</span>
+            <p class="font-playfair text-xl font-black text-white leading-tight">Bistecca<br/>Fiorentina</p>
+            <p class="text-white/60 text-[11px] font-cormorant italic mt-1">Dry-aged T-bone · rosemary butter</p>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <p class="font-playfair text-xl font-black text-white">$48</p>
+            <button class="w-9 h-9 bg-redPrimary rounded-full flex items-center justify-center text-white text-lg shadow-lg">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile: Popular Dishes (horizontal scroll) -->
+    <div class="mt-6">
+      <div class="flex justify-between items-center mb-4 px-5">
+        <p class="mobile-section-title">Most Popular</p>
+        <button class="text-[10px] font-bold uppercase tracking-widest text-redPrimary">See All</button>
+      </div>
+      <div class="flex gap-3 overflow-x-auto scroll-hide pl-5 pr-5 pb-2" style="-webkit-overflow-scrolling:touch;" id="dishScroll">
+
+        <!-- Dish card -->
+        <div class="app-dish-card w-[155px]">
+          <div class="relative overflow-hidden h-[130px]">
+            <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/>
+            <div class="absolute top-2 left-2">
+              <span class="tag tag-gold">Popular</span>
+            </div>
+          </div>
+          <div class="p-3">
+            <p class="font-playfair text-sm font-bold text-textDark leading-tight">Tagliatelle al Ragù</p>
+            <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">House-made pasta</p>
+            <div class="flex items-center justify-between mt-2.5">
+              <p class="font-bold text-textDark text-sm">$28</p>
+              <button class="add-btn"><span class="text-lg leading-none">+</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-dish-card w-[155px]">
+          <div class="relative overflow-hidden h-[130px]">
+            <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/>
+            <div class="absolute top-2 left-2">
+              <span class="tag tag-red">New</span>
+            </div>
+          </div>
+          <div class="p-3">
+            <p class="font-playfair text-sm font-bold text-textDark leading-tight">Panna Cotta</p>
+            <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Vanilla · berry coulis</p>
+            <div class="flex items-center justify-between mt-2.5">
+              <p class="font-bold text-textDark text-sm">$14</p>
+              <button class="add-btn"><span class="text-lg leading-none">+</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-dish-card w-[155px]">
+          <div class="relative overflow-hidden h-[130px]">
+            <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/>
+          </div>
+          <div class="p-3">
+            <p class="font-playfair text-sm font-bold text-textDark leading-tight">Tom Yum Soup</p>
+            <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Spicy lemongrass</p>
+            <div class="flex items-center justify-between mt-2.5">
+              <p class="font-bold text-textDark text-sm">$18</p>
+              <button class="add-btn"><span class="text-lg leading-none">+</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-dish-card w-[155px]">
+          <div class="relative overflow-hidden h-[130px]">
+            <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/>
+          </div>
+          <div class="p-3">
+            <p class="font-playfair text-sm font-bold text-textDark leading-tight">Tuna Tartare</p>
+            <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Sesame · avocado</p>
+            <div class="flex items-center justify-between mt-2.5">
+              <p class="font-bold text-textDark text-sm">$32</p>
+              <button class="add-btn"><span class="text-lg leading-none">+</span></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile: Reserve CTA -->
+    <div class="px-5 mt-6">
+      <div class="bg-cream rounded-2xl p-5 flex items-center justify-between gap-4 border border-borderSoft">
+        <div>
+          <p class="font-playfair text-lg font-black text-textDark">Reserve Your<br/>Table Tonight</p>
+          <p class="font-cormorant italic text-textMid/50 text-sm mt-1">Mon–Sun · 12pm–11pm</p>
+        </div>
+        <a href="#reservation" class="book-btn text-white px-5 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] flex-shrink-0 flex items-center gap-2">
+          <i class="fa-regular fa-calendar-check"></i> Book Now
+        </a>
+      </div>
+    </div>
+
+  </div><!-- end mobile -->
+
+
+  <!-- ══════════════════════════════════════
+       DESKTOP: CATEGORIES
+  ══════════════════════════════════════ -->
+  <section id="menu" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-20">
+    <div class="flex justify-between items-end mb-12 border-b border-borderSoft pb-5">
+      <div>
+        <div class="section-label mb-3">Our Specialties</div>
+        <h2 class="font-playfair text-4xl lg:text-5xl font-black text-textDark">Most Popular</h2>
+      </div>
+      <button class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-textMid hover:text-redPrimary transition-all border border-borderSoft px-5 py-2.5 rounded-full hover:border-redPrimary">
+        See All Menu <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+      </button>
+    </div>
+    <div class="grid grid-cols-5 gap-5">
+      <!-- each cat card -->
+      <div class="cat-card-desk">
+        <div class="relative overflow-hidden rounded-2xl aspect-[3/4]">
+          <img src="./assests/thai.png" class="w-full h-full object-cover" alt="Thai"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4">
+            <div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div>
+            <h3 class="font-playfair text-xl font-bold text-white">Thai</h3>
+            <p class="text-white/60 text-[11px] font-cormorant italic">Flavors of the East</p>
+          </div>
+        </div>
+      </div>
+      <div class="cat-card-desk">
+        <div class="relative overflow-hidden rounded-2xl aspect-[3/4]">
+          <img src="./assests/thai.png" class="w-full h-full object-cover" alt="Italian"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4">
+            <div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div>
+            <h3 class="font-playfair text-xl font-bold text-white">Italian</h3>
+            <p class="text-white/60 text-[11px] font-cormorant italic">Pasta & fine wine</p>
+          </div>
+        </div>
+      </div>
+      <div class="cat-card-desk">
+        <div class="relative overflow-hidden rounded-2xl aspect-[3/4]">
+          <img src="./assests/thai.png" class="w-full h-full object-cover" alt="French"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4">
+            <div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div>
+            <h3 class="font-playfair text-xl font-bold text-white">French</h3>
+            <p class="text-white/60 text-[11px] font-cormorant italic">Gourmet pastry</p>
+          </div>
+        </div>
+      </div>
+      <div class="cat-card-desk">
+        <div class="relative overflow-hidden rounded-2xl aspect-[3/4]">
+          <img src="./assests/thai.png" class="w-full h-full object-cover" alt="Japanese"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4">
+            <div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div>
+            <h3 class="font-playfair text-xl font-bold text-white">Japanese</h3>
+            <p class="text-white/60 text-[11px] font-cormorant italic">Masterful sushi</p>
+          </div>
+        </div>
+      </div>
+      <div class="cat-card-desk">
+        <div class="relative overflow-hidden rounded-2xl aspect-[3/4]">
+          <img src="./assests/thai.png" class="w-full h-full object-cover" alt="Dessert"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4">
+            <div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div>
+            <h3 class="font-playfair text-xl font-bold text-white">Dessert</h3>
+            <p class="text-white/60 text-[11px] font-cormorant italic">Sweet endings</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       DESKTOP: POPULAR DISHES
+  ══════════════════════════════════════ -->
+  <section class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-16">
+    <div class="flex justify-between items-end mb-12 border-b border-borderSoft pb-5">
+      <div>
+        <div class="section-label mb-3">Most Ordered</div>
+        <h2 class="font-playfair text-4xl lg:text-5xl font-black text-textDark">Popular Right Now</h2>
+      </div>
+      <button class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-textMid hover:text-redPrimary transition-all border border-borderSoft px-5 py-2.5 rounded-full hover:border-redPrimary">
+        Full Menu <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+      </button>
+    </div>
+    <div class="grid grid-cols-3 gap-5">
+      <!-- dish card 1 -->
+      <div class="dish-card">
+        <div class="relative overflow-hidden h-[200px]">
+          <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"/>
+          <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-3">
             <div>
-                <span class="font-playfair text-2xl font-black text-white">Sav<span
-                        class="italic font-light text-redPrimary">o</span>ria</span>
-                <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">
-                    Fine Dining
-                </p>
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Tagliatelle al Ragù</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">House-made pasta · slow-cooked beef</p>
             </div>
-            <button onclick="toggleMenu()"
-                class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">
-                ✕
+            <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
+          </div>
+          <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+            <p class="font-playfair text-xl font-black text-textDark">$28</p>
+            <button class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
+              <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
             </button>
+          </div>
         </div>
-
-        <!-- Gold divider -->
-        <div class="gold-line h-[1px] w-full mb-8"></div>
-
-        <ul class="flex flex-col gap-1 flex-1">
-            <li>
-                <a href="#" onclick="toggleMenu()"
-                    class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold">Home</a>
-            </li>
-            <li>
-                <a href="#menu" onclick="toggleMenu()"
-                    class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold">Menu</a>
-            </li>
-            <li>
-                <a href="#about" onclick="toggleMenu()"
-                    class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold">About</a>
-            </li>
-            <li>
-                <a href="#reservation" onclick="toggleMenu()"
-                    class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold">Reserve</a>
-            </li>
-            <li>
-                <a href="#contact" onclick="toggleMenu()"
-                    class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold">Contact</a>
-            </li>
-        </ul>
-
-        <div class="mt-auto space-y-3">
-            <a href="#reservation" onclick="toggleMenu()"
-                class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
-                <i class="fa-regular fa-calendar-check"></i> Book a Table
-            </a>
-            <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
-                <span>📞 +1 (555) 920-4200</span>
-                <span>·</span>
-                <span>Mon–Sun 12–11pm</span>
-            </div>
+      </div>
+      <!-- dish card 2 -->
+      <div class="dish-card">
+        <div class="relative overflow-hidden h-[200px]">
+          <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"/>
+          <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
         </div>
-    </div>
-
-    <!-- ═══════════ CART PANEL ═══════════ -->
-    <div id="cartPanel"
-        class="fixed top-0 right-0 h-full z-[1200] w-full sm:w-[400px] bg-white flex flex-col shadow-2xl">
-        <!-- Cart Header -->
-        <div class="flex items-center justify-between px-6 py-5 border-b border-borderSoft bg-cream/50">
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-3">
             <div>
-                <h2 class="font-playfair text-xl font-bold text-textDark">
-                    Your Order
-                </h2>
-                <p class="font-cormorant italic text-gold text-[13px] tracking-wide mt-0.5">
-                    3 items selected
-                </p>
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Bistecca Fiorentina</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Dry-aged T-bone · rosemary butter</p>
             </div>
-            <button onclick="toggleCart()"
-                class="w-9 h-9 rounded-full bg-redPale text-redPrimary hover:bg-redPrimary hover:text-white transition flex items-center justify-center text-sm">
-                <i class="fa-solid fa-xmark"></i>
+            <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
+          </div>
+          <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+            <p class="font-playfair text-xl font-black text-textDark">$48</p>
+            <button class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
+              <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
             </button>
+          </div>
         </div>
-
-        <!-- Gold line -->
-        <div class="gold-line h-[2px]"></div>
-
-        <!-- Cart Items -->
-        <div class="cart-items flex-1 overflow-y-auto px-6 py-5 space-y-4">
-            <!-- Item 1 -->
-            <div class="flex gap-4 pb-4 border-b border-borderSoft/60">
-                <div class="cart-img w-[72px] h-[72px] rounded-xl flex-shrink-0">
-                    🍝
-                </div>
-                <div class="flex-1 min-w-0">
-                    <div class="flex justify-between items-start gap-2">
-                        <div>
-                            <p class="font-playfair font-bold text-textDark text-[15px] leading-tight">
-                                Tagliatelle al Ragù
-                            </p>
-                            <p class="text-[11px] text-textMid/60 mt-0.5 font-cormorant italic">
-                                House-made pasta · slow-cooked beef
-                            </p>
-                        </div>
-                        <button
-                            class="text-white/0 hover:text-redPrimary transition text-xs text-textMid/30 hover:text-redPrimary flex-shrink-0"
-                            onclick="removeItem(this)">
-                            <i class="fa-solid fa-trash-can text-xs"></i>
-                        </button>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div class="flex items-center gap-1 border border-borderSoft rounded-lg overflow-hidden">
-                            <button class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
-                                onclick="changeQty(this, -1)">
-                                −
-                            </button>
-                            <span class="qty-value w-8 text-center text-sm font-semibold text-textDark">1</span>
-                            <button class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
-                                onclick="changeQty(this, 1)">
-                                +
-                            </button>
-                        </div>
-                        <span class="font-bold text-textDark text-[15px]">$28.00</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="flex gap-4 pb-4 border-b border-borderSoft/60">
-                <div class="cart-img w-[72px] h-[72px] rounded-xl flex-shrink-0">
-                    🥩
-                </div>
-                <div class="flex-1 min-w-0">
-                    <div class="flex justify-between items-start gap-2">
-                        <div>
-                            <p class="font-playfair font-bold text-textDark text-[15px] leading-tight">
-                                Bistecca Fiorentina
-                            </p>
-                            <p class="text-[11px] text-textMid/60 mt-0.5 font-cormorant italic">
-                                Dry-aged T-bone · rosemary butter
-                            </p>
-                        </div>
-                        <button class="text-textMid/30 hover:text-redPrimary transition text-xs flex-shrink-0"
-                            onclick="removeItem(this)">
-                            <i class="fa-solid fa-trash-can text-xs"></i>
-                        </button>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div class="flex items-center gap-1 border border-borderSoft rounded-lg overflow-hidden">
-                            <button class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
-                                onclick="changeQty(this, -1)">
-                                −
-                            </button>
-                            <span class="qty-value w-8 text-center text-sm font-semibold text-textDark">2</span>
-                            <button class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
-                                onclick="changeQty(this, 1)">
-                                +
-                            </button>
-                        </div>
-                        <span class="font-bold text-textDark text-[15px]">$96.00</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 3 -->
-            <div class="flex gap-4 pb-4 border-b border-borderSoft/60">
-                <div class="cart-img w-[72px] h-[72px] rounded-xl flex-shrink-0">
-                    🍮
-                </div>
-                <div class="flex-1 min-w-0">
-                    <div class="flex justify-between items-start gap-2">
-                        <div>
-                            <p class="font-playfair font-bold text-textDark text-[15px] leading-tight">
-                                Panna Cotta
-                            </p>
-                            <p class="text-[11px] text-textMid/60 mt-0.5 font-cormorant italic">
-                                Vanilla bean · wild berry coulis
-                            </p>
-                        </div>
-                        <button class="text-textMid/30 hover:text-redPrimary transition text-xs flex-shrink-0"
-                            onclick="removeItem(this)">
-                            <i class="fa-solid fa-trash-can text-xs"></i>
-                        </button>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div class="flex items-center gap-1 border border-borderSoft rounded-lg overflow-hidden">
-                            <button class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
-                                onclick="changeQty(this, -1)">
-                                −
-                            </button>
-                            <span class="qty-value w-8 text-center text-sm font-semibold text-textDark">1</span>
-                            <button class="qty-btn w-8 h-8 text-sm text-textMid flex items-center justify-center"
-                                onclick="changeQty(this, 1)">
-                                +
-                            </button>
-                        </div>
-                        <span class="font-bold text-textDark text-[15px]">$14.00</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Upsell suggestion -->
-            <div class="bg-cream/70 rounded-xl p-4 border border-borderSoft">
-                <p class="text-[11px] uppercase tracking-[0.2em] font-semibold text-gold mb-2">
-                    Pair it with
-                </p>
-                <div class="flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xl">🍷</span>
-                        <div>
-                            <p class="text-[13px] font-semibold text-textDark leading-tight">
-                                Chianti Classico
-                            </p>
-                            <p class="text-[11px] text-textMid/50 font-cormorant italic">
-                                2018 · Tuscany
-                            </p>
-                        </div>
-                    </div>
-                    <button
-                        class="flex-shrink-0 text-[11px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white hover:border-transparent transition">
-                        + Add $18
-                    </button>
-                </div>
-            </div>
+      </div>
+      <!-- dish card 3 -->
+      <div class="dish-card">
+        <div class="relative overflow-hidden h-[200px]">
+          <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"/>
+          <div class="absolute top-3 left-3"><span class="tag tag-gold">New</span></div>
         </div>
-
-        <!-- Cart Footer -->
-        <div class="border-t border-borderSoft bg-white px-6 py-5 space-y-3">
-            <!-- Order note -->
-            <div class="flex items-center gap-2 text-[12px] text-textMid/50 bg-cream/60 rounded-lg px-3 py-2.5">
-                <i class="fa-regular fa-note-sticky text-gold/70"></i>
-                <input type="text" placeholder="Add a note for the kitchen…"
-                    class="bg-transparent flex-1 outline-none placeholder-textMid/40 text-[12px]" />
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Panna Cotta</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Vanilla bean · wild berry coulis</p>
             </div>
-
-            <!-- Totals -->
-            <div class="space-y-1.5">
-                <div class="flex justify-between text-[13px] text-textMid/60">
-                    <span>Subtotal</span><span>$138.00</span>
-                </div>
-                <div class="flex justify-between text-[13px] text-textMid/60">
-                    <span>Service (10%)</span><span>$13.80</span>
-                </div>
-                <div class="gold-line h-[1px] my-2"></div>
-                <div class="flex justify-between font-bold text-textDark text-[16px]">
-                    <span class="font-playfair">Total</span>
-                    <span>$151.80</span>
-                </div>
-            </div>
-
-            <!-- CTA -->
-            <button
-                class="book-btn w-full text-white py-4 rounded text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2">
-                <i class="fa-regular fa-calendar-check"></i>
-                Proceed to Checkout
+            <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
+          </div>
+          <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+            <p class="font-playfair text-xl font-black text-textDark">$14</p>
+            <button class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
+              <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
             </button>
-
-            <button onclick="toggleCart()"
-                class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">
-                Continue Browsing
-            </button>
+          </div>
         </div>
+      </div>
     </div>
+  </section>
 
-    <!-- ═══════════ PAGE CONTENT ═══════════ -->
-    <div id="pageContent">
-        <!-- NAVBAR -->
-        <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
-            style="background: rgba(255, 255, 255, 0)">
-            <!-- Gold top accent -->
-            <div id="goldAccent" class="gold-line h-[2px] w-full transition-opacity duration-300"></div>
-
-            <div id="navInner"
-                class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
-                <!-- Logo -->
-                <a href="#" class="flex flex-col leading-none group flex-shrink-0">
-                    <span
-                        class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
-                        Sav<span class="italic font-light text-redPrimary">o</span>ria
-                    </span>
-                    <span
-                        class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block"
-                        style="margin-top: -2px">
-                        Fine Dining
-                    </span>
-                </a>
-
-                <!-- Desktop Nav Links (hidden on mobile) -->
-                <ul
-                    class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
-                    <li><a href="#" class="nav-link transition">Home</a></li>
-                    <li><a href="#menu" class="nav-link transition">Menu</a></li>
-                    <li><a href="#about" class="nav-link transition">About</a></li>
-                    <li>
-                        <a href="#reservation" class="nav-link transition">Reserve</a>
-                    </li>
-                    <li><a href="#contact" class="nav-link transition">Contact</a></li>
-                </ul>
-
-                <!-- Right Actions -->
-                <div class="flex items-center gap-2 sm:gap-3">
-                    <!-- Cart Button -->
-                    <button onclick="toggleCart()"
-                        class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
-                        <i class="fa-solid fa-bag-shopping text-[15px]"></i>
-                        <span id="cartBadge"
-                            class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full flex items-center justify-center">
-                            3
-                        </span>
-                    </button>
-
-                    <!-- Login (desktop) -->
-                    <button
-                        class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
-                        <i class="fa-regular fa-circle-user"></i> Login
-                    </button>
-
-                    <!-- Book CTA (desktop) -->
-                    <a href="#reservation"
-                        class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
-                        <i class="fa-regular fa-calendar-check text-[11px]"></i>
-                        Book a Table
-                    </a>
-
-                    <!-- Hamburger (mobile) -->
-                    <button onclick="toggleMenu()"
-                        class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
-                        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-                        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-                        <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="h-px bg-borderSoft/80"></div>
-        </nav>
+  <!-- ══════════════════════════════════════
+       DESKTOP: PROMO BANNER
+  ══════════════════════════════════════ -->
+  <section class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-8">
+    <div class="promo-banner p-10 lg:p-14 flex items-center justify-between gap-8">
+      <div class="relative z-10">
+        <span class="tag tag-dark mb-4 block w-fit">Limited Time Offer</span>
+        <h2 class="font-playfair text-4xl lg:text-5xl font-black text-white leading-tight mb-3">
+          30% Off Weekend<br/>Brunch Menu
+        </h2>
+        <p class="font-cormorant italic text-white/50 text-xl tracking-wide">Valid every Saturday & Sunday · 11am–3pm</p>
+        <button class="mt-6 bg-gold hover:bg-goldLight transition text-white text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-3.5 rounded-full inline-flex items-center gap-2">
+          <i class="fa-regular fa-calendar-check"></i> Claim Offer
+        </button>
+      </div>
+      <div class="text-[120px] relative z-10 flex-shrink-0 leading-none">🍽️</div>
     </div>
+  </section>
 
-    <main>
-        <!-- HERO placeholder -->
-        <section class="min-h-[80vh] flex flex-col items-center justify-center gap-4 bg-cream/30 px-6 text-center">
-            <p class="text-[11px] uppercase tracking-[0.35em] text-gold font-semibold">
-                Est. 2010 · New York
-            </p>
-            <h1 class="text-4xl sm:text-5xl lg:text-7xl font-playfair font-bold text-textDark leading-tight">
-                Welcome to <em class="text-redPrimary not-italic">Savoria</em>
-            </h1>
-            <p class="font-cormorant italic text-lg sm:text-xl text-textMid/60 tracking-wide">
-                Where every dish tells a story
-            </p>
-            <div class="flex flex-col sm:flex-row gap-3 mt-4">
-                <a href="#menu"
-                    class="book-btn text-white px-8 py-3.5 rounded text-[11px] font-bold tracking-[0.2em] uppercase">
-                    Explore Menu
-                </a>
-                <a href="#reservation"
-                    class="border border-textDark/20 text-textDark px-8 py-3.5 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition">
-                    Reserve a Table
-                </a>
-            </div>
-        </section>
+  <!-- ══════════════════════════════════════
+       DESKTOP: TESTIMONIALS
+  ══════════════════════════════════════ -->
+  <section id="about" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-20">
+    <div class="text-center mb-14">
+      <div class="section-label justify-center mb-4">What Guests Say</div>
+      <h2 class="font-playfair text-4xl lg:text-5xl font-black text-textDark">Voices of Savoria</h2>
+    </div>
+    <div class="grid grid-cols-3 gap-6">
+      <div class="testimonial-card">
+        <div class="flex gap-0.5 mb-4">
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+        </div>
+        <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"An extraordinary culinary journey. The Bistecca was cooked to absolute perfection — I've never tasted anything like it."</p>
+        <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
+          <div class="w-10 h-10 rounded-full bg-cream flex items-center justify-center font-playfair font-bold text-redPrimary">A</div>
+          <div>
+            <p class="text-sm font-semibold text-textDark">Alexandra M.</p>
+            <p class="text-[11px] text-textMid/50">Regular Guest · New York</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="flex gap-0.5 mb-4">
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+        </div>
+        <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"The ambiance, the service, the food — everything was impeccable. Savoria has truly set a new standard for fine dining."</p>
+        <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
+          <div class="w-10 h-10 rounded-full bg-cream flex items-center justify-center font-playfair font-bold text-redPrimary">J</div>
+          <div>
+            <p class="text-sm font-semibold text-textDark">James R.</p>
+            <p class="text-[11px] text-textMid/50">Food Critic · The Times</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="flex gap-0.5 mb-4">
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+        </div>
+        <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"Chef Marco's Panna Cotta is a poem on a plate. We celebrate every anniversary here — it never disappoints."</p>
+        <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
+          <div class="w-10 h-10 rounded-full bg-cream flex items-center justify-center font-playfair font-bold text-redPrimary">S</div>
+          <div>
+            <p class="text-sm font-semibold text-textDark">Sofia & Daniel</p>
+            <p class="text-[11px] text-textMid/50">Annual Guests · Brooklyn</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <!-- top category section  -->
-        <section class="w-full md:max-w-7xl mx-auto px-6 py-16">
-            <div class="flex justify-between items-end mb-10 border-b border-borderSoft pb-4">
-                <div>
-                    <span class="text-redPrimary uppercase tracking-[0.3em] text-[10px] font-bold">Our
-                        Specialties</span>
-                    <h2 class="text-textDark text-3xl md:text-4xl font-playfair font-black mt-1">
-                        Most Popular
-                    </h2>
-                </div>
-                <button
-                    class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-textMid hover:text-redPrimary transition-all">
-                    See All
-                    <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1.5 transition-transform"></i>
-                </button>
-            </div>
+  <!-- ══════════════════════════════════════
+       DESKTOP: RESERVATION CTA
+  ══════════════════════════════════════ -->
+  <section id="reservation" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-16">
+    <div class="bg-cream rounded-2xl p-12 lg:p-16 flex items-center justify-between gap-8 border border-borderSoft">
+      <div>
+        <div class="section-label mb-4">Book Your Experience</div>
+        <h2 class="font-playfair text-4xl font-black text-textDark mb-3">Reserve Your Table<br/>for Tonight</h2>
+        <p class="font-cormorant italic text-textMid/60 text-lg">Open Monday to Sunday · 12:00pm – 11:00pm<br/>+1 (555) 920-4200</p>
+      </div>
+      <div class="flex flex-col gap-3 flex-shrink-0">
+        <a href="#" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center">
+          <i class="fa-regular fa-calendar-check"></i> Book Online
+        </a>
+        <a href="tel:+15559204200" class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center">
+          <i class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us
+        </a>
+      </div>
+    </div>
+  </section>
 
-            <!-- ── Desktop: 5-column grid ── -->
-            <div class="hidden md:grid grid-cols-5 gap-4">
-                <div class="group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-xl aspect-square mb-2.5">
-                        <img src="./assests/thai.png"
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            alt="Thai" />
-                        <div
-                            class="absolute inset-0 bg-black/15 group-hover:bg-black/35 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span
-                                class="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/40 px-3 py-1 rounded-full backdrop-blur-sm bg-black/20">Explore</span>
-                        </div>
-                    </div>
-                    <h3
-                        class="font-playfair text-base font-bold text-textDark group-hover:text-redPrimary transition-colors leading-tight">
-                        Thai
-                    </h3>
-                    <p class="text-textMid text-[11px] mt-0.5 opacity-60 font-cormorant italic">
-                        Flavors of the East
-                    </p>
-                </div>
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer id="contact" class="footer-bg hidden md:block">
+    <div class="max-w-7xl mx-auto px-8 lg:px-14 py-16">
+      <div class="grid grid-cols-4 gap-10 mb-12">
+        <div class="col-span-1">
+          <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
+          <p class="font-cormorant italic text-gold/60 text-xs tracking-[0.3em] uppercase mt-0.5 mb-4">Fine Dining</p>
+          <p class="text-white/40 text-sm leading-relaxed">Where every dish tells a story of passion, craft, and the finest ingredients.</p>
+          <div class="flex gap-3 mt-5">
+            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-x-twitter"></i></a>
+          </div>
+        </div>
+        <div>
+          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Navigation</p>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
+            <li><a href="#menu" class="text-white/40 text-sm hover:text-gold transition">Menu</a></li>
+            <li><a href="#about" class="text-white/40 text-sm hover:text-gold transition">About</a></li>
+            <li><a href="#reservation" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Hours</p>
+          <ul class="space-y-2">
+            <li class="text-white/40 text-sm">Mon–Fri · 12pm–10pm</li>
+            <li class="text-white/40 text-sm">Sat–Sun · 11am–11pm</li>
+            <li class="text-white/40 text-sm mt-3">Happy Hour · 4–6pm</li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Contact</p>
+          <ul class="space-y-3">
+            <li class="text-white/40 text-sm">📍 42 West 58th St, New York</li>
+            <li class="text-white/40 text-sm">📞 +1 (555) 920-4200</li>
+            <li class="text-white/40 text-sm">✉️ hello@savoria.com</li>
+          </ul>
+        </div>
+      </div>
+      <div class="gold-line h-[1px] mb-6 opacity-20"></div>
+      <div class="flex justify-between items-center">
+        <p class="text-white/30 text-xs">© 2025 Savoria Fine Dining. All rights reserved.</p>
+        <p class="font-cormorant italic text-gold/40 text-sm">Where every dish tells a story</p>
+      </div>
+    </div>
+  </footer>
 
-                <div class="group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-xl aspect-square mb-2.5">
-                        <img src="./assests/thai.png"
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            alt="Italian" />
-                        <div
-                            class="absolute inset-0 bg-black/15 group-hover:bg-black/35 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span
-                                class="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/40 px-3 py-1 rounded-full backdrop-blur-sm bg-black/20">Explore</span>
-                        </div>
-                    </div>
-                    <h3
-                        class="font-playfair text-base font-bold text-textDark group-hover:text-redPrimary transition-colors leading-tight">
-                        Italian
-                    </h3>
-                    <p class="text-textMid text-[11px] mt-0.5 opacity-60 font-cormorant italic">
-                        Pasta & fine wine
-                    </p>
-                </div>
+</main>
 
-                <div class="group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-xl aspect-square mb-2.5">
-                        <img src="./assests/thai.png"
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            alt="French" />
-                        <div
-                            class="absolute inset-0 bg-black/15 group-hover:bg-black/35 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span
-                                class="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/40 px-3 py-1 rounded-full backdrop-blur-sm bg-black/20">Explore</span>
-                        </div>
-                    </div>
-                    <h3
-                        class="font-playfair text-base font-bold text-textDark group-hover:text-redPrimary transition-colors leading-tight">
-                        French
-                    </h3>
-                    <p class="text-textMid text-[11px] mt-0.5 opacity-60 font-cormorant italic">
-                        Gourmet pastry
-                    </p>
-                </div>
+<!-- ══════════════════════════════════════
+     MOBILE BOTTOM NAV (App Style)
+══════════════════════════════════════ -->
+<nav class="mobile-bottom-nav md:hidden">
+  <div class="nav-item active" onclick="setActive(this)">
+    <i class="fa-solid fa-house"></i>
+    <span>Home</span>
+  </div>
+  <div class="nav-item" onclick="setActive(this)">
+    <i class="fa-solid fa-utensils"></i>
+    <span>Menu</span>
+  </div>
+  <!-- Cart FAB (center) -->
+  <div onclick="toggleCart()">
+    <div class="cart-fab">
+      <i class="fa-solid fa-bag-shopping text-lg"></i>
+      <div class="badge">3</div>
+    </div>
+  </div>
+  <div class="nav-item" onclick="setActive(this)">
+    <i class="fa-regular fa-calendar-check"></i>
+    <span>Reserve</span>
+  </div>
+  <div class="nav-item" onclick="setActive(this)">
+    <i class="fa-regular fa-circle-user"></i>
+    <span>Profile</span>
+  </div>
+</nav>
 
-                <div class="group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-xl aspect-square mb-2.5">
-                        <img src="./assests/thai.png"
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            alt="Japanese" />
-                        <div
-                            class="absolute inset-0 bg-black/15 group-hover:bg-black/35 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span
-                                class="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/40 px-3 py-1 rounded-full backdrop-blur-sm bg-black/20">Explore</span>
-                        </div>
-                    </div>
-                    <h3
-                        class="font-playfair text-base font-bold text-textDark group-hover:text-redPrimary transition-colors leading-tight">
-                        Japanese
-                    </h3>
-                    <p class="text-textMid text-[11px] mt-0.5 opacity-60 font-cormorant italic">
-                        Masterful sushi
-                    </p>
-                </div>
+<script src="./static/js/main.js"></script>
+<script>
+  // ── Mobile bottom nav active state ──
+  function setActive(el) {
+    document.querySelectorAll('.mobile-bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+  }
 
-                <div class="group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-xl aspect-square mb-2.5">
-                        <img src="./assests/thai.png"
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            alt="Dessert" />
-                        <div
-                            class="absolute inset-0 bg-black/15 group-hover:bg-black/35 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span
-                                class="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/40 px-3 py-1 rounded-full backdrop-blur-sm bg-black/20">Explore</span>
-                        </div>
-                    </div>
-                    <h3
-                        class="font-playfair text-base font-bold text-textDark group-hover:text-redPrimary transition-colors leading-tight">
-                        Dessert
-                    </h3>
-                    <p class="text-textMid text-[11px] mt-0.5 opacity-60 font-cormorant italic">
-                        Sweet endings
-                    </p>
-                </div>
-            </div>
+  // ── Category pill active ──
+  document.querySelectorAll('.cat-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+    });
+  });
 
-            <!-- ── Mobile: marquee infinite scroll ── -->
+  // ── Cart panel toggle ──
+  function toggleCart() {
+    const panel = document.getElementById('cartPanel');
+    const overlay = document.getElementById('overlay');
+    const isOpen = panel.style.transform === 'translateX(0%)';
+    panel.style.transform = isOpen ? 'translateX(100%)' : 'translateX(0%)';
+    overlay.style.opacity = isOpen ? '0' : '1';
+    overlay.style.pointerEvents = isOpen ? 'none' : 'all';
+  }
 
-            <div class="md:hidden -mx-6">
+  function closeAll() {
+    const panel = document.getElementById('cartPanel');
+    const overlay = document.getElementById('overlay');
+    panel.style.transform = 'translateX(100%)';
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+  }
 
-                <!-- fade edges -->
-                <div class="relative">
-                    
-                    <div id="catScroll" class="overflow-x-auto scroll-smooth"
-                        style="-webkit-overflow-scrolling: touch; scrollbar-width: none; cursor: grab;">
+  // ── Navbar scroll effect ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      navbar.style.background = 'rgba(255,255,255,0.98)';
+      navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.06)';
+    } else {
+      navbar.style.background = 'rgba(255,255,255,0)';
+      navbar.style.boxShadow = 'none';
+    }
+  });
 
-                        <div class="flex gap-3 px-6 pb-3 w-max">
-
-                            <div class="group cursor-pointer w-[120px] flex-shrink-0">
-                                <div class="relative overflow-hidden rounded-2xl mb-2.5" style="aspect-ratio:3/4;">
-                                    <img src="./assests/thai.png" class="w-full h-full object-cover" alt="Thai" />
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-                                    </div>
-                                    <div class="absolute bottom-0 left-0 right-0 p-3">
-                                        <h3 class="font-playfair text-sm font-bold text-white leading-tight">Thai</h3>
-                                        <p class="text-white/60 text-[10px] font-cormorant italic">East flavors</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="group cursor-pointer w-[120px] flex-shrink-0">
-                                <div class="relative overflow-hidden rounded-2xl mb-2.5" style="aspect-ratio:3/4;">
-                                    <img src="./assests/thai.png" class="w-full h-full object-cover" alt="Italian" />
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-                                    </div>
-                                    <div class="absolute bottom-0 left-0 right-0 p-3">
-                                        <h3 class="font-playfair text-sm font-bold text-white leading-tight">Italian
-                                        </h3>
-                                        <p class="text-white/60 text-[10px] font-cormorant italic">Pasta & wine</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="group cursor-pointer w-[120px] flex-shrink-0">
-                                <div class="relative overflow-hidden rounded-2xl mb-2.5" style="aspect-ratio:3/4;">
-                                    <img src="./assests/thai.png" class="w-full h-full object-cover" alt="French" />
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-                                    </div>
-                                    <div class="absolute bottom-0 left-0 right-0 p-3">
-                                        <h3 class="font-playfair text-sm font-bold text-white leading-tight">French</h3>
-                                        <p class="text-white/60 text-[10px] font-cormorant italic">Gourmet</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="group cursor-pointer w-[120px] flex-shrink-0">
-                                <div class="relative overflow-hidden rounded-2xl mb-2.5" style="aspect-ratio:3/4;">
-                                    <img src="./assests/thai.png" class="w-full h-full object-cover" alt="Japanese" />
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-                                    </div>
-                                    <div class="absolute bottom-0 left-0 right-0 p-3">
-                                        <h3 class="font-playfair text-sm font-bold text-white leading-tight">Japanese
-                                        </h3>
-                                        <p class="text-white/60 text-[10px] font-cormorant italic">Masterful sushi</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="group cursor-pointer w-[120px] flex-shrink-0">
-                                <div class="relative overflow-hidden rounded-2xl mb-2.5" style="aspect-ratio:3/4;">
-                                    <img src="./assests/thai.png" class="w-full h-full object-cover" alt="Dessert" />
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-                                    </div>
-                                    <div class="absolute bottom-0 left-0 right-0 p-3">
-                                        <h3 class="font-playfair text-sm font-bold text-white leading-tight">Dessert
-                                        </h3>
-                                        <p class="text-white/60 text-[10px] font-cormorant italic">Sweet endings</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- scroll dots indicator -->
-                <div id="catDots" class="flex justify-center gap-1.5 mt-4">
-                    <div class="h-[3px] w-5 rounded-full bg-redPrimary transition-all duration-300"></div>
-                    <div class="h-[3px] w-2 rounded-full bg-borderSoft transition-all duration-300"></div>
-                    <div class="h-[3px] w-2 rounded-full bg-borderSoft transition-all duration-300"></div>
-                    <div class="h-[3px] w-2 rounded-full bg-borderSoft transition-all duration-300"></div>
-                    <div class="h-[3px] w-2 rounded-full bg-borderSoft transition-all duration-300"></div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script src="./static/js/main.js"></script>
-    <script>
-        const catScroll = document.getElementById('catScroll');
-        const dots = document.querySelectorAll('#catDots div');
-
-        // ── Scrollbar hide ──
-        catScroll.style.cssText += 'scrollbar-width:none;';
-
-        // ── Touch drag ──
-        let isDown = false, startX = 0, scrollStart = 0, velX = 0, lastX = 0, momentum;
-
-        catScroll.addEventListener('touchstart', (e) => {
-            isDown = true;
-            startX = e.touches[0].clientX;
-            scrollStart = catScroll.scrollLeft;
-            velX = 0;
-            cancelAnimationFrame(momentum);
-        }, { passive: true });
-
-        catScroll.addEventListener('touchmove', (e) => {
-            if (!isDown) return;
-            const x = e.touches[0].clientX;
-            velX = x - lastX;
-            lastX = x;
-            catScroll.scrollLeft = scrollStart - (x - startX);
-            updateDots();
-        }, { passive: true });
-
-        catScroll.addEventListener('touchend', () => {
-            isDown = false;
-            // momentum glide
-            let v = -velX * 1.5;
-            function glide() {
-                if (Math.abs(v) < 0.5) return;
-                catScroll.scrollLeft += v;
-                v *= 0.92;
-                updateDots();
-                momentum = requestAnimationFrame(glide);
-            }
-            glide();
-        });
-
-        // ── Dot indicator ──
-        function updateDots() {
-            const cardWidth = 120 + 12; // w + gap
-            const index = Math.min(
-                Math.round(catScroll.scrollLeft / cardWidth),
-                dots.length - 1
-            );
-            dots.forEach((d, i) => {
-                d.style.width = i === index ? '20px' : '8px';
-                d.style.background = i === index ? '#c0392b' : '#e8ddd8';
-            });
-        }
-
-        catScroll.addEventListener('scroll', updateDots, { passive: true });
-    </script>
+  // ── Touch scroll for dish cards ──
+  const dishScroll = document.getElementById('dishScroll');
+  if (dishScroll) {
+    let isDown = false, startX = 0, scrollStart = 0, velX = 0, lastX = 0, momentum;
+    dishScroll.addEventListener('touchstart', e => {
+      isDown = true; startX = e.touches[0].clientX;
+      scrollStart = dishScroll.scrollLeft; velX = 0;
+      cancelAnimationFrame(momentum);
+    }, { passive: true });
+    dishScroll.addEventListener('touchmove', e => {
+      if (!isDown) return;
+      const x = e.touches[0].clientX;
+      velX = x - lastX; lastX = x;
+      dishScroll.scrollLeft = scrollStart - (x - startX);
+    }, { passive: true });
+    dishScroll.addEventListener('touchend', () => {
+      isDown = false;
+      let v = -velX * 1.5;
+      function glide() {
+        if (Math.abs(v) < 0.5) return;
+        dishScroll.scrollLeft += v; v *= 0.92;
+        momentum = requestAnimationFrame(glide);
+      }
+      glide();
+    });
+  }
+</script>
 </body>
-
 </html>
