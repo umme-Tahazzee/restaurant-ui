@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="static/css/style.css"/>
   <script>
     tailwind.config = {
       theme: {
@@ -27,103 +26,200 @@
     };
   </script>
   <style>
-    /* ── page-specific only ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
-    /* hero */
+    /* CSS variables */
+    :root {
+      --red: #c0392b; --gold: #b8963e;
+      --dark: #1a1210; --mid: #4a3830;
+      --border: #e8ddd8; --cream: #f5f0eb;
+    }
+
+    /* Scrollbar hide */
+    .scroll-hide { scrollbar-width:none; -ms-overflow-style:none; }
+    .scroll-hide::-webkit-scrollbar { display:none; }
+
+    /* Gold line */
+    .gold-line { background:linear-gradient(90deg,transparent,#b8963e 30%,#d4af6a 60%,transparent); }
+
+    /* Book button */
+    .book-btn {
+      background:linear-gradient(135deg,#c0392b,#96281b);
+      box-shadow:0 4px 15px rgba(192,57,43,.35);
+      transition:all .3s;
+    }
+    .book-btn:hover {
+      background:linear-gradient(135deg,#96281b,#c0392b);
+      box-shadow:0 6px 22px rgba(192,57,43,.45);
+      transform:translateY(-1px);
+    }
+
+    /* Nav link */
+    .nav-link { position:relative; padding-bottom:2px; }
+    .nav-link::after { content:''; position:absolute; bottom:0; left:0; width:0; height:1.5px; background:#c0392b; transition:width .3s; }
+    .nav-link:hover::after { width:100%; }
+    .nav-link:hover { color:#c0392b; }
+    .active-link { color:#c0392b !important; }
+
+    /* Section label */
+    .section-label {
+      display:flex; align-items:center; gap:10px;
+      font-size:10px; font-weight:700; letter-spacing:.3em;
+      text-transform:uppercase; color:#b8963e;
+    }
+    .section-label::before,.section-label::after {
+      content:''; flex:0 0 28px; height:1px;
+      background:linear-gradient(90deg,transparent,#b8963e);
+    }
+    .section-label::after { background:linear-gradient(90deg,#b8963e,transparent); }
+
+    /* Tags */
+    .tag { display:inline-flex; align-items:center; padding:3px 10px; border-radius:999px; font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+    .tag-gold { background:rgba(184,150,62,.15); color:#b8963e; border:1px solid rgba(184,150,62,.3); }
+    .tag-red  { background:rgba(192,57,43,.12);  color:#c0392b; border:1px solid rgba(192,57,43,.25); }
+    .tag-dark { background:rgba(0,0,0,.45); color:#fff; backdrop-filter:blur(4px); }
+    .tag-veg  { background:rgba(34,139,34,.12); color:#228b22; border:1px solid rgba(34,139,34,.25); }
+
+    /* Footer */
+    .footer-bg { background:linear-gradient(160deg,#1a1210,#2d1b16); }
+
+    /* Mobile bottom nav */
+    .mobile-bottom-nav {
+      position:fixed; bottom:0; left:0; right:0; z-index:900;
+      background:#fff; border-top:1px solid #e8ddd8;
+      display:flex; align-items:center; justify-content:space-around;
+      padding:10px 0 max(10px, env(safe-area-inset-bottom));
+      box-shadow:0 -4px 20px rgba(26,18,16,.08);
+    }
+    .nav-item {
+      display:flex; flex-direction:column; align-items:center; gap:4px;
+      font-size:9px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+      color:#4a3830; opacity:.45; cursor:pointer; transition:.2s; padding:0 6px;
+    }
+    .nav-item i { font-size:18px; }
+    .nav-item.active { opacity:1; color:#c0392b; }
+
+    /* Cart FAB */
+    .cart-fab {
+      width:52px; height:52px; border-radius:18px; position:relative;
+      background:linear-gradient(135deg,#c0392b,#96281b);
+      display:flex; align-items:center; justify-content:center; color:#fff;
+      box-shadow:0 4px 16px rgba(192,57,43,.45); margin-top:-14px;
+      transition:transform .2s;
+    }
+    .cart-fab:hover { transform:scale(1.05); }
+
+    /* Anim */
+    @keyframes slideUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+    .anim-1{animation:slideUp .6s .1s both;}
+    .anim-2{animation:slideUp .6s .2s both;}
+    .anim-3{animation:slideUp .6s .3s both;}
+    .anim-4{animation:slideUp .6s .4s both;}
+    .anim-5{animation:slideUp .6s .5s both;}
+
+    /* Reveal */
+    .reveal { opacity:0; transform:translateY(16px); transition:opacity .5s,transform .5s; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ── HERO ── */
     .reserve-hero {
-      background: linear-gradient(160deg,#fdf6f0 0%,#f5ede4 55%,#f0e4d8 100%);
+      background:linear-gradient(160deg,#fdf6f0 0%,#f5ede4 55%,#f0e4d8 100%);
       position:relative; overflow:hidden;
     }
     .reserve-hero::before {
       content:''; position:absolute; top:-140px; right:-100px;
-      width:580px; height:580px; border-radius:50%;
+      width:min(580px,90vw); height:min(580px,90vw); border-radius:50%;
       background:radial-gradient(circle,rgba(192,57,43,.07) 0%,transparent 65%);
       pointer-events:none;
     }
     .reserve-hero::after {
       content:''; position:absolute; bottom:-100px; left:-60px;
-      width:420px; height:420px; border-radius:50%;
+      width:min(420px,80vw); height:min(420px,80vw); border-radius:50%;
       background:radial-gradient(circle,rgba(184,150,62,.07) 0%,transparent 65%);
       pointer-events:none;
     }
 
-    /* multi-step wizard */
-    .step-bar { display:flex; align-items:center; gap:0; }
-    .step-node {
-      display:flex; flex-direction:column; align-items:center; gap:6px;
-      position:relative; z-index:1;
-    }
+    /* ── STEP BAR ── */
+    .step-bar { display:flex; align-items:center; }
+    .step-node { display:flex; flex-direction:column; align-items:center; gap:6px; position:relative; z-index:1; }
     .step-circle {
-      width:42px; height:42px; border-radius:50%;
+      width:38px; height:38px; border-radius:50%;
       display:flex; align-items:center; justify-content:center;
-      font-size:12px; font-weight:700;
-      border:2px solid var(--border);
-      background:#fff; color:var(--mid);
-      transition:all .3s;
+      font-size:11px; font-weight:700;
+      border:2px solid var(--border); background:#fff; color:var(--mid);
+      transition:all .3s; flex-shrink:0;
     }
     .step-circle.done  { background:var(--red); border-color:var(--red); color:#fff; }
     .step-circle.active{ background:var(--red); border-color:var(--red); color:#fff; box-shadow:0 0 0 6px rgba(192,57,43,.12); }
-    .step-label { font-size:9px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--mid); opacity:.4; white-space:nowrap; }
+    .step-label { font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--mid); opacity:.4; white-space:nowrap; }
     .step-label.active,.step-label.done { opacity:1; color:var(--red); }
-    .step-connector { flex:1; height:2px; background:var(--border); margin:0 8px; margin-bottom:20px; transition:background .3s; min-width:40px; }
+    .step-connector { flex:1; height:2px; background:var(--border); margin:0 4px; margin-bottom:22px; transition:background .3s; min-width:20px; }
     .step-connector.done { background:var(--red); }
 
-    /* form card */
+    /* Mobile step bar: hide labels on very small screens */
+    @media (max-width:480px) {
+      .step-circle { width:32px; height:32px; font-size:10px; }
+      .step-label { display:none; }
+      .step-connector { margin-bottom:0; min-width:12px; }
+      .step-node { gap:0; }
+    }
+
+    /* ── FORM CARD ── */
     .form-card {
       background:#fff; border:1px solid var(--border);
-      border-radius:24px; padding:36px 40px;
+      border-radius:20px; padding:28px 32px;
       box-shadow:0 4px 32px rgba(0,0,0,.05);
     }
-    @media(max-width:640px){ .form-card{ padding:24px 20px; border-radius:18px; } }
+    @media(max-width:640px){ .form-card{ padding:20px 16px; border-radius:16px; } }
 
-    /* field inputs */
+    /* ── INPUTS ── */
     .sv-input {
-      width:100%; border:1.5px solid var(--border); border-radius:14px;
-      padding:13px 16px; font-family:"Jost",sans-serif; font-size:14px;
+      width:100%; border:1.5px solid var(--border); border-radius:12px;
+      padding:12px 14px; font-family:"Jost",sans-serif; font-size:14px;
       color:var(--dark); outline:none; background:#fff;
-      transition:border-color .25s, box-shadow .25s;
+      transition:border-color .25s,box-shadow .25s;
     }
     .sv-input::placeholder { color:rgba(74,56,48,.3); }
-    .sv-input:focus  { border-color:var(--red); box-shadow:0 0 0 3px rgba(192,57,43,.08); }
-    .sv-input.err    { border-color:#e74c3c; }
+    .sv-input:focus { border-color:var(--red); box-shadow:0 0 0 3px rgba(192,57,43,.08); }
+    .sv-input.err { border-color:#e74c3c; }
     select.sv-input {
       appearance:none; cursor:pointer;
-      background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath fill='%234a3830' d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 16px center #fff;
+      background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath fill='%234a3830' d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 14px center #fff;
     }
     textarea.sv-input { resize:none; line-height:1.6; }
     .err-msg { display:none; font-size:11px; color:#e74c3c; margin-top:5px; }
     .err-msg.show { display:block; }
     .field-label { display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.2em; color:rgba(74,56,48,.5); margin-bottom:8px; }
 
-    /* guest counter */
+    /* ── GUEST COUNTER ── */
     .qty-btn {
-      width:38px; height:38px; border-radius:10px;
+      width:36px; height:36px; border-radius:10px;
       border:1.5px solid var(--border); background:#fff;
       display:flex; align-items:center; justify-content:center;
-      cursor:pointer; font-size:16px; color:var(--mid);
-      transition:border-color .2s, background .2s, color .2s;
-      user-select:none; flex-shrink:0;
+      cursor:pointer; font-size:15px; color:var(--mid);
+      transition:border-color .2s,background .2s,color .2s; user-select:none; flex-shrink:0;
     }
     .qty-btn:hover { border-color:var(--red); background:#fdf0ee; color:var(--red); }
     .qty-btn:disabled { opacity:.3; cursor:not-allowed; }
-    .qty-val { font-size:20px; font-weight:700; color:var(--dark); min-width:36px; text-align:center; }
+    .qty-val { font-size:20px; font-weight:700; color:var(--dark); min-width:32px; text-align:center; }
 
-    /* time slot grid */
+    /* ── TIME SLOTS ── */
     .time-slot {
-      padding:10px 14px; border-radius:12px;
+      padding:9px 10px; border-radius:10px;
       border:1.5px solid var(--border); background:#fff;
       text-align:center; cursor:pointer;
-      font-size:12px; font-weight:700; color:var(--mid);
-      transition:all .2s;
+      font-size:11px; font-weight:700; color:var(--mid);
+      transition:all .2s; line-height:1.3;
     }
     .time-slot:hover { border-color:var(--red); color:var(--red); background:#fdf0ee; }
     .time-slot.active { background:var(--red); border-color:var(--red); color:#fff; }
     .time-slot.full { opacity:.35; cursor:not-allowed; background:#f9f6f4; }
 
-    /* occasion pills */
+    /* ── OCCASION PILLS ── */
     .occ-pill {
       display:flex; align-items:center; gap:8px;
-      padding:10px 14px; border-radius:14px;
+      padding:10px 12px; border-radius:12px;
       border:1.5px solid var(--border); background:#fff;
       cursor:pointer; transition:all .2s;
     }
@@ -131,18 +227,18 @@
     .occ-pill.active { border-color:var(--red); background:#fdf0ee; }
     .occ-pill.active .occ-icon { background:var(--red); color:#fff; }
     .occ-icon {
-      width:32px; height:32px; border-radius:10px; background:#f5f0eb;
+      width:30px; height:30px; border-radius:9px; background:#f5f0eb;
       display:flex; align-items:center; justify-content:center;
-      font-size:13px; color:var(--mid); flex-shrink:0; transition:all .2s;
+      font-size:12px; color:var(--mid); flex-shrink:0; transition:all .2s;
     }
 
-    /* dining area cards */
+    /* ── AREA CARDS ── */
     .area-card {
-      border-radius:18px; border:2px solid var(--border);
+      border-radius:16px; border:2px solid var(--border);
       background:#fff; overflow:hidden; cursor:pointer;
-      transition:border-color .25s, box-shadow .2s, transform .2s;
+      transition:border-color .25s,box-shadow .2s,transform .2s;
     }
-    .area-card:hover  { border-color:var(--red); transform:translateY(-2px); box-shadow:0 8px 24px rgba(192,57,43,.1); }
+    .area-card:hover { border-color:var(--red); transform:translateY(-2px); box-shadow:0 8px 24px rgba(192,57,43,.1); }
     .area-card.active { border-color:var(--red); box-shadow:0 0 0 4px rgba(192,57,43,.1); }
     .area-check {
       width:22px; height:22px; border-radius:50%; border:2px solid var(--border);
@@ -151,46 +247,67 @@
     }
     .area-card.active .area-check { background:var(--red); border-color:var(--red); }
 
-    /* summary sidebar */
+    /* ── SUMMARY SIDEBAR ── */
     .summary-card {
       background:#fff; border:1px solid var(--border);
-      border-radius:20px; padding:24px;
-      position:sticky; top:96px;
+      border-radius:18px; padding:22px;
+      position:sticky; top:88px;
     }
-    .sum-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border)/40; }
+    .sum-row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(232,221,216,.5); }
     .sum-row:last-child { border-bottom:none; }
 
-    /* calendar strip */
+    /* ── CALENDAR ── */
     .cal-day {
-      display:flex; flex-direction:column; align-items:center; gap:4px;
-      padding:10px 12px; border-radius:14px; cursor:pointer;
+      display:flex; flex-direction:column; align-items:center; gap:3px;
+      padding:9px 10px; border-radius:12px; cursor:pointer;
       border:1.5px solid var(--border); background:#fff;
-      min-width:58px; transition:all .2s;
+      min-width:52px; transition:all .2s; flex-shrink:0;
     }
     .cal-day:hover  { border-color:var(--red); background:#fdf0ee; }
     .cal-day.active { background:var(--red); border-color:var(--red); }
     .cal-day.today  { border-color:var(--gold); }
     .cal-day.disabled { opacity:.3; cursor:not-allowed; pointer-events:none; }
 
-    /* breadcrumb */
-    .bc { font-size:10px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:#9a8880; text-decoration:none; transition:color .2s; }
-    .bc:hover,.bc.cur { color:var(--red); }
+    /* ── BREADCRUMB ── */
+    .bc-chip { font-size:10px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:#9a8880; text-decoration:none; transition:color .2s; }
+    .bc-chip:hover,.bc-chip.cur { color:var(--red); }
 
-    /* success animation */
+    /* ── SUCCESS ── */
     @keyframes successIn { from{opacity:0;transform:scale(.94);} to{opacity:1;transform:scale(1);} }
     .success-in { animation:successIn .45s ease both; }
     @keyframes tickDraw { from{stroke-dashoffset:60;} to{stroke-dashoffset:0;} }
     .tick-path { stroke-dasharray:60; stroke-dashoffset:60; animation:tickDraw .6s .3s ease forwards; }
 
-    /* nav */
-    .bc-chip { font-size:10px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:#9a8880; text-decoration:none; transition:color .2s; }
-    .bc-chip:hover,.bc-chip.cur { color:var(--red); }
-
-    /* step content transition */
+    /* ── STEP PANELS ── */
     .step-panel { display:none; }
     .step-panel.active { display:block; }
     @keyframes panelIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
     .step-panel.active { animation:panelIn .35s ease both; }
+
+    /* ── DIETARY PILLS ── */
+    .topic-pill {
+      padding:6px 14px; border-radius:999px; font-size:11px; font-weight:600;
+      border:1.5px solid var(--border); background:#fff; color:var(--mid);
+      cursor:pointer; transition:all .2s;
+    }
+    .topic-pill:hover,.topic-pill.active { border-color:var(--red); background:#fdf0ee; color:var(--red); }
+
+    /* Mobile bottom nav safe area */
+    @supports(padding-bottom:env(safe-area-inset-bottom)) {
+      .mobile-bottom-nav { padding-bottom:calc(10px + env(safe-area-inset-bottom)); }
+    }
+    @media(max-width:767px) { main { padding-bottom:80px; } }
+
+    /* ── MOBILE SUMMARY TOGGLE ── */
+    #summaryMobileToggle { display:none; }
+    @media(max-width:1023px) {
+      #summaryCol { order:999; }
+      #summaryMobileToggle { display:flex; }
+    }
+
+    /* Prevent text overflow */
+    img { background:#f5f0eb; }
+    * { min-width:0; }
   </style>
 </head>
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
@@ -199,9 +316,9 @@
 <div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]" onclick="closeAll()"></div>
 
 <!-- ═══════════ MOBILE MENU ═══════════ -->
-<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex-col p-10 hidden"
+<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex flex-col p-8 sm:p-10 hidden"
      style="transform:translateX(100%);transition:transform .5s cubic-bezier(.4,0,.2,1);">
-  <div class="flex justify-between items-center mb-10">
+  <div class="flex justify-between items-center mb-8">
     <div>
       <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
       <p class="font-cormorant italic text-xs tracking-[.3em] uppercase mt-0.5" style="color:rgba(184,150,62,.7)">Fine Dining</p>
@@ -216,8 +333,7 @@
     <li><a href="contact.html"  onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
   </ul>
   <div class="mt-auto">
-    <a href="reserve.html" onclick="toggleMenu()"
-       class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[.2em] transition">
+    <a href="reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[.2em]">
       <i class="fa-regular fa-calendar-check"></i> Book a Table
     </a>
   </div>
@@ -227,12 +343,12 @@
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] bg-white/96 backdrop-blur-[10px] transition-all duration-300">
   <div class="h-[72px] flex items-center justify-between px-5 sm:px-8 lg:px-14">
     <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
-      <span class="font-playfair text-[26px] font-black text-textDark group-hover:text-redPrimary transition tracking-tight">
+      <span class="font-playfair text-[24px] sm:text-[26px] font-black text-textDark group-hover:text-redPrimary transition tracking-tight">
         Sav<span class="italic font-light text-redPrimary">o</span>ria
       </span>
       <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
     </a>
-    <ul class="hidden md:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[.15em] text-textMid">
+    <ul class="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-semibold uppercase tracking-[.15em] text-textMid">
       <li><a href="index.html"    class="nav-link transition">Home</a></li>
       <li><a href="category.html" class="nav-link transition">Menu</a></li>
       <li><a href="reserve.html"  class="nav-link active-link">Reserve</a></li>
@@ -242,8 +358,7 @@
       <a href="login.html" class="hidden md:flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.12em] text-textMid hover:text-gold transition border-l border-borderSoft pl-4">
         <i class="fa-regular fa-circle-user"></i> Login
       </a>
-      <a href="reserve.html"
-         class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[.18em] uppercase transition">
+      <a href="reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-4 lg:px-5 py-2.5 rounded text-[10px] lg:text-[11px] font-semibold tracking-[.18em] uppercase transition">
         <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
       </a>
       <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
@@ -260,43 +375,43 @@
 
 <!-- ═══════════ HERO ═══════════ -->
 <section class="reserve-hero pt-[72px]">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-12 lg:py-20">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 lg:py-20">
 
     <!-- breadcrumb -->
-    <div class="flex items-center gap-2 mb-8 anim-1">
+    <div class="flex items-center gap-2 mb-6 lg:mb-8 anim-1">
       <a href="index.html" class="bc-chip"><i class="fa-solid fa-house text-[9px] mr-1"></i>Home</a>
       <i class="fa-solid fa-chevron-right text-borderSoft text-[8px]"></i>
       <span class="bc-chip cur">Reserve</span>
     </div>
 
-    <div class="grid lg:grid-cols-[1fr_400px] gap-14 lg:gap-20 items-end">
+    <div class="grid lg:grid-cols-[1fr_380px] gap-10 lg:gap-20 items-end">
       <div>
         <div class="section-label mb-4 anim-1">Book Your Table</div>
-        <h1 class="font-playfair text-5xl lg:text-[68px] font-black text-textDark leading-[1.04] mb-5 anim-2">
+        <h1 class="font-playfair text-4xl sm:text-5xl lg:text-[68px] font-black text-textDark leading-[1.04] mb-4 lg:mb-5 anim-2">
           An Evening<br/>Worth <em style="font-style:italic;color:var(--red)">Savouring</em>
         </h1>
-        <p class="font-cormorant italic text-xl leading-relaxed anim-3" style="color:rgba(74,56,48,.55)">
+        <p class="font-cormorant italic text-lg lg:text-xl leading-relaxed anim-3" style="color:rgba(74,56,48,.55)">
           Reserve your table in a few easy steps — we'll handle the rest, from your preferred dining area to special occasion arrangements.
         </p>
 
         <!-- perks row -->
-        <div class="flex flex-wrap gap-3 mt-8 anim-4">
-          <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-borderSoft">
+        <div class="flex flex-wrap gap-2 sm:gap-3 mt-6 lg:mt-8 anim-4">
+          <div class="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-white border border-borderSoft">
             <i class="fa-solid fa-check-circle text-sm" style="color:var(--red)"></i>
             <span class="text-xs font-semibold text-textMid">Instant Confirmation</span>
           </div>
-          <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-borderSoft">
+          <div class="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-white border border-borderSoft">
             <i class="fa-solid fa-check-circle text-sm" style="color:var(--red)"></i>
             <span class="text-xs font-semibold text-textMid">Free Cancellation</span>
           </div>
-          <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-borderSoft">
+          <div class="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-white border border-borderSoft">
             <i class="fa-solid fa-check-circle text-sm" style="color:var(--red)"></i>
             <span class="text-xs font-semibold text-textMid">Special Requests Welcome</span>
           </div>
         </div>
       </div>
 
-      <!-- quick info strip -->
+      <!-- quick info strip (desktop only) -->
       <div class="anim-5 hidden lg:block">
         <div class="bg-white rounded-2xl border border-borderSoft p-6 space-y-4">
           <p class="text-[10px] font-bold uppercase tracking-[.25em]" style="color:rgba(74,56,48,.4)">Good to Know</p>
@@ -320,54 +435,78 @@
           </div>
         </div>
       </div>
+
+      <!-- Mobile: Good to Know (collapsed accordion) -->
+      <div class="lg:hidden anim-5">
+        <details class="bg-white rounded-2xl border border-borderSoft overflow-hidden">
+          <summary class="px-5 py-4 flex items-center justify-between cursor-pointer list-none">
+            <span class="text-[10px] font-bold uppercase tracking-[.25em]" style="color:rgba(74,56,48,.4)">Good to Know</span>
+            <i class="fa-solid fa-chevron-down text-[11px] text-textMid/40"></i>
+          </summary>
+          <div class="px-5 pb-5 space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:#fdf0ee"><i class="fa-solid fa-clock text-xs" style="color:var(--red)"></i></div>
+              <div><p class="text-sm font-semibold text-textDark">Open Daily</p><p class="text-xs" style="color:rgba(74,56,48,.5)">Mon–Fri 12pm–10pm · Sat–Sun 11am–11pm</p></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:#fdf0ee"><i class="fa-solid fa-user-group text-xs" style="color:var(--red)"></i></div>
+              <div><p class="text-sm font-semibold text-textDark">Groups of 10+</p><p class="text-xs" style="color:rgba(74,56,48,.5)">Private event enquiries via contact page</p></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:#fdf0ee"><i class="fa-solid fa-shirt text-xs" style="color:var(--red)"></i></div>
+              <div><p class="text-sm font-semibold text-textDark">Dress Code</p><p class="text-xs" style="color:rgba(74,56,48,.5)">Smart casual or formal attire requested</p></div>
+            </div>
+          </div>
+        </details>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════════ BOOKING WIZARD ═══════════ -->
-<section class="py-14 lg:py-20 px-5 sm:px-8 lg:px-14 bg-white">
+<section class="py-10 lg:py-20 px-4 sm:px-8 lg:px-14 bg-white">
   <div class="max-w-7xl mx-auto">
-    <div class="grid lg:grid-cols-[1fr_320px] gap-10 lg:gap-14 items-start">
+    <div class="grid lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_320px] gap-8 lg:gap-14 items-start">
 
-      <!-- MAIN FORM AREA -->
+      <!-- MAIN FORM -->
       <div>
 
-        <!-- step bar -->
-        <div class="step-bar mb-10 reveal" id="stepBar">
+        <!-- Step bar -->
+        <div class="step-bar mb-8 reveal" id="stepBar">
           <div class="step-node">
-            <div class="step-circle active" id="sc1"><i class="fa-solid fa-calendar-day text-[11px]"></i></div>
-            <span class="step-label active" id="sl1">Date & Time</span>
+            <div class="step-circle active" id="sc1"><i class="fa-solid fa-calendar-day text-[10px]"></i></div>
+            <span class="step-label active" id="sl1">Date &amp; Time</span>
           </div>
           <div class="step-connector" id="con1"></div>
           <div class="step-node">
-            <div class="step-circle" id="sc2"><i class="fa-solid fa-user-group text-[11px]"></i></div>
+            <div class="step-circle" id="sc2"><i class="fa-solid fa-user-group text-[10px]"></i></div>
             <span class="step-label" id="sl2">Guests</span>
           </div>
           <div class="step-connector" id="con2"></div>
           <div class="step-node">
-            <div class="step-circle" id="sc3"><i class="fa-solid fa-chair text-[11px]"></i></div>
+            <div class="step-circle" id="sc3"><i class="fa-solid fa-chair text-[10px]"></i></div>
             <span class="step-label" id="sl3">Dining Area</span>
           </div>
           <div class="step-connector" id="con3"></div>
           <div class="step-node">
-            <div class="step-circle" id="sc4"><i class="fa-solid fa-circle-user text-[11px]"></i></div>
+            <div class="step-circle" id="sc4"><i class="fa-solid fa-circle-user text-[10px]"></i></div>
             <span class="step-label" id="sl4">Your Details</span>
           </div>
         </div>
 
-        <!-- ─── STEP 1: Date & Time ─────────────────────── -->
+        <!-- ─── STEP 1: Date & Time ─── -->
         <div class="step-panel active form-card reveal" id="step1">
-          <h2 class="font-playfair text-2xl font-black text-textDark mb-1">Choose Date &amp; Time</h2>
-          <p class="font-cormorant italic text-base mb-8" style="color:rgba(74,56,48,.5)">Select a date and preferred time slot for your reservation.</p>
+          <h2 class="font-playfair text-xl sm:text-2xl font-black text-textDark mb-1">Choose Date &amp; Time</h2>
+          <p class="font-cormorant italic text-base mb-6 sm:mb-8" style="color:rgba(74,56,48,.5)">Select a date and preferred time slot for your reservation.</p>
 
-          <!-- month nav + calendar strip -->
-          <div class="mb-6">
+          <!-- calendar strip -->
+          <div class="mb-5">
             <div class="flex items-center justify-between mb-4">
-              <button onclick="prevWeek()" class="w-9 h-9 rounded-full border border-borderSoft flex items-center justify-center hover:border-redPrimary hover:bg-redPale transition text-textMid">
+              <button onclick="prevWeek()" class="w-9 h-9 rounded-full border border-borderSoft flex items-center justify-center hover:border-redPrimary hover:bg-redPale transition text-textMid flex-shrink-0">
                 <i class="fa-solid fa-chevron-left text-[11px]"></i>
               </button>
-              <p id="calMonth" class="font-playfair font-bold text-textDark text-lg"></p>
-              <button onclick="nextWeek()" class="w-9 h-9 rounded-full border border-borderSoft flex items-center justify-center hover:border-redPrimary hover:bg-redPale transition text-textMid">
+              <p id="calMonth" class="font-playfair font-bold text-textDark text-base sm:text-lg text-center px-2"></p>
+              <button onclick="nextWeek()" class="w-9 h-9 rounded-full border border-borderSoft flex items-center justify-center hover:border-redPrimary hover:bg-redPale transition text-textMid flex-shrink-0">
                 <i class="fa-solid fa-chevron-right text-[11px]"></i>
               </button>
             </div>
@@ -378,27 +517,25 @@
           <!-- time slots -->
           <div class="mb-2">
             <label class="field-label">Select Time Slot</label>
-            <div id="timeSlots" class="grid grid-cols-3 sm:grid-cols-5 gap-2"></div>
+            <div id="timeSlots" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2"></div>
           </div>
           <p class="err-msg" id="errTime">Please select a time slot.</p>
 
-          <div class="flex justify-end mt-8">
-            <button onclick="goStep(2)"
-                    class="book-btn text-white px-8 py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 transition">
+          <div class="flex justify-end mt-6 sm:mt-8">
+            <button onclick="goStep(2)" class="book-btn text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2">
               Continue <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </button>
           </div>
         </div>
 
-        <!-- ─── STEP 2: Guests ──────────────────────────── -->
+        <!-- ─── STEP 2: Guests ─── -->
         <div class="step-panel form-card reveal" id="step2">
-          <h2 class="font-playfair text-2xl font-black text-textDark mb-1">Number of Guests</h2>
-          <p class="font-cormorant italic text-base mb-8" style="color:rgba(74,56,48,.5)">How many guests will be dining? Select any special occasion too.</p>
+          <h2 class="font-playfair text-xl sm:text-2xl font-black text-textDark mb-1">Number of Guests</h2>
+          <p class="font-cormorant italic text-base mb-6 sm:mb-8" style="color:rgba(74,56,48,.5)">How many guests will be dining? Select any special occasion too.</p>
 
-          <!-- guest counter -->
-          <div class="mb-8">
+          <div class="mb-7">
             <label class="field-label">Party Size</label>
-            <div class="flex items-center gap-5 p-5 rounded-2xl bg-cream border border-borderSoft w-fit">
+            <div class="flex items-center gap-4 sm:gap-5 p-4 sm:p-5 rounded-2xl bg-cream border border-borderSoft w-fit">
               <button class="qty-btn" id="guestMinus" onclick="changeGuests(-1)">
                 <i class="fa-solid fa-minus text-sm"></i>
               </button>
@@ -413,10 +550,9 @@
             <p class="text-xs mt-3" style="color:rgba(74,56,48,.4)">For groups of 10 or more, please <a href="contact.html" class="underline" style="color:var(--red)">contact us directly</a>.</p>
           </div>
 
-          <!-- occasion -->
           <div class="mb-2">
             <label class="field-label">Special Occasion <span style="opacity:.4">(optional)</span></label>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
               <div class="occ-pill" onclick="selectOccasion(this,'none')">
                 <div class="occ-icon"><i class="fa-regular fa-circle"></i></div>
                 <span class="text-sm font-semibold text-textDark">None</span>
@@ -444,127 +580,113 @@
             </div>
           </div>
 
-          <div class="flex justify-between mt-8">
-            <button onclick="goStep(1)"
-                    class="px-6 py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 hover:border-redPrimary hover:text-redPrimary transition text-textMid">
+          <div class="flex justify-between mt-6 sm:mt-8">
+            <button onclick="goStep(1)" class="px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 hover:border-redPrimary hover:text-redPrimary transition text-textMid">
               <i class="fa-solid fa-arrow-left text-[10px]"></i> Back
             </button>
-            <button onclick="goStep(3)"
-                    class="book-btn text-white px-8 py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 transition">
+            <button onclick="goStep(3)" class="book-btn text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2">
               Continue <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </button>
           </div>
         </div>
 
-        <!-- ─── STEP 3: Dining Area ─────────────────────── -->
+        <!-- ─── STEP 3: Dining Area ─── -->
         <div class="step-panel form-card reveal" id="step3">
-          <h2 class="font-playfair text-2xl font-black text-textDark mb-1">Choose Your Dining Area</h2>
-          <p class="font-cormorant italic text-base mb-8" style="color:rgba(74,56,48,.5)">We have several beautiful spaces for an unforgettable dining experience.</p>
+          <h2 class="font-playfair text-xl sm:text-2xl font-black text-textDark mb-1">Choose Your Dining Area</h2>
+          <p class="font-cormorant italic text-base mb-6 sm:mb-8" style="color:rgba(74,56,48,.5)">We have several beautiful spaces for an unforgettable dining experience.</p>
 
-          <div class="grid sm:grid-cols-2 gap-4 mb-2">
+          <div class="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-2">
 
             <div class="area-card active" id="area-main" onclick="selectArea(this,'main')">
-              <div class="h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#2d1a14,#1a1210)">
-                <!-- decorative -->
+              <div class="h-28 sm:h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#2d1a14,#1a1210)">
                 <div class="absolute inset-0 opacity-10" style="background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:20px 20px"></div>
                 <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
                   <div class="flex gap-1.5">
-                    <div class="w-8 h-8 rounded-lg" style="background:rgba(192,57,43,.4)"></div>
-                    <div class="w-8 h-8 rounded-lg" style="background:rgba(192,57,43,.25)"></div>
-                    <div class="w-8 h-8 rounded-lg" style="background:rgba(192,57,43,.15)"></div>
-                  </div>
-                  <div class="flex flex-col gap-1">
-                    <div class="w-12 h-1.5 rounded-full" style="background:rgba(184,150,62,.3)"></div>
-                    <div class="w-8 h-1.5 rounded-full" style="background:rgba(184,150,62,.2)"></div>
+                    <div class="w-7 h-7 rounded-lg" style="background:rgba(192,57,43,.4)"></div>
+                    <div class="w-7 h-7 rounded-lg" style="background:rgba(192,57,43,.25)"></div>
+                    <div class="w-7 h-7 rounded-lg" style="background:rgba(192,57,43,.15)"></div>
                   </div>
                 </div>
                 <div class="absolute inset-0 flex items-center justify-center">
-                  <i class="fa-solid fa-utensils text-white/20 text-4xl"></i>
+                  <i class="fa-solid fa-utensils text-white/20 text-3xl sm:text-4xl"></i>
                 </div>
               </div>
-              <div class="p-4 flex items-start justify-between gap-3">
-                <div>
-                  <p class="font-playfair font-black text-textDark text-base leading-tight">Main Dining Room</p>
-                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Elegant setting · Up to 60 guests · Full menu</p>
-                  <div class="flex gap-1.5 mt-2">
+              <div class="p-3 sm:p-4 flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="font-playfair font-black text-textDark text-sm sm:text-base leading-tight">Main Dining Room</p>
+                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Elegant setting · Up to 60 guests</p>
+                  <div class="flex flex-wrap gap-1.5 mt-2">
                     <span class="tag tag-red">Most Popular</span>
                     <span class="tag" style="background:#f5f0eb;color:var(--mid)">All day</span>
                   </div>
                 </div>
-                <div class="area-check mt-1">
+                <div class="area-check mt-1 flex-shrink-0">
                   <i class="fa-solid fa-check text-white text-[10px]"></i>
                 </div>
               </div>
             </div>
 
             <div class="area-card" id="area-terrace" onclick="selectArea(this,'terrace')">
-              <div class="h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#1e3a28,#0f2318)">
+              <div class="h-28 sm:h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#1e3a28,#0f2318)">
                 <div class="absolute inset-0 opacity-10" style="background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:20px 20px"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
-                  <i class="fa-solid fa-tree text-white/15 text-4xl"></i>
-                </div>
-                <div class="absolute bottom-4 left-4">
-                  <div class="flex gap-1">
-                    <div class="w-3 h-3 rounded-full" style="background:rgba(255,255,255,.15)"></div>
-                    <div class="w-3 h-3 rounded-full" style="background:rgba(255,255,255,.1)"></div>
-                    <div class="w-3 h-3 rounded-full" style="background:rgba(255,255,255,.07)"></div>
-                  </div>
+                  <i class="fa-solid fa-tree text-white/15 text-3xl sm:text-4xl"></i>
                 </div>
               </div>
-              <div class="p-4 flex items-start justify-between gap-3">
-                <div>
-                  <p class="font-playfair font-black text-textDark text-base leading-tight">Garden Terrace</p>
-                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Al fresco dining · Up to 24 guests · Weather dependent</p>
-                  <div class="flex gap-1.5 mt-2">
+              <div class="p-3 sm:p-4 flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="font-playfair font-black text-textDark text-sm sm:text-base leading-tight">Garden Terrace</p>
+                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Al fresco dining · Up to 24 guests</p>
+                  <div class="flex flex-wrap gap-1.5 mt-2">
                     <span class="tag tag-veg">Outdoor</span>
                     <span class="tag" style="background:#f5f0eb;color:var(--mid)">Seasonal</span>
                   </div>
                 </div>
-                <div class="area-check mt-1">
+                <div class="area-check mt-1 flex-shrink-0">
                   <i class="fa-solid fa-check text-white text-[10px]"></i>
                 </div>
               </div>
             </div>
 
             <div class="area-card" id="area-bar" onclick="selectArea(this,'bar')">
-              <div class="h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#1a1a2e,#0f0f1e)">
+              <div class="h-28 sm:h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#1a1a2e,#0f0f1e)">
                 <div class="absolute inset-0 opacity-10" style="background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:20px 20px"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
-                  <i class="fa-solid fa-martini-glass text-white/15 text-4xl"></i>
+                  <i class="fa-solid fa-martini-glass text-white/15 text-3xl sm:text-4xl"></i>
                 </div>
               </div>
-              <div class="p-4 flex items-start justify-between gap-3">
-                <div>
-                  <p class="font-playfair font-black text-textDark text-base leading-tight">Bar Lounge</p>
-                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Casual dining · Up to 12 guests · Bar menu available</p>
-                  <div class="flex gap-1.5 mt-2">
+              <div class="p-3 sm:p-4 flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="font-playfair font-black text-textDark text-sm sm:text-base leading-tight">Bar Lounge</p>
+                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Casual dining · Up to 12 guests</p>
+                  <div class="flex flex-wrap gap-1.5 mt-2">
                     <span class="tag tag-gold">Cocktails</span>
                     <span class="tag" style="background:#f5f0eb;color:var(--mid)">Walk-in friendly</span>
                   </div>
                 </div>
-                <div class="area-check mt-1">
+                <div class="area-check mt-1 flex-shrink-0">
                   <i class="fa-solid fa-check text-white text-[10px]"></i>
                 </div>
               </div>
             </div>
 
             <div class="area-card" id="area-private" onclick="selectArea(this,'private')">
-              <div class="h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#2a1a0a,#1a0f00)">
+              <div class="h-28 sm:h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#2a1a0a,#1a0f00)">
                 <div class="absolute inset-0 opacity-10" style="background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:20px 20px"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
-                  <i class="fa-solid fa-crown text-white/15 text-4xl"></i>
+                  <i class="fa-solid fa-crown text-white/15 text-3xl sm:text-4xl"></i>
                 </div>
               </div>
-              <div class="p-4 flex items-start justify-between gap-3">
-                <div>
-                  <p class="font-playfair font-black text-textDark text-base leading-tight">Private Dining Room</p>
-                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Exclusive setting · Up to 24 guests · Bespoke menu</p>
-                  <div class="flex gap-1.5 mt-2">
+              <div class="p-3 sm:p-4 flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="font-playfair font-black text-textDark text-sm sm:text-base leading-tight">Private Dining Room</p>
+                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Exclusive setting · Up to 24 guests</p>
+                  <div class="flex flex-wrap gap-1.5 mt-2">
                     <span class="tag tag-gold">Premium</span>
-                    <span class="tag" style="background:#f5f0eb;color:var(--mid)">Request required</span>
+                    <span class="tag" style="background:#f5f0eb;color:var(--mid)">On request</span>
                   </div>
                 </div>
-                <div class="area-check mt-1">
+                <div class="area-check mt-1 flex-shrink-0">
                   <i class="fa-solid fa-check text-white text-[10px]"></i>
                 </div>
               </div>
@@ -572,22 +694,20 @@
 
           </div>
 
-          <div class="flex justify-between mt-8">
-            <button onclick="goStep(2)"
-                    class="px-6 py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 hover:border-redPrimary hover:text-redPrimary transition text-textMid">
+          <div class="flex justify-between mt-6 sm:mt-8">
+            <button onclick="goStep(2)" class="px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 hover:border-redPrimary hover:text-redPrimary transition text-textMid">
               <i class="fa-solid fa-arrow-left text-[10px]"></i> Back
             </button>
-            <button onclick="goStep(4)"
-                    class="book-btn text-white px-8 py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 transition">
+            <button onclick="goStep(4)" class="book-btn text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2">
               Continue <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </button>
           </div>
         </div>
 
-        <!-- ─── STEP 4: Your Details ────────────────────── -->
+        <!-- ─── STEP 4: Your Details ─── -->
         <div class="step-panel form-card reveal" id="step4">
-          <h2 class="font-playfair text-2xl font-black text-textDark mb-1">Your Details</h2>
-          <p class="font-cormorant italic text-base mb-8" style="color:rgba(74,56,48,.5)">Almost done — just your contact information and any special requests.</p>
+          <h2 class="font-playfair text-xl sm:text-2xl font-black text-textDark mb-1">Your Details</h2>
+          <p class="font-cormorant italic text-base mb-6 sm:mb-8" style="color:rgba(74,56,48,.5)">Almost done — just your contact information and any special requests.</p>
 
           <form id="detailsForm" onsubmit="confirmReservation(event)" novalidate class="space-y-4">
 
@@ -616,7 +736,6 @@
               </div>
             </div>
 
-            <!-- dietary -->
             <div>
               <label class="field-label">Dietary Requirements <span style="opacity:.4">(optional)</span></label>
               <div class="flex flex-wrap gap-2" id="dietaryChips">
@@ -629,13 +748,11 @@
               </div>
             </div>
 
-            <!-- special requests -->
             <div>
               <label class="field-label">Special Requests <span style="opacity:.4">(optional)</span></label>
-              <textarea id="rfRequests" class="sv-input" rows="3" placeholder="High chair needed, window seat preferred, celebrating a birthday — anything at all…"></textarea>
+              <textarea id="rfRequests" class="sv-input" rows="3" placeholder="High chair needed, window seat preferred, celebrating a birthday…"></textarea>
             </div>
 
-            <!-- how did you hear -->
             <div>
               <label class="field-label">How did you hear about us? <span style="opacity:.4">(optional)</span></label>
               <select id="rfSource" class="sv-input">
@@ -649,22 +766,19 @@
               </select>
             </div>
 
-            <!-- terms -->
             <div class="flex items-start gap-3 p-4 rounded-xl bg-cream border border-borderSoft">
-              <input type="checkbox" id="rfTerms" class="mt-0.5 w-4 h-4 rounded accent-[#c0392b] cursor-pointer flex-shrink-0"/>
+              <input type="checkbox" id="rfTerms" class="mt-0.5 w-4 h-4 rounded cursor-pointer flex-shrink-0" style="accent-color:#c0392b"/>
               <label for="rfTerms" class="text-xs leading-relaxed cursor-pointer" style="color:rgba(74,56,48,.6)">
                 I agree to the <a href="#" style="color:var(--red)">cancellation policy</a>. Reservations can be modified or cancelled up to 2 hours before the booking time at no charge.
               </label>
             </div>
             <p class="err-msg" id="errTerms">Please accept the cancellation policy.</p>
 
-            <div class="flex justify-between pt-2">
-              <button type="button" onclick="goStep(3)"
-                      class="px-6 py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 hover:border-redPrimary hover:text-redPrimary transition text-textMid">
+            <div class="flex flex-col-reverse sm:flex-row justify-between gap-3 pt-2">
+              <button type="button" onclick="goStep(3)" class="px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase flex items-center justify-center gap-2 hover:border-redPrimary hover:text-redPrimary transition text-textMid">
                 <i class="fa-solid fa-arrow-left text-[10px]"></i> Back
               </button>
-              <button type="submit" id="confirmBtn"
-                      class="book-btn text-white px-8 py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 transition">
+              <button type="submit" id="confirmBtn" class="book-btn text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center justify-center gap-2">
                 <span id="confirmLabel"><i class="fa-solid fa-lock text-[10px]"></i> Confirm Reservation</span>
                 <span id="confirmSpinner" class="hidden"><i class="fa-solid fa-spinner fa-spin"></i> Booking…</span>
               </button>
@@ -672,66 +786,43 @@
           </form>
         </div>
 
-        <!-- ─── STEP 5: Confirmation ────────────────────── -->
+        <!-- ─── STEP 5: Confirmation ─── -->
         <div class="step-panel form-card reveal" id="step5">
-          <div class="text-center py-6 success-in">
-
-            <!-- animated tick -->
-            <div class="w-20 h-20 mx-auto mb-6 relative">
+          <div class="text-center py-4 sm:py-6 success-in">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-5 sm:mb-6 relative">
               <svg viewBox="0 0 80 80" class="w-full h-full">
                 <circle cx="40" cy="40" r="38" fill="#fdf0ee" stroke="#fae0da" stroke-width="2"/>
                 <path class="tick-path" d="M22 40 L35 53 L58 27" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
 
-            <h2 class="font-playfair text-3xl font-black text-textDark mb-2">You're All Set!</h2>
-            <p class="font-cormorant italic text-xl mb-8" style="color:rgba(74,56,48,.55)">Your table has been reserved. We can't wait to welcome you.</p>
+            <h2 class="font-playfair text-2xl sm:text-3xl font-black text-textDark mb-2">You're All Set!</h2>
+            <p class="font-cormorant italic text-lg sm:text-xl mb-6 sm:mb-8" style="color:rgba(74,56,48,.55)">Your table has been reserved. We can't wait to welcome you.</p>
 
-            <!-- booking summary card -->
-            <div class="bg-cream rounded-2xl border border-borderSoft p-6 text-left max-w-md mx-auto mb-8">
+            <div class="bg-cream rounded-2xl border border-borderSoft p-5 sm:p-6 text-left max-w-md mx-auto mb-6 sm:mb-8">
               <div class="flex items-center justify-between mb-4">
                 <p class="text-[10px] font-bold uppercase tracking-[.25em]" style="color:rgba(74,56,48,.4)">Booking Summary</p>
                 <span class="tag tag-veg text-[9px]">Confirmed</span>
               </div>
               <div class="space-y-3">
-                <div class="flex justify-between">
-                  <span class="text-sm text-textMid/60">Reference</span>
-                  <span class="text-sm font-bold text-textDark" id="bookRef">SVR-00000</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-sm text-textMid/60">Date</span>
-                  <span class="text-sm font-semibold text-textDark" id="bookDate">—</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-sm text-textMid/60">Time</span>
-                  <span class="text-sm font-semibold text-textDark" id="bookTime">—</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-sm text-textMid/60">Guests</span>
-                  <span class="text-sm font-semibold text-textDark" id="bookGuests">—</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-sm text-textMid/60">Area</span>
-                  <span class="text-sm font-semibold text-textDark" id="bookArea">—</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-sm text-textMid/60">Name</span>
-                  <span class="text-sm font-semibold text-textDark" id="bookName">—</span>
-                </div>
+                <div class="flex justify-between gap-4"><span class="text-sm text-textMid/60 flex-shrink-0">Reference</span><span class="text-sm font-bold text-textDark" id="bookRef">SVR-00000</span></div>
+                <div class="flex justify-between gap-4"><span class="text-sm text-textMid/60 flex-shrink-0">Date</span><span class="text-sm font-semibold text-textDark text-right" id="bookDate">—</span></div>
+                <div class="flex justify-between gap-4"><span class="text-sm text-textMid/60 flex-shrink-0">Time</span><span class="text-sm font-semibold text-textDark" id="bookTime">—</span></div>
+                <div class="flex justify-between gap-4"><span class="text-sm text-textMid/60 flex-shrink-0">Guests</span><span class="text-sm font-semibold text-textDark" id="bookGuests">—</span></div>
+                <div class="flex justify-between gap-4"><span class="text-sm text-textMid/60 flex-shrink-0">Area</span><span class="text-sm font-semibold text-textDark" id="bookArea">—</span></div>
+                <div class="flex justify-between gap-4"><span class="text-sm text-textMid/60 flex-shrink-0">Name</span><span class="text-sm font-semibold text-textDark" id="bookName">—</span></div>
               </div>
             </div>
 
-            <p class="text-sm mb-6" style="color:rgba(74,56,48,.5)">
-              A confirmation has been sent to <strong id="bookEmail" class="text-textDark"></strong>
+            <p class="text-sm mb-5 sm:mb-6" style="color:rgba(74,56,48,.5)">
+              A confirmation has been sent to <strong id="bookEmail" class="text-textDark break-all"></strong>
             </p>
 
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="category.html"
-                 class="book-btn text-white px-8 py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase inline-flex items-center gap-2 justify-center transition">
+              <a href="category.html" class="book-btn text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase inline-flex items-center gap-2 justify-center">
                 <i class="fa-solid fa-utensils text-[10px]"></i> Browse Menu
               </a>
-              <button onclick="newBooking()"
-                      class="px-8 py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase hover:border-redPrimary hover:text-redPrimary transition text-textMid flex items-center gap-2 justify-center">
+              <button onclick="newBooking()" class="px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase hover:border-redPrimary hover:text-redPrimary transition text-textMid flex items-center gap-2 justify-center">
                 <i class="fa-solid fa-plus text-[10px]"></i> New Booking
               </button>
             </div>
@@ -742,45 +833,52 @@
 
       <!-- ── SUMMARY SIDEBAR ── -->
       <div id="summaryCol">
-        <div class="summary-card reveal">
-          <p class="text-[10px] font-bold uppercase tracking-[.25em] mb-5" style="color:rgba(74,56,48,.4)">Your Reservation</p>
 
+        <!-- Mobile: inline summary strip (shows above form on mobile) -->
+        <div class="lg:hidden mb-5 bg-cream rounded-2xl border border-borderSoft p-4 flex items-center gap-3 flex-wrap" id="mobileSummaryStrip">
+          <div class="flex items-center gap-2 text-xs">
+            <i class="fa-regular fa-calendar text-redPrimary text-[11px]"></i>
+            <span class="font-semibold text-textDark" id="mobSumDate">No date</span>
+          </div>
+          <span class="text-borderSoft">·</span>
+          <div class="flex items-center gap-2 text-xs">
+            <i class="fa-regular fa-clock text-redPrimary text-[11px]"></i>
+            <span class="font-semibold text-textDark" id="mobSumTime">No time</span>
+          </div>
+          <span class="text-borderSoft">·</span>
+          <div class="flex items-center gap-2 text-xs">
+            <i class="fa-solid fa-user-group text-redPrimary text-[11px]"></i>
+            <span class="font-semibold text-textDark" id="mobSumGuests">2 Guests</span>
+          </div>
+        </div>
+
+        <div class="summary-card reveal hidden lg:block">
+          <p class="text-[10px] font-bold uppercase tracking-[.25em] mb-5" style="color:rgba(74,56,48,.4)">Your Reservation</p>
           <div class="space-y-1">
             <div class="sum-row">
-              <div class="flex items-center gap-2 text-sm text-textMid/50">
-                <i class="fa-regular fa-calendar w-4 text-center text-xs" style="color:var(--red)"></i>Date
-              </div>
+              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-regular fa-calendar w-4 text-center text-xs" style="color:var(--red)"></i>Date</div>
               <span class="text-sm font-semibold text-textDark" id="sumDate">Not selected</span>
             </div>
             <div class="sum-row">
-              <div class="flex items-center gap-2 text-sm text-textMid/50">
-                <i class="fa-regular fa-clock w-4 text-center text-xs" style="color:var(--red)"></i>Time
-              </div>
+              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-regular fa-clock w-4 text-center text-xs" style="color:var(--red)"></i>Time</div>
               <span class="text-sm font-semibold text-textDark" id="sumTime">Not selected</span>
             </div>
             <div class="sum-row">
-              <div class="flex items-center gap-2 text-sm text-textMid/50">
-                <i class="fa-solid fa-user-group w-4 text-center text-xs" style="color:var(--red)"></i>Guests
-              </div>
+              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-solid fa-user-group w-4 text-center text-xs" style="color:var(--red)"></i>Guests</div>
               <span class="text-sm font-semibold text-textDark" id="sumGuests">2</span>
             </div>
             <div class="sum-row">
-              <div class="flex items-center gap-2 text-sm text-textMid/50">
-                <i class="fa-solid fa-chair w-4 text-center text-xs" style="color:var(--red)"></i>Area
-              </div>
+              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-solid fa-chair w-4 text-center text-xs" style="color:var(--red)"></i>Area</div>
               <span class="text-sm font-semibold text-textDark" id="sumArea">Main Dining</span>
             </div>
             <div class="sum-row">
-              <div class="flex items-center gap-2 text-sm text-textMid/50">
-                <i class="fa-solid fa-star w-4 text-center text-xs" style="color:var(--gold)"></i>Occasion
-              </div>
+              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-solid fa-star w-4 text-center text-xs" style="color:var(--gold)"></i>Occasion</div>
               <span class="text-sm font-semibold text-textDark" id="sumOccasion">None</span>
             </div>
           </div>
 
           <div class="gold-line h-px my-5 opacity-30"></div>
 
-          <!-- progress -->
           <div class="mb-4">
             <div class="flex justify-between text-[10px] font-bold uppercase tracking-[.15em] mb-2">
               <span style="color:rgba(74,56,48,.4)">Progress</span>
@@ -791,7 +889,6 @@
             </div>
           </div>
 
-          <!-- info notes -->
           <div class="space-y-2.5 mt-5">
             <div class="flex items-start gap-2.5 p-3 rounded-xl bg-cream">
               <i class="fa-solid fa-circle-info text-xs mt-0.5 flex-shrink-0" style="color:var(--gold)"></i>
@@ -803,11 +900,9 @@
             </div>
           </div>
 
-          <!-- call fallback -->
           <div class="mt-5 pt-5 border-t border-borderSoft/50">
             <p class="text-[10px] font-bold uppercase tracking-[.2em] mb-3" style="color:rgba(74,56,48,.4)">Prefer to Call?</p>
-            <a href="tel:+15559204200"
-               class="flex items-center gap-3 p-3 rounded-xl border border-borderSoft bg-white hover:border-redPrimary transition">
+            <a href="tel:+15559204200" class="flex items-center gap-3 p-3 rounded-xl border border-borderSoft bg-white hover:border-redPrimary transition">
               <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#fdf0ee">
                 <i class="fa-solid fa-phone text-xs" style="color:var(--red)"></i>
               </div>
@@ -826,29 +921,29 @@
 
 <!-- ═══════════ FOOTER ═══════════ -->
 <footer class="footer-bg">
-  <div class="max-w-7xl mx-auto px-8 lg:px-14 py-16">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 mb-12">
-      <div>
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-12 lg:py-16">
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 lg:gap-10 mb-10 lg:mb-12">
+      <div class="col-span-2 sm:col-span-1">
         <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
         <p class="font-cormorant italic text-xs tracking-[.3em] uppercase mt-0.5 mb-4" style="color:rgba(184,150,62,.6)">Fine Dining</p>
         <p class="text-sm leading-relaxed" style="color:rgba(255,255,255,.4)">Where every dish tells a story of passion, craft, and the finest ingredients.</p>
         <div class="flex gap-3 mt-5">
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.4)';this.style.borderColor='rgba(255,255,255,.1)'"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.4)';this.style.borderColor='rgba(255,255,255,.1)'"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.4)';this.style.borderColor='rgba(255,255,255,.1)'"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)"><i class="fa-brands fa-x-twitter"></i></a>
         </div>
       </div>
       <div>
-        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-5" style="color:rgba(255,255,255,.7)">Navigation</p>
+        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5" style="color:rgba(255,255,255,.7)">Navigation</p>
         <ul class="space-y-3">
-          <li><a href="index.html"    class="text-sm transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.4)'">Home</a></li>
-          <li><a href="category.html" class="text-sm transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.4)'">Menu</a></li>
+          <li><a href="index.html"    class="text-sm hover:text-gold transition" style="color:rgba(255,255,255,.4)">Home</a></li>
+          <li><a href="category.html" class="text-sm hover:text-gold transition" style="color:rgba(255,255,255,.4)">Menu</a></li>
           <li><a href="reserve.html"  class="text-sm" style="color:var(--gold)">Reserve</a></li>
-          <li><a href="contact.html"  class="text-sm transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.4)'">Contact</a></li>
+          <li><a href="contact.html"  class="text-sm hover:text-gold transition" style="color:rgba(255,255,255,.4)">Contact</a></li>
         </ul>
       </div>
       <div>
-        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-5" style="color:rgba(255,255,255,.7)">Hours</p>
+        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5" style="color:rgba(255,255,255,.7)">Hours</p>
         <ul class="space-y-2">
           <li class="text-sm" style="color:rgba(255,255,255,.4)">Mon–Fri · 12pm–10pm</li>
           <li class="text-sm" style="color:rgba(255,255,255,.4)">Sat–Sun · 11am–11pm</li>
@@ -856,7 +951,7 @@
         </ul>
       </div>
       <div>
-        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-5" style="color:rgba(255,255,255,.7)">Contact</p>
+        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5" style="color:rgba(255,255,255,.7)">Contact</p>
         <ul class="space-y-3">
           <li class="text-sm" style="color:rgba(255,255,255,.4)">📍 42 West 58th St, New York</li>
           <li class="text-sm" style="color:rgba(255,255,255,.4)">📞 +1 (555) 920-4200</li>
@@ -879,7 +974,7 @@
   <div class="nav-item" onclick="location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></div>
   <div class="nav-item" onclick="location.href='category.html'"><i class="fa-solid fa-utensils"></i><span>Menu</span></div>
   <div>
-    <div class="cart-fab active" onclick="window.scrollTo({top:400,behavior:'smooth'})">
+    <div class="cart-fab" onclick="window.scrollTo({top:400,behavior:'smooth'})">
       <i class="fa-regular fa-calendar-check" style="font-size:20px"></i>
     </div>
   </div>
@@ -887,19 +982,11 @@
   <div class="nav-item" onclick="location.href='profile.html'"><i class="fa-regular fa-circle-user"></i><span>Profile</span></div>
 </nav>
 
-<script src="static/js/main.js"></script>
 <script>
-// ═══════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════
+// ═══ STATE ═══
 const state = {
-  step: 1,
-  date: null,       // Date object
-  time: null,       // string "7:00 PM"
-  guests: 2,
-  occasion: 'None',
-  area: 'main',
-  areaLabel: 'Main Dining',
+  step:1, date:null, time:null, guests:2,
+  occasion:'None', area:'main', areaLabel:'Main Dining',
 };
 
 const TIME_SLOTS = [
@@ -910,30 +997,20 @@ const TIME_SLOTS = [
   {t:"7:30 PM",full:true},  {t:"8:00 PM",full:false}, {t:"8:30 PM",full:false},
   {t:"9:00 PM",full:false}, {t:"9:30 PM",full:true},  {t:"10:00 PM",full:false},
 ];
+let calOffset = 0;
 
-let calOffset = 0;  // weeks offset for calendar
-
-// ═══════════════════════════════════════════════════════
-// CALENDAR
-// ═══════════════════════════════════════════════════════
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DAYS   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
+// ═══ CALENDAR ═══
 function renderCalendar() {
   const strip = document.getElementById('calStrip');
   const today = new Date();
   const base  = new Date(today); base.setDate(today.getDate() + calOffset * 7);
-
-  // Show 7 days starting from base
-  const start = new Date(base);
   const days  = [];
   for (let i = 0; i < 7; i++) {
-    const d = new Date(start);
-    d.setDate(start.getDate() + i);
-    days.push(d);
+    const d = new Date(base); d.setDate(base.getDate() + i); days.push(d);
   }
-
-  // month label (show range if crossing months)
   const firstM = days[0], lastM = days[6];
   document.getElementById('calMonth').textContent =
     firstM.getMonth() === lastM.getMonth()
@@ -941,39 +1018,31 @@ function renderCalendar() {
       : `${MONTHS[firstM.getMonth()].slice(0,3)} – ${MONTHS[lastM.getMonth()].slice(0,3)} ${lastM.getFullYear()}`;
 
   strip.innerHTML = days.map(d => {
-    const isToday   = d.toDateString() === today.toDateString();
-    const isPast    = d < today && !isToday;
-    const isActive  = state.date && d.toDateString() === state.date.toDateString();
+    const isToday  = d.toDateString() === today.toDateString();
+    const isPast   = d < today && !isToday;
+    const isActive = state.date && d.toDateString() === state.date.toDateString();
     let cls = 'cal-day';
     if (isPast) cls += ' disabled';
     else if (isActive) cls += ' active';
     else if (isToday) cls += ' today';
-    const dateStr = d.toDateString();
-    return `
-      <div class="${cls}" onclick="selectDate('${dateStr}')">
-        <span class="text-[9px] font-bold uppercase tracking-[.08em] ${isActive?'text-white/70':isToday?'text-gold/70':'text-textMid/40'}">${DAYS[d.getDay()]}</span>
-        <span class="text-base font-black leading-none ${isActive?'text-white':isToday?'text-redPrimary':'text-textDark'}">${d.getDate()}</span>
-        <span class="text-[9px] ${isActive?'text-white/50':'text-textMid/30'}">${MONTHS[d.getMonth()].slice(0,3)}</span>
-      </div>`;
+    const ds = d.toDateString();
+    return `<div class="${cls}" onclick="selectDate('${ds}')">
+      <span class="text-[9px] font-bold uppercase tracking-[.08em] ${isActive?'text-white/70':isToday?'text-gold/70':'text-textMid/40'}">${DAYS[d.getDay()]}</span>
+      <span class="text-base font-black leading-none ${isActive?'text-white':isToday?'text-redPrimary':'text-textDark'}">${d.getDate()}</span>
+      <span class="text-[9px] ${isActive?'text-white/50':'text-textMid/30'}">${MONTHS[d.getMonth()].slice(0,3)}</span>
+    </div>`;
   }).join('');
 }
 
 function prevWeek() { if (calOffset > 0) { calOffset--; renderCalendar(); } }
 function nextWeek() { calOffset++; renderCalendar(); }
-
-function selectDate(dateStr) {
-  state.date = new Date(dateStr);
-  renderCalendar();
-  updateSummary();
-  // reset time selection
-  state.time = null;
-  renderTimeSlots();
+function selectDate(ds) {
+  state.date = new Date(ds); renderCalendar(); updateSummary();
+  state.time = null; renderTimeSlots();
   document.getElementById('errDate').classList.remove('show');
 }
 
-// ═══════════════════════════════════════════════════════
-// TIME SLOTS
-// ═══════════════════════════════════════════════════════
+// ═══ TIME SLOTS ═══
 function renderTimeSlots() {
   document.getElementById('timeSlots').innerHTML = TIME_SLOTS.map(s => {
     let cls = 'time-slot';
@@ -982,17 +1051,12 @@ function renderTimeSlots() {
     return `<div class="${cls}" ${s.full?'title="Fully booked"':''} onclick="${s.full?'':` selectTime('${s.t}')`}">${s.t}${s.full?'<br><span style="font-size:9px;opacity:.6">Full</span>':''}</div>`;
   }).join('');
 }
-
 function selectTime(t) {
-  state.time = t;
-  renderTimeSlots();
-  updateSummary();
+  state.time = t; renderTimeSlots(); updateSummary();
   document.getElementById('errTime').classList.remove('show');
 }
 
-// ═══════════════════════════════════════════════════════
-// GUESTS
-// ═══════════════════════════════════════════════════════
+// ═══ GUESTS ═══
 function changeGuests(delta) {
   state.guests = Math.max(1, Math.min(9, state.guests + delta));
   document.getElementById('guestVal').textContent = state.guests;
@@ -1001,9 +1065,7 @@ function changeGuests(delta) {
   updateSummary();
 }
 
-// ═══════════════════════════════════════════════════════
-// OCCASION
-// ═══════════════════════════════════════════════════════
+// ═══ OCCASION ═══
 function selectOccasion(el, val) {
   document.querySelectorAll('.occ-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
@@ -1011,40 +1073,43 @@ function selectOccasion(el, val) {
   updateSummary();
 }
 
-// ═══════════════════════════════════════════════════════
-// DINING AREA
-// ═══════════════════════════════════════════════════════
+// ═══ AREA ═══
 const AREA_LABELS = { main:'Main Dining', terrace:'Garden Terrace', bar:'Bar Lounge', private:'Private Room' };
 function selectArea(el, key) {
   document.querySelectorAll('.area-card').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  state.area      = key;
-  state.areaLabel = AREA_LABELS[key];
+  state.area = key; state.areaLabel = AREA_LABELS[key];
   updateSummary();
 }
 
-// ═══════════════════════════════════════════════════════
-// DIETARY PILLS
-// ═══════════════════════════════════════════════════════
+// ═══ DIETARY ═══
 function toggleDiet(el) { el.classList.toggle('active'); }
 
-// ═══════════════════════════════════════════════════════
-// SUMMARY
-// ═══════════════════════════════════════════════════════
+// ═══ SUMMARY ═══
 function updateSummary() {
   const fmt = d => d ? `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()}` : 'Not selected';
-  document.getElementById('sumDate').textContent    = fmt(state.date);
-  document.getElementById('sumTime').textContent    = state.time || 'Not selected';
-  document.getElementById('sumGuests').textContent  = state.guests + (state.guests === 1 ? ' Guest' : ' Guests');
-  document.getElementById('sumArea').textContent    = state.areaLabel;
-  document.getElementById('sumOccasion').textContent= state.occasion;
+  // Desktop sidebar
+  const sd = document.getElementById('sumDate');
+  const st = document.getElementById('sumTime');
+  const sg = document.getElementById('sumGuests');
+  const sa = document.getElementById('sumArea');
+  const so = document.getElementById('sumOccasion');
+  if(sd) sd.textContent = fmt(state.date);
+  if(st) st.textContent = state.time || 'Not selected';
+  if(sg) sg.textContent = state.guests + (state.guests===1?' Guest':' Guests');
+  if(sa) sa.textContent = state.areaLabel;
+  if(so) so.textContent = state.occasion;
+  // Mobile strip
+  const md = document.getElementById('mobSumDate');
+  const mt = document.getElementById('mobSumTime');
+  const mg = document.getElementById('mobSumGuests');
+  if(md) md.textContent = state.date ? fmt(state.date) : 'No date';
+  if(mt) mt.textContent = state.time || 'No time';
+  if(mg) mg.textContent = state.guests + ' Guest' + (state.guests!==1?'s':'');
 }
 
-// ═══════════════════════════════════════════════════════
-// STEP NAVIGATION
-// ═══════════════════════════════════════════════════════
+// ═══ STEP NAV ═══
 function goStep(n) {
-  // validate current step before advancing
   if (n > state.step) {
     if (state.step === 1) {
       let ok = true;
@@ -1052,44 +1117,37 @@ function goStep(n) {
       if (!state.time) { document.getElementById('errTime').classList.add('show'); ok = false; }
       if (!ok) return;
     }
-    if (state.step === 4 && n === 5) return; // handled by form submit
+    if (state.step === 4 && n === 5) return;
   }
-
   state.step = n;
 
-  // panels
-  document.querySelectorAll('.step-panel').forEach((p, i) => {
-    p.classList.toggle('active', i + 1 === n);
-  });
+  document.querySelectorAll('.step-panel').forEach((p,i) => p.classList.toggle('active', i+1===n));
 
-  // step bar
   for (let i = 1; i <= 4; i++) {
-    const circle = document.getElementById('sc'+i);
-    const label  = document.getElementById('sl'+i);
-    if (i < n)      { circle.className = 'step-circle done';   label.className = 'step-label done'; }
-    else if (i === n){ circle.className = 'step-circle active'; label.className = 'step-label active'; }
-    else            { circle.className = 'step-circle';         label.className = 'step-label'; }
-    if (i < 4) {
-      const con = document.getElementById('con'+i);
-      con.className = 'step-connector' + (i < n ? ' done' : '');
-    }
+    const c = document.getElementById('sc'+i);
+    const l = document.getElementById('sl'+i);
+    if (i < n)       { c.className='step-circle done';   l.className='step-label done'; }
+    else if (i === n){ c.className='step-circle active'; l.className='step-label active'; }
+    else             { c.className='step-circle';         l.className='step-label'; }
+    if (i < 4) document.getElementById('con'+i).className = 'step-connector'+(i<n?' done':'');
   }
 
-  // progress
   const pcts = {1:25,2:50,3:75,4:100,5:100};
-  document.getElementById('progressBar').style.width = pcts[n] + '%';
-  document.getElementById('stepPct').textContent = n <= 4 ? `Step ${n} of 4` : 'Complete!';
+  document.getElementById('progressBar').style.width = pcts[n]+'%';
+  document.getElementById('stepPct').textContent = n<=4?`Step ${n} of 4`:'Complete!';
 
-  // hide summary on confirmation
-  document.getElementById('summaryCol').style.display = n === 5 ? 'none' : '';
-  document.getElementById('stepBar').style.display    = n === 5 ? 'none' : '';
+  const sc = document.getElementById('summaryCol');
+  const sb = document.getElementById('stepBar');
+  const ms = document.getElementById('mobileSummaryStrip');
+  if(sc) sc.style.display = n===5?'none':'';
+  if(sb) sb.style.display = n===5?'none':'';
+  if(ms) ms.style.display = n===5?'none':'';
 
-  window.scrollTo({ top: document.querySelector('#step'+n)?.offsetTop - 100 || 0, behavior:'smooth' });
+  const target = document.getElementById('step'+n);
+  if(target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 90, behavior:'smooth' });
 }
 
-// ═══════════════════════════════════════════════════════
-// FORM SUBMIT
-// ═══════════════════════════════════════════════════════
+// ═══ FORM SUBMIT ═══
 function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 function setE(fId, eId, show) {
   document.getElementById(fId)?.classList.toggle('err', show);
@@ -1098,46 +1156,41 @@ function setE(fId, eId, show) {
 
 function confirmReservation(e) {
   e.preventDefault();
-  const first  = document.getElementById('rfFirst').value.trim();
-  const email  = document.getElementById('rfEmail').value.trim();
-  const phone  = document.getElementById('rfPhone').value.trim();
-  const terms  = document.getElementById('rfTerms').checked;
+  const first = document.getElementById('rfFirst').value.trim();
+  const email = document.getElementById('rfEmail').value.trim();
+  const phone = document.getElementById('rfPhone').value.trim();
+  const terms = document.getElementById('rfTerms').checked;
   let ok = true;
-
-  setE('rfFirst', 'errFirst', !first);          if (!first) ok = false;
-  setE('rfEmail', 'errEmail', !isEmail(email)); if (!isEmail(email)) ok = false;
-  setE('rfPhone', 'errPhone', !phone);          if (!phone) ok = false;
-  if (!terms) { document.getElementById('errTerms').classList.add('show'); ok = false; }
+  setE('rfFirst','errFirst',!first);          if(!first) ok=false;
+  setE('rfEmail','errEmail',!isEmail(email)); if(!isEmail(email)) ok=false;
+  setE('rfPhone','errPhone',!phone);          if(!phone) ok=false;
+  if(!terms){ document.getElementById('errTerms').classList.add('show'); ok=false; }
   else { document.getElementById('errTerms').classList.remove('show'); }
-  if (!ok) return;
+  if(!ok) return;
 
   document.getElementById('confirmLabel').classList.add('hidden');
   document.getElementById('confirmSpinner').classList.remove('hidden');
   document.getElementById('confirmBtn').disabled = true;
 
   setTimeout(() => {
-    // populate confirmation card
-    const ref = 'SVR-' + Math.floor(10000 + Math.random() * 90000);
+    const ref = 'SVR-'+Math.floor(10000+Math.random()*90000);
     const d   = state.date;
-    const dateStr = d ? `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}` : '—';
+    const dateStr = d?`${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`:'—';
     const lastName = document.getElementById('rfLast').value.trim();
-
     document.getElementById('bookRef').textContent    = ref;
     document.getElementById('bookDate').textContent   = dateStr;
     document.getElementById('bookTime').textContent   = state.time;
-    document.getElementById('bookGuests').textContent = state.guests + (state.guests===1?' Guest':' Guests');
+    document.getElementById('bookGuests').textContent = state.guests+(state.guests===1?' Guest':' Guests');
     document.getElementById('bookArea').textContent   = state.areaLabel;
-    document.getElementById('bookName').textContent   = first + (lastName?' '+lastName:'');
+    document.getElementById('bookName').textContent   = first+(lastName?' '+lastName:'');
     document.getElementById('bookEmail').textContent  = email;
-
     goStep(5);
   }, 2000);
 }
 
 function newBooking() {
-  // reset
-  state.step=1; state.date=null; state.time=null; state.guests=2;
-  state.occasion='None'; state.area='main'; state.areaLabel='Main Dining';
+  state.step=1;state.date=null;state.time=null;state.guests=2;
+  state.occasion='None';state.area='main';state.areaLabel='Main Dining';
   calOffset=0;
   document.getElementById('detailsForm').reset();
   document.getElementById('confirmLabel').classList.remove('hidden');
@@ -1145,39 +1198,32 @@ function newBooking() {
   document.getElementById('confirmBtn').disabled=false;
   document.querySelectorAll('.occ-pill').forEach(p=>p.classList.remove('active'));
   selectArea(document.getElementById('area-main'),'main');
-  updateSummary();
-  renderCalendar();
-  renderTimeSlots();
-  goStep(1);
+  updateSummary(); renderCalendar(); renderTimeSlots(); goStep(1);
 }
 
-// ═══════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════
+// ═══ INIT ═══
 document.addEventListener('DOMContentLoaded', () => {
-  renderCalendar();
-  renderTimeSlots();
-  updateSummary();
+  renderCalendar(); renderTimeSlots(); updateSummary();
 
-  // navbar scroll tint
   window.addEventListener('scroll', () => {
     const nav = document.getElementById('navbar');
     nav.style.boxShadow = window.scrollY > 60 ? '0 2px 20px rgba(0,0,0,.06)' : 'none';
   });
 
-  // scroll reveal
   const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.05 });
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold:0.05 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 });
 
-// mobile menu fallback
 function toggleMenu() {
   const m=document.getElementById('mobileMenu'), ov=document.getElementById('overlay');
-  const open=m.style.transform==='translateX(0%)';
-  m.style.display='flex'; m.style.transform=open?'translateX(100%)':'translateX(0%)';
-  ov.style.opacity=open?'0':'1'; ov.style.pointerEvents=open?'none':'auto';
+  const open = m.style.transform==='translateX(0%)';
+  m.classList.remove('hidden');
+  m.style.display='flex';
+  m.style.transform = open?'translateX(100%)':'translateX(0%)';
+  ov.style.opacity  = open?'0':'1';
+  ov.style.pointerEvents = open?'none':'auto';
 }
 function closeAll() {
   const m=document.getElementById('mobileMenu'), ov=document.getElementById('overlay');
