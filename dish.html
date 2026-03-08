@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Savoria — Dish Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            redPrimary: "#c0392b", redDeep: "#96281b", redPale: "#fdf0ee",
+            cream: "#f5f0eb", textDark: "#1a1210", textMid: "#4a3830",
+            borderSoft: "#e8ddd8", gold: "#b8963e", goldLight: "#d4af6a",
+          },
+          fontFamily: {
+            playfair: ["Playfair Display", "serif"],
+            jost: ["Jost", "sans-serif"],
+            cormorant: ["Cormorant Garamond", "serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root {
+      --red: #c0392b;
+      --gold: #b8963e;
+      --cream: #f5f0eb;
+      --dark: #1a1210;
+      --mid: #4a3830;
+      --border: #e8ddd8;
+    }
+
+    * { box-sizing: border-box; }
+    body { background: #f8f5f2; }
+
+    /* ── HERO IMAGE ── */
+    .hero-img-wrap {
+      position: relative;
+      height: 380px;
+      overflow: hidden;
+      border-radius: 0 0 32px 32px;
+    }
+    @media(min-width:768px) { .hero-img-wrap { height: 480px; border-radius: 0 0 48px 48px; } }
+    .hero-img-wrap img { width:100%; height:100%; object-fit:cover; transition: transform 8s ease; }
+    .hero-img-wrap:hover img { transform: scale(1.04); }
+    .hero-gradient { position:absolute; inset:0; background: linear-gradient(to top, rgba(26,18,16,0.85) 0%, rgba(26,18,16,0.3) 50%, transparent 100%); }
+
+    /* ── BACK BTN ── */
+    .back-btn {
+      position: absolute; top: 20px; left: 20px; z-index: 10;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      color: white; cursor: pointer; transition: all 0.2s;
+      text-decoration: none;
+    }
+    .back-btn:hover { background: white; color: var(--dark); }
+
+    /* ── SHARE BTN ── */
+    .share-btn {
+      position: absolute; top: 20px; right: 20px; z-index: 10;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      color: white; cursor: pointer; transition: all 0.2s;
+    }
+    .share-btn:hover { background: white; color: var(--dark); }
+
+    /* ── LIKE BTN ── */
+    .like-btn {
+      position: absolute; bottom: 24px; right: 20px; z-index: 10;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: white;
+      display: flex; align-items: center; justify-content: center;
+      color: #ddd; cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .like-btn.liked { color: var(--red); }
+    .like-btn:hover { transform: scale(1.1); }
+
+    /* ── FLOATING BADGE ── */
+    .hero-badge {
+      position: absolute; bottom: 24px; left: 20px; z-index: 10;
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.12); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 12px; border-radius: 100px;
+    }
+
+    /* ── MAIN CARD ── */
+    .main-card {
+      background: white;
+      border-radius: 24px;
+      margin: -32px 12px 0;
+      position: relative; z-index: 5;
+      padding: 24px 20px 20px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+    }
+    @media(min-width:768px) {
+      .main-card { margin: -40px 40px 0; padding: 36px 40px 32px; border-radius: 32px; }
+    }
+
+    /* ── TAGS ── */
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; border-radius: 100px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .tag-red { background: #fdf0ee; color: var(--red); }
+    .tag-gold { background: #fef8ec; color: var(--gold); }
+    .tag-green { background: #edf7f0; color: #2d7a47; }
+    .tag-dark { background: rgba(26,18,16,0.07); color: var(--dark); }
+
+    /* ── RATING STARS ── */
+    .star-fill { color: var(--gold); }
+    .star-empty { color: #ddd; }
+
+    /* ── SECTION TITLE ── */
+    .section-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.25em; color: rgba(74,56,48,0.4);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
+
+    /* ── INGREDIENT CHIP ── */
+    .ingr-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 12px; border-radius: 100px;
+      border: 1px solid var(--border);
+      font-size: 11px; font-weight: 500; color: var(--mid);
+      background: var(--cream);
+    }
+
+    /* ── ALLERGEN ── */
+    .allergen {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 3px 8px; border-radius: 6px;
+      background: #fff8f0; border: 1px solid rgba(184,150,62,0.15);
+      font-size: 10px; font-weight: 600; color: var(--mid);
+    }
+
+    /* ── REVIEW CARD ── */
+    .review-card {
+      background: var(--cream); border-radius: 16px; padding: 16px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── RECOMMEND CARD ── */
+    .rec-card {
+      flex-shrink: 0;
+      background: white; border-radius: 18px; overflow: hidden;
+      border: 1px solid var(--border);
+      width: 170px;
+      transition: all 0.25s;
+      cursor: pointer;
+    }
+    .rec-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
+    @media(min-width:768px) {
+      .rec-card { width: auto; flex-shrink: 1; }
+    }
+    .rec-card img { width:100%; height:110px; object-fit:cover; }
+
+    /* ── NUTRITION RING ── */
+    .nut-ring {
+      width: 64px; height: 64px; border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      border: 3px solid var(--border);
+      position: relative;
+    }
+
+    /* ── STICKY BOTTOM ── */
+    .sticky-bottom {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      background: white; border-top: 1px solid var(--border);
+      padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.08);
+    }
+    @media(min-width:768px) { .sticky-bottom { max-width: 600px; margin: 0 auto; left: 50%; transform: translateX(-50%); right:auto; width:600px; border-radius: 24px 24px 0 0; } }
+
+    /* ── ADD BTN ── */
+    .add-to-order-btn {
+      background: linear-gradient(135deg, #c0392b 0%, #96281b 100%);
+      color: white; border: none; border-radius: 14px;
+      font-family: 'Jost', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.2s;
+      flex: 1; padding: 16px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .add-to-order-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .add-to-order-btn:active { transform: scale(0.98); }
+
+    /* ── QTY CONTROL ── */
+    .qty-ctrl {
+      display: flex; align-items: center; gap: 0;
+      border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden;
+    }
+    .qty-btn {
+      width: 44px; height: 52px;
+      background: var(--cream); border: none; cursor: pointer;
+      font-size: 18px; color: var(--mid); transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qty-btn:hover { background: #fdf0ee; color: var(--red); }
+    .qty-num {
+      width: 40px; text-align: center;
+      font-family: 'Playfair Display', serif; font-weight: 700; font-size: 16px;
+      color: var(--dark);
+    }
+
+    /* ── SPICE DOTS ── */
+    .spice-dot {
+      width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+    }
+    .spice-mild { background: #fbbf24; }
+    .spice-medium { background: #f97316; }
+    .spice-hot { background: #ef4444; }
+
+    /* ── TAB ── */
+    .info-tab {
+      flex: 1; padding: 10px; text-align: center;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(74,56,48,0.4); border-bottom: 2px solid transparent;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .info-tab.active { color: var(--red); border-color: var(--red); }
+
+    /* ── SCROLL HIDE ── */
+    .scroll-hide::-webkit-scrollbar { display: none; }
+    .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ── ANIMATION ── */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .anim-1 { animation: slideUp 0.5s ease both; }
+    .anim-2 { animation: slideUp 0.5s 0.1s ease both; }
+    .anim-3 { animation: slideUp 0.5s 0.2s ease both; }
+    .anim-4 { animation: slideUp 0.5s 0.3s ease both; }
+
+    /* ── TOAST ── */
+    @keyframes fadeSlideUp {
+      from { opacity:0; transform: translateX(-50%) translateY(10px); }
+      to { opacity:1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* ── PROGRESS BAR ── */
+    .prog-bar { height: 5px; border-radius: 100px; background: var(--border); overflow: hidden; }
+    .prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--gold), #e8c06e); transition: width 1s ease; }
+
+    /* ── CHEF NOTE ── */
+    .chef-note {
+      background: linear-gradient(135deg, #1a1210 0%, #2d1f1a 100%);
+      border-radius: 20px; padding: 20px;
+      position: relative; overflow: hidden;
+    }
+    .chef-note::before {
+      content: '"'; position: absolute; top: -10px; left: 12px;
+      font-family: 'Playfair Display', serif; font-size: 100px; color: rgba(184,150,62,0.15);
+      line-height: 1;
+    }
+  </style>
+</head>
+
+<body class="font-jost text-textDark overflow-x-hidden pb-32">
+
+<!-- ═══════════ HERO IMAGE SECTION ═══════════ -->
+<div class="hero-img-wrap anim-1" id="heroWrap">
+  <img src="./assests/thai.png" alt="Dish" id="heroImg"/>
+  <div class="hero-gradient"></div>
+
+  <!-- Back -->
+  <a href="index.html" class="back-btn">
+    <i class="fa-solid fa-arrow-left text-sm"></i>
+  </a>
+
+  <!-- Share -->
+  <button class="share-btn" onclick="sharedish()">
+    <i class="fa-solid fa-share-nodes text-sm"></i>
+  </button>
+
+  <!-- Like -->
+  <button class="like-btn" id="likeBtn" onclick="toggleLike()">
+    <i class="fa-solid fa-heart text-xl" id="likeIcon"></i>
+  </button>
+
+  <!-- Bottom badge -->
+  <div class="hero-badge">
+    <i class="fa-solid fa-star text-gold text-[10px]"></i>
+    <span class="text-white text-[11px] font-bold" id="heroRating">4.9</span>
+    <span class="text-white/50 text-[11px]">·</span>
+    <span class="text-white/70 text-[11px]" id="heroReviews">248 reviews</span>
+  </div>
+
+  <!-- Tag -->
+  <div class="absolute top-20 left-20 z-10" id="heroTagWrap">
+    <span class="tag tag-red" id="heroTag">Signature</span>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN INFO CARD ═══════════ -->
+<div class="main-card anim-2" id="mainCard">
+
+  <!-- Name & Price -->
+  <div class="flex items-start justify-between gap-4 mb-3">
+    <div class="flex-1">
+      <h1 class="font-playfair text-2xl md:text-3xl font-black text-textDark leading-tight" id="dishName">Bistecca Fiorentina</h1>
+      <p class="font-cormorant italic text-textMid/60 text-base mt-1" id="dishDesc">Dry-aged T-bone · rosemary butter · roasted garlic</p>
+    </div>
+    <div class="flex flex-col items-end flex-shrink-0">
+      <p class="font-playfair text-2xl font-black text-textDark" id="dishPrice">$48</p>
+      <p class="text-[10px] text-textMid/40 mt-0.5">per serving</p>
+    </div>
+  </div>
+
+  <!-- Tags row -->
+  <div class="flex flex-wrap gap-2 mb-4" id="dishTags">
+    <span class="tag tag-red">Chef's Pick</span>
+    <span class="tag tag-dark">🥩 Beef</span>
+    <span class="tag tag-gold">⏱ 25–30 min</span>
+  </div>
+
+  <!-- Star Rating -->
+  <div class="flex items-center gap-3 mb-4 pb-4 border-b border-borderSoft">
+    <div class="flex gap-0.5" id="starRow">
+      <i class="fa-solid fa-star star-fill text-sm"></i>
+      <i class="fa-solid fa-star star-fill text-sm"></i>
+      <i class="fa-solid fa-star star-fill text-sm"></i>
+      <i class="fa-solid fa-star star-fill text-sm"></i>
+      <i class="fa-solid fa-star-half-stroke star-fill text-sm"></i>
+    </div>
+    <span class="font-bold text-sm text-textDark" id="ratingNum">4.9</span>
+    <span class="text-textMid/40 text-sm" id="reviewCount">(248 reviews)</span>
+    <div class="ml-auto">
+      <span class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">✓ Available</span>
+    </div>
+  </div>
+
+  <!-- Info Tabs -->
+  <div class="flex border-b border-borderSoft mb-5" id="infoTabs">
+    <button class="info-tab active" onclick="switchTab('about')">About</button>
+    <button class="info-tab" onclick="switchTab('nutrition')">Nutrition</button>
+    <button class="info-tab" onclick="switchTab('allergens')">Allergens</button>
+  </div>
+
+  <!-- Tab: About -->
+  <div id="tab-about">
+    <!-- Description -->
+    <p class="text-sm text-textMid/70 leading-relaxed mb-5" id="dishLongDesc">
+      A Florentine classic elevated to its peak expression. Our T-bone is dry-aged for 28 days in our in-house aging room, then seared over a custom wood-fire grill at 900°F for a perfectly caramelized crust. Finished tableside with rosemary-infused compound butter and whole roasted garlic cloves.
+    </p>
+
+    <!-- Chef Note -->
+    <div class="chef-note mb-5">
+      <div class="relative z-10">
+        <p class="text-[10px] uppercase tracking-[0.2em] text-gold/60 font-bold mb-2">Chef Marco's Note</p>
+        <p class="font-cormorant italic text-white/80 text-base leading-relaxed" id="chefNote">
+          "This is the dish I cook when I want to show someone the soul of Italian cooking — no shortcuts, no garnishes to hide behind. Just exceptional beef and fire."
+        </p>
+      </div>
+    </div>
+
+    <!-- Ingredients -->
+    <p class="section-label mb-3">Key Ingredients</p>
+    <div class="flex flex-wrap gap-2 mb-5" id="ingredients">
+      <span class="ingr-chip">🥩 Dry-aged T-bone</span>
+      <span class="ingr-chip">🌿 Fresh Rosemary</span>
+      <span class="ingr-chip">🧄 Roasted Garlic</span>
+      <span class="ingr-chip">🧈 Cultured Butter</span>
+      <span class="ingr-chip">🧂 Himalayan Salt</span>
+      <span class="ingr-chip">🫒 Extra Virgin Olive Oil</span>
+    </div>
+
+    <!-- Spice Level -->
+    <p class="section-label mb-3">Spice Level</p>
+    <div class="flex items-center gap-3 mb-5">
+      <div class="flex gap-1.5">
+        <span class="spice-dot spice-mild"></span>
+        <span class="spice-dot" style="background:#e8ddd8"></span>
+        <span class="spice-dot" style="background:#e8ddd8"></span>
+      </div>
+      <span class="text-sm font-semibold text-textMid" id="spiceLevel">Mild</span>
+      <span class="text-xs text-textMid/40">· Great for everyone</span>
+    </div>
+  </div>
+
+  <!-- Tab: Nutrition -->
+  <div id="tab-nutrition" class="hidden">
+    <p class="text-[11px] text-textMid/50 mb-4 font-cormorant italic">Per serving (approx. 400g)</p>
+    <div class="grid grid-cols-2 gap-3 mb-5" id="nutritionData">
+      <div class="bg-cream rounded-2xl p-4">
+        <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40 mb-1">Calories</p>
+        <p class="font-playfair text-2xl font-black text-textDark">680</p>
+        <div class="prog-bar mt-2"><div class="prog-fill" style="width:68%"></div></div>
+      </div>
+      <div class="bg-cream rounded-2xl p-4">
+        <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40 mb-1">Protein</p>
+        <p class="font-playfair text-2xl font-black text-textDark">58g</p>
+        <div class="prog-bar mt-2"><div class="prog-fill" style="width:82%"></div></div>
+      </div>
+      <div class="bg-cream rounded-2xl p-4">
+        <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40 mb-1">Fat</p>
+        <p class="font-playfair text-2xl font-black text-textDark">42g</p>
+        <div class="prog-bar mt-2"><div class="prog-fill" style="width:55%"></div></div>
+      </div>
+      <div class="bg-cream rounded-2xl p-4">
+        <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40 mb-1">Carbs</p>
+        <p class="font-playfair text-2xl font-black text-textDark">4g</p>
+        <div class="prog-bar mt-2"><div class="prog-fill" style="width:8%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab: Allergens -->
+  <div id="tab-allergens" class="hidden">
+    <p class="text-sm text-textMid/60 mb-4">This dish contains the following allergens. Please inform your server of any dietary restrictions.</p>
+    <div class="flex flex-wrap gap-2 mb-5" id="allergenList">
+      <span class="allergen">🥩 Beef</span>
+      <span class="allergen">🥛 Dairy (butter)</span>
+    </div>
+    <div class="bg-green-50 border border-green-200 rounded-xl p-3 flex gap-3">
+      <i class="fa-solid fa-circle-check text-green-500 mt-0.5"></i>
+      <div>
+        <p class="text-sm font-semibold text-green-800">Gluten-Free</p>
+        <p class="text-xs text-green-600 mt-0.5">This dish contains no gluten ingredients</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ REVIEWS ═══════════ -->
+<div class="mx-3 md:mx-10 mt-4 anim-3">
+  <div class="bg-white rounded-2xl p-5 border border-borderSoft">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <p class="section-label flex-1">Guest Reviews</p>
+      <a href="#" class="text-[10px] font-bold uppercase tracking-widest text-redPrimary ml-3">See All</a>
+    </div>
+
+    <!-- Overall score -->
+    <div class="flex items-center gap-5 mb-5 pb-4 border-b border-borderSoft">
+      <div class="text-center flex-shrink-0">
+        <p class="font-playfair text-5xl font-black text-textDark">4.9</p>
+        <div class="flex gap-0.5 justify-center mt-1">
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star-half-stroke text-gold text-xs"></i>
+        </div>
+        <p class="text-[10px] text-textMid/40 mt-1">248 reviews</p>
+      </div>
+      <div class="flex-1 space-y-2">
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-textMid/50 w-3">5</span>
+          <div class="prog-bar flex-1"><div class="prog-fill" style="width:78%"></div></div>
+          <span class="text-[10px] text-textMid/40 w-5">78%</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-textMid/50 w-3">4</span>
+          <div class="prog-bar flex-1"><div class="prog-fill" style="width:16%"></div></div>
+          <span class="text-[10px] text-textMid/40 w-5">16%</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-textMid/50 w-3">3</span>
+          <div class="prog-bar flex-1"><div class="prog-fill" style="width:4%"></div></div>
+          <span class="text-[10px] text-textMid/40 w-5">4%</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-textMid/50 w-3">2</span>
+          <div class="prog-bar flex-1"><div class="prog-fill" style="width:2%"></div></div>
+          <span class="text-[10px] text-textMid/40 w-5">2%</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-textMid/50 w-3">1</span>
+          <div class="prog-bar flex-1"><div class="prog-fill" style="width:0%"></div></div>
+          <span class="text-[10px] text-textMid/40 w-5">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review cards -->
+    <div class="space-y-3">
+      <div class="review-card">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-full bg-redPale flex items-center justify-center font-playfair font-bold text-redPrimary text-sm">A</div>
+            <div>
+              <p class="text-sm font-semibold text-textDark">Alexandra M.</p>
+              <p class="text-[10px] text-textMid/40">2 days ago · Regular Guest</p>
+            </div>
+          </div>
+          <div class="flex gap-0.5">
+            <i class="fa-solid fa-star text-gold text-[10px]"></i>
+            <i class="fa-solid fa-star text-gold text-[10px]"></i>
+            <i class="fa-solid fa-star text-gold text-[10px]"></i>
+            <i class="fa-solid fa-star text-gold text-[10px]"></i>
+            <i class="fa-solid fa-star text-gold text-[10px]"></i>
+          </div>
+        </div>
+        <p class="font-cormorant italic text-sm text-textMid/70 leading-relaxed">The Bistecca was cooked to absolute perfection — that perfect char on the outside, rosy pink inside. The rosemary butter was heavenly.</p>
+      </div>
+
+      <div class="review-card">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-full bg-cream flex items-center justify-center font-playfair font-bold text-gold text-sm">J</div>
+            <div>
+              <p class="text-sm font-semibold text-textDark">James R.</p>
+              <p class="text-[10px] text-textMid/40">1 week ago · Food Critic</p>
+            </div>
+          </div>
+          <div class="flex gap-0.5">
+            <i class="fa-solid fa-star text-gold text-[10px]"></i>
+            <i class="fa-solid fa-star text-gold text-[10px]"></i>
+            <i class="fa-solid fa-star text-gold text-[10px]"></i>
+            <i class="fa-solid fa-star text-gold text-[10px]"></i>
+            <i class="fa-solid fa-star text-gold text-[10px]"></i>
+          </div>
+        </div>
+        <p class="font-cormorant italic text-sm text-textMid/70 leading-relaxed">In 20 years of reviewing restaurants, this is easily among the top 5 steaks I've ever had. The aging process truly elevates this to another level.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ RECOMMENDED ═══════════ -->
+<div class="mt-6 anim-4">
+  <div class="flex items-center justify-between px-4 md:px-10 mb-4">
+    <div>
+      <p class="section-label" style="color:#b8963e">
+        <i class="fa-solid fa-wand-magic-sparkles text-[9px] mr-1"></i> Recommended
+      </p>
+      <p class="font-cormorant italic text-textMid/50 text-sm mt-0.5">Pairs perfectly with your order</p>
+    </div>
+    <a href="menu.html" class="text-[10px] font-bold uppercase tracking-widest text-redPrimary">See All</a>
+  </div>
+
+  <!-- Scrollable cards -->
+  <div class="flex gap-3 overflow-x-auto scroll-hide pl-4 pr-4 pb-2 md:grid md:grid-cols-4 md:px-10 md:overflow-visible" id="recommendedRow">
+
+    <div class="rec-card" onclick="goToDish('Black Truffle Risotto', 32, '4.9', 'Chef\'s Pick', 'Carnaroli rice · black truffle · aged Parmigiano')">
+      <div class="relative">
+        <img src="./assests/thai.png" alt="Truffle Risotto"/>
+        <div class="absolute top-2 left-2"><span class="tag tag-red" style="font-size:9px;padding:3px 7px">Chef's Pick</span></div>
+        <div class="absolute top-2 right-2 bg-white/90 rounded-full px-2 py-0.5 flex items-center gap-1">
+          <i class="fa-solid fa-star text-gold text-[8px]"></i>
+          <span class="text-[10px] font-bold">4.9</span>
+        </div>
+      </div>
+      <div class="p-3">
+        <p class="font-playfair text-sm font-bold text-textDark leading-tight">Black Truffle Risotto</p>
+        <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Carnaroli · truffle · Parmigiano</p>
+        <div class="flex items-center justify-between mt-2.5">
+          <p class="font-playfair font-black text-textDark text-sm">$32</p>
+          <button onclick="event.stopPropagation(); quickAdd('Black Truffle Risotto', 32)" class="w-7 h-7 rounded-full bg-redPrimary text-white flex items-center justify-center text-sm shadow-sm hover:bg-redDeep transition">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-card" onclick="goToDish('Chianti Classico', 18, '4.8', 'Wine Pairing', '2018 · Tuscany · 750ml')">
+      <div class="relative">
+        <div class="h-[110px] bg-gradient-to-br from-[#7b1e2e] to-[#3d0e17] flex items-center justify-center text-5xl">🍷</div>
+        <div class="absolute top-2 left-2"><span class="tag tag-gold" style="font-size:9px;padding:3px 7px">Wine</span></div>
+      </div>
+      <div class="p-3">
+        <p class="font-playfair text-sm font-bold text-textDark leading-tight">Chianti Classico</p>
+        <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">2018 · Tuscany · 750ml</p>
+        <div class="flex items-center justify-between mt-2.5">
+          <p class="font-playfair font-black text-textDark text-sm">$18</p>
+          <button onclick="event.stopPropagation(); quickAdd('Chianti Classico', 18)" class="w-7 h-7 rounded-full bg-redPrimary text-white flex items-center justify-center text-sm shadow-sm hover:bg-redDeep transition">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-card" onclick="goToDish('Tagliatelle al Ragù', 28, '4.8', 'Popular', 'House-made pasta · slow-cooked beef · Parmigiano')">
+      <div class="relative">
+        <img src="./assests/thai.png" alt="Tagliatelle"/>
+        <div class="absolute top-2 left-2"><span class="tag tag-gold" style="font-size:9px;padding:3px 7px">Popular</span></div>
+        <div class="absolute top-2 right-2 bg-white/90 rounded-full px-2 py-0.5 flex items-center gap-1">
+          <i class="fa-solid fa-star text-gold text-[8px]"></i>
+          <span class="text-[10px] font-bold">4.8</span>
+        </div>
+      </div>
+      <div class="p-3">
+        <p class="font-playfair text-sm font-bold text-textDark leading-tight">Tagliatelle al Ragù</p>
+        <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">House-made pasta</p>
+        <div class="flex items-center justify-between mt-2.5">
+          <p class="font-playfair font-black text-textDark text-sm">$28</p>
+          <button onclick="event.stopPropagation(); quickAdd('Tagliatelle al Ragù', 28)" class="w-7 h-7 rounded-full bg-redPrimary text-white flex items-center justify-center text-sm shadow-sm hover:bg-redDeep transition">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-card" onclick="goToDish('Panna Cotta', 14, '4.7', 'New', 'Vanilla bean · wild berry coulis · mint')">
+      <div class="relative">
+        <img src="./assests/thai.png" alt="Panna Cotta"/>
+        <div class="absolute top-2 left-2"><span class="tag tag-green" style="font-size:9px;padding:3px 7px">Dessert</span></div>
+        <div class="absolute top-2 right-2 bg-white/90 rounded-full px-2 py-0.5 flex items-center gap-1">
+          <i class="fa-solid fa-star text-gold text-[8px]"></i>
+          <span class="text-[10px] font-bold">4.7</span>
+        </div>
+      </div>
+      <div class="p-3">
+        <p class="font-playfair text-sm font-bold text-textDark leading-tight">Panna Cotta</p>
+        <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Vanilla · berry coulis</p>
+        <div class="flex items-center justify-between mt-2.5">
+          <p class="font-playfair font-black text-textDark text-sm">$14</p>
+          <button onclick="event.stopPropagation(); quickAdd('Panna Cotta', 14)" class="w-7 h-7 rounded-full bg-redPrimary text-white flex items-center justify-center text-sm shadow-sm hover:bg-redDeep transition">+</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════ STICKY BOTTOM BAR ═══════════ -->
+<div class="sticky-bottom" id="stickyBottom">
+  <div class="flex items-center gap-3">
+    <!-- Qty Control -->
+    <div class="qty-ctrl">
+      <button class="qty-btn" onclick="changeQty(-1)">−</button>
+      <span class="qty-num" id="qtyNum">1</span>
+      <button class="qty-btn" onclick="changeQty(1)">+</button>
+    </div>
+    <!-- Add to Order -->
+    <button class="add-to-order-btn" onclick="addCurrentDish()" id="addBtn">
+      <i class="fa-solid fa-bag-shopping text-[11px]"></i>
+      <span>Add to Order</span>
+      <span class="ml-1 opacity-70">·</span>
+      <span id="totalPrice">$48</span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script>
+// ── DISH DATA ──
+const dishes = {
+  'Bistecca Fiorentina': {
+    price: 48, rating: 4.9, reviews: 248, tag: 'Signature',
+    tagStyle: 'tag-red',
+    desc: 'Dry-aged T-bone · rosemary butter · roasted garlic',
+    longDesc: 'A Florentine classic elevated to its peak expression. Our T-bone is dry-aged for 28 days in our in-house aging room, then seared over a custom wood-fire grill at 900°F for a perfectly caramelized crust. Finished tableside with rosemary-infused compound butter and whole roasted garlic cloves.',
+    chefNote: '"This is the dish I cook when I want to show someone the soul of Italian cooking — no shortcuts, no garnishes to hide behind. Just exceptional beef and fire."',
+    ingredients: ['🥩 Dry-aged T-bone', '🌿 Fresh Rosemary', '🧄 Roasted Garlic', '🧈 Cultured Butter', '🧂 Himalayan Salt', '🫒 Extra Virgin Olive Oil'],
+    allergens: ['🥩 Beef', '🥛 Dairy (butter)'],
+    tags: ['Chef\'s Pick', 'Beef', '⏱ 25–30 min'],
+    spice: 'Mild', spiceDots: 1,
+    nutrition: { calories: 680, protein: '58g', fat: '42g', carbs: '4g' },
+    nutProgress: [68, 82, 55, 8],
+    glutenFree: true,
+  },
+  'Tagliatelle al Ragù': {
+    price: 28, rating: 4.8, reviews: 312, tag: 'Popular',
+    tagStyle: 'tag-gold',
+    desc: 'House-made pasta · slow-cooked beef · Parmigiano',
+    longDesc: 'Our signature tagliatelle is made fresh every morning using stone-milled flour and farm eggs from upstate New York. The ragù is slow-braised for 6 hours with Chianti Classico, San Marzano tomatoes, and whole vegetables, creating a sauce of unparalleled depth and richness.',
+    chefNote: '"My grandmother\'s recipe, perfected over 40 years. Every bowl carries the memory of Sunday lunches in Bologna."',
+    ingredients: ['🍝 Fresh Tagliatelle', '🥩 Slow-braised Beef', '🍷 Chianti Classico', '🍅 San Marzano Tomato', '🧀 Aged Parmigiano', '🌿 Fresh Basil'],
+    allergens: ['🌾 Gluten', '🥚 Eggs', '🥛 Dairy'],
+    tags: ['Popular', 'Pasta', '⏱ 20–25 min'],
+    spice: 'Mild', spiceDots: 1,
+    nutrition: { calories: 520, protein: '28g', fat: '22g', carbs: '58g' },
+    nutProgress: [52, 45, 38, 60],
+    glutenFree: false,
+  },
+  'Panna Cotta': {
+    price: 14, rating: 4.7, reviews: 189, tag: 'New',
+    tagStyle: 'tag-gold',
+    desc: 'Vanilla bean · wild berry coulis · mint',
+    longDesc: 'A silken Italian classic made with double cream from a small family dairy in Vermont. Infused with hand-split Madagascar vanilla beans and set overnight for the perfect texture — firm enough to hold its shape, tender enough to melt on the tongue. Topped with our house-made wild berry coulis.',
+    chefNote: '"Simplicity is the ultimate sophistication. This dish proves that great ingredients, treated with respect, need nothing else."',
+    ingredients: ['🥛 Double Cream', '🍦 Madagascar Vanilla', '🍓 Wild Berry Coulis', '🍬 Caster Sugar', '🌿 Fresh Mint', '🍋 Lemon Zest'],
+    allergens: ['🥛 Dairy'],
+    tags: ['Vegetarian', 'Dessert', '⏱ Made fresh daily'],
+    spice: 'None', spiceDots: 0,
+    nutrition: { calories: 320, protein: '4g', fat: '26g', carbs: '22g' },
+    nutProgress: [32, 8, 52, 24],
+    glutenFree: true,
+  }
+};
+
+let currentDish = null;
+let qty = 1;
+let cart = JSON.parse(localStorage.getItem('savoria_cart') || '[]');
+
+// ── LOAD DISH FROM URL ──
+function loadDish() {
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('dish') || 'Bistecca Fiorentina';
+  const data = dishes[name];
+  if (!data) return;
+  currentDish = { name, ...data };
+
+  // Update DOM
+  document.getElementById('dishName').textContent = name;
+  document.getElementById('dishDesc').textContent = data.desc;
+  document.getElementById('dishPrice').textContent = '$' + data.price;
+  document.getElementById('dishLongDesc').textContent = data.longDesc;
+  document.getElementById('chefNote').textContent = data.chefNote;
+  document.getElementById('heroRating').textContent = data.rating;
+  document.getElementById('heroReviews').textContent = data.reviews + ' reviews';
+  document.getElementById('ratingNum').textContent = data.rating;
+  document.getElementById('reviewCount').textContent = '(' + data.reviews + ' reviews)';
+  document.getElementById('heroTag').textContent = data.tag;
+  document.getElementById('heroTag').className = 'tag ' + data.tagStyle;
+  document.getElementById('spiceLevel').textContent = data.spice;
+  document.title = 'Savoria — ' + name;
+
+  // Tags
+  const tagsEl = document.getElementById('dishTags');
+  tagsEl.innerHTML = data.tags.map((t, i) => {
+    const styles = ['tag-red', 'tag-dark', 'tag-gold'];
+    return `<span class="tag ${styles[i % styles.length]}">${t}</span>`;
+  }).join('');
+
+  // Ingredients
+  document.getElementById('ingredients').innerHTML = data.ingredients
+    .map(i => `<span class="ingr-chip">${i}</span>`).join('');
+
+  // Allergens
+  document.getElementById('allergenList').innerHTML = data.allergens
+    .map(a => `<span class="allergen">${a}</span>`).join('');
+
+  // Nutrition
+  const nutKeys = ['Calories', 'Protein', 'Fat', 'Carbs'];
+  const nutVals = [data.nutrition.calories, data.nutrition.protein, data.nutrition.fat, data.nutrition.carbs];
+  document.getElementById('nutritionData').innerHTML = nutKeys.map((k, i) => `
+    <div class="bg-cream rounded-2xl p-4">
+      <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40 mb-1">${k}</p>
+      <p class="font-playfair text-2xl font-black text-textDark">${nutVals[i]}</p>
+      <div class="prog-bar mt-2"><div class="prog-fill" style="width:${data.nutProgress[i]}%"></div></div>
+    </div>
+  `).join('');
+
+  // Gluten free notice
+  const gfEl = document.querySelector('#tab-allergens .bg-green-50');
+  if (!data.glutenFree) {
+    gfEl.className = 'bg-red-50 border border-red-200 rounded-xl p-3 flex gap-3';
+    gfEl.querySelector('i').className = 'fa-solid fa-circle-xmark text-red-500 mt-0.5';
+    gfEl.querySelector('.text-green-800').textContent = 'Contains Gluten';
+    gfEl.querySelector('.text-green-800').className = 'text-sm font-semibold text-red-800';
+    gfEl.querySelector('.text-green-600').textContent = 'This dish contains gluten ingredients';
+    gfEl.querySelector('.text-green-600').className = 'text-xs text-red-600 mt-0.5';
+  }
+
+  // Spice dots
+  const spiceLevels = { 'None': 0, 'Mild': 1, 'Medium': 2, 'Hot': 3 };
+  const spiceColors = ['spice-mild', 'spice-medium', 'spice-hot'];
+  const level = spiceLevels[data.spice] || 0;
+  const dots = document.querySelector('.flex.items-center.gap-3.mb-5 .flex.gap-1\\.5');
+  if (dots) {
+    dots.innerHTML = [1, 2, 3].map(i => 
+      `<span class="spice-dot ${i <= level ? spiceColors[level - 1] : ''}" style="${i <= level ? '' : 'background:#e8ddd8'}"></span>`
+    ).join('');
+  }
+
+  updatePrice();
+}
+
+// ── QTY & PRICE ──
+function changeQty(delta) {
+  qty = Math.max(1, qty + delta);
+  document.getElementById('qtyNum').textContent = qty;
+  updatePrice();
+}
+function updatePrice() {
+  if (!currentDish) return;
+  document.getElementById('totalPrice').textContent = '$' + (currentDish.price * qty).toFixed(0);
+}
+
+// ── ADD TO ORDER ──
+function addCurrentDish() {
+  if (!currentDish) return;
+  const btn = document.getElementById('addBtn');
+  btn.innerHTML = '<i class="fa-solid fa-check text-[11px]"></i> Added to Order!';
+  btn.style.background = 'linear-gradient(135deg, #27ae60, #229954)';
+  
+  showToast(currentDish.name);
+  
+  // Save to localStorage for cross-page cart
+  const existing = cart.find(i => i.name === currentDish.name);
+  if (existing) { existing.qty += qty; }
+  else { cart.push({ name: currentDish.name, price: currentDish.price, qty }); }
+  localStorage.setItem('savoria_cart', JSON.stringify(cart));
+
+  setTimeout(() => {
+    btn.innerHTML = `<i class="fa-solid fa-bag-shopping text-[11px]"></i> Add to Order <span class="ml-1 opacity-70">·</span> $${(currentDish.price * qty).toFixed(0)}`;
+    btn.style.background = '';
+  }, 1800);
+}
+
+// ── QUICK ADD ──
+function quickAdd(name, price) {
+  const existing = cart.find(i => i.name === name);
+  if (existing) { existing.qty++; }
+  else { cart.push({ name, price, qty: 1 }); }
+  localStorage.setItem('savoria_cart', JSON.stringify(cart));
+  showToast(name);
+}
+
+// ── NAVIGATE TO DISH ──
+function goToDish(name, price, rating, tag, desc) {
+  window.location.href = 'dish.html?dish=' + encodeURIComponent(name);
+}
+
+// ── LIKE ──
+let liked = false;
+function toggleLike() {
+  liked = !liked;
+  const btn = document.getElementById('likeBtn');
+  btn.classList.toggle('liked', liked);
+  btn.style.transform = 'scale(1.3)';
+  setTimeout(() => btn.style.transform = '', 200);
+}
+
+// ── SHARE ──
+function shareish() {
+  if (navigator.share) {
+    navigator.share({ title: 'Savoria — ' + (currentDish?.name || ''), url: window.location.href });
+  }
+}
+function shareish(){ shareish(); }
+
+// ── TABS ──
+function switchTab(tab) {
+  ['about', 'nutrition', 'allergens'].forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    if (el) el.classList.toggle('hidden', t !== tab);
+  });
+  document.querySelectorAll('.info-tab').forEach((btn, i) => {
+    const tabs = ['about', 'nutrition', 'allergens'];
+    btn.classList.toggle('active', tabs[i] === tab);
+  });
+}
+
+// ── TOAST ──
+function showToast(name) {
+  const existing = document.getElementById('toast');
+  if (existing) existing.remove();
+  const t = document.createElement('div');
+  t.id = 'toast';
+  t.style.cssText = 'position:fixed;bottom:120px;left:50%;transform:translateX(-50%);z-index:2000;background:#1a1210;color:white;padding:12px 20px;border-radius:100px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 8px 30px rgba(0,0,0,0.25);animation:fadeSlideUp 0.3s ease both;white-space:nowrap;';
+  t.innerHTML = `<i class="fa-solid fa-check" style="color:#b8963e;font-size:10px"></i> ${name} added!`;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity 0.3s'; setTimeout(()=>t.remove(),300); }, 2200);
+}
+
+// ── INIT ──
+loadDish();
+</script>
+
+</body>
+</html>

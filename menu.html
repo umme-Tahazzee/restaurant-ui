@@ -749,8 +749,10 @@ function updateCartUI() {
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex justify-between items-start">
-            <p class="font-playfair font-bold text-textDark text-[13px] leading-tight">${item.name}</p>
-            <button class="text-textMid/25 hover:text-redPrimary transition ml-2" onclick="removeFromCart(${idx})">
+            <p class="font-playfair font-bold text-textDark text-[13px] leading-tight">
+              ${item.name}</p>
+            <button class="text-textMid/25 hover:text-redPrimary transition ml-2" 
+            onclick="removeFromCart(${idx})">
               <i class="fa-solid fa-trash-can text-[11px]"></i>
             </button>
           </div>
@@ -879,7 +881,8 @@ function openQuick(card) {
     <div class="relative">
       <div class="md:hidden flex justify-center pt-3 pb-1"><div class="w-10 h-[4px] rounded-full bg-borderSoft"></div></div>
       <img src="./assests/thai.png" alt="${name}" class="w-full h-[220px] object-cover"/>
-      <button onclick="closeQuick()" class="absolute top-4 right-4 w-9 h-9 bg-white/90 rounded-full flex items-center justify-center text-textMid hover:text-redPrimary transition shadow-md">
+      <button onclick="closeQuick()" class="absolute top-4 right-4 w-9 h-9 bg-white/90 
+      rounded-full flex items-center justify-center text-textMid hover:text-redPrimary transition shadow-md">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>

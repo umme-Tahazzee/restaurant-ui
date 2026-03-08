@@ -1,0 +1,38 @@
+
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
+   style="background:rgba(255,255,255,0)">
+ 
+    <div id="navInner" class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
+      <a href="#" class="flex flex-col leading-none group flex-shrink-0">
+        <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
+          Sav<span class="italic font-light text-redPrimary">o</span>ria
+        </span>
+        <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
+        <li><a href="#" class="nav-link transition">Home</a></li>
+        <li><a href="menu.html" class="nav-link transition">Menu</a></li>
+        <li><a href="/about.html" class="nav-link transition">About</a></li>
+        <li><a href="#reservation" class="nav-link transition">Reserve</a></li>
+        <li><a href="#contact" class="nav-link transition">Contact</a></li>
+      </ul>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
+          <i class="fa-solid fa-bag-shopping text-[15px]"></i>
+          <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
+        </button>
+        <button class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
+          <i class="fa-regular fa-circle-user"></i> Login
+        </button>
+        <a href="#reservation" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
+          <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
+        </a>
+        <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
+          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+          <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
+        </button>
+      </div>
+    </div>
+    <div class="h-px bg-borderSoft/80"></div>
+  </nav>
