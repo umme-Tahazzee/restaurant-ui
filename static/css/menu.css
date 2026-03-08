@@ -1,5 +1,206 @@
 
-   
+
+    /* ─────────────────────────────────────────
+       SEARCH BAR STYLES
+    ───────────────────────────────────────── */
+
+    /* Desktop search wrap */
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 280px;
+    }
+    .search-wrap input {
+      width: 100%;
+      height: 36px;
+      padding: 0 34px 0 34px;
+      border: 1.5px solid #e8ddd8;
+      border-radius: 100px;
+      font-family: 'Jost', sans-serif;
+      font-size: 11.5px;
+      color: #1a1210;
+      background: #f5f0eb;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-wrap input::placeholder { color: rgba(74,56,48,0.38); }
+    .search-wrap input:focus {
+      border-color: #b8963e;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(184,150,62,0.1);
+    }
+    .search-wrap .s-icon {
+      position: absolute; left: 11px; top: 50%;
+      transform: translateY(-50%);
+      color: rgba(74,56,48,0.4); font-size: 11px;
+      pointer-events: none; transition: color 0.2s;
+    }
+    .search-wrap:focus-within .s-icon { color: #b8963e; }
+    .search-wrap .s-clear {
+      position: absolute; right: 10px; top: 50%;
+      transform: translateY(-50%);
+      width: 17px; height: 17px; border-radius: 50%;
+      background: rgba(74,56,48,0.15);
+      display: none; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 8px; color: #4a3830;
+      transition: all 0.15s;
+    }
+    .search-wrap .s-clear:hover { background: #c0392b; color: #fff; }
+    .search-wrap.has-value .s-clear { display: flex; }
+
+    /* Mobile search bar — slides in below filter pills */
+    .mob-search-bar {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 0;
+    }
+    .mob-search-bar.open {
+      max-height: 64px;
+      padding: 8px 0 4px;
+    }
+    .mob-search-inner { position: relative; }
+    .mob-search-bar input {
+      width: 100%;
+      height: 40px;
+      padding: 0 38px 0 38px;
+      border: 1.5px solid #e8ddd8;
+      border-radius: 12px;
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      color: #1a1210;
+      background: #f5f0eb;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .mob-search-bar input:focus {
+      border-color: #b8963e;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(184,150,62,0.1);
+    }
+    .mob-search-bar input::placeholder { color: rgba(74,56,48,.38); }
+    .mob-search-bar .ms-icon {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: rgba(74,56,48,.4); font-size: 12px; pointer-events: none;
+    }
+    .mob-search-bar .ms-clear {
+      position: absolute; right: 11px; top: 50%;
+      transform: translateY(-50%);
+      width: 19px; height: 19px; border-radius: 50%;
+      background: rgba(74,56,48,.14);
+      display: none; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 8px; color: #4a3830;
+    }
+    .mob-search-bar.has-value .ms-clear { display: flex; }
+
+    /* Mobile search toggle icon button */
+    .m-search-btn {
+      flex-shrink: 0;
+      width: 34px; height: 32px;
+      border: 1.5px solid #e8ddd8;
+      border-radius: 100px;
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(74,56,48,.45); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .m-search-btn.active { background: #b8963e; border-color: #b8963e; color: #fff; }
+
+    /* Search result count bar */
+    .search-result-bar {
+      display: none;
+      padding: 8px 0;
+      font-size: 11px;
+      font-weight: 600;
+      color: #b8963e;
+      letter-spacing: 0.05em;
+      align-items: center;
+      gap: 7px;
+    }
+    .search-result-bar.visible { display: flex; }
+
+    /* No results block */
+    .no-results {
+      display: none;
+      text-align: center;
+      padding: 72px 20px;
+    }
+    .no-results.visible { display: block; }
+
+    /* Hide cards when filtered out by search */
+    .menu-card.hidden-search { display: none !important; }
+    .menu-section.section-empty { display: none !important; }
+
+    /* ─────────────────────────────────────────
+       QUICK MODAL — FIXED CLOSE BUTTON
+       Close btn is sticky so it stays visible
+       even after scrolling inside the panel
+    ───────────────────────────────────────── */
+    .quick-modal {
+      position: fixed; inset: 0; z-index: 1200;
+      display: flex; align-items: flex-end;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.28s ease;
+    }
+    .quick-modal.open { pointer-events: all; opacity: 1; }
+
+    .quick-modal-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(3px);
+      cursor: pointer;
+    }
+
+    .quick-modal-panel {
+      position: relative; z-index: 10;
+      width: 100%;
+      background: #fff;
+      border-radius: 24px 24px 0 0;
+      max-height: 88vh;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
+    }
+    .quick-modal.open .quick-modal-panel { transform: translateY(0); }
+
+    /* CLOSE BUTTON — sticky top-right, always visible */
+    .qm-close-btn {
+      position: sticky;
+      top: 12px;
+      float: right;
+      margin: 12px 12px -48px 0; /* negative margin so it overlaps image */
+      z-index: 30;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1.5px solid #e8ddd8;
+      display: flex; align-items: center; justify-content: center;
+      color: #4a3830; cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+      transition: all 0.18s;
+      flex-shrink: 0;
+    }
+    .qm-close-btn:hover { background: #c0392b; color: #fff; border-color: #c0392b; }
+
+    /* Desktop: centered dialog */
+    @media (min-width: 768px) {
+      .quick-modal { align-items: center; justify-content: center; }
+      .quick-modal-panel {
+        width: 500px; max-height: 84vh;
+        border-radius: 24px;
+        transform: scale(0.94);
+        transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+        box-shadow: 0 20px 70px rgba(0,0,0,0.2);
+      }
+      .quick-modal.open .quick-modal-panel { transform: scale(1); }
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity:0; transform:translateX(-50%) translateY(10px); }
+      to   { opacity:1; transform:translateX(-50%) translateY(0); }
+    }
+ 
    
     /* FILTER TABS */
     .filter-tab { padding: 10px 22px; border-radius: 100px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; cursor: pointer; transition: all 0.25s ease; border: 1.5px solid #e8ddd8; color: #4a3830; white-space: nowrap; }

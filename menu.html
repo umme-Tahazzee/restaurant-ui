@@ -1,11 +1,14 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Savoria — Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/static/css/style.css">
   <link rel="stylesheet" href="static/css/menu.css">
@@ -27,902 +30,874 @@
       },
     };
   </script>
-  
+
 </head>
 
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
 
-<!-- ═══ OVERLAY ═══ -->
-<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]" onclick="closeAll()"></div>
+  <!-- ═══ OVERLAY ═══ -->
+  <div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]"
+    onclick="closeAll()"></div>
 
-<!-- ═══ MOBILE MENU ═══ -->
-<div id="mobileMenu" class="fixed inset-0 z-[1100] flex-col p-10 hidden bg-[#1a1210]" style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
-  <div class="flex justify-between items-center mb-10">
-    <div>
-      <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-      <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
-    </div>
-    <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
-  </div>
-  <div class="gold-line h-[1px] w-full mb-8"></div>
-  <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
-    <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-redPrimary">Menu</a></li>
-    <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair
-         font-bold text-white">About</a></li>
-    <li><a href="#" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="#" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
-  </ul>
-  <div class="mt-auto space-y-3">
-    <a href="#" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
-      <i class="fa-regular fa-calendar-check"></i> Book a Table
-    </a>
-  </div>
-</div>
-
-<!-- ═══ CART MODAL ═══ -->
-<div id="cartModal">
-  <div id="cartBackdrop" onclick="toggleCart()"></div>
-  <div id="cartPanel">
-    <div class="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
-      <div class="w-10 h-[4px] rounded-full bg-borderSoft"></div>
-    </div>
-    <div class="flex items-center justify-between px-6 py-4 flex-shrink-0 border-b border-borderSoft">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-redPale flex items-center justify-center">
-          <i class="fa-solid fa-bag-shopping text-redPrimary text-sm"></i>
-        </div>
-        <div>
-          <h2 class="font-playfair text-lg font-bold text-textDark leading-tight">Your Order</h2>
-          <p class="text-[11px] text-textMid/50 mt-0.5">Table 7 · Dine In</p>
-        </div>
-      </div>
-      <button onclick="toggleCart()" class="w-9 h-9 rounded-full border border-borderSoft text-textMid/50 hover:border-redPrimary hover:text-redPrimary transition flex items-center justify-center text-sm">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-    <div class="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-center" id="cartBody">
-      <div class="text-center py-16">
-        <div class="text-6xl mb-4">🛒</div>
-        <p class="font-playfair text-xl font-bold text-textDark mb-2">Your cart is empty</p>
-        <p class="font-cormorant italic text-textMid/60">Add dishes from the menu to get started</p>
-      </div>
-    </div>
-    <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 flex-shrink-0" id="cartFooter" style="box-shadow:0 -4px 20px rgba(0,0,0,0.04)">
-      <div class="space-y-2 mb-4" id="cartTotals"></div>
-      <button class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2">
-        <i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order
-      </button>
-      <button onclick="toggleCart()" class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">Continue Browsing</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ QUICK VIEW MODAL ═══ -->
-<div class="quick-modal" id="quickModal">
-  <div class="quick-modal-backdrop" onclick="closeQuick()"></div>
-  <div class="quick-modal-panel" id="quickPanel">
-    <!-- filled by JS -->
-  </div>
-</div>
-
-<!-- ═══ NAVBAR ═══ -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300" style="background:rgba(255,255,255,0)">
-  <div class="gold-line h-[2px] w-full"></div>
-  <div class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14">
-    <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
-      <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
-        Sav<span class="italic font-light text-redPrimary">o</span>ria
-      </span>
-      <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
-    </a>
-    <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
-      <li><a href="index.html" class="nav-link transition">Home</a></li>
-      <li><a href="menu.html" class="nav-link active-link transition">Menu</a></li>
-      <li><a href="about.html" class="nav-link transition">About</a></li>
-      <li><a href="#" class="nav-link transition">Reserve</a></li>
-      <li><a href="#" class="nav-link transition">Contact</a></li>
-    </ul>
-    <div class="flex items-center gap-2 sm:gap-3">
-      <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
-        <i class="fa-solid fa-bag-shopping text-[15px]"></i>
-        <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden" id="cartBadge">0</span>
-      </button>
-      <button class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
-        <i class="fa-regular fa-circle-user"></i> Login
-      </button>
-      <a href="#" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
-        <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
-      </a>
-      <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
-        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-        <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
-      </button>
-    </div>
-  </div>
-  <div class="h-px bg-borderSoft/80"></div>
-</nav>
-
-<main>
-
-  <!-- ══════════════════════════════════════
-       HERO
-  ══════════════════════════════════════ -->
-  <section class="menu-hero pt-[76px]">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-12 md:py-20">
-      <div class="anim-1">
-        <div class="section-label mb-4">Savoria · New York City</div>
-        <h1 class="font-playfair text-4xl md:text-6xl lg:text-7xl font-black text-textDark leading-[1.05] mb-4">
-          Our <em class="text-redPrimary" style="font-style:italic">Menu</em>
-        </h1>
-        <p class="font-cormorant italic text-lg md:text-xl text-textMid/60 tracking-wide max-w-xl">
-          Every dish is a canvas. Chef Marco curates each recipe with seasonal produce and 20 years of culinary mastery.
-        </p>
-      </div>
-      <!-- Stats strip -->
-      <div class="flex gap-6 md:gap-10 mt-8 pt-8 border-t border-borderSoft anim-2 flex-wrap">
-        <div><p class="font-playfair text-2xl md:text-3xl font-black text-textDark">80+</p><p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Dishes</p></div>
-        <div class="w-px bg-borderSoft"></div>
-        <div><p class="font-playfair text-2xl md:text-3xl font-black text-textDark">5</p><p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Cuisines</p></div>
-        <div class="w-px bg-borderSoft"></div>
-        <div><p class="font-playfair text-2xl md:text-3xl font-black text-textDark">★ 4.9</p><p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Rating</p></div>
-        <div class="w-px bg-borderSoft"></div>
-        <div><p class="font-playfair text-2xl md:text-3xl font-black text-textDark">Seasonal</p><p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Ingredients</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════
-       STICKY FILTER BAR
-  ══════════════════════════════════════ -->
-  <div class="sticky-filter">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14">
-      <!-- Desktop filters -->
-      <div class="hidden md:flex items-center gap-3 py-4 overflow-x-auto scroll-hide">
-        <button class="filter-tab active" onclick="filterMenu('all', this)">All Items</button>
-        <button class="filter-tab" onclick="filterMenu('starters', this)">Starters</button>
-        <button class="filter-tab" onclick="filterMenu('pasta', this)">Pasta & Risotto</button>
-        <button class="filter-tab" onclick="filterMenu('mains', this)">Main Courses</button>
-        <button class="filter-tab" onclick="filterMenu('seafood', this)">Seafood</button>
-        <button class="filter-tab" onclick="filterMenu('desserts', this)">Desserts</button>
-        <button class="filter-tab" onclick="filterMenu('drinks', this)">Drinks</button>
-        <div class="ml-auto flex items-center gap-2 flex-shrink-0">
-          <span class="text-[10px] uppercase tracking-[0.2em] text-textMid/40 font-bold">Sort:</span>
-          <select class="text-[11px] font-semibold text-textMid border border-borderSoft rounded-full px-3 py-2 outline-none bg-white cursor-pointer" onchange="sortMenu(this.value)">
-            <option value="default">Featured</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="rating">Top Rated</option>
-          </select>
-        </div>
-      </div>
-      <!-- Mobile filters -->
-      <div class="md:hidden flex gap-2 py-3 overflow-x-auto scroll-hide">
-        <button class="m-filter active" onclick="filterMenu('all', this)">All</button>
-        <button class="m-filter" onclick="filterMenu('starters', this)">Starters</button>
-        <button class="m-filter" onclick="filterMenu('pasta', this)">Pasta</button>
-        <button class="m-filter" onclick="filterMenu('mains', this)">Mains</button>
-        <button class="m-filter" onclick="filterMenu('seafood', this)">Seafood</button>
-        <button class="m-filter" onclick="filterMenu('desserts', this)">Desserts</button>
-        <button class="m-filter" onclick="filterMenu('drinks', this)">Drinks</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       CHEF'S SPECIAL STRIP
-  ══════════════════════════════════════ -->
-  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 anim-3">
-    <div class="chef-strip p-6 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10">
-      <div class="relative z-10 flex-1">
-        <span class="tag tag-dark mb-3 inline-block">Chef's Special — Tonight Only</span>
-        <h2 class="font-playfair text-2xl md:text-4xl font-black text-white leading-tight mb-2">Wagyu Tenderloin<br/>with Truffle Jus</h2>
-        <p class="font-cormorant italic text-white/60 text-base md:text-lg">A5 Japanese wagyu · black truffle · pomme purée · seasonal microgreens</p>
-        <div class="flex items-center gap-4 mt-5">
-          <p class="font-playfair text-3xl font-black text-gold">$165</p>
-          <button onclick="addToCartById('special')" class="bg-gold hover:bg-goldLight transition text-white text-[11px] font-bold uppercase tracking-[0.2em] px-6 py-3 rounded-full flex items-center gap-2">
-            <i class="fa-solid fa-plus text-[10px]"></i> Add to Order
-          </button>
-        </div>
-      </div>
-      <div class="flex gap-3 flex-shrink-0 relative z-10">
-        <div class="rating-badge bg-white/10 text-white/80"><i class="fa-solid fa-star text-gold text-[9px]"></i> 5.0</div>
-        <span class="tag tag-dark">Limited Seats</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════
-       MENU GRID
-  ══════════════════════════════════════ -->
-  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 pb-20" id="menuGrid">
-
-    <!-- ── STARTERS ── -->
-    <div class="menu-section" data-category="starters">
-      <div class="menu-section-divider"><h3>Starters</h3></div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
-
-        <div class="menu-card" data-price="18" data-rating="4.7" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Burrata" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 left-3"><span class="tag tag-veg">Vegetarian</span></div>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div></div>
-          </div>
-          <div class="p-5">
-            <div class="flex items-start justify-between gap-3">
-              <div>
-                <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Burrata & Heirloom Tomatoes</h3>
-                <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Fresh burrata · heirloom tomatoes · basil oil</p>
-                <div class="flex gap-1.5 mt-2 flex-wrap">
-                  <span class="allergen">🥛 Dairy</span>
-                  <span class="allergen">🌿 GF</span>
-                </div>
-              </div>
-            </div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$18</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Burrata & Heirloom Tomatoes', 18)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card" data-price="24" data-rating="4.8" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Tartare" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div></div>
-          </div>
-          <div class="p-5">
-            <div>
-              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Tuna Tartare</h3>
-              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Yellowfin tuna · sesame · avocado · ponzu</p>
-              <div class="flex gap-1.5 mt-2"><span class="allergen">🐟 Fish</span><span class="allergen">🥜 Sesame</span></div>
-            </div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$24</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tuna Tartare', 24)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card" data-price="16" data-rating="4.6" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Soup" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.6</div></div>
-          </div>
-          <div class="p-5">
-            <div>
-              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Tom Yum Soup</h3>
-              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Lemongrass · galangal · tiger prawns</p>
-              <div class="flex gap-1.5 mt-2 items-center">
-                <span class="allergen">🦐 Shellfish</span>
-                <span class="spice-dot spice-hot"></span>
-                <span class="text-[10px] text-textMid/50 font-semibold">Spicy</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$16</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tom Yum Soup', 16)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ── PASTA & RISOTTO ── -->
-    <div class="menu-section" data-category="pasta">
-      <div class="menu-section-divider"><h3>Pasta & Risotto</h3></div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
-
-        <div class="menu-card" data-price="28" data-rating="4.8" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Tagliatelle" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Tagliatelle al Ragù</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">House-made pasta · slow-cooked beef · Parmigiano</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🌾 Gluten</span><span class="allergen">🥛 Dairy</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$28</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tagliatelle al Ragù', 28)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card" data-price="32" data-rating="4.9" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Truffle Risotto" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Black Truffle Risotto</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Carnaroli rice · black truffle · aged Parmigiano</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🥛 Dairy</span><span class="allergen tag-veg" style="background:#edf7f0;color:#2d7a47">🌿 Veg</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$32</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Black Truffle Risotto', 32)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card" data-price="26" data-rating="4.7" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Carbonara" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Spaghetti alla Carbonara</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Guanciale · egg yolk · Pecorino · black pepper</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🌾 Gluten</span><span class="allergen">🥚 Eggs</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$26</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Spaghetti alla Carbonara', 26)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ── MAINS ── -->
-    <div class="menu-section" data-category="mains">
-      <div class="menu-section-divider"><h3>Main Courses</h3></div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
-
-        <div class="menu-card" data-price="48" data-rating="4.9" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Bistecca" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 left-3"><span class="tag tag-red">Signature</span></div>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Bistecca Fiorentina</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Dry-aged T-bone · rosemary butter · roasted garlic</p>
-            <div class="flex gap-1.5 mt-2">
-              <span class="allergen">🥩 Beef</span>
-              <span class="spice-dot spice-mild" style="margin-top:3px"></span>
-              <span class="text-[10px] text-textMid/50 font-semibold">Mild</span>
-            </div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$48</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Bistecca Fiorentina', 48)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card" data-price="38" data-rating="4.8" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Duck" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Confit Duck Leg</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Duck confit · cherry jus · celeriac purée</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🦆 Poultry</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$38</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Confit Duck Leg', 38)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card" data-price="42" data-rating="4.7" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Lamb" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 left-3"><span class="tag tag-gold">New</span></div>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Rack of Lamb Provençal</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Herb-crusted rack · ratatouille · lamb jus</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🥩 Lamb</span><span class="allergen">🌾 Gluten</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$42</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Rack of Lamb Provençal', 42)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ── SEAFOOD ── -->
-    <div class="menu-section" data-category="seafood">
-      <div class="menu-section-divider"><h3>Seafood</h3></div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
-
-        <div class="menu-card" data-price="44" data-rating="4.9" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Lobster" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 left-3"><span class="tag tag-red">Premium</span></div>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Butter-Poached Lobster</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Maine lobster · beurre blanc · tarragon · asparagus</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🦞 Crustacean</span><span class="allergen">🥛 Dairy</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$44</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Butter-Poached Lobster', 44)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card" data-price="36" data-rating="4.8" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Sea Bass" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Pan-Seared Sea Bass</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Chilean sea bass · lemon beurre blanc · fennel</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🐟 Fish</span><span class="allergen">🥛 Dairy</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$36</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Pan-Seared Sea Bass', 36)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card" data-price="22" data-rating="4.6" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Scallops" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.6</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Seared Scallops</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Diver scallops · cauliflower purée · crispy capers</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🦪 Molluscs</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$22</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Seared Scallops', 22)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ── DESSERTS ── -->
-    <div class="menu-section" data-category="desserts">
-      <div class="menu-section-divider"><h3>Desserts</h3></div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
-
-        <div class="menu-card" data-price="14" data-rating="4.7" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Panna Cotta" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 left-3"><span class="tag tag-gold">New</span></div>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Panna Cotta</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Vanilla bean · wild berry coulis · mint</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🥛 Dairy</span><span class="allergen tag-veg" style="background:#edf7f0;color:#2d7a47">🌿 Veg</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$14</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Panna Cotta', 14)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card" data-price="16" data-rating="4.9" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Soufflé" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Chocolate Soufflé</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Valrhona 70% dark chocolate · crème anglaise</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🥛 Dairy</span><span class="allergen">🥚 Eggs</span><span class="allergen">🌾 Gluten</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$16</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Chocolate Soufflé', 16)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card" data-price="12" data-rating="4.6" onclick="openQuick(this)">
-          <div class="relative overflow-hidden h-[200px] bg-cream">
-            <img src="./assests/thai.png" alt="Tiramisu" class="w-full h-full object-cover"/>
-            <div class="absolute top-3 right-3"><div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.6</div></div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Classic Tiramisù</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Savoiardi · espresso · mascarpone · cocoa</p>
-            <div class="flex gap-1.5 mt-2"><span class="allergen">🥛 Dairy</span><span class="allergen">🥚 Eggs</span></div>
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-              <p class="font-playfair text-xl font-black text-textDark">$12</p>
-              <button class="add-btn" onclick="event.stopPropagation(); addToCart('Classic Tiramisù', 12)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ── DRINKS ── -->
-    <div class="menu-section" data-category="drinks">
-      <div class="menu-section-divider"><h3>Drinks</h3></div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
-
-        <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer" onclick="addToCart('Chianti Classico 2018', 18)">
-          <div class="text-4xl mb-3">🍷</div>
-          <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Chianti Classico</h3>
-          <p class="font-cormorant italic text-textMid/60 text-sm mt-1">2018 · Tuscany · 750ml</p>
-          <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
-            <p class="font-playfair text-lg font-black text-textDark">$18</p>
-            <button class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer" onclick="addToCart('Aperol Spritz', 14)">
-          <div class="text-4xl mb-3">🍊</div>
-          <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Aperol Spritz</h3>
-          <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Prosecco · Aperol · orange · ice</p>
-          <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
-            <p class="font-playfair text-lg font-black text-textDark">$14</p>
-            <button class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer" onclick="addToCart('Negroni', 16)">
-          <div class="text-4xl mb-3">🍸</div>
-          <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Classic Negroni</h3>
-          <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Gin · Campari · sweet vermouth</p>
-          <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
-            <p class="font-playfair text-lg font-black text-textDark">$16</p>
-            <button class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer" onclick="addToCart('Still Water (500ml)', 4)">
-          <div class="text-4xl mb-3">💧</div>
-          <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Still / Sparkling Water</h3>
-          <p class="font-cormorant italic text-textMid/60 text-sm mt-1">San Pellegrino · Acqua Panna · 500ml</p>
-          <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
-            <p class="font-playfair text-lg font-black text-textDark">$4</p>
-            <button class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ══════════════════════════════════════
-       RESERVATION CTA
-  ══════════════════════════════════════ -->
-  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10">
-    <div class="bg-cream rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 border border-borderSoft">
+  <!-- ═══ MOBILE MENU ═══ -->
+  <div id="mobileMenu" class="fixed inset-0 z-[1100] flex-col p-10 hidden bg-[#1a1210]"
+    style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
+    <div class="flex justify-between items-center mb-10">
       <div>
-        <div class="section-label mb-3">Book Your Experience</div>
-        <h2 class="font-playfair text-3xl md:text-4xl font-black text-textDark mb-2">Reserve Your Table<br/>for Tonight</h2>
-        <p class="font-cormorant italic text-textMid/60 text-lg">Mon–Sun · 12pm–11pm &nbsp;·&nbsp; +1 (555) 920-4200</p>
+        <span class="font-playfair text-2xl font-black text-white">Sav<span
+            class="italic font-light text-redPrimary">o</span>ria</span>
+        <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
       </div>
-      <div class="flex flex-col gap-3 flex-shrink-0 w-full md:w-auto">
-        <a href="#" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center">
-          <i class="fa-regular fa-calendar-check"></i> Book Online
+      <button onclick="toggleMenu()"
+        class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
+    </div>
+    <div class="gold-line h-[1px] w-full mb-8"></div>
+    <ul class="flex flex-col gap-1 flex-1">
+      <li><a href="index.html" onclick="toggleMenu()"
+          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+      <li><a href="menu.html" onclick="toggleMenu()"
+          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-redPrimary">Menu</a></li>
+      <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair
+         font-bold text-white">About</a></li>
+      <li><a href="#" onclick="toggleMenu()"
+          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+      <li><a href="#" onclick="toggleMenu()"
+          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+    </ul>
+    <div class="mt-auto space-y-3">
+      <a href="#"
+        class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
+        <i class="fa-regular fa-calendar-check"></i> Book a Table
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ CART MODAL ═══ -->
+  <div id="cartModal">
+    <div id="cartBackdrop" onclick="toggleCart()"></div>
+    <div id="cartPanel">
+      <div class="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
+        <div class="w-10 h-[4px] rounded-full bg-borderSoft"></div>
+      </div>
+      <div class="flex items-center justify-between px-6 py-4 flex-shrink-0 border-b border-borderSoft">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-redPale flex items-center justify-center">
+            <i class="fa-solid fa-bag-shopping text-redPrimary text-sm"></i>
+          </div>
+          <div>
+            <h2 class="font-playfair text-lg font-bold text-textDark leading-tight">Your Order</h2>
+            <p class="text-[11px] text-textMid/50 mt-0.5">Table 7 · Dine In</p>
+          </div>
+        </div>
+        <button onclick="toggleCart()"
+          class="w-9 h-9 rounded-full border border-borderSoft text-textMid/50 hover:border-redPrimary hover:text-redPrimary transition flex items-center justify-center text-sm">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-center" id="cartBody">
+        <div class="text-center py-16">
+          <div class="text-6xl mb-4">🛒</div>
+          <p class="font-playfair text-xl font-bold text-textDark mb-2">Your cart is empty</p>
+          <p class="font-cormorant italic text-textMid/60">Add dishes from the menu to get started</p>
+        </div>
+      </div>
+      <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 flex-shrink-0" id="cartFooter"
+        style="box-shadow:0 -4px 20px rgba(0,0,0,0.04)">
+        <div class="space-y-2 mb-4" id="cartTotals"></div>
+        <button
+          class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2">
+          <i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order
+        </button>
+        <button onclick="toggleCart()"
+          class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">Continue
+          Browsing</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ QUICK VIEW MODAL ═══ -->
+  <div class="quick-modal" id="quickModal">
+    <div class="quick-modal-backdrop" onclick="closeQuick()"></div>
+    <div class="quick-modal-panel" id="quickPanel">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
+    style="background:rgba(255,255,255,0)">
+    <div class="gold-line h-[2px] w-full"></div>
+    <div class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14">
+      <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
+        <span
+          class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
+          Sav<span class="italic font-light text-redPrimary">o</span>ria
+        </span>
+        <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block"
+          style="margin-top:-2px">Fine Dining</span>
+      </a>
+      <ul
+        class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
+        <li><a href="index.html" class="nav-link transition">Home</a></li>
+        <li><a href="menu.html" class="nav-link active-link transition">Menu</a></li>
+        <li><a href="about.html" class="nav-link transition">About</a></li>
+        <li><a href="#" class="nav-link transition">Reserve</a></li>
+        <li><a href="#" class="nav-link transition">Contact</a></li>
+      </ul>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleCart()"
+          class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
+          <i class="fa-solid fa-bag-shopping text-[15px]"></i>
+          <span id="cartBadge"
+            class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden"
+            id="cartBadge">0</span>
+        </button>
+        <button
+          class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
+          <i class="fa-regular fa-circle-user"></i> Login
+        </button>
+        <a href="#"
+          class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
+          <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
         </a>
-        <a href="tel:+15559204200" class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center">
-          <i class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════
-       FOOTER
-  ══════════════════════════════════════ -->
-  <footer class="footer-bg hidden md:block">
-    <div class="max-w-7xl mx-auto px-8 lg:px-14 py-16">
-      <div class="grid grid-cols-4 gap-10 mb-12">
-        <div class="col-span-1">
-          <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-          <p class="font-cormorant italic text-gold/60 text-xs tracking-[0.3em] uppercase mt-0.5 mb-4">Fine Dining</p>
-          <p class="text-white/40 text-sm leading-relaxed">Where every dish tells a story of passion, craft, and the finest ingredients.</p>
-          <div class="flex gap-3 mt-5">
-            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-x-twitter"></i></a>
-          </div>
-        </div>
-        <div>
-          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Navigation</p>
-          <ul class="space-y-3">
-            <li><a href="index.html" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
-            <li><a href="menu.html" class="text-white/60 text-sm hover:text-gold transition">Menu</a></li>
-            <li><a href="about.html" class="text-white/40 text-sm hover:text-gold transition">About</a></li>
-            <li><a href="#" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
-          </ul>
-        </div>
-        <div>
-          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Hours</p>
-          <ul class="space-y-2">
-            <li class="text-white/40 text-sm">Mon–Fri · 12pm–10pm</li>
-            <li class="text-white/40 text-sm">Sat–Sun · 11am–11pm</li>
-            <li class="text-white/40 text-sm mt-3">Happy Hour · 4–6pm</li>
-          </ul>
-        </div>
-        <div>
-          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Contact</p>
-          <ul class="space-y-3">
-            <li class="text-white/40 text-sm">📍 42 West 58th St, New York</li>
-            <li class="text-white/40 text-sm">📞 +1 (555) 920-4200</li>
-            <li class="text-white/40 text-sm">✉️ hello@savoria.com</li>
-          </ul>
-        </div>
-      </div>
-      <div class="gold-line h-[1px] mb-6 opacity-20"></div>
-      <div class="flex justify-between items-center">
-        <p class="text-white/30 text-xs">© 2025 Savoria Fine Dining. All rights reserved.</p>
-        <p class="font-cormorant italic text-gold/40 text-sm">Where every dish tells a story</p>
-      </div>
-    </div>
-  </footer>
-
-</main>
-
-<!-- ══════════ MOBILE BOTTOM NAV ══════════ -->
-<nav class="mobile-bottom-nav md:hidden">
-  <div class="nav-item" onclick="location.href='index.html'">
-    <i class="fa-solid fa-house"></i><span>Home</span>
-  </div>
-  <div class="nav-item active">
-    <i class="fa-solid fa-utensils"></i><span>Menu</span>
-  </div>
-  <div onclick="toggleCart()">
-    <div class="cart-fab">
-      <i class="fa-solid fa-bag-shopping text-lg"></i>
-      <div class="badge" id="mobileBadge" style="display:none">0</div>
-    </div>
-  </div>
-  <div class="nav-item">
-    <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
-  </div>
-  <div class="nav-item">
-    <i class="fa-regular fa-circle-user"></i><span>Profile</span>
-  </div>
-</nav>
-
-<script>
-// ══ CART STATE ══
-let cart = [];
-
-function addToCart(name, price) {
-  const existing = cart.find(i => i.name === name);
-  if (existing) { existing.qty++; }
-  else { cart.push({ name, price, qty: 1 }); }
-  updateCartUI();
-  showToast(name);
-}
-
-function addToCartById(id) {
-  if (id === 'special') addToCart('Wagyu Tenderloin with Truffle Jus', 165);
-}
-
-function removeFromCart(idx) {
-  cart.splice(idx, 1);
-  updateCartUI();
-}
-
-function changeQtyCart(idx, delta) {
-  cart[idx].qty += delta;
-  if (cart[idx].qty <= 0) cart.splice(idx, 1);
-  updateCartUI();
-}
-
-function updateCartUI() {
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const count = cart.reduce((s, i) => s + i.qty, 0);
-
-  // Badges
-  const badge = document.getElementById('cartBadge');
-  const mbadge = document.getElementById('mobileBadge');
-  if (count > 0) {
-    badge.textContent = count; badge.style.display = 'flex';
-    mbadge.textContent = count; mbadge.style.display = 'flex';
-  } else {
-    badge.style.display = 'none'; mbadge.style.display = 'none';
-  }
-
-  // Cart body
-  const body = document.getElementById('cartBody');
-  if (cart.length === 0) {
-    body.innerHTML = `<div class="text-center py-16"><div class="text-6xl mb-4">🛒</div><p class="font-playfair text-xl font-bold text-textDark mb-2">Your cart is empty</p><p class="font-cormorant italic text-textMid/60">Add dishes from the menu to get started</p></div>`;
-    document.getElementById('cartTotals').innerHTML = '';
-    return;
-  }
-
-  body.innerHTML = cart.map((item, idx) => `
-    <div class="px-6 py-4 border-b border-borderSoft/50">
-      <div class="flex gap-4">
-        <div class="w-[60px] h-[60px] rounded-xl flex-shrink-0 bg-cream overflow-hidden border border-borderSoft">
-          <img src="./assests/thai.png" class="w-full h-full object-cover"/>
-        </div>
-        <div class="flex-1 min-w-0">
-          <div class="flex justify-between items-start">
-            <p class="font-playfair font-bold text-textDark text-[13px] leading-tight">
-              ${item.name}</p>
-            <button class="text-textMid/25 hover:text-redPrimary transition ml-2" 
-            onclick="removeFromCart(${idx})">
-              <i class="fa-solid fa-trash-can text-[11px]"></i>
-            </button>
-          </div>
-          <div class="flex items-center justify-between mt-2">
-            <div class="flex items-center border border-borderSoft rounded-xl overflow-hidden">
-              <button class="w-7 h-7 text-sm text-textMid hover:bg-redPale hover:text-redPrimary transition flex items-center justify-center" onclick="changeQtyCart(${idx},-1)">−</button>
-              <span class="w-7 text-center text-sm font-bold text-textDark">${item.qty}</span>
-              <button class="w-7 h-7 text-sm text-textMid hover:bg-redPale hover:text-redPrimary transition flex items-center justify-center" onclick="changeQtyCart(${idx},1)">+</button>
-            </div>
-            <span class="font-playfair font-bold text-textDark text-sm">$${(item.price * item.qty).toFixed(2)}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  const service = total * 0.1;
-  const tax = total * 0.08875;
-  const grandTotal = total + service + tax;
-  document.getElementById('cartTotals').innerHTML = `
-    <div class="flex justify-between text-[12px] text-textMid/55"><span>Subtotal (${count} items)</span><span>$${total.toFixed(2)}</span></div>
-    <div class="flex justify-between text-[12px] text-textMid/55"><span>Service (10%)</span><span>$${service.toFixed(2)}</span></div>
-    <div class="flex justify-between text-[12px] text-textMid/55"><span>Tax (8.875%)</span><span>$${tax.toFixed(2)}</span></div>
-    <div class="border-t border-borderSoft pt-2.5 mt-1 flex justify-between items-center">
-      <span class="font-playfair text-base font-black text-textDark">Total</span>
-      <span class="font-playfair text-xl font-black text-textDark">$${grandTotal.toFixed(2)}</span>
-    </div>
-  `;
-}
-
-// ══ TOAST ══
-function showToast(name) {
-  const existing = document.getElementById('toast');
-  if (existing) existing.remove();
-  const t = document.createElement('div');
-  t.id = 'toast';
-  t.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:2000;background:#1a1210;color:white;padding:12px 20px;border-radius:100px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 8px 30px rgba(0,0,0,0.2);animation:fadeSlideUp 0.3s ease both';
-  t.innerHTML = `<i class="fa-solid fa-check" style="color:#b8963e;font-size:10px"></i> Added to order`;
-  document.body.appendChild(t);
-  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity 0.3s'; setTimeout(()=>t.remove(),300); }, 2000);
-}
-
-// ══ CART PANEL ══
-function toggleCart() {
-  const modal = document.getElementById('cartModal');
-  const panel = document.getElementById('cartPanel');
-  const backdrop = document.getElementById('cartBackdrop');
-  const overlay = document.getElementById('overlay');
-  const isMobile = window.innerWidth < 768;
-  const isOpen = modal.dataset.open === 'true';
-  if (isOpen) {
-    panel.style.transform = isMobile ? 'translateY(100%)' : 'translateX(100%)';
-    if (backdrop) backdrop.style.opacity = '0';
-    overlay.style.opacity = '0'; overlay.style.pointerEvents = 'none';
-    modal.style.pointerEvents = 'none'; document.body.style.overflow = '';
-    modal.dataset.open = 'false';
-  } else {
-    modal.style.pointerEvents = 'all'; document.body.style.overflow = 'hidden';
-    panel.style.transform = isMobile ? 'translateY(0%)' : 'translateX(0%)';
-    if (backdrop) backdrop.style.opacity = '1';
-    overlay.style.opacity = '1'; overlay.style.pointerEvents = 'all';
-    modal.dataset.open = 'true';
-  }
-}
-function closeAll() { if (document.getElementById('cartModal').dataset.open === 'true') toggleCart(); }
-
-// ══ MOBILE MENU ══
-function toggleMenu() {
-  const m = document.getElementById('mobileMenu');
-  const isHidden = m.classList.contains('hidden');
-  if (isHidden) {
-    m.classList.remove('hidden'); m.style.display = 'flex';
-    requestAnimationFrame(() => m.style.transform = 'translateX(0)');
-  } else {
-    m.style.transform = 'translateX(100%)';
-    setTimeout(() => m.classList.add('hidden'), 500);
-  }
-}
-
-// ══ FILTER ══
-function filterMenu(cat, btn) {
-  // Update button states
-  document.querySelectorAll('.filter-tab, .m-filter').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll(`.filter-tab, .m-filter`).forEach(b => {
-    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${cat}'`)) b.classList.add('active');
-  });
-
-  document.querySelectorAll('.menu-section').forEach(sec => {
-    if (cat === 'all' || sec.dataset.category === cat) {
-      sec.style.display = 'block';
-    } else {
-      sec.style.display = 'none';
-    }
-  });
-  btn.classList.add('active');
-}
-
-// ══ SORT ══
-function sortMenu(val) {
-  const grid = document.getElementById('menuGrid');
-  const sections = [...grid.querySelectorAll('.menu-section')];
-  sections.forEach(sec => {
-    const container = sec.querySelector('.grid');
-    if (!container) return;
-    const cards = [...container.querySelectorAll('.menu-card')];
-    cards.sort((a, b) => {
-      const pa = parseFloat(a.dataset.price), pb = parseFloat(b.dataset.price);
-      const ra = parseFloat(a.dataset.rating), rb = parseFloat(b.dataset.rating);
-      if (val === 'price-asc') return pa - pb;
-      if (val === 'price-desc') return pb - pa;
-      if (val === 'rating') return rb - ra;
-      return 0;
-    });
-    cards.forEach(c => container.appendChild(c));
-  });
-}
-
-// ══ QUICK VIEW ══
-function openQuick(card) {
-  const name = card.querySelector('h3').textContent;
-  const desc = card.querySelector('p.font-cormorant').textContent;
-  const price = card.dataset.price;
-  const rating = card.dataset.rating;
-  const panel = document.getElementById('quickPanel');
-  panel.innerHTML = `
-    <div class="relative">
-      <div class="md:hidden flex justify-center pt-3 pb-1"><div class="w-10 h-[4px] rounded-full bg-borderSoft"></div></div>
-      <img src="./assests/thai.png" alt="${name}" class="w-full h-[220px] object-cover"/>
-      <button onclick="closeQuick()" class="absolute top-4 right-4 w-9 h-9 bg-white/90 
-      rounded-full flex items-center justify-center text-textMid hover:text-redPrimary transition shadow-md">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-    <div class="p-6">
-      <div class="flex items-start justify-between gap-3 mb-3">
-        <h2 class="font-playfair text-2xl font-black text-textDark leading-tight">${name}</h2>
-        <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i> ${rating}</div>
-      </div>
-      <p class="font-cormorant italic text-lg text-textMid/70 mb-4">${desc}</p>
-      <div class="bg-cream/60 rounded-xl p-4 mb-5 border border-borderSoft">
-        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-textMid/40 mb-2">About This Dish</p>
-        <p class="text-sm text-textMid/70 leading-relaxed">Crafted by Chef Marco using only the finest seasonal ingredients sourced from local farms and trusted suppliers. Each dish is prepared fresh to order.</p>
-      </div>
-      <div class="flex items-center justify-between">
-        <p class="font-playfair text-3xl font-black text-textDark">$${price}</p>
-        <button onclick="addToCart('${name}', ${price}); closeQuick();" class="book-btn text-white px-8 py-3.5 rounded-xl text-[11px] font-bold tracking-[0.18em] uppercase flex items-center gap-2">
-          <i class="fa-solid fa-plus text-[10px]"></i> Add to Order
+        <button onclick="toggleMenu()"
+          class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
+          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+          <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
         </button>
       </div>
     </div>
-  `;
-  document.getElementById('quickModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeQuick() {
-  document.getElementById('quickModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
+    <div class="h-px bg-borderSoft/80"></div>
+  </nav>
 
-// ══ NAVBAR SCROLL ══
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 60) {
-    navbar.style.background = 'rgba(255,255,255,0.98)';
-    navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.06)';
-  } else {
-    navbar.style.background = 'rgba(255,255,255,0)';
-    navbar.style.boxShadow = 'none';
-  }
-});
-</script>
+  <main>
+
+    <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+    <section class="menu-hero pt-[76px]">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-12 md:py-20">
+        <div class="anim-1">
+          <div class="section-label mb-4">Savoria · New York City</div>
+          <h1 class="font-playfair text-4xl md:text-6xl lg:text-7xl font-black text-textDark leading-[1.05] mb-4">
+            Our <em class="text-redPrimary" style="font-style:italic">Menu</em>
+          </h1>
+          <p class="font-cormorant italic text-lg md:text-xl text-textMid/60 tracking-wide max-w-xl">
+            Every dish is a canvas. Chef Marco curates each recipe with seasonal produce and 20 years of culinary
+            mastery.
+          </p>
+        </div>
+        <!-- Stats strip -->
+        <div class="flex gap-6 md:gap-10 mt-8 pt-8 border-t border-borderSoft anim-2 flex-wrap">
+          <div>
+            <p class="font-playfair text-2xl md:text-3xl font-black text-textDark">80+</p>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Dishes</p>
+          </div>
+          <div class="w-px bg-borderSoft"></div>
+          <div>
+            <p class="font-playfair text-2xl md:text-3xl font-black text-textDark">5</p>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Cuisines</p>
+          </div>
+          <div class="w-px bg-borderSoft"></div>
+          <div>
+            <p class="font-playfair text-2xl md:text-3xl font-black text-textDark">★ 4.9</p>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Rating</p>
+          </div>
+          <div class="w-px bg-borderSoft"></div>
+          <div>
+            <p class="font-playfair text-2xl md:text-3xl font-black text-textDark">Seasonal</p>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Ingredients</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+       STICKY FILTER BAR
+  ══════════════════════════════════════ -->
+    <!-- ══ STICKY FILTER BAR ══ -->
+    <div class="sticky-filter" id="stickyFilter">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14">
+
+        <!-- ── DESKTOP: filter + search in one row ── -->
+        <div class="hidden md:flex items-center gap-3 py-4 overflow-x-auto scroll-hide">
+          <button class="filter-tab active" onclick="filterMenu('all', this)">All Items</button>
+          <button class="filter-tab" onclick="filterMenu('starters', this)">Starters</button>
+          <button class="filter-tab" onclick="filterMenu('pasta', this)">Pasta & Risotto</button>
+          <button class="filter-tab" onclick="filterMenu('mains', this)">Main Courses</button>
+          <button class="filter-tab" onclick="filterMenu('seafood', this)">Seafood</button>
+          <button class="filter-tab" onclick="filterMenu('desserts', this)">Desserts</button>
+          <button class="filter-tab" onclick="filterMenu('drinks', this)">Drinks</button>
+
+          <!-- search bar pushed to right -->
+          <div class="ml-auto flex items-center gap-3 flex-shrink-0">
+            <div class="search-wrap" id="deskSearchWrap">
+              <i class="fa-solid fa-magnifying-glass s-icon"></i>
+              <input id="deskSearch" type="text" placeholder="Search dishes…" oninput="handleSearch(this.value)"
+                autocomplete="off" />
+              <div class="s-clear" onclick="clearSearch()" title="Clear"><i class="fa-solid fa-xmark"
+                  style="font-size:8px"></i></div>
+            </div>
+            <span class="text-[10px] uppercase tracking-[0.2em] text-textMid/40 font-bold">Sort:</span>
+            <select
+              class="text-[11px] font-semibold text-textMid border border-borderSoft rounded-full px-3 py-2 outline-none bg-white cursor-pointer"
+              onchange="sortMenu(this.value)">
+              <option value="default">Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating">Top Rated</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ── MOBILE: filter pills row with search icon ── -->
+        <div class="md:hidden flex items-center gap-2 py-3 overflow-x-auto scroll-hide">
+          <!-- search toggle -->
+          <button class="m-search-btn" id="mobSearchBtn" onclick="toggleMobSearch()" title="Search">
+            <i class="fa-solid fa-magnifying-glass" style="font-size:11px"></i>
+          </button>
+          <button class="m-filter active" onclick="filterMenu('all', this)">All</button>
+          <button class="m-filter" onclick="filterMenu('starters', this)">Starters</button>
+          <button class="m-filter" onclick="filterMenu('pasta', this)">Pasta</button>
+          <button class="m-filter" onclick="filterMenu('mains', this)">Mains</button>
+          <button class="m-filter" onclick="filterMenu('seafood', this)">Seafood</button>
+          <button class="m-filter" onclick="filterMenu('desserts', this)">Desserts</button>
+          <button class="m-filter" onclick="filterMenu('drinks', this)">Drinks</button>
+        </div>
+
+        <!-- ── MOBILE: slide-down search input ── -->
+        <div class="mob-search-bar md:hidden" id="mobSearchBar">
+          <div class="mob-search-inner">
+            <i class="fa-solid fa-magnifying-glass ms-icon"></i>
+            <input id="mobSearch" type="text" placeholder="Search dishes, ingredients…"
+              oninput="handleSearch(this.value)" autocomplete="off" />
+            <div class="ms-clear" onclick="clearSearch()"><i class="fa-solid fa-xmark" style="font-size:8px"></i></div>
+          </div>
+        </div>
+
+        <!-- ── Search result count ── -->
+        <div class="search-result-bar" id="searchResultBar">
+          <i class="fa-solid fa-magnifying-glass" style="font-size:10px"></i>
+          <span id="searchResultText">0 results</span>
+          <button onclick="clearSearch()"
+            class="ml-auto text-[10px] uppercase tracking-wider font-bold text-redPrimary hover:text-redDeep transition">Clear</button>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ══ CHEF'S SPECIAL ══ -->
+    <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 anim-3">
+      <div class="chef-strip p-6 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10">
+        <div class="relative z-10 flex-1">
+          <span class="tag tag-dark mb-3 inline-block">Chef's Special — Tonight Only</span>
+          <h2 class="font-playfair text-2xl md:text-4xl font-black text-white leading-tight mb-2">Wagyu
+            Tenderloin<br />with Truffle Jus</h2>
+          <p class="font-cormorant italic text-white/60 text-base md:text-lg">A5 Japanese wagyu · black truffle · pomme
+            purée · seasonal microgreens</p>
+          <div class="flex items-center gap-4 mt-5">
+            <p class="font-playfair text-3xl font-black text-gold">$165</p>
+            <button onclick="addToCartById('special')"
+              class="bg-gold hover:bg-goldLight transition text-white text-[11px] font-bold uppercase tracking-[0.2em] px-6 py-3 rounded-full flex items-center gap-2">
+              <i class="fa-solid fa-plus text-[10px]"></i> Add to Order
+            </button>
+          </div>
+        </div>
+        <div class="flex gap-3 flex-shrink-0 relative z-10">
+          <div class="rating-badge bg-white/10 text-white/80"><i class="fa-solid fa-star text-gold text-[9px]"></i> 5.0
+          </div>
+          <span class="tag tag-dark">Limited Seats</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MENU GRID ══ -->
+    <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 pb-20" id="menuGrid">
+
+      <!-- No results state -->
+      <div class="no-results" id="noResults">
+        <div style="font-size:3rem;margin-bottom:12px">🔍</div>
+        <p class="font-playfair text-2xl font-black text-textDark mb-2">No dishes found</p>
+        <p class="font-cormorant italic text-textMid/50 text-lg mb-6" id="noResultsLabel">Try a different keyword</p>
+        <button onclick="clearSearch()"
+          class="book-btn text-white px-6 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.15em]">Clear
+          Search</button>
+      </div>
+
+      <!-- ── STARTERS ── -->
+      <div class="menu-section" data-category="starters">
+        <div class="menu-section-divider">
+          <h3>Starters</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
+
+          <div class="menu-card" data-price="18" data-rating="4.7"
+            data-search="burrata heirloom tomatoes fresh basil oil vegetarian dairy" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Burrata" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3"><span class="tag tag-veg">Vegetarian</span></div>
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Burrata & Heirloom Tomatoes
+                  </h3>
+                  <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Fresh burrata · heirloom tomatoes ·
+                    basil oil</p>
+                  <div class="flex gap-1.5 mt-2 flex-wrap">
+                    <span class="allergen">🥛 Dairy</span>
+                    <span class="allergen">🌿 GF</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$18</p>
+                <button class="add-btn"
+                  onclick="event.stopPropagation(); addToCart('Burrata & Heirloom Tomatoes', 18)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card" data-price="24" data-rating="4.8"
+            data-search="tuna tartare yellowfin sesame avocado ponzu fish" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Tartare" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <div>
+                <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Tuna Tartare</h3>
+                <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Yellowfin tuna · sesame · avocado · ponzu
+                </p>
+                <div class="flex gap-1.5 mt-2"><span class="allergen">🐟 Fish</span><span class="allergen">🥜
+                    Sesame</span></div>
+              </div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$24</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tuna Tartare', 24)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card" data-price="16" data-rating="4.6"
+            data-search="tom yum soup lemongrass galangal tiger prawns spicy shellfish" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Soup" class="w-full h-full object-cover" />
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.6</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <div>
+                <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Tom Yum Soup</h3>
+                <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Lemongrass · galangal · tiger prawns</p>
+                <div class="flex gap-1.5 mt-2 items-center">
+                  <span class="allergen">🦐 Shellfish</span>
+                  <span class="spice-dot spice-hot"></span>
+                  <span class="text-[10px] text-textMid/50 font-semibold">Spicy</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$16</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tom Yum Soup', 16)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── PASTA & RISOTTO ── -->
+      <div class="menu-section" data-category="pasta">
+        <div class="menu-section-divider">
+          <h3>Pasta & Risotto</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
+
+          <div class="menu-card" data-price="28" data-rating="4.8"
+            data-search="tagliatelle ragu pasta beef parmigiano italian gluten dairy" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Tagliatelle" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Tagliatelle al Ragù</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">House-made pasta · slow-cooked beef ·
+                Parmigiano</p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🌾 Gluten</span><span class="allergen">🥛
+                  Dairy</span></div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$28</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tagliatelle al Ragù', 28)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card" data-price="32" data-rating="4.9"
+            data-search="black truffle risotto carnaroli rice parmigiano vegetarian dairy" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Truffle Risotto" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Black Truffle Risotto</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Carnaroli rice · black truffle · aged
+                Parmigiano</p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🥛 Dairy</span><span class="allergen tag-veg"
+                  style="background:#edf7f0;color:#2d7a47">🌿 Veg</span></div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$32</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Black Truffle Risotto', 32)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card" data-price="26" data-rating="4.7"
+            data-search="spaghetti carbonara guanciale egg yolk pecorino black pepper gluten" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Carbonara" class="w-full h-full object-cover" />
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Spaghetti alla Carbonara</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Guanciale · egg yolk · Pecorino · black
+                pepper</p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🌾 Gluten</span><span class="allergen">🥚
+                  Eggs</span></div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$26</p>
+                <button class="add-btn"
+                  onclick="event.stopPropagation(); addToCart('Spaghetti alla Carbonara', 26)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── MAINS ── -->
+      <div class="menu-section" data-category="mains">
+        <div class="menu-section-divider">
+          <h3>Main Courses</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
+
+          <div class="menu-card" data-price="48" data-rating="4.9"
+            data-search="bistecca fiorentina t-bone steak rosemary butter garlic beef italian"
+            onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Bistecca" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3"><span class="tag tag-red">Signature</span></div>
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Bistecca Fiorentina</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Dry-aged T-bone · rosemary butter · roasted
+                garlic</p>
+              <div class="flex gap-1.5 mt-2">
+                <span class="allergen">🥩 Beef</span>
+                <span class="spice-dot spice-mild" style="margin-top:3px"></span>
+                <span class="text-[10px] text-textMid/50 font-semibold">Mild</span>
+              </div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$48</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Bistecca Fiorentina', 48)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card" data-price="38" data-rating="4.8"
+            data-search="confit duck leg cherry jus celeriac puree poultry french" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Duck" class="w-full h-full object-cover" />
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Confit Duck Leg</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Duck confit · cherry jus · celeriac purée
+              </p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🦆 Poultry</span></div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$38</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Confit Duck Leg', 38)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card" data-price="42" data-rating="4.7"
+            data-search="rack lamb provencal herb crusted ratatouille jus gluten" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Lamb" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3"><span class="tag tag-gold">New</span></div>
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Rack of Lamb Provençal</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Herb-crusted rack · ratatouille · lamb jus
+              </p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🥩 Lamb</span><span class="allergen">🌾
+                  Gluten</span></div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$42</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Rack of Lamb Provençal', 42)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── SEAFOOD ── -->
+      <div class="menu-section" data-category="seafood">
+        <div class="menu-section-divider">
+          <h3>Seafood</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
+
+          <div class="menu-card" data-price="44" data-rating="4.9"
+            data-search="butter poached lobster maine beurre blanc tarragon asparagus crustacean dairy"
+            onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Lobster" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3"><span class="tag tag-red">Premium</span></div>
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Butter-Poached Lobster</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Maine lobster · beurre blanc · tarragon ·
+                asparagus</p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🦞 Crustacean</span><span class="allergen">🥛
+                  Dairy</span></div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$44</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Butter-Poached Lobster', 44)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card" data-price="36" data-rating="4.8"
+            data-search="pan seared sea bass chilean lemon beurre blanc fennel fish dairy" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Sea Bass" class="w-full h-full object-cover" />
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Pan-Seared Sea Bass</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Chilean sea bass · lemon beurre blanc ·
+                fennel</p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🐟 Fish</span><span class="allergen">🥛 Dairy</span>
+              </div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$36</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Pan-Seared Sea Bass', 36)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card" data-price="22" data-rating="4.6"
+            data-search="seared scallops diver cauliflower capers molluscs seafood" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Scallops" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.6</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Seared Scallops</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Diver scallops · cauliflower purée · crispy
+                capers</p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🦪 Molluscs</span></div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$22</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Seared Scallops', 22)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── DESSERTS ── -->
+      <div class="menu-section" data-category="desserts">
+        <div class="menu-section-divider">
+          <h3>Desserts</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
+
+          <div class="menu-card" data-price="14" data-rating="4.7"
+            data-search="panna cotta vanilla bean wild berry coulis mint dairy vegetarian" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Panna Cotta" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3"><span class="tag tag-gold">New</span></div>
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Panna Cotta</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Vanilla bean · wild berry coulis · mint</p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🥛 Dairy</span><span class="allergen tag-veg"
+                  style="background:#edf7f0;color:#2d7a47">🌿 Veg</span></div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$14</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Panna Cotta', 14)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card" data-price="16" data-rating="4.9"
+            data-search="chocolate souffle valrhona dark creme anglaise dairy eggs gluten" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Soufflé" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Chocolate Soufflé</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Valrhona 70% dark chocolate · crème anglaise
+              </p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🥛 Dairy</span><span class="allergen">🥚
+                  Eggs</span><span class="allergen">🌾 Gluten</span></div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$16</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Chocolate Soufflé', 16)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card" data-price="12" data-rating="4.6"
+            data-search="tiramisu savoiardi espresso mascarpone cocoa dairy eggs italian" onclick="openQuick(this)">
+            <div class="relative overflow-hidden h-[200px] bg-cream">
+              <img src="./assests/thai.png" alt="Tiramisu" class="w-full h-full object-cover" />
+              <div class="absolute top-3 right-3">
+                <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.6</div>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Classic Tiramisù</h3>
+              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Savoiardi · espresso · mascarpone · cocoa
+              </p>
+              <div class="flex gap-1.5 mt-2"><span class="allergen">🥛 Dairy</span><span class="allergen">🥚 Eggs</span>
+              </div>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+                <p class="font-playfair text-xl font-black text-textDark">$12</p>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Classic Tiramisù', 12)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── DRINKS ── -->
+      <div class="menu-section" data-category="drinks">
+        <div class="menu-section-divider">
+          <h3>Drinks</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+
+          <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer"
+            onclick="addToCart('Chianti Classico 2018', 18)">
+            <div class="text-4xl mb-3">🍷</div>
+            <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Chianti Classico</h3>
+            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">2018 · Tuscany · 750ml</p>
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
+              <p class="font-playfair text-lg font-black text-textDark">$18</p>
+              <button
+                class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer"
+            onclick="addToCart('Aperol Spritz', 14)">
+            <div class="text-4xl mb-3">🍊</div>
+            <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Aperol Spritz</h3>
+            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Prosecco · Aperol · orange · ice</p>
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
+              <p class="font-playfair text-lg font-black text-textDark">$14</p>
+              <button
+                class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer"
+            onclick="addToCart('Negroni', 16)">
+            <div class="text-4xl mb-3">🍸</div>
+            <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Classic Negroni</h3>
+            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Gin · Campari · sweet vermouth</p>
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
+              <p class="font-playfair text-lg font-black text-textDark">$16</p>
+              <button
+                class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer"
+            onclick="addToCart('Still Water (500ml)', 4)">
+            <div class="text-4xl mb-3">💧</div>
+            <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Still / Sparkling Water</h3>
+            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">San Pellegrino · Acqua Panna · 500ml</p>
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
+              <p class="font-playfair text-lg font-black text-textDark">$4</p>
+              <button
+                class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ══ RESERVATION CTA ══ -->
+    <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10">
+      <div
+        class="bg-cream rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 border border-borderSoft">
+        <div>
+          <div class="section-label mb-3">Book Your Experience</div>
+          <h2 class="font-playfair text-3xl md:text-4xl font-black text-textDark mb-2">Reserve Your Table<br />for
+            Tonight</h2>
+          <p class="font-cormorant italic text-textMid/60 text-lg">Mon–Sun · 12pm–11pm &nbsp;·&nbsp; +1 (555) 920-4200
+          </p>
+        </div>
+        <div class="flex flex-col gap-3 flex-shrink-0 w-full md:w-auto">
+          <a href="#"
+            class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center">
+            <i class="fa-regular fa-calendar-check"></i> Book Online
+          </a>
+          <a href="tel:+15559204200"
+            class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center">
+            <i class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FOOTER ══ -->
+    <footer class="footer-bg hidden md:block">
+      <div class="max-w-7xl mx-auto px-8 lg:px-14 py-16">
+        <div class="grid grid-cols-4 gap-10 mb-12">
+          <div class="col-span-1">
+            <span class="font-playfair text-2xl font-black text-white">Sav<span
+                class="italic font-light text-redPrimary">o</span>ria</span>
+            <p class="font-cormorant italic text-gold/60 text-xs tracking-[0.3em] uppercase mt-0.5 mb-4">Fine Dining</p>
+            <p class="text-white/40 text-sm leading-relaxed">Where every dish tells a story of passion, craft, and the
+              finest ingredients.</p>
+            <div class="flex gap-3 mt-5">
+              <a href="#"
+                class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i
+                  class="fa-brands fa-instagram"></i></a>
+              <a href="#"
+                class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i
+                  class="fa-brands fa-facebook-f"></i></a>
+              <a href="#"
+                class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i
+                  class="fa-brands fa-x-twitter"></i></a>
+            </div>
+          </div>
+          <div>
+            <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Navigation</p>
+            <ul class="space-y-3">
+              <li><a href="index.html" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
+              <li><a href="menu.html" class="text-white/60 text-sm hover:text-gold transition">Menu</a></li>
+              <li><a href="about.html" class="text-white/40 text-sm hover:text-gold transition">About</a></li>
+              <li><a href="#" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Hours</p>
+            <ul class="space-y-2">
+              <li class="text-white/40 text-sm">Mon–Fri · 12pm–10pm</li>
+              <li class="text-white/40 text-sm">Sat–Sun · 11am–11pm</li>
+              <li class="text-white/40 text-sm mt-3">Happy Hour · 4–6pm</li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Contact</p>
+            <ul class="space-y-3">
+              <li class="text-white/40 text-sm">📍 42 West 58th St, New York</li>
+              <li class="text-white/40 text-sm">📞 +1 (555) 920-4200</li>
+              <li class="text-white/40 text-sm">✉️ hello@savoria.com</li>
+            </ul>
+          </div>
+        </div>
+        <div class="gold-line h-[1px] mb-6 opacity-20"></div>
+        <div class="flex justify-between items-center">
+          <p class="text-white/30 text-xs">© 2025 Savoria Fine Dining. All rights reserved.</p>
+          <p class="font-cormorant italic text-gold/40 text-sm">Where every dish tells a story</p>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ══ MOBILE BOTTOM NAV ══ -->
+  <nav class="mobile-bottom-nav md:hidden">
+    <div class="nav-item" onclick="location.href='index.html'">
+      <i class="fa-solid fa-house"></i><span>Home</span>
+    </div>
+    <div class="nav-item active">
+      <i class="fa-solid fa-utensils"></i><span>Menu</span>
+    </div>
+    <div onclick="toggleCart()">
+      <div class="cart-fab">
+        <i class="fa-solid fa-bag-shopping text-lg"></i>
+        <div class="badge" id="mobileBadge" style="display:none">0</div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
+    </div>
+    <div class="nav-item">
+      <i class="fa-regular fa-circle-user"></i><span>Profile</span>
+    </div>
+  </nav>
+
+  <script src="/static/js/menu.js"></script>
 </body>
+
 </html>
