@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Savoria — Contact Us</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- shared stylesheet -->
+  <link rel="stylesheet" href="static/css/style.css"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            redPrimary: "#c0392b", redDeep: "#96281b", redPale: "#fdf0ee",
+            cream: "#f5f0eb", textDark: "#1a1210", textMid: "#4a3830",
+            borderSoft: "#e8ddd8", gold: "#b8963e", goldLight: "#d4af6a",
+          },
+          fontFamily: {
+            playfair: ["Playfair Display","serif"],
+            jost:     ["Jost","sans-serif"],
+            cormorant:["Cormorant Garamond","serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* ── PAGE-SPECIFIC ONLY (no duplication of style.css) ── */
+
+    /* hero: light cream — reuses mobile-hero palette */
+    .contact-hero {
+      background: linear-gradient(160deg, #fdf6f0 0%, #f5ede4 60%, #f0e4d8 100%);
+      position: relative; overflow: hidden;
+    }
+    .contact-hero::before {
+      content:''; position:absolute; top:-140px; right:-80px;
+      width:520px; height:520px; border-radius:50%;
+      background:radial-gradient(circle,rgba(192,57,43,.07) 0%,transparent 65%);
+      pointer-events:none;
+    }
+    .contact-hero::after {
+      content:''; position:absolute; bottom:-80px; left:-40px;
+      width:380px; height:380px; border-radius:50%;
+      background:radial-gradient(circle,rgba(184,150,62,.07) 0%,transparent 65%);
+      pointer-events:none;
+    }
+
+    /* info card */
+    .info-card {
+      background:#fff; border:1px solid var(--border);
+      border-radius:18px; padding:20px 22px;
+      transition:box-shadow .25s, transform .2s;
+      display:flex; align-items:center; gap:16px;
+    }
+    .info-card:hover { box-shadow:0 10px 32px rgba(0,0,0,.07); transform:translateY(-2px); }
+    .info-icon {
+      width:46px; height:46px; border-radius:14px; background:#fdf0ee;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    }
+
+    /* form inputs */
+    .sv-input {
+      width:100%; border:1.5px solid var(--border); border-radius:14px;
+      padding:13px 16px; font-family:"Jost",sans-serif; font-size:14px;
+      color:var(--dark); outline:none; background:#fff;
+      transition:border-color .25s, box-shadow .25s;
+    }
+    .sv-input::placeholder { color:rgba(74,56,48,.35); }
+    .sv-input:focus  { border-color:var(--red); box-shadow:0 0 0 3px rgba(192,57,43,.08); }
+    .sv-input.err    { border-color:#e74c3c; }
+    textarea.sv-input { resize:none; min-height:130px; line-height:1.6; }
+    select.sv-input {
+      appearance:none; cursor:pointer;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath fill='%234a3830' d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 16px center #fff;
+    }
+    .err-msg { display:none; font-size:11px; color:#e74c3c; margin-top:4px; }
+    .err-msg.show { display:block; }
+
+    /* topic pills — reuse nav-link colour language */
+    .topic-pill {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:8px 16px; border-radius:999px;
+      font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+      cursor:pointer; border:1.5px solid var(--border);
+      color:var(--mid); background:#fff;
+      transition:background .2s, color .2s, border-color .2s;
+      white-space:nowrap;
+    }
+    .topic-pill:hover,
+    .topic-pill.active { background:var(--red); color:#fff; border-color:var(--red); }
+
+    /* opening hours rows */
+    .h-row {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:9px 0; border-bottom:1px solid #f0e8e4;
+    }
+    .h-row:last-child { border-bottom:none; }
+    .h-row.today {
+      background:#fdf0ee; border-radius:10px;
+      padding:9px 12px; border-bottom:1px solid #fae0da; margin:0 -4px;
+    }
+
+    /* decorative map */
+    .map-box {
+      border-radius:20px; overflow:hidden;
+      border:1px solid var(--border);
+      background:linear-gradient(135deg,#f5ede4,#ede0d4);
+      position:relative; height:280px;
+    }
+    .map-grid {
+      position:absolute; inset:0;
+      background-image:
+        linear-gradient(rgba(74,56,48,.07) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(74,56,48,.07) 1px,transparent 1px);
+      background-size:40px 40px;
+    }
+    .map-road-h { position:absolute; height:2px; background:rgba(192,57,43,.18); left:0; right:0; }
+    .map-road-v { position:absolute; width:2px;  background:rgba(192,57,43,.18); top:0; bottom:0; }
+    .map-block  { position:absolute; background:rgba(74,56,48,.06); border-radius:8px; border:1px solid rgba(74,56,48,.08); }
+    .map-pin {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-62%);
+      width:50px; height:50px; border-radius:50%;
+      background:linear-gradient(135deg,#c0392b,#96281b);
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 6px 24px rgba(192,57,43,.45), 0 0 0 8px rgba(192,57,43,.12);
+      animation:pinPulse 2.2s ease-in-out infinite; z-index:2;
+    }
+    @keyframes pinPulse {
+      0%,100%{ box-shadow:0 6px 24px rgba(192,57,43,.45),0 0 0 8px rgba(192,57,43,.12); }
+      50%    { box-shadow:0 6px 24px rgba(192,57,43,.45),0 0 0 18px rgba(192,57,43,.04); }
+    }
+    .map-chip {
+      position:absolute; bottom:14px; left:14px; right:14px;
+      background:rgba(255,255,255,.92); backdrop-filter:blur(12px);
+      border:1px solid var(--border); border-radius:14px;
+      padding:12px 16px; display:flex; align-items:center; gap:12px;
+      box-shadow:0 4px 16px rgba(0,0,0,.08);
+    }
+
+    /* social circles */
+    .social-btn {
+      width:42px; height:42px; border-radius:50%;
+      border:1.5px solid var(--border);
+      display:flex; align-items:center; justify-content:center;
+      color:#9a8880; font-size:16px;
+      transition:border-color .2s, color .2s, transform .15s;
+    }
+    .social-btn:hover { border-color:var(--red); color:var(--red); transform:scale(1.08); }
+
+    /* quick action rows */
+    .q-action {
+      display:flex; align-items:center; gap:12px;
+      padding:12px 14px; border-radius:14px;
+      border:1px solid var(--border); background:#fff; text-decoration:none;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .q-action:hover { border-color:var(--red); box-shadow:0 4px 14px rgba(192,57,43,.08); }
+    .q-icon { width:36px; height:36px; border-radius:10px; background:#fdf0ee; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+    /* file upload zone */
+    .upload-zone {
+      display:flex; align-items:center; gap:14px;
+      border:2px dashed var(--border); border-radius:14px; padding:16px;
+      cursor:pointer; transition:border-color .2s, background .2s;
+    }
+    .upload-zone:hover { border-color:var(--red); background:#fdf0ee; }
+
+    /* FAQ accordion */
+    .faq-item { border-bottom:1px solid #efe8e2; }
+    .faq-q { display:flex; align-items:center; justify-content:space-between; padding:18px 0; cursor:pointer; gap:16px; }
+    .faq-body { display:none; padding-bottom:18px; }
+    .faq-body.open { display:block; }
+    .faq-icon { flex-shrink:0; color:#9a8880; transition:transform .3s, color .2s; }
+    .faq-icon.open { transform:rotate(45deg); color:var(--red); }
+
+    /* success state */
+    @keyframes successIn { from{opacity:0;transform:scale(.94);} to{opacity:1;transform:scale(1);} }
+    .success-card { animation:successIn .4s ease both; }
+
+    /* breadcrumb chip */
+    .bc { font-size:10px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:#9a8880; text-decoration:none; transition:color .2s; }
+    .bc:hover, .bc.current { color:var(--red); }
+  </style>
+</head>
+<body class="font-jost bg-white text-textDark overflow-x-hidden">
+
+<!-- ═══════════ OVERLAY ═══════════ -->
+<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]" onclick="closeAll()"></div>
+
+<!-- ═══════════ MOBILE MENU ═══════════ -->
+<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex-col p-10 hidden"
+     style="transform:translateX(100%);transition:transform .5s cubic-bezier(.4,0,.2,1);">
+  <div class="flex justify-between items-center mb-10">
+    <div>
+      <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
+      <p class="font-cormorant italic text-gold/70 text-xs tracking-[.3em] uppercase mt-0.5">Fine Dining</p>
+    </div>
+    <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition flex items-center justify-center">✕</button>
+  </div>
+  <div class="gold-line h-px mb-8 opacity-40"></div>
+  <ul class="flex flex-col gap-1 flex-1">
+    <li><a href="index.html"             onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+    <li><a href="category.html"          onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
+    <li><a href="index.html#reservation" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+    <li><a href="contact.html"           onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-redPrimary">Contact</a></li>
+  </ul>
+  <div class="mt-auto">
+    <a href="index.html#reservation" onclick="toggleMenu()"
+       class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[.2em] transition">
+      <i class="fa-regular fa-calendar-check"></i> Book a Table
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-[10px] transition-all duration-300">
+  <div class="h-[72px] flex items-center justify-between px-5 sm:px-8 lg:px-14">
+    <!-- logo -->
+    <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
+      <span class="font-playfair text-[26px] font-black text-textDark group-hover:text-redPrimary transition tracking-tight">
+        Sav<span class="italic font-light text-redPrimary">o</span>ria
+      </span>
+      <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
+    </a>
+
+    <!-- desktop links -->
+    <ul class="hidden md:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[.15em] text-textMid">
+      <li><a href="index.html"             class="nav-link transition">Home</a></li>
+      <li><a href="category.html"          class="nav-link transition">Menu</a></li>
+      <li><a href="index.html#reservation" class="nav-link transition">Reserve</a></li>
+      <li><a href="contact.html"           class="nav-link active-link">Contact</a></li>
+    </ul>
+
+    <!-- CTA -->
+    <div class="flex items-center gap-3">
+      <a href="login.html" class="hidden md:flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.12em] text-textMid hover:text-gold transition border-l border-borderSoft pl-4">
+        <i class="fa-regular fa-circle-user"></i> Login
+      </a>
+      <a href="index.html#reservation"
+         class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[.18em] uppercase transition">
+        <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
+      </a>
+      <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
+        <span class="w-[18px] h-[1.5px] bg-textDark rounded-full block"></span>
+        <span class="w-[18px] h-[1.5px] bg-textDark rounded-full block"></span>
+        <span class="w-[12px] h-[1.5px] bg-textDark rounded-full block self-start ml-[3px]"></span>
+      </button>
+    </div>
+  </div>
+  <div class="h-px bg-borderSoft/70"></div>
+</nav>
+
+<main>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="contact-hero pt-[72px]">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-14 lg:py-24">
+
+    <!-- breadcrumb -->
+    <div class="flex items-center gap-2 mb-8 anim-1">
+      <a href="index.html" class="bc"><i class="fa-solid fa-house text-[9px] mr-1"></i>Home</a>
+      <i class="fa-solid fa-chevron-right text-borderSoft text-[8px]"></i>
+      <span class="bc current">Contact</span>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-14 lg:gap-20 items-start">
+
+      <!-- copy + contact info -->
+      <div>
+        <div class="section-label mb-4 anim-1">Get in Touch</div>
+        <h1 class="font-playfair text-5xl lg:text-[72px] font-black text-textDark leading-[1.04] mb-5 anim-2">
+          We'd Love<br/>to <em style="font-style:italic;color:var(--red)">Hear</em><br/>From You
+        </h1>
+        <p class="font-cormorant italic text-xl text-textMid/60 tracking-wide leading-relaxed mb-10 anim-3">
+          Whether it's a reservation enquiry, a private event, or simply a kind word for our kitchen — we read every message personally.
+        </p>
+
+        <div class="space-y-3 anim-4">
+          <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-phone" style="color:var(--red);font-size:18px;"></i></div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-[.2em] text-textMid/40 mb-0.5">Call Us</p>
+              <p class="font-semibold text-textDark">+1 (555) 920-4200</p>
+              <p class="font-cormorant italic text-sm" style="color:rgba(74,56,48,.5)">Mon–Sun · 10am–11pm</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon"><i class="fa-regular fa-envelope" style="color:var(--red);font-size:18px;"></i></div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-[.2em] text-textMid/40 mb-0.5">Email Us</p>
+              <p class="font-semibold text-textDark">hello@savoria.com</p>
+              <p class="font-cormorant italic text-sm" style="color:rgba(74,56,48,.5)">Response within 2 business hours</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-location-dot" style="color:var(--red);font-size:18px;"></i></div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-[.2em] text-textMid/40 mb-0.5">Visit Us</p>
+              <p class="font-semibold text-textDark">42 West 58th Street</p>
+              <p class="font-cormorant italic text-sm" style="color:rgba(74,56,48,.5)">Midtown Manhattan, New York 10019</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- socials -->
+        <div class="flex items-center gap-3 mt-8 anim-5">
+          <span class="text-[10px] font-bold uppercase tracking-[.2em] text-textMid/40 mr-1">Follow Us</span>
+          <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-btn"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" class="social-btn"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+      </div>
+
+      <!-- opening hours card -->
+      <div class="anim-5">
+        <div class="bg-white rounded-2xl border border-borderSoft shadow-sm p-6">
+          <div class="flex items-center justify-between mb-5">
+            <span class="text-[10px] font-bold uppercase tracking-[.25em] text-textMid/40">Opening Hours</span>
+            <span class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[.1em] text-emerald-600">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block"></span>Open Now
+            </span>
+          </div>
+          <div id="hoursTable"></div>
+
+          <div class="gold-line h-px my-5 opacity-40"></div>
+
+          <!-- happy hour -->
+          <div class="flex items-center gap-3 rounded-xl p-3.5 mb-4" style="background:#fffbf0;border:1px solid rgba(184,150,62,.2)">
+            <i class="fa-solid fa-champagne-glasses flex-shrink-0" style="color:var(--gold)"></i>
+            <div>
+              <p class="font-semibold text-textDark text-sm">Happy Hour</p>
+              <p class="font-cormorant italic text-sm" style="color:rgba(74,56,48,.5)">Every day · 4:00pm – 6:00pm · 20% off drinks</p>
+            </div>
+          </div>
+
+          <a href="index.html#reservation"
+             class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded-xl text-[11px] font-bold uppercase tracking-[.18em] transition">
+            <i class="fa-regular fa-calendar-check text-[10px]"></i>Book a Table
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FORM + MAP ═══════════ -->
+<section class="py-16 lg:py-24 px-5 sm:px-8 lg:px-14 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-[1fr_380px] gap-12 lg:gap-16">
+
+      <!-- ── FORM ── -->
+      <div class="reveal">
+        <div class="section-label mb-3">Send a Message</div>
+        <h2 class="font-playfair text-4xl font-black text-textDark mb-8">How Can We Help?</h2>
+
+        <!-- topic pills -->
+        <div class="flex flex-wrap gap-2 mb-8">
+          <button class="topic-pill active" data-topic="reservation" onclick="selectTopic(this)"><i class="fa-regular fa-calendar-check"></i>Reservation</button>
+          <button class="topic-pill" data-topic="event"    onclick="selectTopic(this)"><i class="fa-solid fa-star"></i>Private Event</button>
+          <button class="topic-pill" data-topic="feedback" onclick="selectTopic(this)"><i class="fa-regular fa-comment"></i>Feedback</button>
+          <button class="topic-pill" data-topic="press"    onclick="selectTopic(this)"><i class="fa-solid fa-newspaper"></i>Press</button>
+          <button class="topic-pill" data-topic="careers"  onclick="selectTopic(this)"><i class="fa-solid fa-briefcase"></i>Careers</button>
+          <button class="topic-pill" data-topic="other"    onclick="selectTopic(this)"><i class="fa-solid fa-ellipsis"></i>Other</button>
+        </div>
+
+        <form id="contactForm" onsubmit="handleSubmit(event)" novalidate class="space-y-4">
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">First Name *</label>
+              <input type="text" id="cfFirst" class="sv-input" placeholder="John" autocomplete="given-name"/>
+              <p class="err-msg" id="errFirst">Please enter your name.</p>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Last Name</label>
+              <input type="text" id="cfLast" class="sv-input" placeholder="Doe" autocomplete="family-name"/>
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Email Address *</label>
+              <input type="email" id="cfEmail" class="sv-input" placeholder="your@email.com" autocomplete="email"/>
+              <p class="err-msg" id="errEmail">Please enter a valid email.</p>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Phone Number</label>
+              <input type="tel" id="cfPhone" class="sv-input" placeholder="+1 (555) 000-0000" autocomplete="tel"/>
+            </div>
+          </div>
+
+          <!-- reservation / event: date + guests -->
+          <div id="dateRow" class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Preferred Date</label>
+              <input type="date" id="cfDate" class="sv-input"/>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Number of Guests</label>
+              <select id="cfGuests" class="sv-input">
+                <option value="">Select party size</option>
+                <option>1 Guest</option><option>2 Guests</option><option>3 Guests</option>
+                <option>4 Guests</option><option>5–8 Guests</option><option>9–15 Guests</option>
+                <option>16+ Guests (Private Event)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Subject *</label>
+            <input type="text" id="cfSubject" class="sv-input" placeholder="Table reservation enquiry"/>
+            <p class="err-msg" id="errSubject">Please enter a subject.</p>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Message *</label>
+            <textarea id="cfMessage" class="sv-input" placeholder="Tell us more — dietary requirements, special requests, anything at all…"></textarea>
+            <div class="flex justify-between mt-1.5">
+              <p class="err-msg" id="errMessage">Please write at least 10 characters.</p>
+              <p class="text-[10px] ml-auto" style="color:rgba(74,56,48,.3)"><span id="charCount">0</span> / 500</p>
+            </div>
+          </div>
+
+          <!-- star rating: feedback only -->
+          <div id="ratingRow" class="hidden">
+            <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-3">Your Experience</label>
+            <div class="flex gap-2" id="starRow">
+              <i class="fa-regular fa-star text-2xl cursor-pointer hover:text-gold transition" style="color:rgba(184,150,62,.3)" onclick="setRating(1)"></i>
+              <i class="fa-regular fa-star text-2xl cursor-pointer hover:text-gold transition" style="color:rgba(184,150,62,.3)" onclick="setRating(2)"></i>
+              <i class="fa-regular fa-star text-2xl cursor-pointer hover:text-gold transition" style="color:rgba(184,150,62,.3)" onclick="setRating(3)"></i>
+              <i class="fa-regular fa-star text-2xl cursor-pointer hover:text-gold transition" style="color:rgba(184,150,62,.3)" onclick="setRating(4)"></i>
+              <i class="fa-regular fa-star text-2xl cursor-pointer hover:text-gold transition" style="color:rgba(184,150,62,.3)" onclick="setRating(5)"></i>
+            </div>
+          </div>
+
+          <!-- attachment -->
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Attachment <span style="opacity:.4">(optional)</span></label>
+            <label class="upload-zone">
+              <div class="w-10 h-10 rounded-xl bg-cream flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-paperclip text-sm text-textMid/40"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-textDark text-sm">Attach a file</p>
+                <p class="text-xs mt-0.5 text-textMid/40">PDF, JPG, PNG · Max 5 MB</p>
+              </div>
+              <input type="file" id="cfFile" class="hidden" accept=".pdf,.jpg,.jpeg,.png"/>
+            </label>
+            <p id="fileName" class="hidden text-[11px] mt-2" style="color:var(--gold)"></p>
+          </div>
+
+          <!-- submit -->
+          <button type="submit" id="submitBtn"
+                  class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[.18em] uppercase flex items-center justify-center gap-2 transition">
+            <span id="btnLabel"><i class="fa-regular fa-paper-plane text-[11px]"></i> Send Message</span>
+            <span id="btnSpinner" class="hidden"><i class="fa-solid fa-spinner fa-spin"></i> Sending…</span>
+          </button>
+        </form>
+
+        <!-- success state -->
+        <div id="successCard" class="hidden success-card bg-white border border-borderSoft rounded-2xl p-10 text-center">
+          <div class="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto mb-5">
+            <i class="fa-solid fa-check text-emerald-500 text-2xl"></i>
+          </div>
+          <h3 class="font-playfair text-2xl font-black text-textDark mb-2">Message Received!</h3>
+          <p class="font-cormorant italic text-textMid/60 text-lg mb-6">We'll be in touch within 2 business hours.</p>
+          <div class="flex items-center justify-center gap-3 bg-cream rounded-xl p-4 mb-6">
+            <i class="fa-regular fa-envelope" style="color:var(--gold)"></i>
+            <p class="text-sm text-textMid/60">Confirmation sent to <strong id="confirmEmail" class="text-textDark"></strong></p>
+          </div>
+          <button onclick="resetForm()"
+                  class="book-btn text-white px-8 py-3 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase inline-flex items-center gap-2 transition">
+            <i class="fa-solid fa-rotate-left text-[10px]"></i> Send Another Message
+          </button>
+        </div>
+      </div>
+
+      <!-- ── RIGHT: map + info ── -->
+      <div class="space-y-5 reveal">
+
+        <!-- decorative map -->
+        <div class="map-box">
+          <div class="map-grid"></div>
+          <div class="map-road-h" style="top:32%"></div>
+          <div class="map-road-h" style="top:57%"></div>
+          <div class="map-road-h" style="top:76%"></div>
+          <div class="map-road-v" style="left:27%"></div>
+          <div class="map-road-v" style="left:53%"></div>
+          <div class="map-road-v" style="left:74%"></div>
+          <div class="map-block" style="top:33%;left:28%;width:24%;height:23%;"></div>
+          <div class="map-block" style="top:33%;left:54%;width:19%;height:23%;"></div>
+          <div class="map-block" style="top:58%;left:28%;width:45%;height:17%;"></div>
+          <div class="map-pin"><i class="fa-solid fa-utensils text-white text-lg"></i></div>
+          <div class="map-chip">
+            <div class="w-9 h-9 rounded-xl book-btn flex items-center justify-center flex-shrink-0 transition">
+              <i class="fa-solid fa-utensils text-white text-sm"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-playfair font-black text-textDark text-sm leading-tight">Savoria Fine Dining</p>
+              <p class="font-cormorant italic text-textMid/50 text-xs truncate">42 West 58th St, New York</p>
+            </div>
+            <a href="https://maps.google.com" target="_blank"
+               class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center transition"
+               style="background:#fdf0ee;color:var(--red)">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- getting here -->
+        <div class="bg-white border border-borderSoft rounded-2xl p-5">
+          <p class="text-[10px] font-bold uppercase tracking-[.25em] text-textMid/40 mb-4">Getting Here</p>
+          <div class="space-y-3.5">
+            <div class="flex items-start gap-3">
+              <div class="q-icon"><i class="fa-solid fa-train-subway text-xs" style="color:var(--red)"></i></div>
+              <div><p class="font-semibold text-textDark text-sm">Subway</p><p class="text-xs leading-relaxed text-textMid/50 mt-0.5">N, Q, R, W to 57th St–7th Ave. 3 min walk north.</p></div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="q-icon"><i class="fa-solid fa-car text-xs" style="color:var(--red)"></i></div>
+              <div><p class="font-semibold text-textDark text-sm">By Car</p><p class="text-xs leading-relaxed text-textMid/50 mt-0.5">Valet from 5pm. Self-parking at Columbus Circle Garage.</p></div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="q-icon"><i class="fa-solid fa-person-walking text-xs" style="color:var(--red)"></i></div>
+              <div><p class="font-semibold text-textDark text-sm">On Foot</p><p class="text-xs leading-relaxed text-textMid/50 mt-0.5">8 min from Central Park South. Near The Plaza Hotel.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- quick actions -->
+        <div class="bg-white border border-borderSoft rounded-2xl p-5 space-y-2.5">
+          <p class="text-[10px] font-bold uppercase tracking-[.25em] text-textMid/40 mb-1">Quick Actions</p>
+          <a href="tel:+15559204200" class="q-action">
+            <div class="q-icon"><i class="fa-solid fa-phone text-sm" style="color:var(--red)"></i></div>
+            <span class="font-medium text-textDark text-sm flex-1">+1 (555) 920-4200</span>
+            <i class="fa-solid fa-chevron-right text-[10px] text-textMid/20"></i>
+          </a>
+          <a href="mailto:hello@savoria.com" class="q-action">
+            <div class="q-icon"><i class="fa-regular fa-envelope text-sm" style="color:var(--red)"></i></div>
+            <span class="font-medium text-textDark text-sm flex-1">hello@savoria.com</span>
+            <i class="fa-solid fa-chevron-right text-[10px] text-textMid/20"></i>
+          </a>
+          <a href="index.html#reservation" class="q-action">
+            <div class="q-icon"><i class="fa-regular fa-calendar-check text-sm" style="color:var(--red)"></i></div>
+            <span class="font-medium text-textDark text-sm flex-1">Book a Table Online</span>
+            <i class="fa-solid fa-chevron-right text-[10px] text-textMid/20"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FAQ ═══════════ -->
+<section class="py-16 lg:py-20 px-5 sm:px-8 lg:px-14 bg-cream">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <div class="section-label justify-center mb-3">FAQ</div>
+      <h2 class="font-playfair text-4xl lg:text-5xl font-black text-textDark">Frequently Asked<br/>Questions</h2>
+    </div>
+    <div id="faqList" class="bg-white rounded-2xl border border-borderSoft px-6 reveal"></div>
+  </div>
+</section>
+
+<!-- ═══════════ RESERVATION CTA ═══════════ -->
+<section class="py-16 px-5 sm:px-8 lg:px-14 bg-white reveal">
+  <div class="max-w-7xl mx-auto">
+    <div class="promo-banner p-10 lg:p-14 flex flex-col md:flex-row items-center justify-between gap-8">
+      <div class="relative z-10">
+        <div class="section-label mb-4" style="color:rgba(184,150,62,.8)">Book Your Experience</div>
+        <h2 class="font-playfair text-3xl lg:text-4xl font-black text-white mb-2">Reserve Your Table<br/>for Tonight</h2>
+        <p class="font-cormorant italic text-lg" style="color:rgba(255,255,255,.45)">
+          Open Monday to Sunday · 12:00pm – 11:00pm
+        </p>
+      </div>
+      <div class="flex flex-col gap-3 flex-shrink-0 relative z-10 w-full md:w-auto">
+        <a href="index.html#reservation"
+           class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[.2em] uppercase flex items-center gap-2 justify-center transition">
+          <i class="fa-regular fa-calendar-check"></i>Book Online
+        </a>
+        <a href="tel:+15559204200"
+           class="text-white px-10 py-4 rounded text-[11px] font-semibold tracking-[.2em] uppercase text-center transition"
+           style="border:1px solid rgba(255,255,255,.2)"
+           onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
+           onmouseout="this.style.borderColor='rgba(255,255,255,.2)';this.style.color='white'">
+          <i class="fa-solid fa-phone text-[10px] mr-1"></i>Call Us
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer-bg">
+  <div class="max-w-7xl mx-auto px-8 lg:px-14 py-16">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+      <div>
+        <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
+        <p class="font-cormorant italic text-xs tracking-[.3em] uppercase mt-0.5 mb-4" style="color:rgba(184,150,62,.6)">Fine Dining</p>
+        <p class="text-sm leading-relaxed" style="color:rgba(255,255,255,.4)">Where every dish tells a story of passion, craft, and the finest ingredients.</p>
+        <div class="flex gap-3 mt-5">
+          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.4)'"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.4)'"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.4)'"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+      <div>
+        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-5" style="color:rgba(255,255,255,.7)">Navigation</p>
+        <ul class="space-y-3">
+          <li><a href="index.html"    class="text-sm transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.4)'">Home</a></li>
+          <li><a href="category.html" class="text-sm transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.4)'">Menu</a></li>
+          <li><a href="index.html#reservation" class="text-sm transition" style="color:rgba(255,255,255,.4)" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.4)'">Reserve</a></li>
+          <li><a href="contact.html"  class="text-sm" style="color:var(--gold)">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-5" style="color:rgba(255,255,255,.7)">Hours</p>
+        <ul class="space-y-2">
+          <li class="text-sm" style="color:rgba(255,255,255,.4)">Mon–Fri · 12pm–10pm</li>
+          <li class="text-sm" style="color:rgba(255,255,255,.4)">Sat–Sun · 11am–11pm</li>
+          <li class="text-sm mt-3" style="color:rgba(255,255,255,.4)">Happy Hour · 4–6pm</li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-5" style="color:rgba(255,255,255,.7)">Contact</p>
+        <ul class="space-y-3">
+          <li class="text-sm" style="color:rgba(255,255,255,.4)">📍 42 West 58th St, New York</li>
+          <li class="text-sm" style="color:rgba(255,255,255,.4)">📞 +1 (555) 920-4200</li>
+          <li class="text-sm" style="color:rgba(255,255,255,.4)">✉️ hello@savoria.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gold-line h-px mb-6 opacity-20"></div>
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
+      <p class="text-xs" style="color:rgba(255,255,255,.3)">© 2025 Savoria Fine Dining. All rights reserved.</p>
+      <p class="font-cormorant italic text-sm" style="color:rgba(184,150,62,.4)">Where every dish tells a story</p>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav md:hidden">
+  <div class="nav-item" onclick="location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></div>
+  <div class="nav-item" onclick="location.href='category.html'"><i class="fa-solid fa-utensils"></i><span>Menu</span></div>
+  <div onclick="location.href='index.html#reservation'">
+    <div class="cart-fab"><i class="fa-regular fa-calendar-check" style="font-size:20px"></i></div>
+  </div>
+  <div class="nav-item active"><i class="fa-solid fa-paper-plane"></i><span>Contact</span></div>
+  <div class="nav-item" onclick="location.href='profile.html'"><i class="fa-regular fa-circle-user"></i><span>Profile</span></div>
+</nav>
+
+<script src="static/js/main.js"></script>
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const HOURS = [
+  {day:"Monday",    open:"12:00 pm", close:"10:00 pm"},
+  {day:"Tuesday",   open:"12:00 pm", close:"10:00 pm"},
+  {day:"Wednesday", open:"12:00 pm", close:"10:00 pm"},
+  {day:"Thursday",  open:"12:00 pm", close:"10:00 pm"},
+  {day:"Friday",    open:"12:00 pm", close:"11:00 pm"},
+  {day:"Saturday",  open:"11:00 am", close:"11:00 pm"},
+  {day:"Sunday",    open:"11:00 am", close:"10:00 pm"},
+];
+const FAQ = [
+  {q:"Do you accept walk-ins?",
+   a:"We welcome walk-ins based on availability, but strongly recommend booking in advance — especially for Friday evenings and weekends. You can reserve online or call us directly."},
+  {q:"Is there a dress code?",
+   a:"We ask guests to dress in smart casual or formal attire. Sportswear and beachwear are kindly not permitted."},
+  {q:"Can you accommodate dietary requirements?",
+   a:"Absolutely. Our kitchen caters to vegetarian, vegan, gluten-free, halal, and severe allergy requirements. Please let us know when booking or in your message."},
+  {q:"Do you offer private dining?",
+   a:"Yes — our private dining room seats up to 24 guests, ideal for corporate dinners, anniversaries, and celebrations. Use the 'Private Event' topic above to reach our events team."},
+  {q:"How far in advance should I book?",
+   a:"Weekdays: 2–3 days is usually fine. Friday and Saturday evenings: at least one week ahead. Private events: 3–4 weeks in advance."},
+  {q:"Is valet parking available?",
+   a:"Complimentary valet is available from 5:00pm. For lunch, self-parking is at Columbus Circle Garage — a 4-minute walk away."},
+];
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderHours();
+  renderFAQ();
+
+  // char counter
+  document.getElementById('cfMessage').addEventListener('input', function () {
+    const n = Math.min(this.value.length, 500);
+    document.getElementById('charCount').textContent = n;
+    if (this.value.length > 500) this.value = this.value.slice(0, 500);
+  });
+
+  // file name
+  document.getElementById('cfFile').addEventListener('change', function () {
+    const p = document.getElementById('fileName');
+    if (this.files[0]) { p.textContent = '📎 ' + this.files[0].name; p.classList.remove('hidden'); }
+  });
+
+  // navbar scroll tint
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 60) {
+      nav.style.background = 'rgba(255,255,255,0.97)';
+      nav.style.boxShadow  = '0 2px 20px rgba(0,0,0,.06)';
+    } else {
+      nav.style.background = 'rgba(255,255,255,0.95)';
+      nav.style.boxShadow  = 'none';
+    }
+  });
+
+  // scroll reveal (shared .reveal class from style.css)
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+});
+
+// ── HOURS ─────────────────────────────────────────────────────────────────────
+function renderHours() {
+  const map = {1:0,2:1,3:2,4:3,5:4,6:5,0:6};
+  const idx = map[new Date().getDay()];
+  document.getElementById('hoursTable').innerHTML = HOURS.map((h, i) => `
+    <div class="h-row ${i === idx ? 'today' : ''}">
+      <div class="flex items-center gap-2">
+        ${i === idx ? '<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>' : ''}
+        <span class="text-sm ${i === idx ? 'font-bold text-textDark' : 'text-textMid/50'}">${h.day}</span>
+        ${i === idx ? '<span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#16a34a;margin-left:4px">Today</span>' : ''}
+      </div>
+      <span class="font-cormorant italic text-sm ${i === idx ? 'font-bold' : 'text-textMid/40'}" ${i === idx ? 'style="color:var(--red)"' : ''}>${h.open} – ${h.close}</span>
+    </div>
+  `).join('');
+}
+
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+function renderFAQ() {
+  document.getElementById('faqList').innerHTML = FAQ.map((f, i) => `
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(${i})">
+        <p class="font-semibold text-textDark text-[15px] pr-4 leading-snug">${f.q}</p>
+        <i class="fa-solid fa-plus faq-icon" id="fi${i}"></i>
+      </div>
+      <div class="faq-body font-cormorant italic text-lg leading-relaxed text-textMid/70" id="fb${i}">${f.a}</div>
+    </div>
+  `).join('');
+}
+function toggleFaq(i) {
+  const b = document.getElementById('fb'+i), ic = document.getElementById('fi'+i);
+  const was = b.classList.contains('open');
+  document.querySelectorAll('.faq-body').forEach(x => x.classList.remove('open'));
+  document.querySelectorAll('.faq-icon').forEach(x => x.classList.remove('open'));
+  if (!was) { b.classList.add('open'); ic.classList.add('open'); }
+}
+
+// ── TOPIC PILLS ───────────────────────────────────────────────────────────────
+let activeTopic = 'reservation';
+function selectTopic(el) {
+  document.querySelectorAll('.topic-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  activeTopic = el.dataset.topic;
+  const showDate = ['reservation','event'].includes(activeTopic);
+  document.getElementById('dateRow').style.display = showDate ? 'grid' : 'none';
+  document.getElementById('ratingRow').classList.toggle('hidden', activeTopic !== 'feedback');
+  const ph = {reservation:"Table reservation enquiry",event:"Private event enquiry",
+              feedback:"My dining experience",press:"Press & media enquiry",
+              careers:"Job application",other:"General enquiry"};
+  document.getElementById('cfSubject').placeholder = ph[activeTopic] || 'How can we help?';
+}
+
+// ── STAR RATING ───────────────────────────────────────────────────────────────
+let starVal = 0;
+function setRating(n) {
+  starVal = n;
+  document.querySelectorAll('#starRow i').forEach((s, i) => {
+    s.className = `fa-${i < n ? 'solid' : 'regular'} fa-star text-2xl cursor-pointer hover:text-gold transition`;
+    s.style.color = i < n ? 'var(--gold)' : 'rgba(184,150,62,.3)';
+  });
+}
+
+// ── FORM VALIDATION + SUBMIT ──────────────────────────────────────────────────
+function setErr(inputId, msgId, show) {
+  document.getElementById(inputId)?.classList.toggle('err', show);
+  document.getElementById(msgId)?.classList.toggle('show', show);
+}
+function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const first = document.getElementById('cfFirst').value.trim();
+  const email = document.getElementById('cfEmail').value.trim();
+  const subj  = document.getElementById('cfSubject').value.trim();
+  const msg   = document.getElementById('cfMessage').value.trim();
+  let ok = true;
+
+  setErr('cfFirst',   'errFirst',   !first);          if (!first) ok = false;
+  setErr('cfEmail',   'errEmail',   !isEmail(email)); if (!isEmail(email)) ok = false;
+  setErr('cfSubject', 'errSubject', !subj);           if (!subj) ok = false;
+  setErr('cfMessage', 'errMessage', msg.length < 10); if (msg.length < 10) ok = false;
+  if (!ok) return;
+
+  document.getElementById('btnLabel').classList.add('hidden');
+  document.getElementById('btnSpinner').classList.remove('hidden');
+  document.getElementById('submitBtn').disabled = true;
+
+  setTimeout(() => {
+    document.getElementById('contactForm').classList.add('hidden');
+    document.getElementById('successCard').classList.remove('hidden');
+    document.getElementById('confirmEmail').textContent = email;
+  }, 1800);
+}
+
+function resetForm() {
+  document.getElementById('contactForm').classList.remove('hidden');
+  document.getElementById('successCard').classList.add('hidden');
+  document.getElementById('contactForm').reset();
+  document.getElementById('btnLabel').classList.remove('hidden');
+  document.getElementById('btnSpinner').classList.add('hidden');
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('charCount').textContent = '0';
+  document.getElementById('fileName').classList.add('hidden');
+  starVal = 0;
+}
+
+// ── MOBILE MENU FALLBACK (if main.js not loaded) ──────────────────────────────
+function toggleMenu() {
+  const m = document.getElementById('mobileMenu'), ov = document.getElementById('overlay');
+  const open = m.style.transform === 'translateX(0%)';
+  m.style.display = 'flex';
+  m.style.transform = open ? 'translateX(100%)' : 'translateX(0%)';
+  ov.style.opacity = open ? '0' : '1';
+  ov.style.pointerEvents = open ? 'none' : 'auto';
+}
+function closeAll() {
+  const m = document.getElementById('mobileMenu'), ov = document.getElementById('overlay');
+  if (m) m.style.transform = 'translateX(100%)';
+  if (ov) { ov.style.opacity = '0'; ov.style.pointerEvents = 'none'; }
+}
+</script>
+</body>
+</html>

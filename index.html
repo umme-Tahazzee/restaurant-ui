@@ -58,14 +58,14 @@
   </div>
   <div class="gold-line h-[1px] w-full mb-8"></div>
   <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="#" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+    <li><a href="/" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
     <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
     <li><a href="/about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-    <li><a href="#reservation" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="#contact" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+    <li><a href="/reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+    <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
   </ul>
   <div class="mt-auto space-y-3">
-    <a href="#reservation" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
+    <a href="/reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
       <i class="fa-regular fa-calendar-check"></i> Book a Table
     </a>
     <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
@@ -238,16 +238,19 @@
         <li><a href="#" class="nav-link transition">Home</a></li>
         <li><a href="menu.html" class="nav-link transition">Menu</a></li>
         <li><a href="/about.html" class="nav-link transition">About</a></li>
-        <li><a href="#reservation" class="nav-link transition">Reserve</a></li>
-        <li><a href="#contact" class="nav-link transition">Contact</a></li>
+        <li><a href="/reserve.html" class="nav-link transition">Reserve</a></li>
+        <li><a href="/contact.html" class="nav-link transition">Contact</a></li>
       </ul>
       <div class="flex items-center gap-2 sm:gap-3">
         <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
           <i class="fa-solid fa-bag-shopping text-[15px]"></i>
           <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
         </button>
-        <button class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
-          <i class="fa-regular fa-circle-user"></i> Login
+        <button class="hidden md:flex items-center gap-1.5 text-[11px]
+         font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold
+          transition pl-3 border-l border-borderSoft ml-1">
+          <i class="fa-regular fa-circle-user"></i> 
+          <a href="/login.html" >Login</a>
         </button>
         <a href="#reservation" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
           <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
@@ -282,7 +285,7 @@
           <a href="menu.html" class="book-btn text-white px-8 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase inline-flex items-center gap-2">
             <i class="fa-solid fa-utensils text-[10px]"></i> Explore Menu
           </a>
-          <a href="#reservation" class="border border-textDark/20 text-textDark px-8 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition">
+          <a href="/reserve.html" class="border border-textDark/20 text-textDark px-8 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition">
             Reserve a Table
           </a>
         </div>
@@ -683,7 +686,9 @@
     <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
   </div>
   <div class="nav-item" onclick="setActive(this)">
-    <i class="fa-regular fa-circle-user"></i><span>Profile</span>
+    <i class="fa-regular fa-circle-user"></i><span>
+       <a href="/login.html" >Profile</a>
+    </span>
   </div>
 </nav> 
     <script src="static/js/main.js"></script>
