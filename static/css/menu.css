@@ -1,0 +1,98 @@
+
+   
+   
+    /* FILTER TABS */
+    .filter-tab { padding: 10px 22px; border-radius: 100px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; cursor: pointer; transition: all 0.25s ease; border: 1.5px solid #e8ddd8; color: #4a3830; white-space: nowrap; }
+    .filter-tab:hover { border-color: var(--red); color: var(--red); }
+    .filter-tab.active { background: linear-gradient(135deg, #c0392b, #96281b); color: white; border-color: transparent; box-shadow: 0 4px 16px rgba(192,57,43,0.3); }
+
+    /* MENU DISH CARD */
+    .menu-card { background:#fff; border-radius:20px; border:1px solid #efe8e2; overflow:hidden; transition:transform 0.35s cubic-bezier(0.34,1.3,0.64,1), box-shadow 0.3s ease; cursor:pointer; }
+    .menu-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(0,0,0,0.09); }
+    .menu-card img { transition: transform 0.6s ease; }
+    .menu-card:hover img { transform: scale(1.07); }
+    .menu-card .add-btn { width:36px; height:36px; background:var(--red); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:18px; transition:transform 0.2s ease, background 0.2s ease; flex-shrink:0; }
+    .menu-card:hover .add-btn { transform:scale(1.12); background:#96281b; }
+
+    /* FEATURED STRIP */
+    .chef-strip { background:linear-gradient(135deg, #1a1210 0%, #2d1e18 100%); border-radius:20px; position:relative; overflow:hidden; }
+    .chef-strip::before { content:''; position:absolute; top:-60px; right:-60px; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle, rgba(184,150,62,0.15) 0%, transparent 70%); }
+
+    /* RATING */
+    .rating-badge { background:rgba(184,150,62,0.12); border-radius:8px; padding:3px 8px; font-size:10px; font-weight:700; color:var(--gold); display:inline-flex; align-items:center; gap:3px; }
+
+    /* TAG */
+    .tag { display:inline-block; padding:3px 10px; border-radius:100px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; }
+    .tag-red { background:#fdf0ee; color:#c0392b; }
+    .tag-gold { background:rgba(184,150,62,0.1); color:#b8963e; }
+    .tag-dark { background:rgba(255,255,255,0.12); color:rgba(255,255,255,0.8); }
+    .tag-veg { background: #edf7f0; color: #2d7a47; }
+
+    /* FOOTER */
+    .footer-bg { background: linear-gradient(160deg, #1a1210 0%, #2a1a14 100%); }
+
+   
+    /* MOBILE CARD */
+    .m-card { background:white; border-radius:16px; border:1px solid #f0e8e4; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.05); cursor:pointer; transition:transform 0.2s ease; }
+    .m-card:active { transform:scale(0.97); }
+
+    /* STICKY FILTER BAR */
+    .sticky-filter { position: sticky; top: 76px; z-index: 100; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid #e8ddd8; }
+
+    /* SECTION DIVIDER */
+    .menu-section-divider { display:flex; align-items:center; gap:16px; margin-bottom: 28px; }
+    .menu-section-divider h3 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: #1a1210; white-space: nowrap; }
+    .menu-section-divider::after { content:''; flex:1; height:1px; background:#e8ddd8; }
+
+    /* ANIMATIONS */
+    @keyframes fadeSlideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .anim-1{animation:fadeSlideUp 0.5s ease 0.05s both}
+    .anim-2{animation:fadeSlideUp 0.5s ease 0.15s both}
+    .anim-3{animation:fadeSlideUp 0.5s ease 0.25s both}
+    .anim-4{animation:fadeSlideUp 0.5s ease 0.35s both}
+
+    /* CART PANEL */
+    .book-btn { background: linear-gradient(135deg, #c0392b, #96281b); }
+    .book-btn:hover { background: linear-gradient(135deg, #96281b, #7a1f14); }
+
+    @media (max-width: 767px) { main { padding-bottom: 80px; } }
+
+    /* QUICK VIEW MODAL */
+    .quick-modal { position:fixed; inset:0; z-index:1300; display:flex; align-items:flex-end; justify-content:center; pointer-events:none; }
+    .quick-modal.open { pointer-events:all; }
+    .quick-modal-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(2px); opacity:0; transition:opacity 0.3s ease; }
+    .quick-modal.open .quick-modal-backdrop { opacity:1; }
+    .quick-modal-panel { position:relative; z-index:1; background:white; border-radius:24px 24px 0 0; width:100%; max-width:520px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.4,0,0.2,1); max-height:90vh; overflow-y:auto; }
+    .quick-modal.open .quick-modal-panel { transform:translateY(0); }
+
+    /* Desktop modal */
+    @media (min-width: 768px) {
+      .quick-modal { align-items:center; }
+      .quick-modal-panel { border-radius:24px; width:480px; transform:scale(0.9) translateY(20px); max-height:80vh; }
+      .quick-modal.open .quick-modal-panel { transform:scale(1) translateY(0); }
+    }
+
+    /* SPICE INDICATOR */
+    .spice-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+    .spice-mild { background:#f0a500; }
+    .spice-medium { background:#e56600; }
+    .spice-hot { background:#c0392b; }
+
+    /* ALLERGEN TAG */
+    .allergen { font-size:9px; padding:2px 8px; border-radius:100px; background:#f5f0eb; color:#4a3830; font-weight:600; }
+
+    /* MOBILE FILTER PILL */
+    .m-filter { padding:8px 16px; border-radius:100px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; cursor:pointer; transition:all 0.2s ease; border:1.5px solid #e8ddd8; color:#4a3830; white-space:nowrap; flex-shrink:0; }
+    .m-filter.active { background:linear-gradient(135deg,#c0392b,#96281b); color:white; border-color:transparent; }
+
+    /* CART PANEL (reused from home) */
+    #cartModal { position:fixed; inset:0; z-index:1200; pointer-events:none; }
+    #cartBackdrop { position:absolute; inset:0; background:rgba(0,0,0,0.4); backdrop-filter:blur(2px); opacity:0; transition:opacity 0.3s; }
+    #cartPanel { position:absolute; background:white; display:flex; flex-direction:column;
+                 bottom:0; left:0; right:0; height:95vh; border-radius:24px 24px 0 0;
+                 transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+                 box-shadow:-8px 0 40px rgba(0,0,0,0.12); }
+    @media(min-width:768px){
+      #cartPanel { top:0; right:0; left:auto; bottom:auto; height:100%; width:460px; border-radius:0; transform:translateX(100%); }
+      #cartBackdrop { display:block; }
+    }
