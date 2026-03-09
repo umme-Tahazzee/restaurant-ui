@@ -36,7 +36,7 @@
 <!-- ═══ OVERLAY ═══ -->
 <div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]" onclick="closeAll()"></div>
 
-<!-- ═══ MOBILE MENU ═══ -->
+<!-- ═══════════ MOBILE MENU ═══════════ -->
 <div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex-col p-10 hidden" style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
   <div class="flex justify-between items-center mb-10">
     <div>
@@ -47,14 +47,14 @@
   </div>
   <div class="gold-line h-[1px] w-full mb-8"></div>
   <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+    <li><a href="/" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
     <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-redPrimary">About</a></li>
-    <li><a href="#" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="#" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+    <li><a href="/about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+    <li><a href="/reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+    <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
   </ul>
   <div class="mt-auto space-y-3">
-    <a href="#" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
+    <a href="/reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
       <i class="fa-regular fa-calendar-check"></i> Book a Table
     </a>
     <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
@@ -137,37 +137,49 @@
   </div>
 </div>
 
-<!-- ═══ NAVBAR ═══ -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300" style="background:rgba(255,255,255,0)">
-  <div class="gold-line h-[2px] w-full"></div>
-  <div class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14">
-    <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
-      <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-      <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
-    </a>
-    <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
-      <li><a href="index.html" class="nav-link transition">Home</a></li>
-      <li><a href="menu.html" class="nav-link transition">Menu</a></li>
-      <li><a href="about.html" class="nav-link active-link transition">About</a></li>
-      <li><a href="#" class="nav-link transition">Reserve</a></li>
-      <li><a href="#contact" class="nav-link transition">Contact</a></li>
-    </ul>
-    <div class="flex items-center gap-2 sm:gap-3">
-      <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
-        <i class="fa-solid fa-bag-shopping text-[15px]"></i>
-        <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
-      </button>
-      <button class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1"><i class="fa-regular fa-circle-user"></i> Login</button>
-      <a href="#" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1"><i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table</a>
-      <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
-        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-        <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
-      </button>
+<!-- ═══════════ NAVBAR ═══════════ -->
+<div id="pageContent">
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
+   style="background:rgba(255,255,255,0)">
+ 
+    <div id="navInner" class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
+      <a href="#" class="flex flex-col leading-none group flex-shrink-0">
+        <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
+          Sav<span class="italic font-light text-redPrimary">o</span>ria
+        </span>
+        <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
+        <li><a href="#" class="nav-link transition">Home</a></li>
+        <li><a href="menu.html" class="nav-link transition">Menu</a></li>
+        <li><a href="/about.html" class="nav-link transition">About</a></li>
+        <li><a href="/reserve.html" class="nav-link transition">Reserve</a></li>
+        <li><a href="/contact.html" class="nav-link transition">Contact</a></li>
+      </ul>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
+       <i class="fa-solid fa-cart-shopping text-[20px] "></i>
+          <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
+        </button>
+        <button class="hidden md:flex items-center gap-1.5 text-[11px]
+         font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold
+          transition pl-3 border-l border-borderSoft ml-1">
+          <i class="fa-regular fa-circle-user"></i> 
+          <a href="/login.html" >Login</a>
+        </button>
+        <a href="/reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
+          <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
+        </a>
+        <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
+          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+          <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="h-px bg-borderSoft/80"></div>
-</nav>
+    <div class="h-px bg-borderSoft/80"></div>
+  </nav>
+</div>
 
 <main>
 
@@ -603,24 +615,20 @@
   <!-- ══════════════════════════════════════
        CTA — RESERVATION
   ══════════════════════════════════════ -->
-  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-12 reveal">
-    <div class="dark-strip rounded-2xl p-8 md:p-14 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-      <div class="relative z-10">
-        <span class="tag tag-dark mb-4 inline-block">Join Us</span>
-        <h2 class="font-playfair text-3xl md:text-4xl font-black text-white leading-tight mb-3">Be Part of the<br/><em class="text-gold" style="font-style:italic">Savoria Story</em></h2>
-        <p class="font-cormorant italic text-white/55 text-lg">Mon–Sun · 12pm–11pm &nbsp;·&nbsp; +1 (555) 920-4200</p>
+
+  <section id="reservation" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-16 mb-10">
+    <div class="bg-cream rounded-2xl p-12 lg:p-16 flex items-center justify-between gap-8 border border-borderSoft">
+      <div>
+        <div class="section-label mb-4">Book Your Experience</div>
+        <h2 class="font-playfair text-4xl font-black text-textDark mb-3">Reserve Your Table<br/>for Tonight</h2>
+        <p class="font-cormorant italic text-textMid/60 text-lg">Open Monday to Sunday · 12:00pm – 11:00pm<br/>+1 (555) 920-4200</p>
       </div>
-      <div class="flex flex-col sm:flex-row gap-3 flex-shrink-0 relative z-10 w-full md:w-auto">
-        <a href="#" class="book-btn text-white px-8 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center">
-          <i class="fa-regular fa-calendar-check"></i> Reserve a Table
-        </a>
-        <a href="menu.html" class="border border-white/20 text-white px-8 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center flex items-center justify-center gap-2">
-          <i class="fa-solid fa-utensils text-[10px]"></i> View Menu
-        </a>
+      <div class="flex flex-col gap-3 flex-shrink-0">
+        <a href="/reserve.html" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center"><i class="fa-regular fa-calendar-check"></i> Book Online</a>
+        <a href="tel:+15559204200" class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center"><i class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us</a>
       </div>
     </div>
   </section>
-
   <!-- ══════════════════════════════════════
        FOOTER
   ══════════════════════════════════════ -->

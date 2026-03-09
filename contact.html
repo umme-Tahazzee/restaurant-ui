@@ -203,12 +203,12 @@
   <div class="gold-line h-px mb-8 opacity-40"></div>
   <ul class="flex flex-col gap-1 flex-1">
     <li><a href="index.html"             onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
-    <li><a href="category.html"          onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="index.html#reservation" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+    <li><a href="menu.html"          onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
+    <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
     <li><a href="contact.html"           onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-redPrimary">Contact</a></li>
   </ul>
   <div class="mt-auto">
-    <a href="index.html#reservation" onclick="toggleMenu()"
+    <a href="/reserve.html" onclick="toggleMenu()"
        class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[.2em] transition">
       <i class="fa-regular fa-calendar-check"></i> Book a Table
     </a>
@@ -229,8 +229,10 @@
     <!-- desktop links -->
     <ul class="hidden md:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[.15em] text-textMid">
       <li><a href="index.html"             class="nav-link transition">Home</a></li>
-      <li><a href="category.html"          class="nav-link transition">Menu</a></li>
-      <li><a href="index.html#reservation" class="nav-link transition">Reserve</a></li>
+      
+      <li><a href="menu.html"          class="nav-link transition">Menu</a></li>
+      <li><a href="about.html"             class="nav-link transition">About</a></li>
+      <li><a href="reserve.html" class="nav-link transition">Reserve</a></li>
       <li><a href="contact.html"           class="nav-link active-link">Contact</a></li>
     </ul>
 
@@ -239,7 +241,7 @@
       <a href="login.html" class="hidden md:flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.12em] text-textMid hover:text-gold transition border-l border-borderSoft pl-4">
         <i class="fa-regular fa-circle-user"></i> Login
       </a>
-      <a href="index.html#reservation"
+      <a href="/reserve.html"
          class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[.18em] uppercase transition">
         <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
       </a>
@@ -337,7 +339,7 @@
             </div>
           </div>
 
-          <a href="index.html#reservation"
+          <a href="/reserve.html"
              class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded-xl text-[11px] font-bold uppercase tracking-[.18em] transition">
             <i class="fa-regular fa-calendar-check text-[10px]"></i>Book a Table
           </a>
@@ -544,7 +546,7 @@
             <span class="font-medium text-textDark text-sm flex-1">hello@savoria.com</span>
             <i class="fa-solid fa-chevron-right text-[10px] text-textMid/20"></i>
           </a>
-          <a href="index.html#reservation" class="q-action">
+          <a href="/reserve.html" class="q-action">
             <div class="q-icon"><i class="fa-regular fa-calendar-check text-sm" style="color:var(--red)"></i></div>
             <span class="font-medium text-textDark text-sm flex-1">Book a Table Online</span>
             <i class="fa-solid fa-chevron-right text-[10px] text-textMid/20"></i>
@@ -579,7 +581,7 @@
         </p>
       </div>
       <div class="flex flex-col gap-3 flex-shrink-0 relative z-10 w-full md:w-auto">
-        <a href="index.html#reservation"
+        <a href="reserve.html"
            class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[.2em] uppercase flex items-center gap-2 justify-center transition">
           <i class="fa-regular fa-calendar-check"></i>Book Online
         </a>

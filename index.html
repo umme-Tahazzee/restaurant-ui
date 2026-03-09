@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Savoria — Fine Dining Experience</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
+
+
   <link rel="stylesheet" href="static/css/style.css">
   <script>
     tailwind.config = {
@@ -65,7 +68,7 @@
     <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
   </ul>
   <div class="mt-auto space-y-3">
-    <a href="/reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
+    <a href="reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
       <i class="fa-regular fa-calendar-check"></i> Book a Table
     </a>
     <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
@@ -242,8 +245,9 @@
         <li><a href="/contact.html" class="nav-link transition">Contact</a></li>
       </ul>
       <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
-          <i class="fa-solid fa-bag-shopping text-[15px]"></i>
+        <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center
+         rounded-full  text-textMid hover:text-redPrimary transition p-2">
+         <i class="fa-solid fa-cart-shopping text-[20px] "></i>
           <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
         </button>
         <button class="hidden md:flex items-center gap-1.5 text-[11px]
@@ -252,7 +256,7 @@
           <i class="fa-regular fa-circle-user"></i> 
           <a href="/login.html" >Login</a>
         </button>
-        <a href="#reservation" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
+        <a href="/reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
           <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
         </a>
         <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
@@ -612,7 +616,7 @@
         <p class="font-cormorant italic text-textMid/60 text-lg">Open Monday to Sunday · 12:00pm – 11:00pm<br/>+1 (555) 920-4200</p>
       </div>
       <div class="flex flex-col gap-3 flex-shrink-0">
-        <a href="#" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center"><i class="fa-regular fa-calendar-check"></i> Book Online</a>
+        <a href="/reserve.html" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center"><i class="fa-regular fa-calendar-check"></i> Book Online</a>
         <a href="tel:+15559204200" class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center"><i class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us</a>
       </div>
     </div>
@@ -676,6 +680,7 @@
   <div class="nav-item" onclick="location.href='menu.html'">
     <i class="fa-solid fa-utensils"></i><span>Menu</span>
   </div>
+  
   <div onclick="toggleCart()">
     <div class="cart-fab">
       <i class="fa-solid fa-bag-shopping text-lg"></i>
@@ -691,6 +696,9 @@
     </span>
   </div>
 </nav> 
+
+
+
     <script src="static/js/main.js"></script>
 </body>
 </html>
