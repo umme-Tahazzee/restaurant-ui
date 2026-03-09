@@ -289,7 +289,8 @@
         <!-- Mobile: horizontal scroll -->
         <div class="flex lg:flex-col p-2 gap-1 overflow-x-auto scroll-hide">
           <div class="profile-tab active" id="tab-orders" onclick="showTab('orders')">
-            <i class="fa-solid fa-receipt"></i><span class="hidden sm:inline">Order History</span><span class="sm:hidden">Orders</span>
+            <i class="fa-solid fa-receipt"></i><span class="hidden sm:inline">Order History</span>
+            <span class="sm:hidden">Orders</span>
           </div>
           <div class="profile-tab" id="tab-wishlist" onclick="showTab('wishlist')">
             <i class="fa-regular fa-heart"></i><span class="hidden sm:inline">Wishlist</span><span class="sm:hidden">Saved</span>
@@ -323,7 +324,14 @@
       <!-- ──────── ORDERS ──────── -->
       <div id="panel-orders" class="panel">
         <div class="section-label mb-4">Order History</div>
-        <h2 class="font-playfair text-2xl font-black text-textDark mb-6">Recent Orders</h2>
+        <div class="flex justify-between">
+            <h2 class="font-playfair text-2xl font-black text-textDark mb-6">Recent Orders</h2>
+
+        <a href="order.html" 
+   class="text-[10px] font-bold text-gold uppercase tracking-widest hover:underline">
+  Track Order
+</a>
+        </div>
         <div class="space-y-4" id="orderList">
           <!-- filled by JS -->
         </div>
