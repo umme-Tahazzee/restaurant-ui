@@ -3,179 +3,248 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Savoria — Category</title>
+  <title>Thai Cuisine — Savoria Fine Dining</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="static/css/style.css">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            redPrimary:"#c0392b",redDeep:"#96281b",redPale:"#fdf0ee",
-            cream:"#f5f0eb",textDark:"#1a1210",textMid:"#4a3830",
-            borderSoft:"#e8ddd8",gold:"#b8963e",goldLight:"#d4af6a",
+            redPrimary: "#c0392b", redDeep: "#96281b", redPale: "#fdf0ee",
+            cream: "#f5f0eb", textDark: "#1a1210", textMid: "#4a3830",
+            borderSoft: "#e8ddd8", gold: "#b8963e", goldLight: "#d4af6a",
           },
           fontFamily: {
-            playfair:["Playfair Display","serif"],
-            jost:["Jost","sans-serif"],
-            cormorant:["Cormorant Garamond","serif"],
-          },
-          animation: {
-            fadeIn:"fadeIn 0.4s ease forwards",
-            slideUp:"slideUp 0.6s cubic-bezier(.4,0,.2,1) forwards",
-            slideLeft:"slideLeft 0.4s cubic-bezier(.4,0,.2,1) forwards",
-            slideRight:"slideRight 0.4s cubic-bezier(.4,0,.2,1) forwards",
-          },
-          keyframes: {
-            fadeIn:{"0%":{opacity:0},"100%":{opacity:1}},
-            slideUp:{"0%":{opacity:0,transform:"translateY(20px)"},"100%":{opacity:1,transform:"translateY(0)"}},
-            slideLeft:{"0%":{transform:"translateX(100%)"},"100%":{transform:"translateX(0)"}},
-            slideRight:{"0%":{transform:"translateX(0)"},"100%":{transform:"translateX(100%)"}},
+            playfair: ["Playfair Display", "serif"],
+            jost: ["Jost", "sans-serif"],
+            cormorant: ["Cormorant Garamond", "serif"],
           },
         },
       },
     };
   </script>
   <style>
-    :root {
-      --red:#c0392b; --gold:#b8963e; --cream:#f5f0eb;
-      --dark:#1a1210; --mid:#4a3830; --border:#e8ddd8;
-    }
-    /* ── shared from style.css ── */
-    .gold-line{background:linear-gradient(90deg,transparent,#b8963e,transparent);}
-    .scroll-hide{scrollbar-width:none;-ms-overflow-style:none;}
-    .scroll-hide::-webkit-scrollbar{display:none;}
-    .book-btn{background:linear-gradient(135deg,#c0392b,#96281b);transition:opacity .2s,transform .15s;}
-    .book-btn:hover{opacity:.88;transform:translateY(-1px);}
-    .nav-link{position:relative;padding-bottom:4px;}
-    .nav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--red);transition:width .3s;}
-    .nav-link:hover::after,.nav-link.active-link::after{width:100%;}
-    .section-label{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--mid);}
-    .section-label::before{content:'';width:24px;height:1.5px;background:var(--gold);flex-shrink:0;}
-    .tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
-    .tag-red{background:#fdf0ee;color:#c0392b;}
-    .tag-gold{background:rgba(184,150,62,.12);color:#b8963e;border:1px solid rgba(184,150,62,.25);}
-    .tag-dark{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);}
-    .tag-veg{background:#edf7ed;color:#2e7d32;}
-    .rating-badge{display:inline-flex;align-items:center;gap:4px;background:#fffbf0;border:1px solid rgba(184,150,62,.3);color:#b8963e;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;}
-    .footer-bg{background:linear-gradient(160deg,#1a1210 0%,#2a1c18 100%);}
-    .mobile-bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:900;box-shadow:0 -4px 20px rgba(0,0,0,.06);}
-    .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9a8880;cursor:pointer;transition:color .2s;padding:2px 0;}
-    .nav-item i{font-size:16px;}
-    .nav-item.active,.nav-item:hover{color:var(--red);}
-    .cart-fab{width:50px;height:50px;background:linear-gradient(135deg,#c0392b,#96281b);border-radius:16px;display:flex;align-items:center;justify-center:center;color:#fff;cursor:pointer;margin:-16px auto 0;box-shadow:0 8px 24px rgba(192,57,43,.4);position:relative;transition:transform .2s;display:flex;align-items:center;justify-content:center;}
-    .cart-fab:hover{transform:scale(1.05);}
-    .badge{position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:#b8963e;color:#fff;font-size:9px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
-    .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
-    .reveal.visible{opacity:1;transform:translateY(0);}
-    @keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-    .anim-1{animation:fadeSlideUp .6s .05s ease both;}
-    .anim-2{animation:fadeSlideUp .6s .15s ease both;}
-    .anim-3{animation:fadeSlideUp .6s .25s ease both;}
-    .anim-4{animation:fadeSlideUp .6s .35s ease both;}
-    .anim-5{animation:fadeSlideUp .6s .45s ease both;}
-    @keyframes toastIn{0%{opacity:0;transform:translateY(20px);}15%{opacity:1;transform:translateY(0);}85%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(20px);}}
-    .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1210;color:#fff;padding:10px 20px;border-radius:999px;font-size:12px;font-weight:600;z-index:9999;animation:toastIn 2.2s ease forwards;white-space:nowrap;pointer-events:none;}
+    /* ── Base ── */
+    * { box-sizing: border-box; }
+    body { font-family: "Jost", sans-serif; background: #fff; color: #1a1210; overflow-x: hidden; }
 
-    /* ── Category page specific ── */
-    .cat-hero{
-      background:linear-gradient(135deg,#1a1210 0%,#2d1a14 50%,#1a1210 100%);
-      position:relative; overflow:hidden;
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f5f0eb; }
+    ::-webkit-scrollbar-thumb { background: #e8ddd8; border-radius: 3px; }
+
+    /* ── Gold gradient line ── */
+    .gold-line { background: linear-gradient(90deg, transparent, #b8963e 40%, #d4af6a 60%, transparent); }
+
+    /* ── Section label ── */
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.3em;
+      text-transform: uppercase; color: #b8963e;
     }
-    .cat-hero::before{
-      content:''; position:absolute; inset:0;
-      background:radial-gradient(ellipse 80% 60% at 70% 50%,rgba(192,57,43,.18) 0%,transparent 70%),
-                radial-gradient(ellipse 40% 40% at 20% 80%,rgba(184,150,62,.1) 0%,transparent 60%);
-    }
-    .cat-hero-grid{
-      position:absolute; inset:0;
-      background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
-                       linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
-      background-size:60px 60px;
+    .section-label::before {
+      content: ""; width: 24px; height: 1px;
+      background: linear-gradient(90deg, #b8963e, #d4af6a);
     }
 
-    /* filter pill */
-    .filter-pill{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:8px 18px; border-radius:999px; font-size:11px; font-weight:700;
-      letter-spacing:.1em; text-transform:uppercase; cursor:pointer;
-      border:1.5px solid var(--border); color:var(--mid);
-      background:#fff; transition:all .2s; white-space:nowrap;
+    /* ── Navbar ── */
+    #navbar { transition: background 0.3s, box-shadow 0.3s; }
+    #navbar.scrolled { background: rgba(255,255,255,0.97) !important; box-shadow: 0 1px 20px rgba(0,0,0,0.06); }
+    .nav-link { position: relative; padding-bottom: 2px; }
+    .nav-link::after { content: ""; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: #c0392b; transition: width 0.3s; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+    /* ── Book btn ── */
+    .book-btn {
+      background: linear-gradient(135deg, #c0392b 0%, #96281b 100%);
+      transition: opacity 0.2s, transform 0.2s;
     }
-    .filter-pill:hover,.filter-pill.active{
-      background:var(--red); color:#fff; border-color:var(--red);
+    .book-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ── Hero banner ── */
+    .cat-hero {
+      position: relative;
+      background: linear-gradient(135deg, #1a0f0d 0%, #2d1410 50%, #1a0f0d 100%);
+      overflow: hidden;
+    }
+    .cat-hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: url("./assests/thai.png") center/cover no-repeat;
+      opacity: 0.25;
+    }
+    .cat-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(26,9,7,0.85) 0%, rgba(26,9,7,0.5) 60%, rgba(192,57,43,0.15) 100%);
     }
 
-    /* dish card */
-    .d-card{
-      background:#fff; border-radius:20px; overflow:hidden;
-      border:1px solid var(--border);
-      transition:transform .25s,box-shadow .25s;
-      cursor:pointer;
+    /* ── Category tabs ── */
+    .cat-tab {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 50px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; border: 1.5px solid #e8ddd8;
+      color: #4a3830; background: #fff; cursor: pointer;
+      transition: all 0.25s; white-space: nowrap;
     }
-    .d-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(26,18,16,.1);}
-    .d-card-img{position:relative; overflow:hidden; height:200px;}
-    .d-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
-    .d-card:hover .d-card-img img{transform:scale(1.06);}
-    .d-card-body{padding:16px 18px 18px;}
-
-    /* heart btn */
-    .heart-btn{
-      position:absolute; top:12px; right:12px;
-      width:34px;height:34px; border-radius:50%;
-      background:rgba(255,255,255,.9);backdrop-filter:blur(4px);
-      border:none; cursor:pointer; display:flex; align-items:center;justify-content:center;
-      font-size:14px; color:#ccc; transition:color .2s,transform .15s;
-      z-index:2;
+    .cat-tab:hover { border-color: #c0392b; color: #c0392b; }
+    .cat-tab.active {
+      background: linear-gradient(135deg, #c0392b, #96281b);
+      border-color: transparent; color: #fff;
+      box-shadow: 0 4px 14px rgba(192,57,43,0.3);
     }
-    .heart-btn.active,.heart-btn:hover{color:#e74c3c;}
-    .heart-btn.active i{font-weight:900;}
-    .heart-btn:active{transform:scale(.88);}
+    .cat-tab .count {
+      font-size: 9px; padding: 2px 6px; border-radius: 10px;
+      background: rgba(255,255,255,0.2); font-weight: 700;
+    }
+    .cat-tab:not(.active) .count { background: #f5f0eb; color: #b8963e; }
 
-    /* sort bar */
-    .sort-select{
-      appearance:none; background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234a3830' d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 12px center;
-      border:1.5px solid var(--border); border-radius:10px;
-      padding:8px 32px 8px 14px; font-size:11px; font-weight:600;
-      color:var(--mid); cursor:pointer; outline:none;
+    /* ── Filter bar ── */
+    .filter-pill {
+      padding: 6px 14px; border-radius: 50px; font-size: 10px;
+      font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      border: 1.5px solid #e8ddd8; color: #4a3830; background: #fff;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .filter-pill:hover, .filter-pill.active { border-color: #b8963e; color: #b8963e; background: #fdf8f0; }
+
+    /* ── Sort select ── */
+    .sort-select {
+      appearance: none; background: #fff; border: 1.5px solid #e8ddd8;
+      padding: 8px 32px 8px 12px; border-radius: 50px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #4a3830; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a3830'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+      transition: border-color 0.2s;
+    }
+    .sort-select:hover { border-color: #b8963e; }
+    .sort-select:focus { outline: none; border-color: #b8963e; }
+
+    /* ── Dish card ── */
+    .dish-card {
+      background: #fff; border-radius: 20px; overflow: hidden;
+      border: 1px solid #e8ddd8;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .dish-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,18,16,0.1); }
+    .dish-card .img-wrap { position: relative; overflow: hidden; }
+    .dish-card .img-wrap img { transition: transform 0.5s ease; }
+    .dish-card:hover .img-wrap img { transform: scale(1.05); }
+
+    /* ── Tag ── */
+    .tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 50px; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .tag-gold { background: rgba(184,150,62,0.15); color: #b8963e; border: 1px solid rgba(184,150,62,0.3); }
+    .tag-red { background: rgba(192,57,43,0.12); color: #c0392b; border: 1px solid rgba(192,57,43,0.2); }
+    .tag-dark { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.2); }
+    .tag-green { background: rgba(39,174,96,0.1); color: #1a8a4a; border: 1px solid rgba(39,174,96,0.25); }
+
+    /* ── Rating badge ── */
+    .rating-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 8px; border-radius: 50px; font-size: 10px; font-weight: 700;
+      background: #f5f0eb; color: #b8963e; border: 1px solid #e8ddd8;
     }
 
-    /* stars */
-    .stars{display:inline-flex;gap:1px;}
-    .stars i{font-size:10px;color:#b8963e;}
-    .stars i.empty{color:#e8ddd8;}
-
-    /* add-to-cart mini */
-    .add-btn-sm{
-      width:34px;height:34px; border-radius:50%;
-      background:linear-gradient(135deg,#c0392b,#96281b);
-      color:#fff; border:none; cursor:pointer;
-      display:flex;align-items:center;justify-content:center;
-      font-size:18px; line-height:1; transition:transform .15s,opacity .2s;
-      flex-shrink:0;
+    /* ── Add btn ── */
+    .add-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, #c0392b, #96281b);
+      color: #fff; display: flex; align-items: center; justify-center: center;
+      justify-content: center; font-size: 18px; line-height: 1;
+      border: none; cursor: pointer; flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(192,57,43,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .add-btn-sm:hover{opacity:.88;transform:scale(1.08);}
+    .add-btn:hover { transform: scale(1.1); box-shadow: 0 6px 18px rgba(192,57,43,0.45); }
 
-    /* cat breadcrumb chips */
-    .cat-chip{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:4px 14px;border-radius:999px;font-size:10px;font-weight:700;
-      letter-spacing:.12em;text-transform:uppercase;
-      background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);
-      border:1px solid rgba(255,255,255,.15);
-      text-decoration:none;transition:all .2s;
-    }
-    .cat-chip:hover{background:rgba(255,255,255,.18);color:#fff;}
+    /* ── Spice indicator ── */
+    .spice-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+    .spice-dot.on { background: #c0392b; }
+    .spice-dot.off { background: #e8ddd8; }
 
-    /* empty */
-    .empty-state{
-      padding:80px 20px; text-align:center;
-      display:none; flex-direction:column; align-items:center; gap:12px;
+    /* ── Featured wide card ── */
+    .featured-wide {
+      background: linear-gradient(135deg, #1a0f0d 0%, #2d1410 100%);
+      border-radius: 24px; overflow: hidden; position: relative;
     }
+
+    /* ── Scroll hide ── */
+    .scroll-hide { scrollbar-width: none; }
+    .scroll-hide::-webkit-scrollbar { display: none; }
+
+    /* ── Skeleton loader ── */
+    @keyframes shimmer {
+      0% { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg, #f0ebe6 25%, #faf7f4 50%, #f0ebe6 75%);
+      background-size: 800px 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+
+    /* ── Fade in animation ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.5s ease forwards; }
+    .delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .delay-4 { animation-delay: 0.4s; opacity: 0; }
+
+    /* ── Mobile bottom nav ── */
+    .mobile-bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 900;
+      background: #fff; border-top: 1px solid #e8ddd8;
+      display: flex; align-items: center; justify-content: space-around;
+      padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      font-size: 9px; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase; color: #9a8880; cursor: pointer;
+      padding: 4px 8px; transition: color 0.2s;
+    }
+    .nav-item i { font-size: 18px; }
+    .nav-item.active { color: #c0392b; }
+    .cart-fab {
+      width: 50px; height: 50px; border-radius: 50%;
+      background: linear-gradient(135deg, #c0392b, #96281b);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; box-shadow: 0 4px 16px rgba(192,57,43,0.4);
+      position: relative; margin-top: -18px; cursor: pointer;
+    }
+
+    /* ── Cart badge ── */
+    #cartBadge { display: none; }
+    #cartBadge.show { display: flex; }
+
+    /* ── Footer bg ── */
+    .footer-bg { background: linear-gradient(160deg, #1a0f0d 0%, #0f0806 100%); }
+
+    /* ── Overlay ── */
+    #overlay { transition: opacity 0.3s; }
+    #overlay.show { opacity: 1; pointer-events: all; }
+
+    /* ── Cart panel ── */
+    #cartPanel.open { transform: translateY(0) !important; }
+    @media (min-width: 768px) {
+      #cartPanel { transform: translateX(100%) !important; }
+      #cartPanel.open { transform: translateX(0) !important; }
+    }
+
+    /* ── Mobile menu ── */
+    #mobileMenu.open { transform: translateX(0) !important; display: flex !important; }
   </style>
 </head>
+
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
 
 <!-- ═══════════ OVERLAY ═══════════ -->
@@ -192,10 +261,11 @@
   </div>
   <div class="gold-line h-[1px] w-full mb-8"></div>
   <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="index.html" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
-    <li><a href="menu.html" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="about.html" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-    <li><a href="#reservation" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+    <li><a href="/" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+    <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
+    <li><a href="/about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+    <li><a href="/reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+    <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
   </ul>
 </div>
 
@@ -203,7 +273,7 @@
 <div id="cartModal" class="fixed inset-0 z-[1200] pointer-events-none">
   <div id="cartBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 transition-opacity duration-300 hidden md:block" onclick="toggleCart()"></div>
   <div id="cartPanel"
-       class="absolute bg-white flex flex-col bottom-0 left-0 right-0 h-[95vh] rounded-t-[24px] md:top-0 md:right-0 md:left-auto md:bottom-auto md:h-full md:w-[460px] md:rounded-none"
+       class="absolute bg-white flex flex-col bottom-0 left-0 right-0 h-[95vh] rounded-t-[24px] md:top-0 md:right-0 md:left-auto md:bottom-auto md:h-full md:w-[460px] md:rounded-none pointer-events-auto"
        style="transform:translateY(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); box-shadow: -8px 0 40px rgba(0,0,0,0.12);">
     <div class="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
       <div class="w-10 h-[4px] rounded-full bg-borderSoft"></div>
@@ -215,7 +285,7 @@
         </div>
         <div>
           <h2 class="font-playfair text-lg font-bold text-textDark leading-tight">Your Order</h2>
-          <p class="text-[11px] text-textMid/50 mt-0.5" id="cartSubtitle">Table 7 · Dine In</p>
+          <p class="text-[11px] text-textMid/50 mt-0.5">Table 7 · Dine In</p>
         </div>
       </div>
       <button onclick="toggleCart()" class="w-9 h-9 rounded-full border border-borderSoft text-textMid/50 hover:border-redPrimary hover:text-redPrimary transition flex items-center justify-center text-sm">
@@ -223,16 +293,6 @@
       </button>
     </div>
     <div class="flex-1 overflow-y-auto bg-white" id="cartScrollBody">
-      <div class="px-6 pt-5 pb-4">
-        <div class="flex gap-2 p-1 bg-cream rounded-xl">
-          <button id="dineBtn" onclick="setOrderType('dine')" class="flex-1 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.12em] transition-all bg-white text-textDark shadow-sm"><i class="fa-solid fa-utensils mr-1.5 text-[10px]"></i> Dine In</button>
-          <button id="takeBtn" onclick="setOrderType('take')" class="flex-1 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.12em] transition-all text-textMid/50"><i class="fa-solid fa-box mr-1.5 text-[10px]"></i> Takeout</button>
-        </div>
-      </div>
-      <div class="px-6 pb-3 flex items-center justify-between">
-        <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-textMid/40">Order Items</p>
-        <span id="itemCountBadge" class="text-[10px] font-bold text-redPrimary bg-redPale px-2 py-0.5 rounded-full">0 items</span>
-      </div>
       <div id="cartItemsContainer"></div>
       <div id="cartEmpty" class="px-6 py-12 text-center">
         <div class="text-5xl mb-4">🛒</div>
@@ -240,7 +300,7 @@
         <p class="font-cormorant italic text-textMid/50">Add dishes from the menu to get started</p>
       </div>
     </div>
-    <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 md:pb-5 flex-shrink-0" style="box-shadow:0 -4px 20px rgba(0,0,0,0.04);">
+    <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 md:pb-5 flex-shrink-0">
       <div class="space-y-2 mb-4" id="cartTotalsBlock"></div>
       <button id="cartConfirmBtn" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled>
         <i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order
@@ -251,367 +311,697 @@
 </div>
 
 <!-- ═══════════ NAVBAR ═══════════ -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300" style="background:rgba(26,18,16,0.95);backdrop-filter:blur(12px);">
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300" style="background:rgba(255,255,255,0)">
   <div id="navInner" class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
-    <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
-      <span class="font-playfair text-[26px] sm:text-[28px] font-black text-white tracking-tight group-hover:text-redPrimary transition duration-300">
+    <a href="/" class="flex flex-col leading-none group flex-shrink-0">
+      <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
         Sav<span class="italic font-light text-redPrimary">o</span>ria
       </span>
       <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
     </a>
-    <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-white/70">
-      <li><a href="index.html" class="nav-link transition hover:text-white">Home</a></li>
-      <li><a href="menu.html" class="nav-link active-link transition text-white">Menu</a></li>
-      <li><a href="about.html" class="nav-link transition hover:text-white">About</a></li>
-      <li><a href="#reservation" class="nav-link transition hover:text-white">Reserve</a></li>
+    <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
+      <li><a href="/" class="nav-link transition">Home</a></li>
+      <li><a href="menu.html" class="nav-link active transition">Menu</a></li>
+      <li><a href="/about.html" class="nav-link transition">About</a></li>
+      <li><a href="/reserve.html" class="nav-link transition">Reserve</a></li>
+      <li><a href="/contact.html" class="nav-link transition">Contact</a></li>
     </ul>
     <div class="flex items-center gap-2 sm:gap-3">
-      <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 text-white/70 hover:text-white transition">
-     <i class="fa-solid fa-cart-shopping text-[20px] "></i>
+      <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full text-textMid hover:text-redPrimary transition p-2">
+        <i class="fa-solid fa-cart-shopping text-[20px]"></i>
         <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
       </button>
-      <a href="#reservation" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
+      <button class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
+        <i class="fa-regular fa-circle-user"></i>
+        <a href="/login.html">Login</a>
+      </button>
+      <a href="/reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
         <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
       </a>
-      <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-white/10 transition">
-        <span class="w-[18px] h-[1.5px] bg-white block rounded-full"></span>
-        <span class="w-[18px] h-[1.5px] bg-white block rounded-full"></span>
-        <span class="w-[12px] h-[1.5px] bg-white block rounded-full self-start ml-[3px]"></span>
+      <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
+        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+        <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
       </button>
     </div>
   </div>
-  <div class="h-px bg-white/10"></div>
+  <div class="h-px bg-borderSoft/80"></div>
 </nav>
 
-<!-- ═══════════ CATEGORY HERO ═══════════ -->
-<section class="cat-hero pt-[76px]">
-  <div class="cat-hero-grid"></div>
-  <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-14 lg:py-20">
-    <!-- Breadcrumb -->
-    <div class="flex items-center gap-2 mb-8 anim-1">
-      <a href="index.html" class="cat-chip"><i class="fa-solid fa-house text-[9px]"></i> Home</a>
-      <i class="fa-solid fa-chevron-right text-white/30 text-[9px]"></i>
-      <a href="menu.html" class="cat-chip"><i class="fa-solid fa-utensils text-[9px]"></i> Menu</a>
-      <i class="fa-solid fa-chevron-right text-white/30 text-[9px]"></i>
-      <span class="cat-chip" style="background:rgba(192,57,43,.3);color:#fff;border-color:rgba(192,57,43,.4);" id="breadcrumbCat">Thai</span>
-    </div>
+<main class="pt-[76px]">
 
-    <div class="grid md:grid-cols-2 gap-10 items-center">
-      <div class="anim-2">
-        <div class="section-label mb-4" style="color:rgba(184,150,62,.8);">
-          <span style="background:#b8963e;"></span>
-          <span id="heroSubLabel">Authentic Flavors</span>
+  <!-- ══════════ HERO BANNER ══════════ -->
+  <section class="cat-hero min-h-[340px] md:min-h-[420px] flex items-end">
+    <div class="cat-hero-overlay"></div>
+    <div class="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 pb-10 md:pb-14 pt-16">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-6 fade-up">
+        <a href="/" class="hover:text-gold transition">Home</a>
+        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+        <a href="menu.html" class="hover:text-gold transition">Menu</a>
+        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+        <span class="text-gold" id="heroCategoryName">Thai</span>
+      </nav>
+
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div class="fade-up delay-1">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="tag tag-gold" id="heroDishCount">12 Dishes</span>
+            <span class="tag tag-dark"><i class="fa-solid fa-star text-[8px] text-gold mr-0.5"></i> 4.8 Avg</span>
+          </div>
+          <h1 class="font-playfair text-4xl md:text-6xl font-black text-white leading-tight" id="heroCategoryTitle">
+            Thai Cuisine
+          </h1>
+          <p class="font-cormorant italic text-white/50 text-lg md:text-xl mt-2 tracking-wide" id="heroCategoryDesc">
+            Vibrant flavors from Southeast Asia — aromatic herbs, bold spices & silky broths
+          </p>
         </div>
-        <h1 id="heroTitle" class="font-playfair text-5xl lg:text-7xl font-black text-white leading-[1.05] mb-5">
-          Thai <em class="text-redPrimary" style="font-style:italic">Cuisine</em>
-        </h1>
-        <p id="heroDesc" class="font-cormorant italic text-xl text-white/50 tracking-wide leading-relaxed mb-8">
-          Journey through the vibrant streets of Bangkok with fragrant herbs, bold spices, and centuries-old recipes reimagined by Chef Marco.
-        </p>
-        <div class="flex items-center gap-6">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center"><i class="fa-solid fa-utensils text-gold text-xs"></i></div>
-            <div><p class="text-white text-sm font-bold" id="dishCount">12</p><p class="text-white/40 text-[10px]">Dishes</p></div>
+
+        <!-- Stats row -->
+        <div class="flex items-center gap-5 fade-up delay-2">
+          <div class="text-center">
+            <p class="font-playfair text-2xl font-black text-white">12</p>
+            <p class="text-[9px] uppercase tracking-[0.2em] text-white/40 font-semibold mt-0.5">Dishes</p>
           </div>
           <div class="w-px h-8 bg-white/10"></div>
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center"><i class="fa-solid fa-star text-gold text-xs"></i></div>
-            <div><p class="text-white text-sm font-bold">4.8</p><p class="text-white/40 text-[10px]">Avg Rating</p></div>
+          <div class="text-center">
+            <p class="font-playfair text-2xl font-black text-white">$14</p>
+            <p class="text-[9px] uppercase tracking-[0.2em] text-white/40 font-semibold mt-0.5">From</p>
           </div>
           <div class="w-px h-8 bg-white/10"></div>
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center"><i class="fa-solid fa-fire text-gold text-xs"></i></div>
-            <div><p class="text-white text-sm font-bold">Most Ordered</p><p class="text-white/40 text-[10px]">This week</p></div>
+          <div class="text-center">
+            <p class="font-playfair text-2xl font-black text-gold">★ 4.8</p>
+            <p class="text-[9px] uppercase tracking-[0.2em] text-white/40 font-semibold mt-0.5">Rated</p>
           </div>
         </div>
       </div>
-
-      <!-- Hero image mosaic -->
-      <div class="hidden md:grid grid-cols-3 gap-2.5 anim-3" style="height:280px;">
-        <div class="rounded-2xl overflow-hidden row-span-2"><img src="./assests/thai.png" alt="" class="w-full h-full object-cover opacity-80"/></div>
-        <div class="rounded-2xl overflow-hidden"><img src="./assests/thai.png" alt="" class="w-full h-full object-cover opacity-70"/></div>
-        <div class="rounded-2xl overflow-hidden"><img src="./assests/thai.png" alt="" class="w-full h-full object-cover opacity-60"/></div>
-        <div class="rounded-2xl overflow-hidden col-span-2"><img src="./assests/thai.png" alt="" class="w-full h-full object-cover opacity-75"/></div>
-      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ═══════════ CATEGORY TABS ═══════════ -->
-<div class="sticky top-[76px] z-50 bg-white border-b border-borderSoft shadow-sm">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14">
-    <div class="flex gap-0 overflow-x-auto scroll-hide" id="catTabBar">
-      <!-- dynamically filled -->
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ FILTER + SORT BAR ═══════════ -->
-<div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-6">
-  <div class="flex items-center justify-between gap-4 flex-wrap">
-    <div class="flex items-center gap-2 overflow-x-auto scroll-hide pb-1">
-      <span class="text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mr-1 flex-shrink-0">Filter:</span>
-      <button class="filter-pill active" onclick="filterDishes(this,'all')">All</button>
-      <button class="filter-pill" onclick="filterDishes(this,'popular')"><i class="fa-solid fa-fire text-[9px]"></i> Popular</button>
-      <button class="filter-pill" onclick="filterDishes(this,'new')"><i class="fa-solid fa-sparkles text-[9px]"></i> New</button>
-      <button class="filter-pill" onclick="filterDishes(this,'veg')"><i class="fa-solid fa-leaf text-[9px]"></i> Vegetarian</button>
-      <button class="filter-pill" onclick="filterDishes(this,'spicy')"><i class="fa-solid fa-pepper-hot text-[9px]"></i> Spicy</button>
-    </div>
-    <div class="flex items-center gap-2 flex-shrink-0">
-      <span class="text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50">Sort:</span>
-      <select class="sort-select" onchange="sortDishes(this.value)">
-        <option value="popular">Most Popular</option>
-        <option value="price-asc">Price: Low–High</option>
-        <option value="price-desc">Price: High–Low</option>
-        <option value="rating">Best Rated</option>
-      </select>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ DISHES GRID ═══════════ -->
-<main class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 pb-28 md:pb-20">
-  <div id="dishGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5"></div>
-  <div id="emptyState" class="empty-state">
-    <div class="text-5xl">🍽️</div>
-    <p class="font-playfair text-xl font-bold text-textDark">No dishes found</p>
-    <p class="font-cormorant italic text-textMid/50">Try a different filter</p>
-  </div>
-</main>
-
-<!-- ═══════════ MOBILE BOTTOM NAV ═══════════ -->
-<nav class="mobile-bottom-nav md:hidden">
-  <div class="nav-item" onclick="location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></div>
-  <div class="nav-item active"><i class="fa-solid fa-utensils"></i><span>Menu</span></div>
-  <div onclick="toggleCart()">
-    <div class="cart-fab"><i class="fa-solid fa-bag-shopping text-lg"></i><div class="badge" id="mobileBadge" style="display:none">0</div></div>
-  </div>
-  <div class="nav-item" onclick="location.href='index.html#reservation'"><i class="fa-regular fa-calendar-check"></i><span>Reserve</span></div>
-  <div class="nav-item"><i class="fa-regular fa-circle-user"></i><span>Profile</span></div>
-</nav>
-
-<script src="static/js/main.js"></script>
-<script>
-// ── Data ────────────────────────────────────────────────────────────────────
-const CATEGORIES = {
-  thai:{
-    name:"Thai", subtitle:"Authentic Flavors", emoji:"🌿",
-    desc:"Journey through the vibrant streets of Bangkok with fragrant herbs, bold spices, and centuries-old recipes reimagined by Chef Marco.",
-    color:"#2e7d32",
-  },
-  italian:{
-    name:"Italian", subtitle:"La Cucina Italiana", emoji:"🍝",
-    desc:"From hand-rolled pastas to wood-fired classics, every bite carries the soul of Tuscany — slow-cooked, unhurried, perfetto.",
-    color:"#c0392b",
-  },
-  french:{
-    name:"French", subtitle:"Haute Cuisine", emoji:"🥐",
-    desc:"The elegance of French gastronomy distilled into every plate — buttery, refined, and crafted with classical technique.",
-    color:"#b8963e",
-  },
-  japanese:{
-    name:"Japanese", subtitle:"Washoku Mastery", emoji:"🍣",
-    desc:"Precision. Simplicity. Mastery. Our Japanese selection honours the philosophy of letting exceptional ingredients speak.",
-    color:"#1565c0",
-  },
-  dessert:{
-    name:"Desserts", subtitle:"Sweet Endings", emoji:"🍮",
-    desc:"A final note of sweetness to complete your journey — petite fours, artisan gelato, and timeless classics reimagined.",
-    color:"#8e44ad",
-  },
-};
-
-const DISHES_DB = {
-  thai:[
-    {id:"th1",name:"Tom Yum Goong",desc:"Spicy-sour lemongrass prawn soup with kaffir lime & galangal",price:22,rating:4.9,reviews:148,tags:["popular","spicy"],veg:false,img:"./assests/thai.png"},
-    {id:"th2",name:"Green Curry",desc:"Aromatic coconut green curry with Thai basil & jasmine rice",price:26,rating:4.8,reviews:112,tags:["popular"],veg:true,img:"./assests/thai.png"},
-    {id:"th3",name:"Pad Thai",desc:"Wok-tossed rice noodles, tamarind, egg, bean sprouts & peanuts",price:24,rating:4.7,reviews:203,tags:["popular"],veg:false,img:"./assests/thai.png"},
-    {id:"th4",name:"Larb Gai",desc:"Minced chicken salad with toasted rice, lime & fresh mint",price:20,rating:4.6,reviews:67,tags:["new","spicy"],veg:false,img:"./assests/thai.png"},
-    {id:"th5",name:"Massaman Lamb",desc:"Slow-braised lamb shoulder in rich Massaman curry & potatoes",price:34,rating:4.9,reviews:89,tags:["popular"],veg:false,img:"./assests/thai.png"},
-    {id:"th6",name:"Som Tum",desc:"Green papaya salad, chilli, lime, fish sauce & dried shrimp",price:16,rating:4.5,reviews:55,tags:["spicy"],veg:false,img:"./assests/thai.png"},
-    {id:"th7",name:"Mango Sticky Rice",desc:"Pandan-scented glutinous rice, fresh mango & coconut cream",price:14,rating:4.8,reviews:134,tags:["popular","new"],veg:true,img:"./assests/thai.png"},
-    {id:"th8",name:"Basil Stir Fry",desc:"Wok-fried tofu & vegetables in oyster-soy glaze with Thai basil",price:18,rating:4.4,reviews:41,tags:["veg"],veg:true,img:"./assests/thai.png"},
-  ],
-  italian:[
-    {id:"it1",name:"Tagliatelle al Ragù",desc:"Hand-made tagliatelle with 6-hour slow-cooked beef Bolognese",price:28,rating:4.8,reviews:176,tags:["popular"],veg:false,img:"./assests/thai.png"},
-    {id:"it2",name:"Bistecca Fiorentina",desc:"Dry-aged T-bone grilled over oak coals with rosemary butter",price:48,rating:4.9,reviews:94,tags:["popular"],veg:false,img:"./assests/thai.png"},
-    {id:"it3",name:"Panna Cotta",desc:"Vanilla bean cream with wild berry coulis & biscotti crumb",price:14,rating:4.7,reviews:210,tags:["popular","new"],veg:true,img:"./assests/thai.png"},
-    {id:"it4",name:"Risotto ai Funghi",desc:"Carnaroli rice with porcini, parmesan & white truffle oil",price:32,rating:4.8,reviews:88,tags:["popular"],veg:true,img:"./assests/thai.png"},
-    {id:"it5",name:"Branzino al Forno",desc:"Whole sea bass baked with capers, olives & lemon gremolata",price:38,rating:4.6,reviews:62,tags:["new"],veg:false,img:"./assests/thai.png"},
-  ],
-  french:[
-    {id:"fr1",name:"Soupe à l'Oignon",desc:"Classic gratinéed onion soup with Gruyère croûton",price:18,rating:4.7,reviews:103,tags:["popular"],veg:true,img:"./assests/thai.png"},
-    {id:"fr2",name:"Duck Confit",desc:"12-hour confit leg, Puy lentils, Dijon jus & crispy skin",price:42,rating:4.9,reviews:87,tags:["popular"],veg:false,img:"./assests/thai.png"},
-    {id:"fr3",name:"Crème Brûlée",desc:"Tahitian vanilla custard with caramelised sugar crust",price:13,rating:4.8,reviews:245,tags:["popular","new"],veg:true,img:"./assests/thai.png"},
-    {id:"fr4",name:"Bouillabaisse",desc:"Provençal saffron fish stew with rouille & sourdough",price:44,rating:4.7,reviews:71,tags:["spicy"],veg:false,img:"./assests/thai.png"},
-  ],
-  japanese:[
-    {id:"jp1",name:"Omakase Sashimi",desc:"Chef's selection of daily-flown sashimi (8 pieces)",price:52,rating:4.9,reviews:119,tags:["popular"],veg:false,img:"./assests/thai.png"},
-    {id:"jp2",name:"Wagyu Gyoza",desc:"Pan-fried dumplings filled with A5 Wagyu & shiso",price:24,rating:4.8,reviews:96,tags:["popular","new"],veg:false,img:"./assests/thai.png"},
-    {id:"jp3",name:"Miso Black Cod",desc:"Nobu-style miso-marinated black cod with pickled ginger",price:46,rating:4.9,reviews:134,tags:["popular"],veg:false,img:"./assests/thai.png"},
-    {id:"jp4",name:"Matcha Tiramisu",desc:"Japanese take on the classic — matcha mascarpone & yuzu",price:15,rating:4.7,reviews:88,tags:["new"],veg:true,img:"./assests/thai.png"},
-  ],
-  dessert:[
-    {id:"de1",name:"Panna Cotta",desc:"Vanilla bean cream, wild berry coulis & biscotti crumb",price:14,rating:4.7,reviews:210,tags:["popular"],veg:true,img:"./assests/thai.png"},
-    {id:"de2",name:"Crème Brûlée",desc:"Tahitian vanilla custard with caramelised sugar crust",price:13,rating:4.8,reviews:245,tags:["popular"],veg:true,img:"./assests/thai.png"},
-    {id:"de3",name:"Mango Sticky Rice",desc:"Pandan glutinous rice, fresh mango & coconut cream",price:14,rating:4.8,reviews:134,tags:["popular","new"],veg:true,img:"./assests/thai.png"},
-    {id:"de4",name:"Matcha Tiramisu",desc:"Japanese matcha mascarpone with yuzu gel & ladyfingers",price:15,rating:4.7,reviews:88,tags:["new"],veg:true,img:"./assests/thai.png"},
-    {id:"de5",name:"Chocolate Fondant",desc:"Warm dark chocolate heart with vanilla bean ice cream",price:16,rating:4.9,reviews:167,tags:["popular"],veg:true,img:"./assests/thai.png"},
-  ],
-};
-
-// ── State ────────────────────────────────────────────────────────────────────
-let currentCat = 'thai';
-let currentFilter = 'all';
-let currentSort = 'popular';
-let wishlist = new Set(JSON.parse(localStorage.getItem('sv_wish')||'[]'));
-
-function saveWishlist(){localStorage.setItem('sv_wish',JSON.stringify([...wishlist]));}
-
-// ── Init ─────────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', ()=>{
-  // read ?cat= param
-  const p = new URLSearchParams(location.search);
-  currentCat = p.get('cat') || 'thai';
-  if(!DISHES_DB[currentCat]) currentCat='thai';
-  updateHero();
-  buildTabBar();
-  renderDishes();
-  if(typeof renderCart==='function') renderCart();
-});
-
-function updateHero(){
-  const c = CATEGORIES[currentCat];
-  document.title = `Savoria — ${c.name}`;
-  document.getElementById('heroTitle').innerHTML = `${c.name} <em class="text-redPrimary" style="font-style:italic">Cuisine</em>`;
-  document.getElementById('heroDesc').textContent = c.desc;
-  document.getElementById('heroSubLabel').textContent = c.subtitle;
-  document.getElementById('breadcrumbCat').textContent = c.name;
-  document.getElementById('dishCount').textContent = DISHES_DB[currentCat].length;
-}
-
-function buildTabBar(){
-  const bar = document.getElementById('catTabBar');
-  bar.innerHTML = Object.entries(CATEGORIES).map(([key,val])=>`
-    <button onclick="switchCat('${key}')" class="cat-tab-btn flex-shrink-0 px-5 py-4 text-[11px] font-bold uppercase tracking-[.15em] border-b-2 transition-all ${key===currentCat?'border-redPrimary text-redPrimary':'border-transparent text-textMid/50 hover:text-textDark'}" data-key="${key}">
-      ${val.emoji} ${val.name}
-    </button>
-  `).join('');
-}
-
-function switchCat(key){
-  currentCat = key;
-  currentFilter = 'all';
-  updateHero();
-  // update tab bar
-  document.querySelectorAll('.cat-tab-btn').forEach(b=>{
-    const active = b.dataset.key===key;
-    b.className = `cat-tab-btn flex-shrink-0 px-5 py-4 text-[11px] font-bold uppercase tracking-[.15em] border-b-2 transition-all ${active?'border-redPrimary text-redPrimary':'border-transparent text-textMid/50 hover:text-textDark'}`;
-  });
-  // reset filter pills
-  document.querySelectorAll('.filter-pill').forEach((p,i)=>{
-    p.classList.toggle('active', i===0);
-  });
-  renderDishes();
-  history.replaceState(null,'',`?cat=${key}`);
-}
-
-function filterDishes(el, f){
-  currentFilter = f;
-  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  renderDishes();
-}
-
-function sortDishes(val){
-  currentSort = val;
-  renderDishes();
-}
-
-function renderDishes(){
-  let dishes = [...(DISHES_DB[currentCat]||[])];
-  // filter
-  if(currentFilter!=='all'){
-    if(currentFilter==='veg') dishes=dishes.filter(d=>d.veg);
-    else dishes=dishes.filter(d=>d.tags.includes(currentFilter));
-  }
-  // sort
-  if(currentSort==='price-asc') dishes.sort((a,b)=>a.price-b.price);
-  else if(currentSort==='price-desc') dishes.sort((a,b)=>b.price-a.price);
-  else if(currentSort==='rating') dishes.sort((a,b)=>b.rating-a.rating);
-
-  const grid = document.getElementById('dishGrid');
-  const empty = document.getElementById('emptyState');
-
-  if(!dishes.length){
-    grid.innerHTML=''; empty.style.display='flex'; return;
-  }
-  empty.style.display='none';
-
-  grid.innerHTML = dishes.map((d,i)=>dishCard(d,i)).join('');
-}
-
-function dishCard(d,i){
-  const inWish = wishlist.has(d.id);
-  const stars = starsHTML(d.rating);
-  const tagBadge = d.tags.includes('popular')
-    ? `<span class="tag tag-gold">Popular</span>`
-    : d.tags.includes('new')
-    ? `<span class="tag tag-red">New</span>`
-    : d.veg ? `<span class="tag tag-veg">Veg</span>` : '';
-  return `
-  <div class="d-card reveal" style="animation-delay:${i*0.06}s" onclick="openDish('${d.id}')">
-    <div class="d-card-img">
-      <img src="${d.img}" alt="${d.name}" loading="lazy"/>
-      <button class="heart-btn ${inWish?'active':''}" id="heart_${d.id}"
-        onclick="event.stopPropagation();toggleWish('${d.id}')" title="Wishlist">
-        <i class="fa-${inWish?'solid':'regular'} fa-heart"></i>
-      </button>
-      <div class="absolute top-3 left-3">${tagBadge}</div>
-    </div>
-    <div class="d-card-body">
-      <div class="flex items-start justify-between gap-2 mb-1.5">
-        <h3 class="font-playfair text-[15px] font-bold text-textDark leading-tight">${d.name}</h3>
-        <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i>${d.rating}</div>
-      </div>
-      <p class="font-cormorant italic text-[12px] text-textMid/60 leading-relaxed mb-3 line-clamp-2">${d.desc}</p>
-      <div class="flex items-center justify-between">
-        <p class="font-playfair text-lg font-black text-textDark">$${d.price}</p>
-        <button class="add-btn-sm" onclick="event.stopPropagation();addToCart('${d.name}',${d.price})" title="Add to cart">
-          <i class="fa-solid fa-plus text-[12px]"></i>
+  <!-- ══════════ CATEGORY TABS ══════════ -->
+  <div class="sticky top-[76px] z-[800] bg-white border-b border-borderSoft shadow-sm">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14">
+      <div class="flex gap-2.5 overflow-x-auto scroll-hide py-4" id="categoryTabs">
+        <button class="cat-tab active" data-cat="thai" onclick="switchCategory(this)">
+          <span>🌿</span> Thai <span class="count">12</span>
+        </button>
+        <button class="cat-tab" data-cat="italian" onclick="switchCategory(this)">
+          <span>🍝</span> Italian <span class="count">18</span>
+        </button>
+        <button class="cat-tab" data-cat="french" onclick="switchCategory(this)">
+          <span>🥐</span> French <span class="count">9</span>
+        </button>
+        <button class="cat-tab" data-cat="japanese" onclick="switchCategory(this)">
+          <span>🍱</span> Japanese <span class="count">14</span>
+        </button>
+        <button class="cat-tab" data-cat="dessert" onclick="switchCategory(this)">
+          <span>🍮</span> Desserts <span class="count">11</span>
         </button>
       </div>
     </div>
-  </div>`;
-}
+  </div>
 
-function starsHTML(r){
-  let s='';
-  for(let i=1;i<=5;i++) s+=`<i class="fa-solid fa-star${i<=Math.round(r)?'':' empty'}"></i>`;
-  return `<span class="stars">${s}</span>`;
-}
+  <!-- ══════════ MAIN CONTENT ══════════ -->
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 md:py-14">
 
-function toggleWish(id){
-  const had = wishlist.has(id);
-  if(had) wishlist.delete(id); else wishlist.add(id);
-  saveWishlist();
-  const btn = document.getElementById('heart_'+id);
-  if(!btn) return;
-  btn.classList.toggle('active',!had);
-  btn.innerHTML=`<i class="fa-${!had?'solid':'regular'} fa-heart"></i>`;
-}
+    <!-- Filter + Sort bar -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 md:mb-10">
+      <div class="flex items-center gap-2.5 overflow-x-auto scroll-hide pb-1">
+        <button class="filter-pill active" onclick="filterDishes(this, 'all')">All</button>
+        <button class="filter-pill" onclick="filterDishes(this, 'popular')"><i class="fa-solid fa-fire text-[9px] mr-1"></i>Popular</button>
+        <button class="filter-pill" onclick="filterDishes(this, 'new')">New</button>
+        <button class="filter-pill" onclick="filterDishes(this, 'veg')">🌱 Vegetarian</button>
+        <button class="filter-pill" onclick="filterDishes(this, 'spicy')">🌶 Spicy</button>
+      </div>
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <span class="text-[10px] uppercase tracking-[0.2em] font-bold text-textMid/40">Sort by</span>
+        <select class="sort-select">
+          <option>Recommended</option>
+          <option>Price: Low–High</option>
+          <option>Price: High–Low</option>
+          <option>Top Rated</option>
+          <option>Most Ordered</option>
+        </select>
+      </div>
+    </div>
 
-function openDish(id){
-  location.href=`dish.html?id=${id}`;
-}
+    <!-- ── Featured Chef's Pick ── -->
+    <div class="featured-wide mb-10 fade-up delay-1">
+      <div class="flex flex-col md:flex-row">
+        <div class="relative md:w-[45%] h-[220px] md:h-auto overflow-hidden">
+          <img src="./assests/thai.png" alt="Tom Yum" class="w-full h-full object-cover opacity-80"/>
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#1a0f0d] hidden md:block"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-[#1a0f0d] via-transparent to-transparent md:hidden"></div>
+        </div>
+        <div class="flex-1 p-6 md:p-10 flex flex-col justify-center">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="tag tag-gold">Chef's Signature</span>
+            <span class="tag tag-red">Most Ordered</span>
+          </div>
+          <h2 class="font-playfair text-2xl md:text-3xl font-black text-white leading-tight mb-2">Tom Yum Goong</h2>
+          <p class="font-cormorant italic text-white/50 text-base md:text-lg mb-4 leading-relaxed">
+            Classic hot & sour prawn soup with lemongrass, galangal, kaffir lime & fresh mushrooms. A Thai culinary icon.
+          </p>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="flex items-center gap-1">
+              <i class="fa-solid fa-star text-gold text-xs"></i>
+              <i class="fa-solid fa-star text-gold text-xs"></i>
+              <i class="fa-solid fa-star text-gold text-xs"></i>
+              <i class="fa-solid fa-star text-gold text-xs"></i>
+              <i class="fa-solid fa-star text-gold text-xs"></i>
+              <span class="text-white/50 text-xs ml-1.5">4.9 (234 orders)</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="spice-dot on"></span>
+              <span class="spice-dot on"></span>
+              <span class="spice-dot on"></span>
+              <span class="text-white/30 text-[10px] ml-1">Spicy</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between md:justify-start gap-6">
+            <p class="font-playfair text-3xl font-black text-white">$24</p>
+            <button onclick="addToCart('Tom Yum Goong', 24)" class="book-btn text-white px-6 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.15em] flex items-center gap-2">
+              <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-// scroll reveal
-const obs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
-},{threshold:.1});
-document.addEventListener('DOMContentLoaded',()=>{
-  setTimeout(()=>{document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));},200);
-});
+    <!-- ── Dishes Grid ── -->
+    <div class="mb-4">
+      <div class="section-label mb-2">All Dishes</div>
+      <h2 class="font-playfair text-2xl md:text-3xl font-black text-textDark mb-8" id="gridTitle">Thai Collection</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6" id="dishGrid">
+
+      <!-- Card 1 -->
+      <a href="/dish.html" class="dish-card fade-up delay-1">
+        <div class="img-wrap h-[200px]">
+          <img src="./assests/thai.png" alt="Pad Thai" class="w-full h-full object-cover"/>
+          <div class="absolute top-3 left-3 flex gap-1.5">
+            <span class="tag tag-gold">Popular</span>
+          </div>
+          <div class="absolute top-3 right-3">
+            <button class="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-textMid/60 hover:text-redPrimary transition text-sm">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div>
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Pad Thai</h3>
+              <p class="font-cormorant italic text-textMid/55 text-sm mt-0.5">Stir-fried rice noodles · shrimp · peanuts</p>
+            </div>
+            <div class="rating-badge flex-shrink-0">
+              <i class="fa-solid fa-star text-[9px]"></i> 4.8
+            </div>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center gap-0.5">
+              <span class="spice-dot on"></span>
+              <span class="spice-dot on"></span>
+              <span class="spice-dot off"></span>
+            </div>
+            <span class="text-[10px] text-textMid/40 font-semibold">Medium</span>
+            <span class="w-1 h-1 bg-borderSoft rounded-full"></span>
+            <span class="text-[10px] text-textMid/40"><i class="fa-regular fa-clock mr-0.5"></i> 15 min</span>
+          </div>
+          <div class="flex items-center justify-between pt-4 border-t border-borderSoft/60">
+            <p class="font-playfair text-xl font-black text-textDark">$22</p>
+            <button onclick="addToCart('Pad Thai', 22)" class="add-btn">+</button>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 2 -->
+      <a href="/dish.html" class="dish-card fade-up delay-2">
+        <div class="img-wrap h-[200px]">
+          <img src="./assests/thai.png" alt="Green Curry" class="w-full h-full object-cover"/>
+          <div class="absolute top-3 left-3 flex gap-1.5">
+            <span class="tag tag-red">Spicy 🌶</span>
+          </div>
+          <div class="absolute top-3 right-3">
+            <button class="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-textMid/60 hover:text-redPrimary transition text-sm">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div>
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Green Curry</h3>
+              <p class="font-cormorant italic text-textMid/55 text-sm mt-0.5">Coconut milk · Thai basil · eggplant</p>
+            </div>
+            <div class="rating-badge flex-shrink-0">
+              <i class="fa-solid fa-star text-[9px]"></i> 4.7
+            </div>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center gap-0.5">
+              <span class="spice-dot on"></span>
+              <span class="spice-dot on"></span>
+              <span class="spice-dot on"></span>
+            </div>
+            <span class="text-[10px] text-textMid/40 font-semibold">Hot</span>
+            <span class="w-1 h-1 bg-borderSoft rounded-full"></span>
+            <span class="text-[10px] text-textMid/40"><i class="fa-regular fa-clock mr-0.5"></i> 20 min</span>
+          </div>
+          <div class="flex items-center justify-between pt-4 border-t border-borderSoft/60">
+            <p class="font-playfair text-xl font-black text-textDark">$26</p>
+            <button onclick="addToCart('Green Curry', 26)" class="add-btn">+</button>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 3 -->
+      <a href="/dish.html" class="dish-card fade-up delay-3">
+        <div class="img-wrap h-[200px]">
+          <img src="./assests/thai.png" alt="Mango Sticky Rice" class="w-full h-full object-cover"/>
+          <div class="absolute top-3 left-3 flex gap-1.5">
+            <span class="tag tag-green">🌱 Veg</span>
+            <span class="tag tag-gold">New</span>
+          </div>
+          <div class="absolute top-3 right-3">
+            <button class="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-textMid/60 hover:text-redPrimary transition text-sm">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div>
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Mango Sticky Rice</h3>
+              <p class="font-cormorant italic text-textMid/55 text-sm mt-0.5">Sweet glutinous rice · fresh mango · coconut</p>
+            </div>
+            <div class="rating-badge flex-shrink-0">
+              <i class="fa-solid fa-star text-[9px]"></i> 4.9
+            </div>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center gap-0.5">
+              <span class="spice-dot off"></span>
+              <span class="spice-dot off"></span>
+              <span class="spice-dot off"></span>
+            </div>
+            <span class="text-[10px] text-textMid/40 font-semibold">Mild</span>
+            <span class="w-1 h-1 bg-borderSoft rounded-full"></span>
+            <span class="text-[10px] text-textMid/40"><i class="fa-regular fa-clock mr-0.5"></i> 10 min</span>
+          </div>
+          <div class="flex items-center justify-between pt-4 border-t border-borderSoft/60">
+            <p class="font-playfair text-xl font-black text-textDark">$14</p>
+            <button onclick="addToCart('Mango Sticky Rice', 14)" class="add-btn">+</button>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 4 -->
+      <a href="/dish.html" class="dish-card fade-up delay-1">
+        <div class="img-wrap h-[200px]">
+          <img src="./assests/thai.png" alt="Massaman Curry" class="w-full h-full object-cover"/>
+          <div class="absolute top-3 left-3 flex gap-1.5">
+            <span class="tag tag-gold">Popular</span>
+          </div>
+          <div class="absolute top-3 right-3">
+            <button class="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-textMid/60 hover:text-redPrimary transition text-sm">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div>
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Massaman Curry</h3>
+              <p class="font-cormorant italic text-textMid/55 text-sm mt-0.5">Braised beef · potato · roasted peanuts</p>
+            </div>
+            <div class="rating-badge flex-shrink-0">
+              <i class="fa-solid fa-star text-[9px]"></i> 4.8
+            </div>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center gap-0.5">
+              <span class="spice-dot on"></span>
+              <span class="spice-dot off"></span>
+              <span class="spice-dot off"></span>
+            </div>
+            <span class="text-[10px] text-textMid/40 font-semibold">Mild</span>
+            <span class="w-1 h-1 bg-borderSoft rounded-full"></span>
+            <span class="text-[10px] text-textMid/40"><i class="fa-regular fa-clock mr-0.5"></i> 25 min</span>
+          </div>
+          <div class="flex items-center justify-between pt-4 border-t border-borderSoft/60">
+            <p class="font-playfair text-xl font-black text-textDark">$28</p>
+            <button onclick="addToCart('Massaman Curry', 28)" class="add-btn">+</button>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 5 -->
+      
+      <a href="/dish.html" class="dish-card fade-up delay-2">
+        <div class="img-wrap h-[200px]">
+          <img src="./assests/thai.png" alt="Som Tum" class="w-full h-full object-cover"/>
+          <div class="absolute top-3 left-3 flex gap-1.5">
+            <span class="tag tag-green">🌱 Veg</span>
+          </div>
+          <div class="absolute top-3 right-3">
+            <button class="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-redPrimary transition text-sm">
+              <i class="fa-solid fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div>
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Som Tum</h3>
+              <p class="font-cormorant italic text-textMid/55 text-sm mt-0.5">Green papaya salad · dried shrimp · lime</p>
+            </div>
+            <div class="rating-badge flex-shrink-0">
+              <i class="fa-solid fa-star text-[9px]"></i> 4.6
+            </div>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center gap-0.5">
+              <span class="spice-dot on"></span>
+              <span class="spice-dot on"></span>
+              <span class="spice-dot off"></span>
+            </div>
+            <span class="text-[10px] text-textMid/40 font-semibold">Medium</span>
+            <span class="w-1 h-1 bg-borderSoft rounded-full"></span>
+            <span class="text-[10px] text-textMid/40"><i class="fa-regular fa-clock mr-0.5"></i> 10 min</span>
+          </div>
+          <div class="flex items-center justify-between pt-4 border-t border-borderSoft/60">
+            <p class="font-playfair text-xl font-black text-textDark">$18</p>
+            <button onclick="addToCart('Som Tum', 18)" class="add-btn">+</button>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 6 -->
+      <a href="/dish.html" class="dish-card fade-up delay-3">
+        <div class="img-wrap h-[200px]">
+          <img src="./assests/thai.png" alt="Basil Fried Rice" class="w-full h-full object-cover"/>
+          <div class="absolute top-3 left-3 flex gap-1.5">
+            <span class="tag tag-red">New</span>
+          </div>
+          <div class="absolute top-3 right-3">
+            <button class="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-textMid/60 hover:text-redPrimary transition text-sm">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div>
+              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Basil Fried Rice</h3>
+              <p class="font-cormorant italic text-textMid/55 text-sm mt-0.5">Holy basil · minced chicken · jasmine rice</p>
+            </div>
+            <div class="rating-badge flex-shrink-0">
+              <i class="fa-solid fa-star text-[9px]"></i> 4.7
+            </div>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center gap-0.5">
+              <span class="spice-dot on"></span>
+              <span class="spice-dot on"></span>
+              <span class="spice-dot off"></span>
+            </div>
+            <span class="text-[10px] text-textMid/40 font-semibold">Medium</span>
+            <span class="w-1 h-1 bg-borderSoft rounded-full"></span>
+            <span class="text-[10px] text-textMid/40"><i class="fa-regular fa-clock mr-0.5"></i> 15 min</span>
+          </div>
+          <div class="flex items-center justify-between pt-4 border-t border-borderSoft/60">
+            <p class="font-playfair text-xl font-black text-textDark">$20</p>
+            <button onclick="addToCart('Basil Fried Rice', 20)" class="add-btn">+</button>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Load more -->
+    <div class="flex justify-center mt-10">
+      <button class="group flex items-center gap-2.5 border border-borderSoft text-textMid/60 px-8 py-3.5 rounded-full text-[11px] font-bold uppercase tracking-[0.15em] hover:border-redPrimary hover:text-redPrimary transition-all">
+        <span>Load More Dishes</span>
+        <i class="fa-solid fa-chevron-down text-[9px] group-hover:translate-y-0.5 transition-transform"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════ RESERVE CTA ══════════ -->
+  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 mb-10">
+    <div class="bg-cream rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 border border-borderSoft">
+      <div>
+        <div class="section-label mb-3">Dine With Us</div>
+        <h2 class="font-playfair text-3xl md:text-4xl font-black text-textDark mb-2">Reserve Your Table<br class="hidden md:block"/> for Tonight</h2>
+        <p class="font-cormorant italic text-textMid/50 text-lg">Open Monday to Sunday · 12:00pm – 11:00pm</p>
+      </div>
+      <div class="flex flex-col gap-3 flex-shrink-0 w-full md:w-auto">
+        <a href="/reserve.html" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center">
+          <i class="fa-regular fa-calendar-check"></i> Book Online
+        </a>
+        <a href="tel:+15559204200" class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center">
+          <i class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="footer-bg hidden md:block">
+    <div class="max-w-7xl mx-auto px-8 lg:px-14 py-16">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+        <div class="col-span-1">
+          <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
+          <p class="font-cormorant italic text-gold/60 text-xs tracking-[0.3em] uppercase mt-0.5 mb-4">Fine Dining</p>
+          <p class="text-white/40 text-sm leading-relaxed">Where every dish tells a story of passion, craft, and the finest ingredients.</p>
+          <div class="flex gap-3 mt-5">
+            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-x-twitter"></i></a>
+          </div>
+        </div>
+        <div>
+          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Navigation</p>
+          <ul class="space-y-3">
+            <li><a href="/" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
+            <li><a href="menu.html" class="text-white/40 text-sm hover:text-gold transition">Menu</a></li>
+            <li><a href="/about.html" class="text-white/40 text-sm hover:text-gold transition">About</a></li>
+            <li><a href="/reserve.html" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Hours</p>
+          <ul class="space-y-2">
+            <li class="text-white/40 text-sm">Mon–Fri · 12pm–10pm</li>
+            <li class="text-white/40 text-sm">Sat–Sun · 11am–11pm</li>
+            <li class="text-white/40 text-sm mt-3">Happy Hour · 4–6pm</li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Contact</p>
+          <ul class="space-y-3">
+            <li class="text-white/40 text-sm">📍 42 West 58th St, New York</li>
+            <li class="text-white/40 text-sm">📞 +1 (555) 920-4200</li>
+            <li class="text-white/40 text-sm">✉️ hello@savoria.com</li>
+          </ul>
+        </div>
+      </div>
+      <div class="gold-line h-[1px] mb-6 opacity-20"></div>
+      <div class="flex justify-between items-center">
+        <p class="text-white/30 text-xs">© 2025 Savoria Fine Dining. All rights reserved.</p>
+        <p class="font-cormorant italic text-gold/40 text-sm">Where every dish tells a story</p>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<!-- ══════════ MOBILE BOTTOM NAV ══════════ -->
+<nav class="mobile-bottom-nav md:hidden">
+  <div class="nav-item" onclick="location.href='/'">
+    <i class="fa-solid fa-house"></i><span>Home</span>
+  </div>
+  <div class="nav-item active">
+    <i class="fa-solid fa-utensils"></i><span>Menu</span>
+  </div>
+  <div onclick="toggleCart()">
+    <div class="cart-fab">
+      <i class="fa-solid fa-bag-shopping text-lg"></i>
+      <div class="badge" id="mobileBadge" style="display:none; position:absolute; top:-4px; right:-4px; background:#c0392b; color:#fff; width:18px; height:18px; border-radius:50%; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center;">0</div>
+    </div>
+  </div>
+  <div class="nav-item" onclick="location.href='/reserve.html'">
+    <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
+  </div>
+  <div class="nav-item">
+    <i class="fa-regular fa-circle-user"></i><span><a href="/login.html">Profile</a></span>
+  </div>
+</nav>
+
+<script>
+  // ── Navbar scroll ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // ── Cart state ──
+  let cart = [];
+
+  function addToCart(name, price) {
+    const existing = cart.find(i => i.name === name);
+    if (existing) { existing.qty++; }
+    else { cart.push({ name, price, qty: 1 }); }
+    renderCart();
+    if (!document.getElementById('cartPanel').classList.contains('open')) {
+      showCartToast(name);
+    }
+  }
+
+  function renderCart() {
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const badge = document.getElementById('cartBadge');
+    badge.textContent = count;
+    badge.classList.toggle('hidden', count === 0);
+    badge.classList.toggle('flex', count > 0);
+
+    const container = document.getElementById('cartItemsContainer');
+    const empty = document.getElementById('cartEmpty');
+    const totals = document.getElementById('cartTotalsBlock');
+    const confirmBtn = document.getElementById('cartConfirmBtn');
+
+    empty.style.display = cart.length === 0 ? 'block' : 'none';
+
+    container.innerHTML = cart.map(item => `
+      <div class="flex items-center gap-3 px-6 py-3 border-b border-borderSoft/50 last:border-0">
+        <div class="w-12 h-12 rounded-xl bg-cream flex-shrink-0 overflow-hidden">
+          <img src="./assests/thai.png" alt="${item.name}" class="w-full h-full object-cover"/>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-textDark truncate">${item.name}</p>
+          <p class="text-[12px] text-textMid/50">$${item.price} each</p>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button onclick="changeQty('${item.name}', -1)" class="w-7 h-7 rounded-full border border-borderSoft text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition text-sm flex items-center justify-center">−</button>
+          <span class="text-sm font-bold text-textDark w-4 text-center">${item.qty}</span>
+          <button onclick="changeQty('${item.name}', 1)" class="w-7 h-7 rounded-full border border-borderSoft text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition text-sm flex items-center justify-center">+</button>
+        </div>
+        <p class="text-sm font-bold text-textDark w-12 text-right flex-shrink-0">$${(item.price * item.qty)}</p>
+      </div>
+    `).join('');
+
+    if (cart.length > 0) {
+      const tax = total * 0.08;
+      totals.innerHTML = `
+        <div class="flex justify-between text-sm text-textMid/60"><span>Subtotal</span><span>$${total.toFixed(2)}</span></div>
+        <div class="flex justify-between text-sm text-textMid/60"><span>Tax (8%)</span><span>$${tax.toFixed(2)}</span></div>
+        <div class="flex justify-between font-playfair text-lg font-black text-textDark border-t border-borderSoft pt-2 mt-1"><span>Total</span><span>$${(total + tax).toFixed(2)}</span></div>
+      `;
+      confirmBtn.disabled = false;
+      confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    } else {
+      totals.innerHTML = '';
+      confirmBtn.disabled = true;
+      confirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+  }
+
+  function changeQty(name, delta) {
+    const idx = cart.findIndex(i => i.name === name);
+    if (idx === -1) return;
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    renderCart();
+  }
+
+  // ── Cart toast ──
+  function showCartToast(name) {
+    const t = document.createElement('div');
+    t.innerHTML = `<div style="position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1210;color:#fff;padding:10px 20px;border-radius:50px;font-size:12px;font-weight:600;z-index:9999;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.2);display:flex;align-items:center;gap:8px;">
+      <span style="color:#b8963e;">✓</span> ${name} added to cart
+    </div>`;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2200);
+  }
+
+  // ── Toggle cart ──
+  function toggleCart() {
+    const panel = document.getElementById('cartPanel');
+    const backdrop = document.getElementById('cartBackdrop');
+    const modal = document.getElementById('cartModal');
+    const overlay = document.getElementById('overlay');
+    const isOpen = panel.classList.contains('open');
+
+    if (isOpen) {
+      panel.classList.remove('open');
+      backdrop.classList.remove('opacity-100');
+      backdrop.classList.add('opacity-0');
+      setTimeout(() => { backdrop.classList.add('hidden'); modal.style.pointerEvents = 'none'; }, 400);
+      overlay.classList.remove('show');
+    } else {
+      modal.style.pointerEvents = 'all';
+      backdrop.classList.remove('hidden');
+      setTimeout(() => { backdrop.classList.add('opacity-100'); backdrop.classList.remove('opacity-0'); }, 10);
+      setTimeout(() => panel.classList.add('open'), 10);
+      overlay.classList.add('show');
+    }
+  }
+
+  // ── Toggle mobile menu ──
+  function toggleMenu() {
+    const m = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('overlay');
+    const isOpen = m.classList.contains('open');
+    if (isOpen) {
+      m.classList.remove('open');
+      overlay.classList.remove('show');
+    } else {
+      m.style.display = 'flex';
+      setTimeout(() => m.classList.add('open'), 10);
+      overlay.classList.add('show');
+    }
+  }
+
+  function closeAll() {
+    const panel = document.getElementById('cartPanel');
+    const menu = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('overlay');
+    if (panel.classList.contains('open')) toggleCart();
+    if (menu.classList.contains('open')) toggleMenu();
+    overlay.classList.remove('show');
+  }
+
+  // ── Category tabs ──
+  const categoryData = {
+    thai: { title: 'Thai Cuisine', desc: 'Vibrant flavors from Southeast Asia — aromatic herbs, bold spices & silky broths', count: '12 Dishes' },
+    italian: { title: 'Italian Cuisine', desc: 'Handmade pasta, aged cheeses and the finest Italian wines — la dolce vita', count: '18 Dishes' },
+    french: { title: 'French Cuisine', desc: 'Classic Gallic elegance — buttery pastries, rich sauces & refined technique', count: '9 Dishes' },
+    japanese: { title: 'Japanese Cuisine', desc: 'Precision and purity — from delicate sushi to umami-rich ramen', count: '14 Dishes' },
+    dessert: { title: 'Desserts', desc: 'Sweet symphonies to close your meal — from light panna cotta to rich chocolate', count: '11 Dishes' },
+  };
+
+  function switchCategory(btn) {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.cat;
+    const data = categoryData[cat];
+    document.getElementById('heroCategoryName').textContent = data.title.split(' ')[0];
+    document.getElementById('heroCategoryTitle').textContent = data.title;
+    document.getElementById('heroCategoryDesc').textContent = data.desc;
+    document.getElementById('heroDishCount').textContent = data.count;
+    document.getElementById('gridTitle').textContent = data.title + ' Collection';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Filter pills ──
+  function filterDishes(btn, type) {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+  }
 </script>
+
 </body>
 </html>
