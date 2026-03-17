@@ -7,9 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="/static/css/style.css">
-  <link rel="stylesheet" href="/static/css/about.css">
-  
   <script>
     tailwind.config = {
       theme: {
@@ -24,49 +21,60 @@
             jost: ["Jost", "sans-serif"],
             cormorant: ["Cormorant Garamond", "serif"],
           },
+          keyframes: {
+            fadeSlideUp: { from: { opacity: '0', transform: 'translateY(24px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+          },
+          animation: {
+            'anim-1': 'fadeSlideUp 0.5s ease 0.05s both',
+            'anim-2': 'fadeSlideUp 0.5s ease 0.15s both',
+            'anim-3': 'fadeSlideUp 0.5s ease 0.25s both',
+            'anim-4': 'fadeSlideUp 0.5s ease 0.35s both',
+            'anim-5': 'fadeSlideUp 0.5s ease 0.45s both',
+          },
         },
       },
     };
   </script>
- 
 </head>
 
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
 
 <!-- ═══ OVERLAY ═══ -->
-<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]" onclick="closeAll()"></div>
+<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px] transition-opacity duration-300" onclick="closeAll()"></div>
 
 <!-- ═══════════ MOBILE MENU ═══════════ -->
-<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex-col p-10 hidden" style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
-  <div class="flex justify-between items-center mb-10">
-    <div>
-      <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-      <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
+<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] hidden" style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
+  <div class="flex flex-col h-full p-10">
+    <div class="flex justify-between items-center mb-10">
+      <div>
+        <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
+        <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
+      </div>
+      <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
     </div>
-    <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
-  </div>
-  <div class="gold-line h-[1px] w-full mb-8"></div>
-  <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
-    <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-    <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
-  </ul>
-  <div class="mt-auto space-y-3">
-    <a href="/reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
-      <i class="fa-regular fa-calendar-check"></i> Book a Table
-    </a>
-    <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
-      <span>📞 +1 (555) 920-4200</span><span>·</span><span>Mon–Sun 12–11pm</span>
+    <div class="h-px w-full mb-8" style="background:linear-gradient(90deg,transparent,#b8963e 30%,#d4af6a 60%,transparent)"></div>
+    <ul class="flex flex-col gap-1 flex-1">
+      <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+      <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
+      <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+      <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+      <li><a href="contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+    </ul>
+    <div class="mt-auto space-y-3">
+      <a href="/reserve.html" onclick="toggleMenu()" class="flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em] transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
+        <i class="fa-regular fa-calendar-check"></i> Book a Table
+      </a>
+      <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
+        <span>📞 +1 (555) 920-4200</span><span>·</span><span>Mon–Sun 12–11pm</span>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- ═══ CART MODAL ═══ -->
-<div id="cartModal">
-  <div id="cartBackdrop" onclick="toggleCart()"></div>
-  <div id="cartPanel">
+<div id="cartModal" class="fixed inset-0 z-[1200] pointer-events-none">
+  <div id="cartBackdrop" class="absolute inset-0 opacity-0 transition-opacity duration-300" style="background:rgba(0,0,0,0.4);backdrop-filter:blur(2px)" onclick="toggleCart()"></div>
+  <div id="cartPanel" class="absolute bg-white flex flex-col bottom-0 left-0 right-0 h-[95vh] rounded-t-3xl md:rounded-none md:top-0 md:right-0 md:left-auto md:bottom-auto md:h-full md:w-[460px] shadow-[−8px_0_40px_rgba(0,0,0,.12)] transition-transform duration-[400ms]" style="transform:translateY(100%)">
     <div class="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0"><div class="w-10 h-[4px] rounded-full bg-borderSoft"></div></div>
     <div class="flex items-center justify-between px-6 py-4 flex-shrink-0 border-b border-borderSoft">
       <div class="flex items-center gap-3">
@@ -102,7 +110,7 @@
         <div class="text-5xl mb-4">🛒</div>
         <p class="font-playfair text-lg font-bold text-textDark mb-1">Your cart is empty</p>
         <p class="font-cormorant italic text-textMid/50">Add dishes from the menu to get started</p>
-        <a href="menu.html" onclick="toggleCart()" class="mt-4 inline-block book-btn text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.15em]">Browse Menu</a>
+        <a href="menu.html" onclick="toggleCart()" class="mt-4 inline-block text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.15em] transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b)">Browse Menu</a>
       </div>
       <div id="cartUpsell" class="px-6 py-4 border-b border-borderSoft/50 hidden">
         <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-gold mb-3 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i> Pair it with</p>
@@ -118,7 +126,7 @@
         <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-textMid/40 mb-2.5">Special Instructions</p>
         <div class="flex items-start gap-2.5 bg-white border border-borderSoft rounded-xl px-3 py-2.5 focus-within:border-gold transition">
           <i class="fa-regular fa-note-sticky text-gold/60 mt-0.5 flex-shrink-0"></i>
-          <textarea rows="2" placeholder="Allergies, preferences, or notes for the kitchen…" class="bg-transparent flex-1 outline-none placeholder-textMid/35 text-[12px] text-textDark resize-none leading-relaxed"></textarea>
+          <textarea rows="2" placeholder="Allergies, preferences, or notes for the kitchen…" class="bg-transparent flex-1 outline-none placeholder:text-textMid/35 text-[12px] text-textDark resize-none leading-relaxed"></textarea>
         </div>
       </div>
       <div id="cartMeta" class="px-6 py-4 hidden">
@@ -128,79 +136,79 @@
         </div>
       </div>
     </div>
-    <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 md:pb-5 flex-shrink-0" style="box-shadow:0 -4px 20px rgba(0,0,0,0.04);">
+    <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 md:pb-5 flex-shrink-0 shadow-[0_-4px_20px_rgba(0,0,0,.04)]">
       <div class="space-y-2 mb-4" id="cartTotalsBlock"></div>
       <div id="cartPayment" class="hidden items-center gap-2 mb-4 p-3 bg-cream/60 rounded-xl border border-borderSoft"><i class="fa-regular fa-credit-card text-textMid/40 text-sm"></i><span class="text-[12px] text-textMid/60 flex-1">Visa •••• 4242</span><button class="text-[10px] font-bold text-gold uppercase tracking-wider">Change</button></div>
-      <button id="cartConfirmBtn" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled><i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order</button>
+      <button id="cartConfirmBtn" class="w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" style="background:linear-gradient(135deg,#c0392b,#96281b)" disabled><i class="fa-solid fa-lock text-[10px]"></i> Confirm &amp; Place Order</button>
       <button onclick="toggleCart()" class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">Continue Browsing</button>
     </div>
   </div>
 </div>
 
 <!-- ═══════════ NAVBAR ═══════════ -->
-<div id="pageContent">
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
-   style="background:rgba(255,255,255,0)">
- 
-    <div id="navInner" class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
-      <a href="#" class="flex flex-col leading-none group flex-shrink-0">
-        <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
-          Sav<span class="italic font-light text-redPrimary">o</span>ria
-        </span>
-        <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 bg-white/[0.96] backdrop-blur-[10px]">
+  <div class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14">
+    <a href="#" class="flex flex-col leading-none group flex-shrink-0">
+      <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
+        Sav<span class="italic font-light text-redPrimary">o</span>ria
+      </span>
+      <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
+    </a>
+    <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
+      <li><a href="index.html" class="relative pb-0.5 transition hover:text-redPrimary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-redPrimary after:transition-all hover:after:w-full">Home</a></li>
+      <li><a href="menu.html" class="relative pb-0.5 transition hover:text-redPrimary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-redPrimary after:transition-all hover:after:w-full">Menu</a></li>
+      <li><a href="about.html" class="relative pb-0.5 text-redPrimary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-redPrimary">About</a></li>
+      <li><a href="reserve.html" class="relative pb-0.5 transition hover:text-redPrimary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-redPrimary after:transition-all hover:after:w-full">Reserve</a></li>
+      <li><a href="contact.html" class="relative pb-0.5 transition hover:text-redPrimary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-redPrimary after:transition-all hover:after:w-full">Contact</a></li>
+    </ul>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
+        <i class="fa-solid fa-cart-shopping text-[20px]"></i>
+        <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
+      </button>
+      <button class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
+        <i class="fa-regular fa-circle-user"></i>
+        <a href="/login.html">Login</a>
+      </button>
+      <a href="/reserve.html" class="hidden md:inline-flex items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1 transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
+        <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
       </a>
-      <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
-        <li><a href="index.html" class="nav-link transition">Home</a></li>
-        <li><a href="menu.html" class="nav-link transition">Menu</a></li>
-        <li><a href="about.html" class="nav-link transition">About</a></li>
-        <li><a href="reserve.html" class="nav-link transition">Reserve</a></li>
-        <li><a href="contact.html" class="nav-link transition">Contact</a></li>
-      </ul>
-      <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
-       <i class="fa-solid fa-cart-shopping text-[20px] "></i>
-          <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
-        </button>
-        <button class="hidden md:flex items-center gap-1.5 text-[11px]
-         font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold
-          transition pl-3 border-l border-borderSoft ml-1">
-          <i class="fa-regular fa-circle-user"></i> 
-          <a href="/login.html" >Login</a>
-        </button>
-        <a href="/reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
-          <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
-        </a>
-        <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
-          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-          <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
-        </button>
-      </div>
+      <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
+        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+        <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
+      </button>
     </div>
-    <div class="h-px bg-borderSoft/80"></div>
-  </nav>
-</div>
+  </div>
+  <div class="h-px bg-borderSoft/80"></div>
+</nav>
 
 <main>
 
   <!-- ══════════════════════════════════════
-       HERO — DESKTOP
+       HERO
   ══════════════════════════════════════ -->
-  <section class="about-hero pt-[76px]">
+  <section class="pt-[76px]" style="background:linear-gradient(160deg,#fdf6f0 0%,#f5ede4 55%,#f0e4d8 100%)">
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-16 md:py-24">
 
       <!-- Desktop layout -->
-      <div class="hidden md:grid grid-cols-2 gap-16 items-center">
+      <div class="hidden md:grid grid-cols-2 gap-16 items-center animate-anim-1">
         <!-- Left -->
-        <div class="anim-1">
-          <div class="section-label mb-5">Est. 2010 · New York City</div>
+        <div>
+          <!-- section label -->
+          <div class="flex items-center gap-2.5 mb-5">
+            <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+            <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">Est. 2010 · New York City</span>
+            <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+          </div>
           <h1 class="font-playfair text-6xl lg:text-7xl font-black text-textDark leading-[1.05] mb-6">
-            Our <em class="text-redPrimary" style="font-style:italic">Story</em><br/>of Passion
+            Our <em class="text-redPrimary italic">Story</em><br/>of Passion
           </h1>
           <p class="font-cormorant italic text-xl text-textMid/65 tracking-wide leading-relaxed mb-8">
             Born from a simple belief — that great food is the language of love. Savoria began as a dream in a small Tuscan kitchen and grew into New York's most celebrated dining destination.
           </p>
-          <div class="accent-line mb-8"></div>
+          <!-- accent line -->
+          <div class="w-10 h-[3px] rounded-sm mb-8" style="background:linear-gradient(90deg,#c0392b,#b8963e)"></div>
           <div class="flex gap-10 pt-2">
             <div><p class="font-playfair text-4xl font-black text-textDark">15+</p><p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-1">Years of Excellence</p></div>
             <div class="w-px bg-borderSoft"></div>
@@ -210,7 +218,7 @@
           </div>
         </div>
         <!-- Right: image collage -->
-        <div class="anim-2 relative">
+        <div class="animate-anim-2 relative">
           <div class="grid grid-cols-2 gap-3">
             <div class="rounded-2xl overflow-hidden aspect-[3/4] bg-cream row-span-2 shadow-xl">
               <img src="./assests/thai.png" alt="Chef Marco" class="w-full h-full object-cover"/>
@@ -224,7 +232,7 @@
           </div>
           <!-- Floating award badge -->
           <div class="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl p-4 border border-borderSoft flex items-center gap-3 z-10">
-            <div class="w-10 h-10 rounded-xl bg-[rgba(184,150,62,0.1)] flex items-center justify-center text-xl">⭐</div>
+            <div class="w-10 h-10 rounded-xl bg-gold/[.1] flex items-center justify-center text-xl">⭐</div>
             <div>
               <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-gold">Michelin Guide</p>
               <p class="font-playfair text-sm font-black text-textDark">3-Star Restaurant</p>
@@ -235,21 +243,23 @@
 
       <!-- Mobile layout -->
       <div class="md:hidden">
-        <div class="anim-1 mb-6">
-          <div class="section-label mb-4">Est. 2010 · New York City</div>
+        <div class="animate-anim-1 mb-6">
+          <div class="flex items-center gap-2.5 mb-4">
+            <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+            <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">Est. 2010 · New York City</span>
+            <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+          </div>
           <h1 class="font-playfair text-4xl font-black text-textDark leading-[1.05] mb-4">
-            Our <em class="text-redPrimary" style="font-style:italic">Story</em><br/>of Passion
+            Our <em class="text-redPrimary italic">Story</em><br/>of Passion
           </h1>
           <p class="font-cormorant italic text-lg text-textMid/65 tracking-wide leading-relaxed">
             Born from a simple belief — that great food is the language of love. Savoria grew into New York's most celebrated dining destination.
           </p>
         </div>
-        <!-- Mobile image -->
-        <div class="anim-2 rounded-2xl overflow-hidden h-[240px] bg-cream mb-6 shadow-lg">
+        <div class="animate-anim-2 rounded-2xl overflow-hidden h-[240px] bg-cream mb-6 shadow-lg">
           <img src="./assests/thai.png" alt="Savoria" class="w-full h-full object-cover"/>
         </div>
-        <!-- Mobile stats row -->
-        <div class="anim-3 flex gap-5 flex-wrap">
+        <div class="animate-anim-3 flex gap-5 flex-wrap">
           <div class="flex-1 min-w-[80px] bg-white rounded-2xl border border-borderSoft p-4 text-center shadow-sm">
             <p class="font-playfair text-2xl font-black text-textDark">15+</p>
             <p class="text-[9px] uppercase tracking-[0.15em] text-textMid/50 font-semibold mt-0.5">Years</p>
@@ -271,15 +281,20 @@
   <!-- ══════════════════════════════════════
        MISSION DARK STRIP
   ══════════════════════════════════════ -->
-  <section class="dark-strip reveal">
+  <section class="relative overflow-hidden opacity-0 translate-y-8 transition-all duration-500" data-reveal style="background:linear-gradient(135deg,#1a1210 0%,#2d1e18 60%,#1a1210 100%)">
+    <!-- decorative circles -->
+    <div class="absolute pointer-events-none" style="top:-80px;right:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(184,150,62,.12) 0%,transparent 70%)"></div>
+    <div class="absolute pointer-events-none" style="bottom:-60px;left:20%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(192,57,43,.08) 0%,transparent 70%)"></div>
+
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-16 md:py-20 relative z-10">
       <div class="max-w-3xl mx-auto text-center">
-        <span class="tag tag-dark mb-5 inline-block">Our Philosophy</span>
+        <span class="inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[.12em] bg-white/[.12] text-white/80 mb-5">Our Philosophy</span>
         <div class="relative">
-          <span class="quote-bg">"</span>
+          <!-- big quote mark -->
+          <span class="absolute font-playfair text-[120px] leading-none text-gold/[.08] pointer-events-none select-none" style="top:-20px;left:-10px">"</span>
           <blockquote class="font-playfair text-2xl md:text-4xl font-black text-white leading-tight mb-6 relative z-10">
             We don't just serve food.<br/>
-            <em class="text-gold" style="font-style:italic">We compose experiences.</em>
+            <em class="text-gold italic">We compose experiences.</em>
           </blockquote>
         </div>
         <p class="font-cormorant italic text-white/55 text-lg md:text-xl tracking-wide leading-relaxed max-w-2xl mx-auto">
@@ -299,7 +314,7 @@
   <!-- ══════════════════════════════════════
        CHEF / STORY SECTION
   ══════════════════════════════════════ -->
-  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-16 md:py-24 reveal">
+  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-16 md:py-24 opacity-0 translate-y-8 transition-all duration-500" data-reveal>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
       <!-- Image side -->
       <div class="relative">
@@ -317,11 +332,16 @@
       </div>
       <!-- Text side -->
       <div>
-        <div class="section-label mb-5">Meet the Visionary</div>
+        <!-- section label -->
+        <div class="flex items-center gap-2.5 mb-5">
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+          <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">Meet the Visionary</span>
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+        </div>
         <h2 class="font-playfair text-4xl md:text-5xl font-black text-textDark leading-tight mb-5">
-          Chef Marco<br/><em class="text-redPrimary" style="font-style:italic">Ferretti</em>
+          Chef Marco<br/><em class="text-redPrimary italic">Ferretti</em>
         </h2>
-        <div class="accent-line mb-6"></div>
+        <div class="w-10 h-[3px] rounded-sm mb-6" style="background:linear-gradient(90deg,#c0392b,#b8963e)"></div>
         <p class="font-cormorant italic text-lg text-textMid/70 leading-relaxed mb-5">
           Born in Florence, Italy, Marco Ferretti discovered his love for cooking in his grandmother's kitchen at the age of seven. After training under legendary chefs in Paris, Milan, and Tokyo, he brought his unique cross-cultural vision to New York City in 2010.
         </p>
@@ -331,21 +351,21 @@
         <!-- Credentials -->
         <div class="space-y-3">
           <div class="flex items-center gap-3 p-3 bg-cream/60 rounded-xl border border-borderSoft">
-            <div class="w-8 h-8 rounded-lg bg-[rgba(184,150,62,0.1)] flex items-center justify-center text-base flex-shrink-0">🏆</div>
+            <div class="w-8 h-8 rounded-lg bg-gold/[.1] flex items-center justify-center text-base flex-shrink-0">🏆</div>
             <div>
               <p class="text-[12px] font-bold text-textDark">World's 50 Best Chefs</p>
               <p class="text-[10px] text-textMid/50 font-cormorant italic">5 consecutive years · 2019–2024</p>
             </div>
           </div>
           <div class="flex items-center gap-3 p-3 bg-cream/60 rounded-xl border border-borderSoft">
-            <div class="w-8 h-8 rounded-lg bg-[rgba(184,150,62,0.1)] flex items-center justify-center text-base flex-shrink-0">⭐</div>
+            <div class="w-8 h-8 rounded-lg bg-gold/[.1] flex items-center justify-center text-base flex-shrink-0">⭐</div>
             <div>
               <p class="text-[12px] font-bold text-textDark">Michelin 3-Star Rating</p>
               <p class="text-[10px] text-textMid/50 font-cormorant italic">Michelin Guide New York · Since 2015</p>
             </div>
           </div>
           <div class="flex items-center gap-3 p-3 bg-cream/60 rounded-xl border border-borderSoft">
-            <div class="w-8 h-8 rounded-lg bg-[rgba(184,150,62,0.1)] flex items-center justify-center text-base flex-shrink-0">📖</div>
+            <div class="w-8 h-8 rounded-lg bg-gold/[.1] flex items-center justify-center text-base flex-shrink-0">📖</div>
             <div>
               <p class="text-[12px] font-bold text-textDark">Author of "The Tuscan Table"</p>
               <p class="text-[10px] text-textMid/50 font-cormorant italic">Bestselling cookbook · 200K+ copies sold</p>
@@ -359,30 +379,35 @@
   <!-- ══════════════════════════════════════
        OUR VALUES
   ══════════════════════════════════════ -->
-  <section class="bg-cream/40 py-16 md:py-24 reveal">
+  <section class="bg-cream/40 py-16 md:py-24 opacity-0 translate-y-8 transition-all duration-500" data-reveal>
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14">
       <div class="text-center mb-14">
-        <div class="section-label justify-center mb-4">What Drives Us</div>
+        <div class="flex items-center justify-center gap-2.5 mb-4">
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+          <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">What Drives Us</span>
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+        </div>
         <h2 class="font-playfair text-4xl md:text-5xl font-black text-textDark">Our Core Values</h2>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div class="value-card">
-          <div class="value-icon bg-[rgba(192,57,43,0.06)]">🌿</div>
+        <!-- Value cards -->
+        <div class="bg-white rounded-[20px] border border-[#efe8e2] p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,.07)]">
+          <div class="w-[52px] h-[52px] rounded-2xl flex items-center justify-center text-[22px] mb-4 bg-redPrimary/[.06]">🌿</div>
           <h3 class="font-playfair text-xl font-black text-textDark mb-3">Seasonality</h3>
           <p class="text-sm text-textMid/65 leading-relaxed">Our menu changes with the seasons, honouring nature's rhythms and ensuring every ingredient is at its peak flavour.</p>
         </div>
-        <div class="value-card">
-          <div class="value-icon bg-[rgba(184,150,62,0.08)]">🤝</div>
+        <div class="bg-white rounded-[20px] border border-[#efe8e2] p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,.07)]">
+          <div class="w-[52px] h-[52px] rounded-2xl flex items-center justify-center text-[22px] mb-4 bg-gold/[.08]">🤝</div>
           <h3 class="font-playfair text-xl font-black text-textDark mb-3">Community</h3>
           <p class="text-sm text-textMid/65 leading-relaxed">We partner with over 30 local farms and artisan producers within 150 miles, supporting the communities that feed our kitchen.</p>
         </div>
-        <div class="value-card">
-          <div class="value-icon bg-[rgba(192,57,43,0.06)]">✨</div>
+        <div class="bg-white rounded-[20px] border border-[#efe8e2] p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,.07)]">
+          <div class="w-[52px] h-[52px] rounded-2xl flex items-center justify-center text-[22px] mb-4 bg-redPrimary/[.06]">✨</div>
           <h3 class="font-playfair text-xl font-black text-textDark mb-3">Craft</h3>
           <p class="text-sm text-textMid/65 leading-relaxed">Every technique, every plating, every sauce is executed with obsessive attention. Mediocrity has no place at our pass.</p>
         </div>
-        <div class="value-card">
-          <div class="value-icon bg-[rgba(184,150,62,0.08)]">💚</div>
+        <div class="bg-white rounded-[20px] border border-[#efe8e2] p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,.07)]">
+          <div class="w-[52px] h-[52px] rounded-2xl flex items-center justify-center text-[22px] mb-4 bg-gold/[.08]">💚</div>
           <h3 class="font-playfair text-xl font-black text-textDark mb-3">Sustainability</h3>
           <p class="text-sm text-textMid/65 leading-relaxed">Zero-waste kitchen philosophy, compostable packaging, and carbon-neutral delivery — because the planet deserves care too.</p>
         </div>
@@ -393,13 +418,17 @@
   <!-- ══════════════════════════════════════
        TIMELINE
   ══════════════════════════════════════ -->
-  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-16 md:py-24 reveal">
+  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-16 md:py-24 opacity-0 translate-y-8 transition-all duration-500" data-reveal>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
-      <!-- Left: heading + image -->
+      <!-- Left -->
       <div>
-        <div class="section-label mb-5">Our Journey</div>
+        <div class="flex items-center gap-2.5 mb-5">
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+          <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">Our Journey</span>
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+        </div>
         <h2 class="font-playfair text-4xl md:text-5xl font-black text-textDark leading-tight mb-6">
-          From Florence<br/>to <em class="text-redPrimary" style="font-style:italic">Fifth Avenue</em>
+          From Florence<br/>to <em class="text-redPrimary italic">Fifth Avenue</em>
         </h2>
         <p class="text-sm text-textMid/60 leading-relaxed mb-8">Fifteen years of milestones, awards, and unforgettable evenings — a brief look at how Savoria became what it is today.</p>
         <div class="rounded-2xl overflow-hidden h-[280px] bg-cream shadow-lg">
@@ -408,27 +437,37 @@
       </div>
       <!-- Right: timeline -->
       <div class="space-y-8 pt-2 md:pt-16">
-        <div class="timeline-item pb-8">
+        <!-- Each timeline item: left border with dot -->
+        <div class="relative pl-7 pb-8 border-l-0">
+          <span class="absolute left-0 top-2 w-2.5 h-2.5 rounded-full bg-gold flex-shrink-0 -translate-x-[5px]"></span>
+          <div class="absolute left-0 top-5 bottom-0 w-px" style="background:linear-gradient(to bottom,#b8963e,transparent)"></div>
           <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-gold mb-1">2010</p>
           <h4 class="font-playfair text-lg font-black text-textDark mb-1">Savoria Opens Its Doors</h4>
           <p class="text-sm text-textMid/60 leading-relaxed">Chef Marco opens a 40-seat restaurant on West 58th Street with a handwritten menu and a borrowed espresso machine.</p>
         </div>
-        <div class="timeline-item pb-8">
+        <div class="relative pl-7 pb-8">
+          <span class="absolute left-0 top-2 w-2.5 h-2.5 rounded-full bg-gold -translate-x-[5px]"></span>
+          <div class="absolute left-0 top-5 bottom-0 w-px" style="background:linear-gradient(to bottom,#b8963e,transparent)"></div>
           <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-gold mb-1">2013</p>
           <h4 class="font-playfair text-lg font-black text-textDark mb-1">First Michelin Star</h4>
           <p class="text-sm text-textMid/60 leading-relaxed">Three years in, the Michelin Guide awards Savoria its first star — the beginning of a remarkable recognition streak.</p>
         </div>
-        <div class="timeline-item pb-8">
+        <div class="relative pl-7 pb-8">
+          <span class="absolute left-0 top-2 w-2.5 h-2.5 rounded-full bg-gold -translate-x-[5px]"></span>
+          <div class="absolute left-0 top-5 bottom-0 w-px" style="background:linear-gradient(to bottom,#b8963e,transparent)"></div>
           <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-gold mb-1">2015</p>
           <h4 class="font-playfair text-lg font-black text-textDark mb-1">Three Stars & Expansion</h4>
           <p class="text-sm text-textMid/60 leading-relaxed">Savoria earns its third Michelin star and expands to a 120-seat dining room with a dedicated tasting counter.</p>
         </div>
-        <div class="timeline-item pb-8">
+        <div class="relative pl-7 pb-8">
+          <span class="absolute left-0 top-2 w-2.5 h-2.5 rounded-full bg-gold -translate-x-[5px]"></span>
+          <div class="absolute left-0 top-5 bottom-0 w-px" style="background:linear-gradient(to bottom,#b8963e,transparent)"></div>
           <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-gold mb-1">2019</p>
           <h4 class="font-playfair text-lg font-black text-textDark mb-1">World's 50 Best Debut</h4>
           <p class="text-sm text-textMid/60 leading-relaxed">Chef Marco enters the prestigious World's 50 Best Chefs list at number 22, drawing guests from over 60 countries.</p>
         </div>
-        <div class="timeline-item">
+        <div class="relative pl-7">
+          <span class="absolute left-0 top-2 w-2.5 h-2.5 rounded-full bg-gold -translate-x-[5px]"></span>
           <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-gold mb-1">2025</p>
           <h4 class="font-playfair text-lg font-black text-textDark mb-1">Savoria Today</h4>
           <p class="text-sm text-textMid/60 leading-relaxed">Now 15 years strong, Savoria continues to redefine fine dining with a seasonal tasting menu, private dining room, and culinary masterclasses.</p>
@@ -440,23 +479,27 @@
   <!-- ══════════════════════════════════════
        TEAM
   ══════════════════════════════════════ -->
-  <section class="bg-cream/40 py-16 md:py-24 reveal">
+  <section class="bg-cream/40 py-16 md:py-24 opacity-0 translate-y-8 transition-all duration-500" data-reveal>
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
         <div>
-          <div class="section-label mb-4">The People Behind the Magic</div>
+          <div class="flex items-center gap-2.5 mb-4">
+            <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+            <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">The People Behind the Magic</span>
+            <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+          </div>
           <h2 class="font-playfair text-4xl md:text-5xl font-black text-textDark">Meet Our Team</h2>
         </div>
         <p class="font-cormorant italic text-textMid/60 text-lg max-w-xs text-left md:text-right">A family of 45 dedicated culinary professionals united by a single passion.</p>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-        <!-- Team member 1 -->
-        <div class="team-card">
-          <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream">
-            <img src="./assests/thai.png" alt="Marco" class="w-full h-full object-cover"/>
+        <!-- Team cards -->
+        <div class="bg-white rounded-[20px] border border-[#efe8e2] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,.09)]">
+          <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream group">
+            <img src="./assests/thai.png" alt="Marco" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-4">
-              <span class="tag tag-red mb-1.5 block w-fit text-[9px]">Founder</span>
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-redPale text-redPrimary mb-1.5">Founder</span>
             </div>
           </div>
           <div class="p-4">
@@ -468,12 +511,11 @@
             </div>
           </div>
         </div>
-        <!-- Team member 2 -->
-        <div class="team-card">
-          <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream">
-            <img src="./assests/thai.png" alt="Sophia" class="w-full h-full object-cover"/>
+        <div class="bg-white rounded-[20px] border border-[#efe8e2] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,.09)]">
+          <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream group">
+            <img src="./assests/thai.png" alt="Sophia" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <div class="absolute bottom-0 left-0 right-0 p-4"><span class="tag tag-gold mb-1.5 block w-fit text-[9px]">Pastry</span></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4"><span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-gold/[.1] text-gold mb-1.5">Pastry</span></div>
           </div>
           <div class="p-4">
             <h4 class="font-playfair text-base font-black text-textDark leading-tight">Sophia Laurent</h4>
@@ -484,12 +526,11 @@
             </div>
           </div>
         </div>
-        <!-- Team member 3 -->
-        <div class="team-card">
-          <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream">
-            <img src="./assests/thai.png" alt="Kenji" class="w-full h-full object-cover"/>
+        <div class="bg-white rounded-[20px] border border-[#efe8e2] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,.09)]">
+          <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream group">
+            <img src="./assests/thai.png" alt="Kenji" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <div class="absolute bottom-0 left-0 right-0 p-4"><span class="tag tag-dark mb-1.5 block w-fit text-[9px]">Sommelier</span></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4"><span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-white/[.12] text-white/80 mb-1.5">Sommelier</span></div>
           </div>
           <div class="p-4">
             <h4 class="font-playfair text-base font-black text-textDark leading-tight">Kenji Nakamura</h4>
@@ -500,12 +541,11 @@
             </div>
           </div>
         </div>
-        <!-- Team member 4 -->
-        <div class="team-card">
-          <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream">
-            <img src="./assests/thai.png" alt="Amara" class="w-full h-full object-cover"/>
+        <div class="bg-white rounded-[20px] border border-[#efe8e2] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,.09)]">
+          <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream group">
+            <img src="./assests/thai.png" alt="Amara" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <div class="absolute bottom-0 left-0 right-0 p-4"><span class="tag tag-gold mb-1.5 block w-fit text-[9px]">Service</span></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4"><span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-gold/[.1] text-gold mb-1.5">Service</span></div>
           </div>
           <div class="p-4">
             <h4 class="font-playfair text-base font-black text-textDark leading-tight">Amara Osei</h4>
@@ -523,53 +563,39 @@
   <!-- ══════════════════════════════════════
        AWARDS & RECOGNITION
   ══════════════════════════════════════ -->
-  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-16 md:py-20 reveal">
+  <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-16 md:py-20 opacity-0 translate-y-8 transition-all duration-500" data-reveal>
     <div class="text-center mb-12">
-      <div class="section-label justify-center mb-4">Honours & Recognition</div>
+      <div class="flex items-center justify-center gap-2.5 mb-4">
+        <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+        <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">Honours & Recognition</span>
+        <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+      </div>
       <h2 class="font-playfair text-4xl md:text-5xl font-black text-textDark">Awards</h2>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div class="award-badge">
+      <div class="bg-gold/[.08] border border-gold/20 rounded-2xl p-4 flex items-center gap-3.5 transition hover:bg-gold/[.13]">
         <div class="text-3xl flex-shrink-0">⭐</div>
-        <div>
-          <p class="font-playfair text-base font-black text-textDark">3 Michelin Stars</p>
-          <p class="text-[11px] text-textMid/55 font-cormorant italic">Michelin Guide New York · Since 2015</p>
-        </div>
+        <div><p class="font-playfair text-base font-black text-textDark">3 Michelin Stars</p><p class="text-[11px] text-textMid/55 font-cormorant italic">Michelin Guide New York · Since 2015</p></div>
       </div>
-      <div class="award-badge">
+      <div class="bg-gold/[.08] border border-gold/20 rounded-2xl p-4 flex items-center gap-3.5 transition hover:bg-gold/[.13]">
         <div class="text-3xl flex-shrink-0">🏆</div>
-        <div>
-          <p class="font-playfair text-base font-black text-textDark">World's 50 Best #14</p>
-          <p class="text-[11px] text-textMid/55 font-cormorant italic">World's 50 Best Restaurants · 2024</p>
-        </div>
+        <div><p class="font-playfair text-base font-black text-textDark">World's 50 Best #14</p><p class="text-[11px] text-textMid/55 font-cormorant italic">World's 50 Best Restaurants · 2024</p></div>
       </div>
-      <div class="award-badge">
+      <div class="bg-gold/[.08] border border-gold/20 rounded-2xl p-4 flex items-center gap-3.5 transition hover:bg-gold/[.13]">
         <div class="text-3xl flex-shrink-0">📰</div>
-        <div>
-          <p class="font-playfair text-base font-black text-textDark">Restaurant of the Year</p>
-          <p class="text-[11px] text-textMid/55 font-cormorant italic">New York Times · 2023 & 2024</p>
-        </div>
+        <div><p class="font-playfair text-base font-black text-textDark">Restaurant of the Year</p><p class="text-[11px] text-textMid/55 font-cormorant italic">New York Times · 2023 & 2024</p></div>
       </div>
-      <div class="award-badge">
+      <div class="bg-gold/[.08] border border-gold/20 rounded-2xl p-4 flex items-center gap-3.5 transition hover:bg-gold/[.13]">
         <div class="text-3xl flex-shrink-0">🍷</div>
-        <div>
-          <p class="font-playfair text-base font-black text-textDark">Wine Spectator Grand Award</p>
-          <p class="text-[11px] text-textMid/55 font-cormorant italic">Best Wine Programme · 2022–2024</p>
-        </div>
+        <div><p class="font-playfair text-base font-black text-textDark">Wine Spectator Grand Award</p><p class="text-[11px] text-textMid/55 font-cormorant italic">Best Wine Programme · 2022–2024</p></div>
       </div>
-      <div class="award-badge">
+      <div class="bg-gold/[.08] border border-gold/20 rounded-2xl p-4 flex items-center gap-3.5 transition hover:bg-gold/[.13]">
         <div class="text-3xl flex-shrink-0">🌿</div>
-        <div>
-          <p class="font-playfair text-base font-black text-textDark">Michelin Green Star</p>
-          <p class="text-[11px] text-textMid/55 font-cormorant italic">Sustainable Gastronomy · 2021</p>
-        </div>
+        <div><p class="font-playfair text-base font-black text-textDark">Michelin Green Star</p><p class="text-[11px] text-textMid/55 font-cormorant italic">Sustainable Gastronomy · 2021</p></div>
       </div>
-      <div class="award-badge">
+      <div class="bg-gold/[.08] border border-gold/20 rounded-2xl p-4 flex items-center gap-3.5 transition hover:bg-gold/[.13]">
         <div class="text-3xl flex-shrink-0">👨‍🍳</div>
-        <div>
-          <p class="font-playfair text-base font-black text-textDark">Best Chef — Americas</p>
-          <p class="text-[11px] text-textMid/55 font-cormorant italic">James Beard Foundation · 2020</p>
-        </div>
+        <div><p class="font-playfair text-base font-black text-textDark">Best Chef — Americas</p><p class="text-[11px] text-textMid/55 font-cormorant italic">James Beard Foundation · 2020</p></div>
       </div>
     </div>
   </section>
@@ -577,14 +603,18 @@
   <!-- ══════════════════════════════════════
        TESTIMONIALS
   ══════════════════════════════════════ -->
-  <section class="bg-cream/40 py-16 md:py-20 reveal">
+  <section class="bg-cream/40 py-16 md:py-20 opacity-0 translate-y-8 transition-all duration-500" data-reveal>
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14">
       <div class="text-center mb-14">
-        <div class="section-label justify-center mb-4">What Guests Say</div>
+        <div class="flex items-center justify-center gap-2.5 mb-4">
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+          <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">What Guests Say</span>
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+        </div>
         <h2 class="font-playfair text-4xl md:text-5xl font-black text-textDark">Voices of Savoria</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="testimonial-card">
+        <div class="bg-white rounded-2xl border border-[#efe8e2] p-6 transition hover:shadow-[0_8px_24px_rgba(0,0,0,.07)]">
           <div class="flex gap-0.5 mb-4"><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i></div>
           <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"An extraordinary culinary journey. The Bistecca was cooked to absolute perfection — I've never tasted anything like it."</p>
           <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
@@ -592,7 +622,7 @@
             <div><p class="text-sm font-semibold text-textDark">Alexandra M.</p><p class="text-[11px] text-textMid/50">Regular Guest · New York</p></div>
           </div>
         </div>
-        <div class="testimonial-card">
+        <div class="bg-white rounded-2xl border border-[#efe8e2] p-6 transition hover:shadow-[0_8px_24px_rgba(0,0,0,.07)]">
           <div class="flex gap-0.5 mb-4"><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i></div>
           <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"The ambiance, the service, the food — everything was impeccable. Savoria has truly set a new standard for fine dining."</p>
           <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
@@ -600,7 +630,7 @@
             <div><p class="text-sm font-semibold text-textDark">James R.</p><p class="text-[11px] text-textMid/50">Food Critic · The Times</p></div>
           </div>
         </div>
-        <div class="testimonial-card">
+        <div class="bg-white rounded-2xl border border-[#efe8e2] p-6 transition hover:shadow-[0_8px_24px_rgba(0,0,0,.07)]">
           <div class="flex gap-0.5 mb-4"><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i></div>
           <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"Chef Marco's Panna Cotta is a poem on a plate. We celebrate every anniversary here — it never disappoints."</p>
           <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
@@ -615,24 +645,28 @@
   <!-- ══════════════════════════════════════
        CTA — RESERVATION
   ══════════════════════════════════════ -->
-
   <section id="reservation" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-16 mb-10">
     <div class="bg-cream rounded-2xl p-12 lg:p-16 flex items-center justify-between gap-8 border border-borderSoft">
       <div>
-        <div class="section-label mb-4">Book Your Experience</div>
+        <div class="flex items-center gap-2.5 mb-4">
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+          <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">Book Your Experience</span>
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+        </div>
         <h2 class="font-playfair text-4xl font-black text-textDark mb-3">Reserve Your Table<br/>for Tonight</h2>
         <p class="font-cormorant italic text-textMid/60 text-lg">Open Monday to Sunday · 12:00pm – 11:00pm<br/>+1 (555) 920-4200</p>
       </div>
       <div class="flex flex-col gap-3 flex-shrink-0">
-        <a href="/reserve.html" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center"><i class="fa-regular fa-calendar-check"></i> Book Online</a>
+        <a href="/reserve.html" class="text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)"><i class="fa-regular fa-calendar-check"></i> Book Online</a>
         <a href="tel:+15559204200" class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center"><i class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us</a>
       </div>
     </div>
   </section>
+
   <!-- ══════════════════════════════════════
        FOOTER
   ══════════════════════════════════════ -->
-  <footer id="contact" class="footer-bg">
+  <footer id="contact" style="background:linear-gradient(160deg,#1a1210 0%,#2a1a14 100%)">
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-16">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mb-12">
         <div class="col-span-2 md:col-span-1">
@@ -671,7 +705,7 @@
           </ul>
         </div>
       </div>
-      <div class="gold-line h-[1px] mb-6 opacity-20"></div>
+      <div class="h-px mb-6 opacity-20" style="background:linear-gradient(90deg,transparent,#b8963e 30%,#d4af6a 60%,transparent)"></div>
       <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
         <p class="text-white/30 text-xs">© 2025 Savoria Fine Dining. All rights reserved.</p>
         <p class="font-cormorant italic text-gold/40 text-sm">Where every dish tells a story</p>
@@ -682,26 +716,65 @@
 </main>
 
 <!-- ══════════ MOBILE BOTTOM NAV ══════════ -->
-<nav class="mobile-bottom-nav md:hidden">
-  <div class="nav-item" onclick="location.href='index.html'">
-    <i class="fa-solid fa-house"></i><span>Home</span>
+<nav class="fixed bottom-0 left-0 right-0 z-[900] bg-white border-t border-[#efe8e2] flex items-center justify-around py-2.5 pb-3.5 shadow-[0_-4px_20px_rgba(0,0,0,.06)] md:hidden">
+  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold uppercase tracking-[.08em] text-[#9b8c86] cursor-pointer transition hover:text-redPrimary min-w-[48px]" onclick="location.href='index.html'">
+    <i class="fa-solid fa-house text-[18px]"></i><span>Home</span>
   </div>
-  <div class="nav-item" onclick="location.href='menu.html'">
-    <i class="fa-solid fa-utensils"></i><span>Menu</span>
+  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold uppercase tracking-[.08em] text-[#9b8c86] cursor-pointer transition hover:text-redPrimary min-w-[48px]" onclick="location.href='menu.html'">
+    <i class="fa-solid fa-utensils text-[18px]"></i><span>Menu</span>
   </div>
   <div onclick="toggleCart()">
-    <div class="cart-fab">
+    <div class="w-[52px] h-[52px] rounded-full flex items-center justify-center text-white text-[20px] -mt-6 relative flex-shrink-0" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 16px rgba(192,57,43,.4)">
       <i class="fa-solid fa-bag-shopping text-lg"></i>
-      <div class="badge" id="mobileBadge" style="display:none">0</div>
+      <div id="mobileBadge" class="absolute top-0 right-0 w-[18px] h-[18px] bg-gold rounded-full text-[9px] font-bold text-white flex items-center justify-center hidden">0</div>
     </div>
   </div>
-  <div class="nav-item active">
-    <i class="fa-regular fa-address-card"></i><span>About</span>
+  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold uppercase tracking-[.08em] text-redPrimary cursor-pointer min-w-[48px]">
+    <i class="fa-regular fa-address-card text-[18px]"></i><span>About</span>
   </div>
-  <div class="nav-item">
-    <i class="fa-regular fa-circle-user"></i><span>Profile</span>
+  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold uppercase tracking-[.08em] text-[#9b8c86] cursor-pointer transition hover:text-redPrimary min-w-[48px]">
+    <i class="fa-regular fa-circle-user text-[18px]"></i><span>Profile</span>
   </div>
 </nav>
+
+<script>
+/* ─── Reveal on scroll ─── */
+const revealEls = document.querySelectorAll('[data-reveal]');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.remove('opacity-0', 'translate-y-8');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => io.observe(el));
+
+/* ─── Menu toggle ─── */
+function toggleMenu() {
+  const m = document.getElementById('mobileMenu');
+  const o = document.getElementById('overlay');
+  const isOpen = m.style.transform === 'translateX(0%)';
+  m.style.display = 'flex';
+  m.style.flexDirection = 'column';
+  requestAnimationFrame(() => { m.style.transform = isOpen ? 'translateX(100%)' : 'translateX(0%)'; });
+  o.style.opacity = isOpen ? '0' : '1';
+  o.style.pointerEvents = isOpen ? 'none' : 'auto';
+}
+function closeAll() { toggleMenu(); }
+
+/* ─── Cart toggle ─── */
+function toggleCart() {
+  const panel = document.getElementById('cartPanel');
+  const backdrop = document.getElementById('cartBackdrop');
+  const modal = document.getElementById('cartModal');
+  const isOpen = panel.style.transform === 'translateY(0%)' || panel.style.transform === 'translateX(0%)';
+  modal.style.pointerEvents = isOpen ? 'none' : 'auto';
+  backdrop.style.opacity = isOpen ? '0' : '1';
+  const isMobile = window.innerWidth < 768;
+  panel.style.transform = isOpen ? (isMobile ? 'translateY(100%)' : 'translateX(100%)') : (isMobile ? 'translateY(0%)' : 'translateX(0%)');
+}
+</script>
 
 <script src="/static/js/main.js"></script>
 </body>

@@ -1,12 +1,14 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Savoria — Fine Dining Experience</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
 
@@ -46,659 +48,864 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
 
-<!-- ═══════════ OVERLAY ═══════════ -->
-<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none
+  <!-- ═══════════ OVERLAY ═══════════ -->
+  <div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none
  backdrop-blur-[2px]" onclick="closeAll()"></div>
 
-<!-- ═══════════ MOBILE MENU ═══════════ -->
-<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex-col p-10 hidden" style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
-  <div class="flex justify-between items-center mb-10">
-    <div>
-      <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-      <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
+  <!-- ═══════════ MOBILE MENU ═══════════ -->
+  <div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex-col p-10 hidden"
+    style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
+    <div class="flex justify-between items-center mb-10">
+      <div>
+        <span class="font-playfair text-2xl font-black text-white">Sav<span
+            class="italic font-light text-redPrimary">o</span>ria</span>
+        <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
+      </div>
+      <button onclick="toggleMenu()"
+        class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
     </div>
-    <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
+    <div class="gold-line h-[1px] w-full mb-8"></div>
+    <ul class="flex flex-col gap-1 flex-1">
+      <li><a href="/" onclick="toggleMenu()"
+          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+      <li><a href="menu.html" onclick="toggleMenu()"
+          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
+      <li><a href="/about.html" onclick="toggleMenu()"
+          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+      <li><a href="/reserve.html" onclick="toggleMenu()"
+          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+      <li><a href="/contact.html" onclick="toggleMenu()"
+          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+    </ul>
+    <div class="mt-auto space-y-3">
+      <a href="reserve.html" onclick="toggleMenu()"
+        class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
+        <i class="fa-regular fa-calendar-check"></i> Book a Table
+      </a>
+      <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
+        <span>📞 +1 (555) 920-4200</span><span>·</span><span>Mon–Sun 12–11pm</span>
+      </div>
+    </div>
   </div>
-  <div class="gold-line h-[1px] w-full mb-8"></div>
-  <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="/" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
-    <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="/about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-    <li><a href="/reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
-  </ul>
-  <div class="mt-auto space-y-3">
-    <a href="reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
-      <i class="fa-regular fa-calendar-check"></i> Book a Table
-    </a>
-    <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
-      <span>📞 +1 (555) 920-4200</span><span>·</span><span>Mon–Sun 12–11pm</span>
-    </div>
-  </div>
-</div>
 
-<!-- ═══════════ CART MODAL ═══════════ -->
-<div id="cartModal" class="fixed inset-0 z-[1200] pointer-events-none">
-  <div id="cartBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 transition-opacity duration-300 hidden md:block" onclick="toggleCart()"></div>
-  <div id="cartPanel"
-       class="absolute bg-white flex flex-col bottom-0 left-0 right-0 h-[95vh] rounded-t-[24px] md:top-0 md:right-0 md:left-auto md:bottom-auto md:h-full md:w-[460px] md:rounded-none"
-       style="transform:translateY(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); box-shadow: -8px 0 40px rgba(0,0,0,0.12);">
+  <!-- ═══════════ CART MODAL ═══════════ -->
+  <div id="cartModal" class="fixed inset-0 z-[1200] pointer-events-none">
+    <div id="cartBackdrop"
+      class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 transition-opacity duration-300 hidden md:block"
+      onclick="toggleCart()"></div>
+    <div id="cartPanel"
+      class="absolute bg-white flex flex-col bottom-0 left-0 right-0 h-[95vh] rounded-t-[24px] md:top-0 md:right-0 md:left-auto md:bottom-auto md:h-full md:w-[460px] md:rounded-none"
+      style="transform:translateY(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); box-shadow: -8px 0 40px rgba(0,0,0,0.12);">
 
-    <!-- Mobile drag handle -->
-    <div class="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
-      <div class="w-10 h-[4px] rounded-full bg-borderSoft"></div>
-    </div>
-
-    <!-- Header -->
-    <div class="flex items-center justify-between px-6 py-4 flex-shrink-0 border-b border-borderSoft">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-redPale flex items-center justify-center">
-          <i class="fa-solid fa-bag-shopping text-redPrimary text-sm"></i>
-        </div>
-        <div>
-          <h2 class="font-playfair text-lg font-bold text-textDark leading-tight">Your Order</h2>
-          <p class="text-[11px] text-textMid/50 mt-0.5" id="cartSubtitle">Table 7 · Dine In</p>
-        </div>
+      <!-- Mobile drag handle -->
+      <div class="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
+        <div class="w-10 h-[4px] rounded-full bg-borderSoft"></div>
       </div>
-      <button onclick="toggleCart()" class="w-9 h-9 rounded-full border border-borderSoft text-textMid/50 hover:border-redPrimary hover:text-redPrimary transition flex items-center justify-center text-sm">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
 
-    <!-- Progress steps -->
-    <div class="px-6 py-4 flex-shrink-0 border-b border-borderSoft bg-white">
-      <div class="flex items-center gap-0">
-        <div class="flex flex-col items-center gap-1.5 flex-1">
-          <div class="w-7 h-7 rounded-full bg-redPrimary flex items-center justify-center"><i class="fa-solid fa-check text-white text-[10px]"></i></div>
-          <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-redPrimary">Cart</span>
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 py-4 flex-shrink-0 border-b border-borderSoft">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-redPale flex items-center justify-center">
+            <i class="fa-solid fa-bag-shopping text-redPrimary text-sm"></i>
+          </div>
+          <div>
+            <h2 class="font-playfair text-lg font-bold text-textDark leading-tight">Your Order</h2>
+            <p class="text-[11px] text-textMid/50 mt-0.5" id="cartSubtitle">Table 7 · Dine In</p>
+          </div>
         </div>
-        <div class="flex-1 h-[2px] bg-borderSoft mb-4 mx-1"><div class="h-full bg-redPrimary w-1/2 rounded-full"></div></div>
-        <div class="flex flex-col items-center gap-1.5 flex-1">
-          <div class="w-7 h-7 rounded-full border-2 border-borderSoft flex items-center justify-center"><span class="text-[10px] font-bold text-textMid/40">2</span></div>
-          <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-textMid/40">Details</span>
-        </div>
-        <div class="flex-1 h-[2px] bg-borderSoft mb-4 mx-1"></div>
-        <div class="flex flex-col items-center gap-1.5 flex-1">
-          <div class="w-7 h-7 rounded-full border-2 border-borderSoft flex items-center justify-center"><span class="text-[10px] font-bold text-textMid/40">3</span></div>
-          <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-textMid/40">Confirm</span>
-        </div>
+        <button onclick="toggleCart()"
+          class="w-9 h-9 rounded-full border border-borderSoft text-textMid/50 hover:border-redPrimary hover:text-redPrimary transition flex items-center justify-center text-sm">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
-    </div>
 
-    <!-- Scrollable body -->
-    <div class="flex-1 overflow-y-auto bg-white" id="cartScrollBody">
-
-      <!-- Dine in / Takeout toggle -->
-      <div class="px-6 pt-5 pb-4">
-        <div class="flex gap-2 p-1 bg-cream rounded-xl">
-          <button id="dineBtn" onclick="setOrderType('dine')" class="flex-1 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.12em] transition-all bg-white text-textDark shadow-sm">
-            <i class="fa-solid fa-utensils mr-1.5 text-[10px]"></i> Dine In
-          </button>
-          <button id="takeBtn" onclick="setOrderType('take')" class="flex-1 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.12em] transition-all text-textMid/50">
-            <i class="fa-solid fa-box mr-1.5 text-[10px]"></i> Takeout
-          </button>
+      <!-- Progress steps -->
+      <div class="px-6 py-4 flex-shrink-0 border-b border-borderSoft bg-white">
+        <div class="flex items-center gap-0">
+          <div class="flex flex-col items-center gap-1.5 flex-1">
+            <div class="w-7 h-7 rounded-full bg-redPrimary flex items-center justify-center"><i
+                class="fa-solid fa-check text-white text-[10px]"></i></div>
+            <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-redPrimary">Cart</span>
+          </div>
+          <div class="flex-1 h-[2px] bg-borderSoft mb-4 mx-1">
+            <div class="h-full bg-redPrimary w-1/2 rounded-full"></div>
+          </div>
+          <div class="flex flex-col items-center gap-1.5 flex-1">
+            <div class="w-7 h-7 rounded-full border-2 border-borderSoft flex items-center justify-center"><span
+                class="text-[10px] font-bold text-textMid/40">2</span></div>
+            <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-textMid/40">Details</span>
+          </div>
+          <div class="flex-1 h-[2px] bg-borderSoft mb-4 mx-1"></div>
+          <div class="flex flex-col items-center gap-1.5 flex-1">
+            <div class="w-7 h-7 rounded-full border-2 border-borderSoft flex items-center justify-center"><span
+                class="text-[10px] font-bold text-textMid/40">3</span></div>
+            <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-textMid/40">Confirm</span>
+          </div>
         </div>
       </div>
 
-      <!-- Items label -->
-      <div class="px-6 pb-3 flex items-center justify-between">
-        <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-textMid/40">Order Items</p>
-        <span id="itemCountBadge" class="text-[10px] font-bold text-redPrimary bg-redPale px-2 py-0.5 rounded-full">0 items</span>
-      </div>
+      <!-- Scrollable body -->
+      <div class="flex-1 overflow-y-auto bg-white" id="cartScrollBody">
 
-      <!-- Cart items container -->
-      <div id="cartItemsContainer"></div>
+        <!-- Dine in / Takeout toggle -->
+        <div class="px-6 pt-5 pb-4">
+          <div class="flex gap-2 p-1 bg-cream rounded-xl">
+            <button id="dineBtn" onclick="setOrderType('dine')"
+              class="flex-1 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.12em] transition-all bg-white text-textDark shadow-sm">
+              <i class="fa-solid fa-utensils mr-1.5 text-[10px]"></i> Dine In
+            </button>
+            <button id="takeBtn" onclick="setOrderType('take')"
+              class="flex-1 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.12em] transition-all text-textMid/50">
+              <i class="fa-solid fa-box mr-1.5 text-[10px]"></i> Takeout
+            </button>
+          </div>
+        </div>
 
-      <!-- Empty state -->
-      <div id="cartEmpty" class="px-6 py-12 text-center">
-        <div class="text-5xl mb-4">🛒</div>
-        <p class="font-playfair text-lg font-bold text-textDark mb-1">Your cart is empty</p>
-        <p class="font-cormorant italic text-textMid/50">Add dishes from the menu to get started</p>
-        <a href="menu.html" onclick="toggleCart()" class="mt-4 inline-block book-btn text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.15em]">Browse Menu</a>
-      </div>
+        <!-- Items label -->
+        <div class="px-6 pb-3 flex items-center justify-between">
+          <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-textMid/40">Order Items</p>
+          <span id="itemCountBadge" class="text-[10px] font-bold text-redPrimary bg-redPale px-2 py-0.5 rounded-full">0
+            items</span>
+        </div>
 
-      <!-- Upsell (wine pairing) -->
-      <div id="cartUpsell" class="px-6 py-4 border-b border-borderSoft/50 hidden">
-        <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-gold mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i> Pair it with
-        </p>
-        <div class="flex items-center justify-between gap-3 bg-cream/60 rounded-2xl p-3 border border-borderSoft">
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-xl bg-white border border-borderSoft flex items-center justify-center text-xl flex-shrink-0">🍷</div>
-            <div>
-              <p class="text-[13px] font-semibold text-textDark leading-tight">Chianti Classico</p>
-              <p class="text-[10px] text-textMid/50 font-cormorant italic">2018 · Tuscany · 750ml</p>
-              <div class="flex items-center gap-1 mt-1">
-                <i class="fa-solid fa-star text-gold text-[8px]"></i>
-                <span class="text-[9px] text-textMid/50">4.8 · 120 orders</span>
+        <!-- Cart items container -->
+        <div id="cartItemsContainer"></div>
+
+        <!-- Empty state -->
+        <div id="cartEmpty" class="px-6 py-12 text-center">
+          <div class="text-5xl mb-4">🛒</div>
+          <p class="font-playfair text-lg font-bold text-textDark mb-1">Your cart is empty</p>
+          <p class="font-cormorant italic text-textMid/50">Add dishes from the menu to get started</p>
+          <a href="menu.html" onclick="toggleCart()"
+            class="mt-4 inline-block book-btn text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.15em]">Browse
+            Menu</a>
+        </div>
+
+        <!-- Upsell (wine pairing) -->
+        <div id="cartUpsell" class="px-6 py-4 border-b border-borderSoft/50 hidden">
+          <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-gold mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i> Pair it with
+          </p>
+          <div class="flex items-center justify-between gap-3 bg-cream/60 rounded-2xl p-3 border border-borderSoft">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-12 h-12 rounded-xl bg-white border border-borderSoft flex items-center justify-center text-xl flex-shrink-0">
+                🍷</div>
+              <div>
+                <p class="text-[13px] font-semibold text-textDark leading-tight">Chianti Classico</p>
+                <p class="text-[10px] text-textMid/50 font-cormorant italic">2018 · Tuscany · 750ml</p>
+                <div class="flex items-center gap-1 mt-1">
+                  <i class="fa-solid fa-star text-gold text-[8px]"></i>
+                  <span class="text-[9px] text-textMid/50">4.8 · 120 orders</span>
+                </div>
+              </div>
+            </div>
+            <button onclick="addToCart('Chianti Classico', 18)"
+              class="flex-shrink-0 text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-2 rounded-full hover:bg-redPrimary hover:text-white hover:border-transparent transition whitespace-nowrap">
+              + $18
+            </button>
+          </div>
+        </div>
+
+        <!-- Kitchen note -->
+        <div id="cartNote" class="px-6 py-4 border-b border-borderSoft/50 hidden">
+          <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-textMid/40 mb-2.5">Special Instructions</p>
+          <div
+            class="flex items-start gap-2.5 bg-white border border-borderSoft rounded-xl px-3 py-2.5 focus-within:border-gold transition">
+            <i class="fa-regular fa-note-sticky text-gold/60 mt-0.5 flex-shrink-0"></i>
+            <textarea rows="2" placeholder="Allergies, preferences, or notes for the kitchen…"
+              class="bg-transparent flex-1 outline-none placeholder-textMid/35 text-[12px] text-textDark resize-none leading-relaxed"></textarea>
+          </div>
+        </div>
+
+        <!-- Est. time -->
+        <div id="cartMeta" class="px-6 py-4 hidden">
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 flex-1 bg-white border border-borderSoft rounded-xl p-3">
+              <div class="w-8 h-8 rounded-lg bg-cream flex items-center justify-center flex-shrink-0"><i
+                  class="fa-regular fa-clock text-gold text-sm"></i></div>
+              <div>
+                <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40">Est. Time</p>
+                <p class="text-sm font-bold text-textDark mt-0.5">25–35 min</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 flex-1 bg-white border border-borderSoft rounded-xl p-3">
+              <div class="w-8 h-8 rounded-lg bg-cream flex items-center justify-center flex-shrink-0"><i
+                  class="fa-solid fa-chair text-gold text-sm"></i></div>
+              <div>
+                <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40">Table</p>
+                <p class="text-sm font-bold text-textDark mt-0.5">No. 7 · 4 Seats</p>
               </div>
             </div>
           </div>
-          <button onclick="addToCart('Chianti Classico', 18)" class="flex-shrink-0 text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-2 rounded-full hover:bg-redPrimary hover:text-white hover:border-transparent transition whitespace-nowrap">
-            + $18
+        </div>
+
+      </div>
+
+      <!-- Footer / Totals -->
+      <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 md:pb-5 flex-shrink-0"
+        style="box-shadow: 0 -4px 20px rgba(0,0,0,0.04);">
+        <div class="space-y-2 mb-4" id="cartTotalsBlock"></div>
+        <!-- Payment method (shown when has items) -->
+        <div id="cartPayment"
+          class="hidden flex items-center gap-2 mb-4 p-3 bg-cream/60 rounded-xl border border-borderSoft">
+          <i class="fa-regular fa-credit-card text-textMid/40 text-sm"></i>
+          <span class="text-[12px] text-textMid/60 flex-1">Visa •••• 4242</span>
+          <button class="text-[10px] font-bold text-gold uppercase tracking-wider">Change</button>
+        </div>
+        <button id="cartConfirmBtn"
+          class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed"
+          disabled>
+          <i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order
+        </button>
+        <button onclick="toggleCart()"
+          class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">
+          Continue Browsing
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ NAVBAR ═══════════ -->
+  <div id="pageContent">
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
+      style="background:rgba(255,255,255,0)">
+
+      <div id="navInner"
+        class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
+        <a href="#" class="flex flex-col leading-none group flex-shrink-0">
+          <span
+            class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
+            Sav<span class="italic font-light text-redPrimary">o</span>ria
+          </span>
+          <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block"
+            style="margin-top:-2px">Fine Dining</span>
+        </a>
+        <ul
+          class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
+          <li><a href="#" class="nav-link transition">Home</a></li>
+          <li><a href="menu.html" class="nav-link transition">Menu</a></li>
+          <li><a href="/about.html" class="nav-link transition">About</a></li>
+          <li><a href="/reserve.html" class="nav-link transition">Reserve</a></li>
+          <li><a href="/contact.html" class="nav-link transition">Contact</a></li>
+        </ul>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center
+         rounded-full  text-textMid hover:text-redPrimary transition p-2">
+            <i class="fa-solid fa-cart-shopping text-[20px] "></i>
+            <span id="cartBadge"
+              class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
+          </button>
+          <button class="hidden md:flex items-center gap-1.5 text-[11px]
+         font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold
+          transition pl-3 border-l border-borderSoft ml-1">
+            <i class="fa-regular fa-circle-user"></i>
+            <a href="/login.html">Login</a>
+          </button>
+          <a href="/reserve.html"
+            class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
+            <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
+          </a>
+          <button onclick="toggleMenu()"
+            class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
+            <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+            <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
+            <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
           </button>
         </div>
       </div>
-
-      <!-- Kitchen note -->
-      <div id="cartNote" class="px-6 py-4 border-b border-borderSoft/50 hidden">
-        <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-textMid/40 mb-2.5">Special Instructions</p>
-        <div class="flex items-start gap-2.5 bg-white border border-borderSoft rounded-xl px-3 py-2.5 focus-within:border-gold transition">
-          <i class="fa-regular fa-note-sticky text-gold/60 mt-0.5 flex-shrink-0"></i>
-          <textarea rows="2" placeholder="Allergies, preferences, or notes for the kitchen…" class="bg-transparent flex-1 outline-none placeholder-textMid/35 text-[12px] text-textDark resize-none leading-relaxed"></textarea>
-        </div>
-      </div>
-
-      <!-- Est. time -->
-      <div id="cartMeta" class="px-6 py-4 hidden">
-        <div class="flex items-center justify-between gap-4">
-          <div class="flex items-center gap-3 flex-1 bg-white border border-borderSoft rounded-xl p-3">
-            <div class="w-8 h-8 rounded-lg bg-cream flex items-center justify-center flex-shrink-0"><i class="fa-regular fa-clock text-gold text-sm"></i></div>
-            <div><p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40">Est. Time</p><p class="text-sm font-bold text-textDark mt-0.5">25–35 min</p></div>
-          </div>
-          <div class="flex items-center gap-3 flex-1 bg-white border border-borderSoft rounded-xl p-3">
-            <div class="w-8 h-8 rounded-lg bg-cream flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-chair text-gold text-sm"></i></div>
-            <div><p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40">Table</p><p class="text-sm font-bold text-textDark mt-0.5">No. 7 · 4 Seats</p></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Footer / Totals -->
-    <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 md:pb-5 flex-shrink-0" style="box-shadow: 0 -4px 20px rgba(0,0,0,0.04);">
-      <div class="space-y-2 mb-4" id="cartTotalsBlock"></div>
-      <!-- Payment method (shown when has items) -->
-      <div id="cartPayment" class="hidden flex items-center gap-2 mb-4 p-3 bg-cream/60 rounded-xl border border-borderSoft">
-        <i class="fa-regular fa-credit-card text-textMid/40 text-sm"></i>
-        <span class="text-[12px] text-textMid/60 flex-1">Visa •••• 4242</span>
-        <button class="text-[10px] font-bold text-gold uppercase tracking-wider">Change</button>
-      </div>
-      <button id="cartConfirmBtn" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled>
-        <i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order
-      </button>
-      <button onclick="toggleCart()" class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">
-        Continue Browsing
-      </button>
-    </div>
-
+      <div class="h-px bg-borderSoft/80"></div>
+    </nav>
   </div>
-</div>
 
-<!-- ═══════════ NAVBAR ═══════════ -->
-<div id="pageContent">
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
-   style="background:rgba(255,255,255,0)">
- 
-    <div id="navInner" class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
-      <a href="#" class="flex flex-col leading-none group flex-shrink-0">
-        <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
-          Sav<span class="italic font-light text-redPrimary">o</span>ria
-        </span>
-        <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
-      </a>
-      <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
-        <li><a href="#" class="nav-link transition">Home</a></li>
-        <li><a href="menu.html" class="nav-link transition">Menu</a></li>
-        <li><a href="/about.html" class="nav-link transition">About</a></li>
-        <li><a href="/reserve.html" class="nav-link transition">Reserve</a></li>
-        <li><a href="/contact.html" class="nav-link transition">Contact</a></li>
-      </ul>
-      <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center
-         rounded-full  text-textMid hover:text-redPrimary transition p-2">
-         <i class="fa-solid fa-cart-shopping text-[20px] "></i>
-          <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
-        </button>
-        <button class="hidden md:flex items-center gap-1.5 text-[11px]
-         font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold
-          transition pl-3 border-l border-borderSoft ml-1">
-          <i class="fa-regular fa-circle-user"></i> 
-          <a href="/login.html" >Login</a>
-        </button>
-        <a href="/reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
-          <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
-        </a>
-        <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
-          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-          <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
-        </button>
-      </div>
-    </div>
-    <div class="h-px bg-borderSoft/80"></div>
-  </nav>
-</div>
+  <main>
 
-<main>
-
-  <!-- ══════════ DESKTOP HERO ══════════ -->
-  <section class="hidden md:block hero-bg pt-[76px]">
-    <div class="max-w-7xl mx-auto px-8 lg:px-14 py-20 lg:py-28 grid grid-cols-2 gap-16 items-center">
-      <div class="anim-1">
-        <div class="section-label mb-6">Est. 2010 · New York City</div>
-        <h1 class="font-playfair text-5xl lg:text-7xl font-black text-textDark leading-[1.05] mb-6">
-          The Art of<br/>
-          <em class="text-redPrimary not-italic" style="font-style:italic">Fine Dining</em><br/>
-          Redefined
-        </h1>
-        <p class="font-cormorant italic text-xl text-textMid/60 tracking-wide mb-8 leading-relaxed">
-          Where every dish is a canvas, every meal a memory worth keeping — crafted by Chef Marco with 20 years of passion.
-        </p>
-        <div class="flex items-center gap-4 mb-10">
-          <a href="menu.html" class="book-btn text-white px-8 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase inline-flex items-center gap-2">
-            <i class="fa-solid fa-utensils text-[10px]"></i> Explore Menu
-          </a>
-          <a href="/reserve.html" class="border border-textDark/20 text-textDark px-8 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition">
-            Reserve a Table
-          </a>
+    <!-- ══════════ DESKTOP HERO ══════════ -->
+    <section class="hidden md:block hero-bg pt-[76px]">
+      <div class="max-w-7xl mx-auto px-8 lg:px-14 py-20 lg:py-28 grid grid-cols-2 gap-16 items-center">
+        <div class="anim-1">
+          <div class="section-label mb-6">Est. 2010 · New York City</div>
+          <h1 class="font-playfair text-5xl lg:text-7xl font-black text-textDark leading-[1.05] mb-6">
+            The Art of<br />
+            <em class="text-redPrimary not-italic" style="font-style:italic">Fine Dining</em><br />
+            Redefined
+          </h1>
+          <p class="font-cormorant italic text-xl text-textMid/60 tracking-wide mb-8 leading-relaxed">
+            Where every dish is a canvas, every meal a memory worth keeping — crafted by Chef Marco with 20 years of
+            passion.
+          </p>
+          <div class="flex items-center gap-4 mb-10">
+            <a href="menu.html"
+              class="book-btn text-white px-8 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase inline-flex items-center gap-2">
+              <i class="fa-solid fa-utensils text-[10px]"></i> Explore Menu
+            </a>
+            <a href="/reserve.html"
+              class="border border-textDark/20 text-textDark px-8 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition">
+              Reserve a Table
+            </a>
+          </div>
+          <div class="flex gap-8 pt-8 border-t border-borderSoft">
+            <div>
+              <p class="font-playfair text-3xl font-black text-textDark">15+</p>
+              <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Years</p>
+            </div>
+            <div class="w-px bg-borderSoft"></div>
+            <div>
+              <p class="font-playfair text-3xl font-black text-textDark">80+</p>
+              <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Dishes</p>
+            </div>
+            <div class="w-px bg-borderSoft"></div>
+            <div>
+              <p class="font-playfair text-3xl font-black text-textDark">★ 4.9</p>
+              <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Rating</p>
+            </div>
+            <div class="w-px bg-borderSoft"></div>
+            <div>
+              <p class="font-playfair text-3xl font-black text-textDark">3</p>
+              <p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Michelin Stars</p>
+            </div>
+          </div>
         </div>
-        <div class="flex gap-8 pt-8 border-t border-borderSoft">
-          <div><p class="font-playfair text-3xl font-black text-textDark">15+</p><p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Years</p></div>
-          <div class="w-px bg-borderSoft"></div>
-          <div><p class="font-playfair text-3xl font-black text-textDark">80+</p><p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Dishes</p></div>
-          <div class="w-px bg-borderSoft"></div>
-          <div><p class="font-playfair text-3xl font-black text-textDark">★ 4.9</p><p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Rating</p></div>
-          <div class="w-px bg-borderSoft"></div>
-          <div><p class="font-playfair text-3xl font-black text-textDark">3</p><p class="text-[10px] uppercase tracking-[0.2em] text-textMid/50 font-semibold mt-0.5">Michelin Stars</p></div>
+        <div class="grid grid-cols-2 gap-3 anim-2">
+          <div class="rounded-2xl overflow-hidden aspect-[3/4] bg-cream row-span-2"><img src="./assests/thai.png"
+              alt="Featured" class="w-full h-full object-cover" /></div>
+          <div class="rounded-2xl overflow-hidden aspect-square bg-cream"><img src="./assests/thai.png" alt="Dish"
+              class="w-full h-full object-cover" /></div>
+          <div class="rounded-2xl overflow-hidden aspect-square bg-cream"><img src="./assests/thai.png" alt="Dish"
+              class="w-full h-full object-cover" /></div>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-3 anim-2">
-        <div class="rounded-2xl overflow-hidden aspect-[3/4] bg-cream row-span-2"><img src="./assests/thai.png" alt="Featured" class="w-full h-full object-cover"/></div>
-        <div class="rounded-2xl overflow-hidden aspect-square bg-cream"><img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/></div>
-        <div class="rounded-2xl overflow-hidden aspect-square bg-cream"><img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ══════════ MOBILE HERO ══════════ -->
-  <div class="md:hidden pt-[76px]">
-    <div class="mobile-hero">
-      <div class="flex items-center justify-between mb-4 anim-1">
-        <div>
-          <p class="text-[10px] uppercase tracking-[0.25em] text-gold font-semibold">Good Evening 👋</p>
-          <h1 class="font-playfair text-2xl font-black text-textDark mt-0.5">What would you<br/><em class="text-redPrimary" style="font-style:italic">like to eat?</em></h1>
-        </div>
-        <div class="w-10 h-10 rounded-full bg-cream border border-borderSoft flex items-center justify-center">
-          <i class="fa-regular fa-bell text-textMid text-sm"></i>
-        </div>
-      </div>
-      <div class="mobile-search anim-2">
-        <i class="fa-solid fa-magnifying-glass text-textMid/40 text-sm"></i>
-        <input type="text" placeholder="Search dishes, cuisines…" class="flex-1 bg-transparent outline-none text-sm text-textDark placeholder-textMid/40"/>
-        <div class="w-8 h-8 rounded-lg bg-redPrimary flex items-center justify-center flex-shrink-0">
-          <i class="fa-solid fa-sliders text-white text-xs"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Promo Banner -->
-    <div class="px-5 mt-5 anim-3">
-      <div class="promo-banner p-5 flex items-center justify-between gap-4">
-        <div class="relative z-10">
-          <span class="tag tag-dark mb-2 block w-fit">Limited Offer</span>
-          <p class="font-playfair text-xl font-black text-white leading-tight">30% Off<br/>Weekend Brunch</p>
-          <p class="text-white/50 text-[11px] font-cormorant italic mt-1">Valid Sat & Sun · 11am–3pm</p>
-          <button class="mt-3 bg-gold text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2 rounded-full">Claim Offer</button>
-        </div>
-        <div class="text-6xl relative z-10 flex-shrink-0">🍽️</div>
-      </div>
-    </div>
-
-    <!-- Mobile Categories -->
-    <div class="px-5 mt-6 anim-4">
-      <div class="flex justify-between items-center mb-4">
-        <p class="mobile-section-title">Categories</p>
-        <a href="menu.html" class="text-[10px] font-bold uppercase tracking-widest text-redPrimary">See All</a>
-      </div>
-      <div id="catScroll" class="flex gap-3 overflow-x-auto scroll-hide pb-2" style="-webkit-overflow-scrolling:touch;">
-         <a href="category.html"> <div class="cat-pill active"><div class="icon-wrap"><img src="./assests/thai.png" alt="Thai" class="w-full h-full object-cover"/></div><span>Thai</span></div></a>
-         <a href="category.html">  <div class="cat-pill"><div class="icon-wrap"><img src="./assests/thai.png" alt="Italian" class="w-full h-full object-cover"/></div><span>Italian</span></div></a>
-         <a href="category.html"><div class="cat-pill"><div class="icon-wrap"><img src="./assests/thai.png" alt="French" class="w-full h-full object-cover"/></div><span>French</span></div></a>
-         <a href="category.html">
-        <div class="cat-pill"><div class="icon-wrap"><img src="./assests/thai.png" 
-          alt="Japanese" class="w-full h-full object-cover"/></div><span>Japanese</span></div>
-         </a>
-         <a href="category.html">
-         <div class="cat-pill"><div class="icon-wrap"><img src="./assests/thai.png" alt="Dessert" class="w-full h-full object-cover"/></div><span>Desserts</span></div>
-
-         </a>
-      </div>
-    </div>
-
-    <!-- Mobile: Featured Dish -->
-    <div class="px-5 mt-6">
-      <div class="flex justify-between items-center mb-4">
-        <p class="mobile-section-title">Chef's Special</p>
-        <div class="rating-badge"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
-      </div>
-      <div class="featured-card">
-        <img src="./assests/thai.png" alt="Featured" class="w-full h-[200px] object-cover"/>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-        <div class="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between">
+    <!-- ══════════ MOBILE HERO ══════════ -->
+    <div class="md:hidden pt-[76px]">
+      <div class="mobile-hero">
+        <div class="flex items-center justify-between mb-4 anim-1">
           <div>
-            <span class="tag tag-gold mb-2 block w-fit">Signature</span>
-            <p class="font-playfair text-xl font-black text-white leading-tight">Bistecca<br/>Fiorentina</p>
-            <p class="text-white/60 text-[11px] font-cormorant italic mt-1">Dry-aged T-bone · rosemary butter</p>
+            <p class="text-[10px] uppercase tracking-[0.25em] text-gold font-semibold">Good Evening 👋</p>
+            <h1 class="font-playfair text-2xl font-black text-textDark mt-0.5">What would you<br /><em
+                class="text-redPrimary" style="font-style:italic">like to eat?</em></h1>
           </div>
-          <div class="flex flex-col items-end gap-2">
-            <p class="font-playfair text-xl font-black text-white">$48</p>
-            <button onclick="addToCart('Bistecca Fiorentina', 48)" class="w-9 h-9 bg-redPrimary rounded-full flex items-center justify-center text-white text-lg shadow-lg">+</button>
+          <div class="w-10 h-10 rounded-full bg-cream border border-borderSoft flex items-center justify-center">
+            <i class="fa-regular fa-bell text-textMid text-sm"></i>
           </div>
+        </div>
+        <div class="mobile-search anim-2">
+          <i class="fa-solid fa-magnifying-glass text-textMid/40 text-sm"></i>
+          <input type="text" placeholder="Search dishes, cuisines…"
+            class="flex-1 bg-transparent outline-none text-sm text-textDark placeholder-textMid/40" />
+          <div class="w-8 h-8 rounded-lg bg-redPrimary flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-sliders text-white text-xs"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Promo Banner -->
+      <div class="px-5 mt-5 anim-3">
+        <div class="promo-banner p-5 flex items-center justify-between gap-4">
+          <div class="relative z-10">
+            <span class="tag tag-dark mb-2 block w-fit">Limited Offer</span>
+            <p class="font-playfair text-xl font-black text-white leading-tight">30% Off<br />Weekend Brunch</p>
+            <p class="text-white/50 text-[11px] font-cormorant italic mt-1">Valid Sat & Sun · 11am–3pm</p>
+            <button
+              class="mt-3 bg-gold text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2 rounded-full">Claim
+              Offer</button>
+          </div>
+          <div class="text-6xl relative z-10 flex-shrink-0">🍽️</div>
+        </div>
+      </div>
+
+      <!-- Mobile Categories -->
+      <div class="px-5 mt-6 anim-4">
+        <div class="flex justify-between items-center mb-4">
+          <p class="mobile-section-title">Categories</p>
+          <a href="menu.html" class="text-[10px] font-bold uppercase tracking-widest text-redPrimary">See All</a>
+        </div>
+        <div id="catScroll" class="flex gap-3 overflow-x-auto scroll-hide pb-2"
+          style="-webkit-overflow-scrolling:touch;">
+          <a href="category.html">
+            <div class="cat-pill active">
+              <div class="icon-wrap"><img src="./assests/thai.png" alt="Thai" class="w-full h-full object-cover" />
+              </div><span>Thai</span>
+            </div>
+          </a>
+          <a href="category.html">
+            <div class="cat-pill">
+              <div class="icon-wrap"><img src="./assests/thai.png" alt="Italian" class="w-full h-full object-cover" />
+              </div><span>Italian</span>
+            </div>
+          </a>
+          <a href="category.html">
+            <div class="cat-pill">
+              <div class="icon-wrap"><img src="./assests/thai.png" alt="French" class="w-full h-full object-cover" />
+              </div><span>French</span>
+            </div>
+          </a>
+          <a href="category.html">
+            <div class="cat-pill">
+              <div class="icon-wrap"><img src="./assests/thai.png" alt="Japanese" class="w-full h-full object-cover" />
+              </div><span>Japanese</span>
+            </div>
+          </a>
+          <a href="category.html">
+            <div class="cat-pill">
+              <div class="icon-wrap"><img src="./assests/thai.png" alt="Dessert" class="w-full h-full object-cover" />
+              </div><span>Desserts</span>
+            </div>
+
+          </a>
+        </div>
+      </div>
+
+      <!-- Mobile: Featured Dish -->
+      <div class="px-5 mt-6">
+        <div class="flex justify-between items-center mb-4">
+          <p class="mobile-section-title">Chef's Special</p>
+          <div class="rating-badge"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
+        </div>
+        <div class="featured-card">
+          <img src="./assests/thai.png" alt="Featured" class="w-full h-[200px] object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between">
+            <div>
+              <span class="tag tag-gold mb-2 block w-fit">Signature</span>
+              <p class="font-playfair text-xl font-black text-white leading-tight">Bistecca<br />Fiorentina</p>
+              <p class="text-white/60 text-[11px] font-cormorant italic mt-1">Dry-aged T-bone · rosemary butter</p>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+              <p class="font-playfair text-xl font-black text-white">$48</p>
+              <button onclick="addToCart('Bistecca Fiorentina', 48)"
+                class="w-9 h-9 bg-redPrimary rounded-full flex items-center justify-center text-white text-lg shadow-lg">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile: Popular Dishes -->
+      <div class="mt-6">
+        <div class="flex justify-between items-center mb-4 px-5">
+          <p class="mobile-section-title">Most Popular</p>
+          <a href="menu.html" class="text-[10px] font-bold uppercase tracking-widest text-redPrimary">See All</a>
+        </div>
+        <div class="flex gap-3 overflow-x-auto scroll-hide pl-5 pr-5 pb-2" style="-webkit-overflow-scrolling:touch;"
+          id="dishScroll">
+          <div class="app-dish-card w-[155px]">
+            <div class="relative overflow-hidden h-[130px]"><img src="./assests/thai.png" alt="Dish"
+                class="w-full h-full object-cover" />
+              <div class="absolute top-2 left-2"><span class="tag tag-gold">Popular</span></div>
+            </div>
+            <div class="p-3">
+              <p class="font-playfair text-sm font-bold text-textDark leading-tight">Tagliatelle al Ragù</p>
+              <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">House-made pasta</p>
+              <div class="flex items-center justify-between mt-2.5">
+                <p class="font-bold text-textDark text-sm">$28</p>
+                <button class="add-btn" onclick="addToCart('Tagliatelle al Ragù', 28)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="app-dish-card w-[155px]">
+            <div class="relative overflow-hidden h-[130px]"><img src="./assests/thai.png" alt="Dish"
+                class="w-full h-full object-cover" />
+              <div class="absolute top-2 left-2"><span class="tag tag-red">New</span></div>
+            </div>
+            <div class="p-3">
+              <p class="font-playfair text-sm font-bold text-textDark leading-tight">Panna Cotta</p>
+              <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Vanilla · berry coulis</p>
+              <div class="flex items-center justify-between mt-2.5">
+                <p class="font-bold text-textDark text-sm">$14</p>
+                <button class="add-btn" onclick="addToCart('Panna Cotta', 14)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="app-dish-card w-[155px]">
+            <div class="relative overflow-hidden h-[130px]"><img src="./assests/thai.png" alt="Dish"
+                class="w-full h-full object-cover" /></div>
+            <div class="p-3">
+              <p class="font-playfair text-sm font-bold text-textDark leading-tight">Tom Yum Soup</p>
+              <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Spicy lemongrass</p>
+              <div class="flex items-center justify-between mt-2.5">
+                <p class="font-bold text-textDark text-sm">$18</p>
+                <button class="add-btn" onclick="addToCart('Tom Yum Soup', 18)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="app-dish-card w-[155px]">
+            <div class="relative overflow-hidden h-[130px]"><img src="./assests/thai.png" alt="Dish"
+                class="w-full h-full object-cover" /></div>
+            <div class="p-3">
+              <p class="font-playfair text-sm font-bold text-textDark leading-tight">Tuna Tartare</p>
+              <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Sesame · avocado</p>
+              <div class="flex items-center justify-between mt-2.5">
+                <p class="font-bold text-textDark text-sm">$32</p>
+                <button class="add-btn" onclick="addToCart('Tuna Tartare', 32)"><span
+                    class="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile: Reserve CTA -->
+      <div class="px-5 mt-6">
+        <div class="bg-cream rounded-2xl p-5 flex items-center justify-between gap-4 border border-borderSoft">
+          <div>
+            <p class="font-playfair text-lg font-black text-textDark">Reserve Your<br />Table Tonight</p>
+            <p class="font-cormorant italic text-textMid/50 text-sm mt-1">Mon–Sun · 12pm–11pm</p>
+          </div>
+          <a href="#reservation"
+            class="book-btn text-white px-5 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] flex-shrink-0 flex items-center gap-2">
+            <i class="fa-regular fa-calendar-check"></i> Book Now
+          </a>
         </div>
       </div>
     </div>
 
-    <!-- Mobile: Popular Dishes -->
-    <div class="mt-6">
-      <div class="flex justify-between items-center mb-4 px-5">
-        <p class="mobile-section-title">Most Popular</p>
-        <a href="menu.html" class="text-[10px] font-bold uppercase tracking-widest text-redPrimary">See All</a>
-      </div>
-      <div class="flex gap-3 overflow-x-auto scroll-hide pl-5 pr-5 pb-2" style="-webkit-overflow-scrolling:touch;" id="dishScroll">
-        <div class="app-dish-card w-[155px]">
-          <div class="relative overflow-hidden h-[130px]"><img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/><div class="absolute top-2 left-2"><span class="tag tag-gold">Popular</span></div></div>
-          <div class="p-3">
-            <p class="font-playfair text-sm font-bold text-textDark leading-tight">Tagliatelle al Ragù</p>
-            <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">House-made pasta</p>
-            <div class="flex items-center justify-between mt-2.5">
-              <p class="font-bold text-textDark text-sm">$28</p>
-              <button class="add-btn" onclick="addToCart('Tagliatelle al Ragù', 28)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-        <div class="app-dish-card w-[155px]">
-          <div class="relative overflow-hidden h-[130px]"><img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/><div class="absolute top-2 left-2"><span class="tag tag-red">New</span></div></div>
-          <div class="p-3">
-            <p class="font-playfair text-sm font-bold text-textDark leading-tight">Panna Cotta</p>
-            <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Vanilla · berry coulis</p>
-            <div class="flex items-center justify-between mt-2.5">
-              <p class="font-bold text-textDark text-sm">$14</p>
-              <button class="add-btn" onclick="addToCart('Panna Cotta', 14)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-        <div class="app-dish-card w-[155px]">
-          <div class="relative overflow-hidden h-[130px]"><img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/></div>
-          <div class="p-3">
-            <p class="font-playfair text-sm font-bold text-textDark leading-tight">Tom Yum Soup</p>
-            <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Spicy lemongrass</p>
-            <div class="flex items-center justify-between mt-2.5">
-              <p class="font-bold text-textDark text-sm">$18</p>
-              <button class="add-btn" onclick="addToCart('Tom Yum Soup', 18)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-        <div class="app-dish-card w-[155px]">
-          <div class="relative overflow-hidden h-[130px]"><img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/></div>
-          <div class="p-3">
-            <p class="font-playfair text-sm font-bold text-textDark leading-tight">Tuna Tartare</p>
-            <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Sesame · avocado</p>
-            <div class="flex items-center justify-between mt-2.5">
-              <p class="font-bold text-textDark text-sm">$32</p>
-              <button class="add-btn" onclick="addToCart('Tuna Tartare', 32)"><span class="text-lg leading-none">+</span></button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mobile: Reserve CTA -->
-    <div class="px-5 mt-6">
-      <div class="bg-cream rounded-2xl p-5 flex items-center justify-between gap-4 border border-borderSoft">
+    <!-- ══════════ DESKTOP: CATEGORIES ══════════ -->
+    <section id="menu" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-20">
+      <div class="flex justify-between items-end mb-12 border-b border-borderSoft pb-5">
         <div>
-          <p class="font-playfair text-lg font-black text-textDark">Reserve Your<br/>Table Tonight</p>
-          <p class="font-cormorant italic text-textMid/50 text-sm mt-1">Mon–Sun · 12pm–11pm</p>
+          <div class="section-label mb-3">Our Specialties</div>
+          <h2 class="font-playfair text-4xl lg:text-5xl font-black text-textDark">Most Popular</h2>
         </div>
-        <a href="#reservation" class="book-btn text-white px-5 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] flex-shrink-0 flex items-center gap-2">
-          <i class="fa-regular fa-calendar-check"></i> Book Now
+        <a href="menu.html"
+          class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-textMid hover:text-redPrimary transition-all border border-borderSoft px-5 py-2.5 rounded-full hover:border-redPrimary">
+          See All Menu <i
+            class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
         </a>
       </div>
-    </div>
-  </div>
-
-  <!-- ══════════ DESKTOP: CATEGORIES ══════════ -->
-  <section id="menu" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-20">
-    <div class="flex justify-between items-end mb-12 border-b border-borderSoft pb-5">
-      <div>
-        <div class="section-label mb-3">Our Specialties</div>
-        <h2 class="font-playfair text-4xl lg:text-5xl font-black text-textDark">Most Popular</h2>
-      </div>
-      <a href="menu.html" class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-textMid hover:text-redPrimary transition-all border border-borderSoft px-5 py-2.5 rounded-full hover:border-redPrimary">
-        See All Menu <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
-      </a>
-    </div>
-    <div class="grid grid-cols-5 gap-5">
-      <a href="category.html" class="cat-card-desk"><div class="relative overflow-hidden rounded-2xl aspect-[3/4]"><img src="./assests/thai.png" class="w-full h-full object-cover" alt="Thai"/><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div><div class="absolute bottom-0 left-0 right-0 p-4"><div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div><h3 class="font-playfair text-xl font-bold text-white">Thai</h3><p class="text-white/60 text-[11px] font-cormorant italic">Flavors of the East</p></div></div></a>
-      <a href="category.html" class="cat-card-desk"><div class="relative overflow-hidden rounded-2xl aspect-[3/4]"><img src="./assests/thai.png" class="w-full h-full object-cover" alt="Italian"/><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div><div class="absolute bottom-0 left-0 right-0 p-4"><div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div><h3 class="font-playfair text-xl font-bold text-white">Italian</h3><p class="text-white/60 text-[11px] font-cormorant italic">Pasta & fine wine</p></div></div></a>
-      <a href="category.html" class="cat-card-desk"><div class="relative overflow-hidden rounded-2xl aspect-[3/4]"><img src="./assests/thai.png" class="w-full h-full object-cover" alt="French"/><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div><div class="absolute bottom-0 left-0 right-0 p-4"><div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div><h3 class="font-playfair text-xl font-bold text-white">French</h3><p class="text-white/60 text-[11px] font-cormorant italic">Gourmet pastry</p></div></div></a>
-      <a href="category.html" class="cat-card-desk"><div class="relative overflow-hidden rounded-2xl aspect-[3/4]"><img src="./assests/thai.png" class="w-full h-full object-cover" alt="Japanese"/><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div><div class="absolute bottom-0 left-0 right-0 p-4"><div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div><h3 class="font-playfair text-xl font-bold text-white">Japanese</h3><p class="text-white/60 text-[11px] font-cormorant italic">Masterful sushi</p></div></div></a>
-      <a href="category.html" class="cat-card-desk"><div class="relative overflow-hidden rounded-2xl aspect-[3/4]"><img src="./assests/thai.png" class="w-full h-full object-cover" alt="Dessert"/><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div><div class="absolute bottom-0 left-0 right-0 p-4"><div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div><h3 class="font-playfair text-xl font-bold text-white">Dessert</h3><p class="text-white/60 text-[11px] font-cormorant italic">Sweet endings</p></div></div></a>
-    </div>
-  </section>
-
-  <!-- ══════════ DESKTOP: POPULAR DISHES ══════════ -->
-  <section class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-16">
-    <div class="flex justify-between items-end mb-12 border-b border-borderSoft pb-5">
-      <div>
-        <div class="section-label mb-3">Most Ordered</div>
-        <h2 class="font-playfair text-4xl lg:text-5xl font-black text-textDark">Popular Right Now</h2>
-      </div>
-      <a href="menu.html" class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-textMid hover:text-redPrimary transition-all border border-borderSoft px-5 py-2.5 rounded-full hover:border-redPrimary">
-        Full Menu <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
-      </a>
-    </div>
-    <div class="grid grid-cols-3 gap-5">
-      <!-- Dish card 1 -->
-      <div class="dish-card">
-        <div class="relative overflow-hidden h-[200px]">
-          <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"/>
-          <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
-        </div>
-        <div class="p-5">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Tagliatelle al Ragù</h3>
-              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">House-made pasta · slow-cooked beef</p>
+      <div class="grid grid-cols-5 gap-5">
+        <a href="category.html" class="cat-card-desk">
+          <div class="relative overflow-hidden rounded-2xl aspect-[3/4]"><img src="./assests/thai.png"
+              class="w-full h-full object-cover" alt="Thai" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+              <div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div>
+              <h3 class="font-playfair text-xl font-bold text-white">Thai</h3>
+              <p class="text-white/60 text-[11px] font-cormorant italic">Flavors of the East</p>
             </div>
-            <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
           </div>
-          <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-            <p class="font-playfair text-xl font-black text-textDark">$28</p>
-            <button onclick="addToCart('Tagliatelle al Ragù', 28)" class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
-              <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
-            </button>
-          </div>
-        </div>
-      </div>
-      <!-- Dish card 2 -->
-      <div class="dish-card">
-        <div class="relative overflow-hidden h-[200px]">
-          <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"/>
-          <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
-        </div>
-        <div class="p-5">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Bistecca Fiorentina</h3>
-              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Dry-aged T-bone · rosemary butter</p>
+        </a>
+        <a href="category.html" class="cat-card-desk">
+          <div class="relative overflow-hidden rounded-2xl aspect-[3/4]"><img src="./assests/thai.png"
+              class="w-full h-full object-cover" alt="Italian" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+              <div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div>
+              <h3 class="font-playfair text-xl font-bold text-white">Italian</h3>
+              <p class="text-white/60 text-[11px] font-cormorant italic">Pasta & fine wine</p>
             </div>
-            <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
           </div>
-          <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-            <p class="font-playfair text-xl font-black text-textDark">$48</p>
-            <button onclick="addToCart('Bistecca Fiorentina', 48)" class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
-              <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
-            </button>
-          </div>
-        </div>
-      </div>
-      <!-- Dish card 3 -->
-      <div class="dish-card">
-        <div class="relative overflow-hidden h-[200px]">
-          <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"/>
-          <div class="absolute top-3 left-3"><span class="tag tag-gold">New</span></div>
-        </div>
-        <div class="p-5">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Panna Cotta</h3>
-              <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Vanilla bean · wild berry coulis</p>
+        </a>
+        <a href="category.html" class="cat-card-desk">
+          <div class="relative overflow-hidden rounded-2xl aspect-[3/4]"><img src="./assests/thai.png"
+              class="w-full h-full object-cover" alt="French" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+              <div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div>
+              <h3 class="font-playfair text-xl font-bold text-white">French</h3>
+              <p class="text-white/60 text-[11px] font-cormorant italic">Gourmet pastry</p>
             </div>
-            <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
           </div>
-          <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
-            <p class="font-playfair text-xl font-black text-textDark">$14</p>
-            <button onclick="addToCart('Panna Cotta', 14)" class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
-              <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
-            </button>
+        </a>
+        <a href="category.html" class="cat-card-desk">
+          <div class="relative overflow-hidden rounded-2xl aspect-[3/4]"><img src="./assests/thai.png"
+              class="w-full h-full object-cover" alt="Japanese" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+              <div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div>
+              <h3 class="font-playfair text-xl font-bold text-white">Japanese</h3>
+              <p class="text-white/60 text-[11px] font-cormorant italic">Masterful sushi</p>
+            </div>
           </div>
-        </div>
+        </a>
+        <a href="category.html" class="cat-card-desk">
+          <div class="relative overflow-hidden rounded-2xl aspect-[3/4]"><img src="./assests/thai.png"
+              class="w-full h-full object-cover" alt="Dessert" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+              <div class="explore-tag tag tag-dark mb-2 w-fit">Explore</div>
+              <h3 class="font-playfair text-xl font-bold text-white">Dessert</h3>
+              <p class="text-white/60 text-[11px] font-cormorant italic">Sweet endings</p>
+            </div>
+          </div>
+        </a>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ══════════ DESKTOP: PROMO BANNER ══════════ -->
-  <section class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-8">
-    <div class="promo-banner p-10 lg:p-14 flex items-center justify-between gap-8">
-      <div class="relative z-10">
-        <span class="tag tag-dark mb-4 block w-fit">Limited Time Offer</span>
-        <h2 class="font-playfair text-4xl lg:text-5xl font-black text-white leading-tight mb-3">30% Off Weekend<br/>Brunch Menu</h2>
-        <p class="font-cormorant italic text-white/50 text-xl tracking-wide">Valid every Saturday & Sunday · 11am–3pm</p>
-        <button class="mt-6 bg-gold hover:bg-goldLight transition text-white text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-3.5 rounded-full inline-flex items-center gap-2">
-          <i class="fa-regular fa-calendar-check"></i> Claim Offer
-        </button>
-      </div>
-      <div class="text-[120px] relative z-10 flex-shrink-0 leading-none">🍽️</div>
-    </div>
-  </section>
-
-  <!-- ══════════ DESKTOP: TESTIMONIALS ══════════ -->
-  <section id="about" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-20">
-    <div class="text-center mb-14">
-      <div class="section-label justify-center mb-4">What Guests Say</div>
-      <h2 class="font-playfair text-4xl lg:text-5xl font-black text-textDark">Voices of Savoria</h2>
-    </div>
-    <div class="grid grid-cols-3 gap-6">
-      <div class="testimonial-card">
-        <div class="flex gap-0.5 mb-4"><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i></div>
-        <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"An extraordinary culinary journey. The Bistecca was cooked to absolute perfection — I've never tasted anything like it."</p>
-        <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
-          <div class="w-10 h-10 rounded-full bg-cream flex items-center justify-center font-playfair font-bold text-redPrimary">A</div>
-          <div><p class="text-sm font-semibold text-textDark">Alexandra M.</p><p class="text-[11px] text-textMid/50">Regular Guest · New York</p></div>
+    <!-- ══════════ DESKTOP: POPULAR DISHES ══════════ -->
+    <section class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-16">
+      <div class="flex justify-between items-end mb-12 border-b border-borderSoft pb-5">
+        <div>
+          <div class="section-label mb-3">Most Ordered</div>
+          <h2 class="font-playfair text-4xl lg:text-5xl font-black text-textDark">Popular Right Now</h2>
         </div>
+        <a href="menu.html"
+          class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-textMid hover:text-redPrimary transition-all border border-borderSoft px-5 py-2.5 rounded-full hover:border-redPrimary">
+          Full Menu <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+        </a>
       </div>
-      <div class="testimonial-card">
-        <div class="flex gap-0.5 mb-4"><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i></div>
-        <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"The ambiance, the service, the food — everything was impeccable. Savoria has truly set a new standard for fine dining."</p>
-        <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
-          <div class="w-10 h-10 rounded-full bg-cream flex items-center justify-center font-playfair font-bold text-redPrimary">J</div>
-          <div><p class="text-sm font-semibold text-textDark">James R.</p><p class="text-[11px] text-textMid/50">Food Critic · The Times</p></div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="flex gap-0.5 mb-4"><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i></div>
-        <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"Chef Marco's Panna Cotta is a poem on a plate. We celebrate every anniversary here — it never disappoints."</p>
-        <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
-          <div class="w-10 h-10 rounded-full bg-cream flex items-center justify-center font-playfair font-bold text-redPrimary">S</div>
-          <div><p class="text-sm font-semibold text-textDark">Sofia & Daniel</p><p class="text-[11px] text-textMid/50">Annual Guests · Brooklyn</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════ DESKTOP: RESERVATION CTA ══════════ -->
-  <section id="reservation" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-16 mb-10">
-    <div class="bg-cream rounded-2xl p-12 lg:p-16 flex items-center justify-between gap-8 border border-borderSoft">
-      <div>
-        <div class="section-label mb-4">Book Your Experience</div>
-        <h2 class="font-playfair text-4xl font-black text-textDark mb-3">Reserve Your Table<br/>for Tonight</h2>
-        <p class="font-cormorant italic text-textMid/60 text-lg">Open Monday to Sunday · 12:00pm – 11:00pm<br/>+1 (555) 920-4200</p>
-      </div>
-      <div class="flex flex-col gap-3 flex-shrink-0">
-        <a href="/reserve.html" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center"><i class="fa-regular fa-calendar-check"></i> Book Online</a>
-        <a href="tel:+15559204200" class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center"><i class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════ FOOTER ══════════ -->
-  <footer id="contact" class="hidden footer-bg md:block">
-    <div class="max-w-7xl mx-auto px-8 lg:px-14 py-16">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 mb-12">
-        <div class="col-span-1">
-          <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-          <p class="font-cormorant italic text-gold/60 text-xs tracking-[0.3em] uppercase mt-0.5 mb-4">Fine Dining</p>
-          <p class="text-white/40 text-sm leading-relaxed">Where every dish tells a story of passion, craft, and the finest ingredients.</p>
-          <div class="flex gap-3 mt-5">
-            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-x-twitter"></i></a>
+      <div class="grid grid-cols-3 gap-5">
+        <!-- Dish card 1 -->
+        <div class="dish-card">
+          <div class="relative overflow-hidden h-[200px]">
+            <img src="./assests/thai.png" alt="Dish"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+            <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Tagliatelle al Ragù</h3>
+                <p class="font-cormorant italic text-textMid/60 text-sm mt-1">House-made pasta · slow-cooked beef</p>
+              </div>
+              <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
+            </div>
+            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+              <p class="font-playfair text-xl font-black text-textDark">$28</p>
+              <button onclick="addToCart('Tagliatelle al Ragù', 28)"
+                class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
+                <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
+              </button>
+            </div>
           </div>
         </div>
-        <div>
-          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Navigation</p>
-          <ul class="space-y-3">
-            <li><a href="#" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
-            <li><a href="menu.html" class="text-white/40 text-sm hover:text-gold transition">Menu</a></li>
-            <li><a href="#about" class="text-white/40 text-sm hover:text-gold transition">About</a></li>
-            <li><a href="#reservation" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
-          </ul>
+        <!-- Dish card 2 -->
+        <div class="dish-card">
+          <div class="relative overflow-hidden h-[200px]">
+            <img src="./assests/thai.png" alt="Dish"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+            <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Bistecca Fiorentina</h3>
+                <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Dry-aged T-bone · rosemary butter</p>
+              </div>
+              <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
+            </div>
+            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+              <p class="font-playfair text-xl font-black text-textDark">$48</p>
+              <button onclick="addToCart('Bistecca Fiorentina', 48)"
+                class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
+                <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
+              </button>
+            </div>
+          </div>
         </div>
-        <div>
-          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Hours</p>
-          <ul class="space-y-2">
-            <li class="text-white/40 text-sm">Mon–Fri · 12pm–10pm</li>
-            <li class="text-white/40 text-sm">Sat–Sun · 11am–11pm</li>
-            <li class="text-white/40 text-sm mt-3">Happy Hour · 4–6pm</li>
-          </ul>
-        </div>
-        <div>
-          <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Contact</p>
-          <ul class="space-y-3">
-            <li class="text-white/40 text-sm">📍 42 West 58th St, New York</li>
-            <li class="text-white/40 text-sm">📞 +1 (555) 920-4200</li>
-            <li class="text-white/40 text-sm">✉️ hello@savoria.com</li>
-          </ul>
+        <!-- Dish card 3 -->
+        <div class="dish-card">
+          <div class="relative overflow-hidden h-[200px]">
+            <img src="./assests/thai.png" alt="Dish"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+            <div class="absolute top-3 left-3"><span class="tag tag-gold">New</span></div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="font-playfair text-lg font-bold text-textDark leading-tight">Panna Cotta</h3>
+                <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Vanilla bean · wild berry coulis</p>
+              </div>
+              <div class="rating-badge flex-shrink-0"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
+            </div>
+            <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
+              <p class="font-playfair text-xl font-black text-textDark">$14</p>
+              <button onclick="addToCart('Panna Cotta', 14)"
+                class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
+                <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="gold-line h-[1px] mb-6 opacity-20"></div>
-      <div class="flex justify-between items-center">
-        <p class="text-white/30 text-xs">© 2025 Savoria Fine Dining. All rights reserved.</p>
-        <p class="font-cormorant italic text-gold/40 text-sm">Where every dish tells a story</p>
+    </section>
+
+    <!-- ══════════ DESKTOP: PROMO BANNER ══════════ -->
+    <section class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-8">
+      <div class="promo-banner p-10 lg:p-14 flex items-center justify-between gap-8">
+        <div class="relative z-10">
+          <span class="tag tag-dark mb-4 block w-fit">Limited Time Offer</span>
+          <h2 class="font-playfair text-4xl lg:text-5xl font-black text-white leading-tight mb-3">30% Off
+            Weekend<br />Brunch Menu</h2>
+          <p class="font-cormorant italic text-white/50 text-xl tracking-wide">Valid every Saturday & Sunday · 11am–3pm
+          </p>
+          <button
+            class="mt-6 bg-gold hover:bg-goldLight transition text-white text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-3.5 rounded-full inline-flex items-center gap-2">
+            <i class="fa-regular fa-calendar-check"></i> Claim Offer
+          </button>
+        </div>
+        <div class="text-[120px] relative z-10 flex-shrink-0 leading-none">🍽️</div>
+      </div>
+    </section>
+
+    <!-- ══════════ DESKTOP: TESTIMONIALS ══════════ -->
+    <section id="about" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-20">
+      <div class="text-center mb-14">
+        <div class="section-label justify-center mb-4">What Guests Say</div>
+        <h2 class="font-playfair text-4xl lg:text-5xl font-black text-textDark">Voices of Savoria</h2>
+      </div>
+      <div class="grid grid-cols-3 gap-6">
+        <div class="testimonial-card">
+          <div class="flex gap-0.5 mb-4"><i class="fa-solid fa-star text-gold text-xs"></i><i
+              class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i
+              class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i></div>
+          <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"An extraordinary culinary
+            journey. The Bistecca was cooked to absolute perfection — I've never tasted anything like it."</p>
+          <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
+            <div
+              class="w-10 h-10 rounded-full bg-cream flex items-center justify-center font-playfair font-bold text-redPrimary">
+              A</div>
+            <div>
+              <p class="text-sm font-semibold text-textDark">Alexandra M.</p>
+              <p class="text-[11px] text-textMid/50">Regular Guest · New York</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="flex gap-0.5 mb-4"><i class="fa-solid fa-star text-gold text-xs"></i><i
+              class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i
+              class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i></div>
+          <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"The ambiance, the service, the
+            food — everything was impeccable. Savoria has truly set a new standard for fine dining."</p>
+          <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
+            <div
+              class="w-10 h-10 rounded-full bg-cream flex items-center justify-center font-playfair font-bold text-redPrimary">
+              J</div>
+            <div>
+              <p class="text-sm font-semibold text-textDark">James R.</p>
+              <p class="text-[11px] text-textMid/50">Food Critic · The Times</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="flex gap-0.5 mb-4"><i class="fa-solid fa-star text-gold text-xs"></i><i
+              class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i><i
+              class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i></div>
+          <p class="font-cormorant italic text-lg text-textMid/80 leading-relaxed mb-5">"Chef Marco's Panna Cotta is a
+            poem on a plate. We celebrate every anniversary here — it never disappoints."</p>
+          <div class="flex items-center gap-3 pt-4 border-t border-borderSoft">
+            <div
+              class="w-10 h-10 rounded-full bg-cream flex items-center justify-center font-playfair font-bold text-redPrimary">
+              S</div>
+            <div>
+              <p class="text-sm font-semibold text-textDark">Sofia & Daniel</p>
+              <p class="text-[11px] text-textMid/50">Annual Guests · Brooklyn</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ DESKTOP: RESERVATION CTA ══════════ -->
+    <section id="reservation" class="hidden md:block w-full max-w-7xl mx-auto px-8 lg:px-14 py-16 mb-10">
+      <div class="bg-cream rounded-2xl p-12 lg:p-16 flex items-center justify-between gap-8 border border-borderSoft">
+        <div>
+          <div class="section-label mb-4">Book Your Experience</div>
+          <h2 class="font-playfair text-4xl font-black text-textDark mb-3">Reserve Your Table<br />for Tonight</h2>
+          <p class="font-cormorant italic text-textMid/60 text-lg">Open Monday to Sunday · 12:00pm – 11:00pm<br />+1
+            (555) 920-4200</p>
+        </div>
+        <div class="flex flex-col gap-3 flex-shrink-0">
+          <a href="/reserve.html"
+            class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center"><i
+              class="fa-regular fa-calendar-check"></i> Book Online</a>
+          <a href="tel:+15559204200"
+            class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center"><i
+              class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ FOOTER ══════════ -->
+    <footer id="contact" class="hidden footer-bg md:block">
+      <div class="max-w-7xl mx-auto px-8 lg:px-14 py-16">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+          <div class="col-span-1">
+            <span class="font-playfair text-2xl font-black text-white">Sav<span
+                class="italic font-light text-redPrimary">o</span>ria</span>
+            <p class="font-cormorant italic text-gold/60 text-xs tracking-[0.3em] uppercase mt-0.5 mb-4">Fine Dining</p>
+            <p class="text-white/40 text-sm leading-relaxed">Where every dish tells a story of passion, craft, and the
+              finest ingredients.</p>
+            <div class="flex gap-3 mt-5">
+              <a href="#"
+                class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i
+                  class="fa-brands fa-instagram"></i></a>
+              <a href="#"
+                class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i
+                  class="fa-brands fa-facebook-f"></i></a>
+              <a href="#"
+                class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i
+                  class="fa-brands fa-x-twitter"></i></a>
+            </div>
+          </div>
+          <div>
+            <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Navigation</p>
+            <ul class="space-y-3">
+              <li><a href="#" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
+              <li><a href="menu.html" class="text-white/40 text-sm hover:text-gold transition">Menu</a></li>
+              <li><a href="#about" class="text-white/40 text-sm hover:text-gold transition">About</a></li>
+              <li><a href="#reservation" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Hours</p>
+            <ul class="space-y-2">
+              <li class="text-white/40 text-sm">Mon–Fri · 12pm–10pm</li>
+              <li class="text-white/40 text-sm">Sat–Sun · 11am–11pm</li>
+              <li class="text-white/40 text-sm mt-3">Happy Hour · 4–6pm</li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Contact</p>
+            <ul class="space-y-3">
+              <li class="text-white/40 text-sm">📍 42 West 58th St, New York</li>
+              <li class="text-white/40 text-sm">📞 +1 (555) 920-4200</li>
+              <li class="text-white/40 text-sm">✉️ hello@savoria.com</li>
+            </ul>
+          </div>
+        </div>
+        <div class="gold-line h-[1px] mb-6 opacity-20"></div>
+        <div class="flex justify-between items-center">
+          <p class="text-white/30 text-xs">© 2025 Savoria Fine Dining. All rights reserved.</p>
+          <p class="font-cormorant italic text-gold/40 text-sm">Where every dish tells a story</p>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ══════════ MOBILE BOTTOM NAV ══════════ -->
+  <nav class="mobile-bottom-nav md:hidden">
+    <div class="nav-item active" onclick="setActive(this)">
+      <i class="fa-solid fa-house"></i><span>Home</span>
+    </div>
+    <div class="nav-item" onclick="location.href='menu.html'">
+      <i class="fa-solid fa-utensils"></i><span>Menu</span>
+    </div>
+
+    <div onclick="toggleCart()">
+      <div class="cart-fab">
+        <i class="fa-solid fa-bag-shopping text-lg"></i>
+        <div class="badge" id="mobileBadge" style="display:none">0</div>
       </div>
     </div>
-  </footer>
-
-</main>
-
-<!-- ══════════ MOBILE BOTTOM NAV ══════════ -->
- <nav class="mobile-bottom-nav md:hidden">
-  <div class="nav-item active" onclick="setActive(this)">
-    <i class="fa-solid fa-house"></i><span>Home</span>
-  </div>
-  <div class="nav-item" onclick="location.href='menu.html'">
-    <i class="fa-solid fa-utensils"></i><span>Menu</span>
-  </div>
-  
-  <div onclick="toggleCart()">
-    <div class="cart-fab">
-      <i class="fa-solid fa-bag-shopping text-lg"></i>
-      <div class="badge" id="mobileBadge" style="display:none">0</div>
+    <div class="nav-item" onclick="setActive(this)">
+      <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
     </div>
-  </div>
-  <div class="nav-item" onclick="setActive(this)">
-    <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
-  </div>
-  <div class="nav-item" onclick="setActive(this)">
-    <i class="fa-regular fa-circle-user"></i><span>
-       <a href="/login.html" >Profile</a>
-    </span>
-  </div>
-</nav> 
+    <div class="nav-item" onclick="setActive(this)">
+      <i class="fa-regular fa-circle-user"></i><span>
+        <a href="/login.html">Profile</a>
+      </span>
+    </div>
+  </nav>
 
 
 
-    <script src="static/js/main.js"></script>
+  <script src="static/js/main.js"></script>
 </body>
+
 </html>

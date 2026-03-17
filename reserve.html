@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Savoria — Reserve a Table</title>
-  <link rel="stylesheet" href="static/css/reserve.css">
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -14,75 +14,98 @@
       theme: {
         extend: {
           colors: {
-            redPrimary:"#c0392b", redDeep:"#96281b", redPale:"#fdf0ee",
-            cream:"#f5f0eb", textDark:"#1a1210", textMid:"#4a3830",
-            borderSoft:"#e8ddd8", gold:"#b8963e", goldLight:"#d4af6a",
+            redPrimary: "#c0392b", redDeep: "#96281b", redPale: "#fdf0ee",
+            cream: "#f5f0eb", textDark: "#1a1210", textMid: "#4a3830",
+            borderSoft: "#e8ddd8", gold: "#b8963e", goldLight: "#d4af6a",
           },
           fontFamily: {
-            playfair:["Playfair Display","serif"],
-            jost:["Jost","sans-serif"],
-            cormorant:["Cormorant Garamond","serif"],
+            playfair: ["Playfair Display", "serif"],
+            jost: ["Jost", "sans-serif"],
+            cormorant: ["Cormorant Garamond", "serif"],
+          },
+          keyframes: {
+            slideUp: { from: { opacity: '0', transform: 'translateY(20px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+            panelIn: { from: { opacity: '0', transform: 'translateY(12px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+            successIn: { from: { opacity: '0', transform: 'scale(.94)' }, to: { opacity: '1', transform: 'scale(1)' } },
+            tickDraw: { from: { strokeDashoffset: '60' }, to: { strokeDashoffset: '0' } },
+          },
+          animation: {
+            'slide-up-1': 'slideUp 0.6s 0.1s both',
+            'slide-up-2': 'slideUp 0.6s 0.2s both',
+            'slide-up-3': 'slideUp 0.6s 0.3s both',
+            'slide-up-4': 'slideUp 0.6s 0.4s both',
+            'slide-up-5': 'slideUp 0.6s 0.5s both',
+            'panel-in': 'panelIn 0.35s ease both',
+            'success-in': 'successIn 0.45s ease both',
+          },
+          backgroundImage: {
+            'hero-grad': 'linear-gradient(160deg, #fdf6f0 0%, #f5ede4 55%, #f0e4d8 100%)',
+            'book-btn': 'linear-gradient(135deg, #c0392b, #96281b)',
+            'book-btn-hover': 'linear-gradient(135deg, #96281b, #c0392b)',
+            'footer-bg': 'linear-gradient(160deg, #1a1210, #2d1b16)',
+            'gold-line': 'linear-gradient(90deg, transparent, #b8963e 30%, #d4af6a 60%, transparent)',
+            'nav-bg': 'linear-gradient(90deg, transparent, #b8963e)',
           },
         },
       },
     };
   </script>
-
 </head>
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
 
 <!-- ═══════════ OVERLAY ═══════════ -->
-<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]" onclick="closeAll()"></div>
+<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px] transition-opacity duration-300" onclick="closeAll()"></div>
 
 <!-- ═══════════ MOBILE MENU ═══════════ -->
-<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex-col p-10 hidden" style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
-  <div class="flex justify-between items-center mb-10">
-    <div>
-      <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-      <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
+<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] hidden" style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
+  <div class="flex flex-col h-full p-10">
+    <div class="flex justify-between items-center mb-10">
+      <div>
+        <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
+        <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
+      </div>
+      <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
     </div>
-    <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
-  </div>
-  <div class="gold-line h-[1px] w-full mb-8"></div>
-  <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="/" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
-    <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="/about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-    <li><a href="/reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
-  </ul>
-  <div class="mt-auto space-y-3">
-    <a href="/reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
-      <i class="fa-regular fa-calendar-check"></i> Book a Table
-    </a>
-    <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
-      <span>📞 +1 (555) 920-4200</span><span>·</span><span>Mon–Sun 12–11pm</span>
+    <div class="h-px w-full mb-8" style="background:linear-gradient(90deg,transparent,#b8963e 30%,#d4af6a 60%,transparent)"></div>
+    <ul class="flex flex-col gap-1 flex-1">
+      <li><a href="/" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+      <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
+      <li><a href="/about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+      <li><a href="/reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+      <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+    </ul>
+    <div class="mt-auto space-y-3">
+      <a href="/reserve.html" onclick="toggleMenu()" class="flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
+        <i class="fa-regular fa-calendar-check"></i> Book a Table
+      </a>
+      <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
+        <span>📞 +1 (555) 920-4200</span><span>·</span><span>Mon–Sun 12–11pm</span>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- ═══════════ NAVBAR ═══════════ -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] bg-white/96 backdrop-blur-[10px] transition-all duration-300">
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] bg-white/[0.96] backdrop-blur-[10px] transition-all duration-300">
   <div class="h-[72px] flex items-center justify-between px-5 sm:px-8 lg:px-14">
     <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
-      <span class="font-playfair text-[24px] sm:text-[26px] font-black text-textDark group-hover:text-redPrimary
-       transition tracking-tight">
+      <span class="font-playfair text-[24px] sm:text-[26px] font-black text-textDark group-hover:text-redPrimary transition tracking-tight">
         Sav<span class="italic font-light text-redPrimary">o</span>ria
       </span>
       <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
     </a>
     <ul class="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-semibold uppercase tracking-[.15em] text-textMid">
-      <li><a href="index.html"    class="nav-link transition">Home</a></li>
-      <li><a href="menu.html" class="nav-link transition">Menu</a></li>
-      <li><a href="about.html" class="nav-link transition">About</a></li>
-      <li><a href="reserve.html"  class="nav-link active-link">Reserve</a></li>
-      <li><a href="contact.html"  class="nav-link transition">Contact</a></li>
+      <li><a href="index.html" class="relative pb-0.5 transition hover:text-redPrimary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-redPrimary after:transition-all hover:after:w-full">Home</a></li>
+      <li><a href="menu.html" class="relative pb-0.5 transition hover:text-redPrimary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-redPrimary after:transition-all hover:after:w-full">Menu</a></li>
+      <li><a href="about.html" class="relative pb-0.5 transition hover:text-redPrimary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-redPrimary after:transition-all hover:after:w-full">About</a></li>
+      <li><a href="reserve.html" class="text-redPrimary relative pb-0.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-redPrimary">Reserve</a></li>
+      <li><a href="contact.html" class="relative pb-0.5 transition hover:text-redPrimary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-redPrimary after:transition-all hover:after:w-full">Contact</a></li>
     </ul>
     <div class="flex items-center gap-3">
       <a href="login.html" class="hidden md:flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.12em] text-textMid hover:text-gold transition border-l border-borderSoft pl-4">
         <i class="fa-regular fa-circle-user"></i> Login
       </a>
-      <a href="reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-4 lg:px-5 py-2.5 rounded text-[10px] lg:text-[11px] font-semibold tracking-[.18em] uppercase transition">
+      <a href="reserve.html" class="hidden md:inline-flex items-center gap-2 text-white px-4 lg:px-5 py-2.5 rounded text-[10px] lg:text-[11px] font-semibold tracking-[.18em] uppercase transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
         <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
       </a>
       <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
@@ -98,87 +121,94 @@
 <main>
 
 <!-- ═══════════ HERO ═══════════ -->
-<section class="reserve-hero pt-[72px]">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 lg:py-20">
+<section class="pt-[72px] relative overflow-hidden" style="background:linear-gradient(160deg,#fdf6f0 0%,#f5ede4 55%,#f0e4d8 100%)">
+  <!-- decorative circles -->
+  <div class="absolute pointer-events-none" style="top:-140px;right:-100px;width:min(580px,90vw);height:min(580px,90vw);border-radius:50%;background:radial-gradient(circle,rgba(192,57,43,.07) 0%,transparent 65%)"></div>
+  <div class="absolute pointer-events-none" style="bottom:-100px;left:-60px;width:min(420px,80vw);height:min(420px,80vw);border-radius:50%;background:radial-gradient(circle,rgba(184,150,62,.07) 0%,transparent 65%)"></div>
 
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 lg:py-20">
     <!-- breadcrumb -->
-    <div class="flex items-center gap-2 mb-6 lg:mb-8 anim-1">
-      <a href="index.html" class="bc-chip"><i class="fa-solid fa-house text-[9px] mr-1"></i>Home</a>
+    <div class="flex items-center gap-2 mb-6 lg:mb-8 animate-slide-up-1">
+      <a href="index.html" class="text-[10px] font-bold tracking-[.3em] uppercase text-gold/80 hover:text-redPrimary transition"><i class="fa-solid fa-house text-[9px] mr-1"></i>Home</a>
       <i class="fa-solid fa-chevron-right text-borderSoft text-[8px]"></i>
-      <span class="bc-chip cur">Reserve</span>
+      <span class="text-[10px] font-bold tracking-[.3em] uppercase text-redPrimary">Reserve</span>
     </div>
 
     <div class="grid lg:grid-cols-[1fr_380px] gap-10 lg:gap-20 items-end">
       <div>
-        <div class="section-label mb-4 anim-1">Book Your Table</div>
-        <h1 class="font-playfair text-4xl sm:text-5xl lg:text-[68px] font-black text-textDark leading-[1.04] mb-4 lg:mb-5 anim-2">
-          An Evening<br/>Worth <em style="font-style:italic;color:var(--red)">Savouring</em>
+        <!-- section label -->
+        <div class="flex items-center gap-2.5 mb-4 animate-slide-up-1">
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+          <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">Book Your Table</span>
+          <span class="flex-shrink-0 w-7 h-px" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+        </div>
+        <h1 class="font-playfair text-4xl sm:text-5xl lg:text-[68px] font-black text-textDark leading-[1.04] mb-4 lg:mb-5 animate-slide-up-2">
+          An Evening<br/>Worth <em class="italic" style="color:#c0392b">Savouring</em>
         </h1>
-        <p class="font-cormorant italic text-lg lg:text-xl leading-relaxed anim-3" style="color:rgba(74,56,48,.55)">
+        <p class="font-cormorant italic text-lg lg:text-xl leading-relaxed text-textMid/55 animate-slide-up-3">
           Reserve your table in a few easy steps — we'll handle the rest, from your preferred dining area to special occasion arrangements.
         </p>
-
-        <!-- perks row -->
-        <div class="flex flex-wrap gap-2 sm:gap-3 mt-6 lg:mt-8 anim-4">
+        <!-- perks -->
+        <div class="flex flex-wrap gap-2 sm:gap-3 mt-6 lg:mt-8 animate-slide-up-4">
           <div class="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-white border border-borderSoft">
-            <i class="fa-solid fa-check-circle text-sm" style="color:var(--red)"></i>
+            <i class="fa-solid fa-check-circle text-sm text-redPrimary"></i>
             <span class="text-xs font-semibold text-textMid">Instant Confirmation</span>
           </div>
           <div class="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-white border border-borderSoft">
-            <i class="fa-solid fa-check-circle text-sm" style="color:var(--red)"></i>
+            <i class="fa-solid fa-check-circle text-sm text-redPrimary"></i>
             <span class="text-xs font-semibold text-textMid">Free Cancellation</span>
           </div>
           <div class="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-white border border-borderSoft">
-            <i class="fa-solid fa-check-circle text-sm" style="color:var(--red)"></i>
+            <i class="fa-solid fa-check-circle text-sm text-redPrimary"></i>
             <span class="text-xs font-semibold text-textMid">Special Requests Welcome</span>
           </div>
         </div>
       </div>
 
-      <!-- quick info strip (desktop only) -->
-      <div class="anim-5 hidden lg:block">
+      <!-- Desktop: Good to Know -->
+      <div class="animate-slide-up-5 hidden lg:block">
         <div class="bg-white rounded-2xl border border-borderSoft p-6 space-y-4">
-          <p class="text-[10px] font-bold uppercase tracking-[.25em]" style="color:rgba(74,56,48,.4)">Good to Know</p>
+          <p class="text-[10px] font-bold uppercase tracking-[.25em] text-textMid/40">Good to Know</p>
           <div class="space-y-3.5">
             <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:#fdf0ee"><i class="fa-solid fa-clock text-sm" style="color:var(--red)"></i></div>
-              <div><p class="text-sm font-semibold text-textDark">Open Daily</p><p class="text-xs" style="color:rgba(74,56,48,.5)">Mon–Fri 12pm–10pm · Sat–Sun 11am–11pm</p></div>
+              <div class="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center bg-redPale"><i class="fa-solid fa-clock text-sm text-redPrimary"></i></div>
+              <div><p class="text-sm font-semibold text-textDark">Open Daily</p><p class="text-xs text-textMid/50">Mon–Fri 12pm–10pm · Sat–Sun 11am–11pm</p></div>
             </div>
             <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:#fdf0ee"><i class="fa-solid fa-user-group text-sm" style="color:var(--red)"></i></div>
-              <div><p class="text-sm font-semibold text-textDark">Groups of 10+</p><p class="text-xs" style="color:rgba(74,56,48,.5)">Private event enquiries via contact page</p></div>
+              <div class="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center bg-redPale"><i class="fa-solid fa-user-group text-sm text-redPrimary"></i></div>
+              <div><p class="text-sm font-semibold text-textDark">Groups of 10+</p><p class="text-xs text-textMid/50">Private event enquiries via contact page</p></div>
             </div>
             <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:#fdf0ee"><i class="fa-solid fa-shirt text-sm" style="color:var(--red)"></i></div>
-              <div><p class="text-sm font-semibold text-textDark">Dress Code</p><p class="text-xs" style="color:rgba(74,56,48,.5)">Smart casual or formal attire requested</p></div>
+              <div class="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center bg-redPale"><i class="fa-solid fa-shirt text-sm text-redPrimary"></i></div>
+              <div><p class="text-sm font-semibold text-textDark">Dress Code</p><p class="text-xs text-textMid/50">Smart casual or formal attire requested</p></div>
             </div>
             <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:#fdf0ee"><i class="fa-solid fa-champagne-glasses text-sm" style="color:var(--red)"></i></div>
-              <div><p class="text-sm font-semibold text-textDark">Happy Hour</p><p class="text-xs" style="color:rgba(74,56,48,.5)">Every day 4–6pm · 20% off all drinks</p></div>
+              <div class="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center bg-redPale"><i class="fa-solid fa-champagne-glasses text-sm text-redPrimary"></i></div>
+              <div><p class="text-sm font-semibold text-textDark">Happy Hour</p><p class="text-xs text-textMid/50">Every day 4–6pm · 20% off all drinks</p></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Mobile: Good to Know (collapsed accordion) -->
-      <div class="lg:hidden anim-5">
+      <!-- Mobile: Good to Know accordion -->
+      <div class="lg:hidden animate-slide-up-5">
         <details class="bg-white rounded-2xl border border-borderSoft overflow-hidden">
           <summary class="px-5 py-4 flex items-center justify-between cursor-pointer list-none">
-            <span class="text-[10px] font-bold uppercase tracking-[.25em]" style="color:rgba(74,56,48,.4)">Good to Know</span>
+            <span class="text-[10px] font-bold uppercase tracking-[.25em] text-textMid/40">Good to Know</span>
             <i class="fa-solid fa-chevron-down text-[11px] text-textMid/40"></i>
           </summary>
           <div class="px-5 pb-5 space-y-3">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:#fdf0ee"><i class="fa-solid fa-clock text-xs" style="color:var(--red)"></i></div>
-              <div><p class="text-sm font-semibold text-textDark">Open Daily</p><p class="text-xs" style="color:rgba(74,56,48,.5)">Mon–Fri 12pm–10pm · Sat–Sun 11am–11pm</p></div>
+              <div class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center bg-redPale"><i class="fa-solid fa-clock text-xs text-redPrimary"></i></div>
+              <div><p class="text-sm font-semibold text-textDark">Open Daily</p><p class="text-xs text-textMid/50">Mon–Fri 12pm–10pm · Sat–Sun 11am–11pm</p></div>
             </div>
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:#fdf0ee"><i class="fa-solid fa-user-group text-xs" style="color:var(--red)"></i></div>
-              <div><p class="text-sm font-semibold text-textDark">Groups of 10+</p><p class="text-xs" style="color:rgba(74,56,48,.5)">Private event enquiries via contact page</p></div>
+              <div class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center bg-redPale"><i class="fa-solid fa-user-group text-xs text-redPrimary"></i></div>
+              <div><p class="text-sm font-semibold text-textDark">Groups of 10+</p><p class="text-xs text-textMid/50">Private event enquiries via contact page</p></div>
             </div>
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:#fdf0ee"><i class="fa-solid fa-shirt text-xs" style="color:var(--red)"></i></div>
-              <div><p class="text-sm font-semibold text-textDark">Dress Code</p><p class="text-xs" style="color:rgba(74,56,48,.5)">Smart casual or formal attire requested</p></div>
+              <div class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center bg-redPale"><i class="fa-solid fa-shirt text-xs text-redPrimary"></i></div>
+              <div><p class="text-sm font-semibold text-textDark">Dress Code</p><p class="text-xs text-textMid/50">Smart casual or formal attire requested</p></div>
             </div>
           </div>
         </details>
@@ -194,34 +224,45 @@
 
       <!-- MAIN FORM -->
       <div>
-
-        <!-- Step bar -->
-        <div class="step-bar mb-8 reveal" id="stepBar">
-          <div class="step-node">
-            <div class="step-circle active" id="sc1"><i class="fa-solid fa-calendar-day text-[10px]"></i></div>
-            <span class="step-label active" id="sl1">Date &amp; Time</span>
+        <!-- Step Bar -->
+        <div class="flex items-center mb-8 opacity-0 translate-y-4 transition-all duration-500" id="stepBar" data-reveal>
+          <!-- Step 1 -->
+          <div class="flex flex-col items-center gap-1.5 relative z-[1]">
+            <div id="sc1" class="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 flex-shrink-0 transition-all duration-300 bg-redPrimary border-redPrimary text-white" style="box-shadow:0 0 0 6px rgba(192,57,43,.12)">
+              <i class="fa-solid fa-calendar-day text-[10px]"></i>
+            </div>
+            <span id="sl1" class="text-[9px] font-bold tracking-[.12em] uppercase text-redPrimary whitespace-nowrap hidden sm:block">Date &amp; Time</span>
           </div>
-          <div class="step-connector" id="con1"></div>
-          <div class="step-node">
-            <div class="step-circle" id="sc2"><i class="fa-solid fa-user-group text-[10px]"></i></div>
-            <span class="step-label" id="sl2">Guests</span>
+          <div id="con1" class="flex-1 h-0.5 bg-borderSoft mx-1 mb-0 sm:mb-[22px] min-w-[12px] sm:min-w-[20px] transition-all duration-300"></div>
+          <!-- Step 2 -->
+          <div class="flex flex-col items-center gap-1.5 relative z-[1]">
+            <div id="sc2" class="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 border-borderSoft bg-white text-textMid flex-shrink-0 transition-all duration-300">
+              <i class="fa-solid fa-user-group text-[10px]"></i>
+            </div>
+            <span id="sl2" class="text-[9px] font-bold tracking-[.12em] uppercase text-textMid/40 whitespace-nowrap hidden sm:block">Guests</span>
           </div>
-          <div class="step-connector" id="con2"></div>
-          <div class="step-node">
-            <div class="step-circle" id="sc3"><i class="fa-solid fa-chair text-[10px]"></i></div>
-            <span class="step-label" id="sl3">Dining Area</span>
+          <div id="con2" class="flex-1 h-0.5 bg-borderSoft mx-1 mb-0 sm:mb-[22px] min-w-[12px] sm:min-w-[20px] transition-all duration-300"></div>
+          <!-- Step 3 -->
+          <div class="flex flex-col items-center gap-1.5 relative z-[1]">
+            <div id="sc3" class="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 border-borderSoft bg-white text-textMid flex-shrink-0 transition-all duration-300">
+              <i class="fa-solid fa-chair text-[10px]"></i>
+            </div>
+            <span id="sl3" class="text-[9px] font-bold tracking-[.12em] uppercase text-textMid/40 whitespace-nowrap hidden sm:block">Dining Area</span>
           </div>
-          <div class="step-connector" id="con3"></div>
-          <div class="step-node">
-            <div class="step-circle" id="sc4"><i class="fa-solid fa-circle-user text-[10px]"></i></div>
-            <span class="step-label" id="sl4">Your Details</span>
+          <div id="con3" class="flex-1 h-0.5 bg-borderSoft mx-1 mb-0 sm:mb-[22px] min-w-[12px] sm:min-w-[20px] transition-all duration-300"></div>
+          <!-- Step 4 -->
+          <div class="flex flex-col items-center gap-1.5 relative z-[1]">
+            <div id="sc4" class="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 border-borderSoft bg-white text-textMid flex-shrink-0 transition-all duration-300">
+              <i class="fa-solid fa-circle-user text-[10px]"></i>
+            </div>
+            <span id="sl4" class="text-[9px] font-bold tracking-[.12em] uppercase text-textMid/40 whitespace-nowrap hidden sm:block">Your Details</span>
           </div>
         </div>
 
         <!-- ─── STEP 1: Date & Time ─── -->
-        <div class="step-panel active form-card reveal" id="step1">
+        <div class="step-panel active bg-white border border-borderSoft rounded-[20px] px-8 py-7 shadow-[0_4px_32px_rgba(0,0,0,.05)] opacity-0 translate-y-4 transition-all duration-500 sm:rounded-[20px] max-sm:rounded-2xl max-sm:px-4 max-sm:py-5" id="step1" data-reveal>
           <h2 class="font-playfair text-xl sm:text-2xl font-black text-textDark mb-1">Choose Date &amp; Time</h2>
-          <p class="font-cormorant italic text-base mb-6 sm:mb-8" style="color:rgba(74,56,48,.5)">Select a date and preferred time slot for your reservation.</p>
+          <p class="font-cormorant italic text-base mb-6 sm:mb-8 text-textMid/50">Select a date and preferred time slot for your reservation.</p>
 
           <!-- calendar strip -->
           <div class="mb-5">
@@ -234,71 +275,71 @@
                 <i class="fa-solid fa-chevron-right text-[11px]"></i>
               </button>
             </div>
-            <div id="calStrip" class="flex gap-2 overflow-x-auto scroll-hide pb-1"></div>
+            <div id="calStrip" class="flex gap-2 overflow-x-auto pb-1" style="scrollbar-width:none;-ms-overflow-style:none"></div>
           </div>
-          <p class="err-msg" id="errDate">Please select a date.</p>
+          <p class="hidden text-[11px] text-[#e74c3c] mt-1.5" id="errDate">Please select a date.</p>
 
           <!-- time slots -->
           <div class="mb-2">
-            <label class="field-label">Select Time Slot</label>
+            <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Select Time Slot</label>
             <div id="timeSlots" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2"></div>
           </div>
-          <p class="err-msg" id="errTime">Please select a time slot.</p>
+          <p class="hidden text-[11px] text-[#e74c3c] mt-1.5" id="errTime">Please select a time slot.</p>
 
           <div class="flex justify-end mt-6 sm:mt-8">
-            <button onclick="goStep(2)" class="book-btn text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2">
+            <button onclick="goStep(2)" class="text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
               Continue <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </button>
           </div>
         </div>
 
         <!-- ─── STEP 2: Guests ─── -->
-        <div class="step-panel form-card reveal" id="step2">
+        <div class="step-panel hidden bg-white border border-borderSoft rounded-[20px] px-8 py-7 shadow-[0_4px_32px_rgba(0,0,0,.05)] max-sm:rounded-2xl max-sm:px-4 max-sm:py-5" id="step2">
           <h2 class="font-playfair text-xl sm:text-2xl font-black text-textDark mb-1">Number of Guests</h2>
-          <p class="font-cormorant italic text-base mb-6 sm:mb-8" style="color:rgba(74,56,48,.5)">How many guests will be dining? Select any special occasion too.</p>
+          <p class="font-cormorant italic text-base mb-6 sm:mb-8 text-textMid/50">How many guests will be dining? Select any special occasion too.</p>
 
           <div class="mb-7">
-            <label class="field-label">Party Size</label>
+            <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Party Size</label>
             <div class="flex items-center gap-4 sm:gap-5 p-4 sm:p-5 rounded-2xl bg-cream border border-borderSoft w-fit">
-              <button class="qty-btn" id="guestMinus" onclick="changeGuests(-1)">
+              <button class="w-9 h-9 rounded-[10px] border-[1.5px] border-borderSoft bg-white flex items-center justify-center cursor-pointer text-[15px] text-textMid hover:border-redPrimary hover:bg-redPale hover:text-redPrimary transition select-none flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed" id="guestMinus" onclick="changeGuests(-1)">
                 <i class="fa-solid fa-minus text-sm"></i>
               </button>
               <div class="text-center">
-                <span id="guestVal" class="qty-val">2</span>
-                <p class="text-[10px] font-semibold uppercase tracking-[.12em] mt-1" style="color:rgba(74,56,48,.4)">Guests</p>
+                <span id="guestVal" class="text-[20px] font-bold text-textDark min-w-[32px] inline-block text-center">2</span>
+                <p class="text-[10px] font-semibold uppercase tracking-[.12em] mt-1 text-textMid/40">Guests</p>
               </div>
-              <button class="qty-btn" id="guestPlus" onclick="changeGuests(1)">
+              <button class="w-9 h-9 rounded-[10px] border-[1.5px] border-borderSoft bg-white flex items-center justify-center cursor-pointer text-[15px] text-textMid hover:border-redPrimary hover:bg-redPale hover:text-redPrimary transition select-none flex-shrink-0" id="guestPlus" onclick="changeGuests(1)">
                 <i class="fa-solid fa-plus text-sm"></i>
               </button>
             </div>
-            <p class="text-xs mt-3" style="color:rgba(74,56,48,.4)">For groups of 10 or more, please <a href="contact.html" class="underline" style="color:var(--red)">contact us directly</a>.</p>
+            <p class="text-xs mt-3 text-textMid/40">For groups of 10 or more, please <a href="contact.html" class="underline text-redPrimary">contact us directly</a>.</p>
           </div>
 
           <div class="mb-2">
-            <label class="field-label">Special Occasion <span style="opacity:.4">(optional)</span></label>
+            <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Special Occasion <span class="opacity-40">(optional)</span></label>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-              <div class="occ-pill" onclick="selectOccasion(this,'none')">
-                <div class="occ-icon"><i class="fa-regular fa-circle"></i></div>
+              <div class="occ-pill flex items-center gap-2 p-2.5 rounded-xl border-[1.5px] border-borderSoft bg-white cursor-pointer transition hover:border-redPrimary hover:bg-redPale" onclick="selectOccasion(this,'none')">
+                <div class="occ-icon w-[30px] h-[30px] rounded-[9px] bg-cream flex items-center justify-center text-xs text-textMid flex-shrink-0 transition-all"><i class="fa-regular fa-circle"></i></div>
                 <span class="text-sm font-semibold text-textDark">None</span>
               </div>
-              <div class="occ-pill" onclick="selectOccasion(this,'birthday')">
-                <div class="occ-icon"><i class="fa-solid fa-cake-candles"></i></div>
+              <div class="occ-pill flex items-center gap-2 p-2.5 rounded-xl border-[1.5px] border-borderSoft bg-white cursor-pointer transition hover:border-redPrimary hover:bg-redPale" onclick="selectOccasion(this,'birthday')">
+                <div class="occ-icon w-[30px] h-[30px] rounded-[9px] bg-cream flex items-center justify-center text-xs text-textMid flex-shrink-0 transition-all"><i class="fa-solid fa-cake-candles"></i></div>
                 <span class="text-sm font-semibold text-textDark">Birthday</span>
               </div>
-              <div class="occ-pill" onclick="selectOccasion(this,'anniversary')">
-                <div class="occ-icon"><i class="fa-solid fa-heart"></i></div>
+              <div class="occ-pill flex items-center gap-2 p-2.5 rounded-xl border-[1.5px] border-borderSoft bg-white cursor-pointer transition hover:border-redPrimary hover:bg-redPale" onclick="selectOccasion(this,'anniversary')">
+                <div class="occ-icon w-[30px] h-[30px] rounded-[9px] bg-cream flex items-center justify-center text-xs text-textMid flex-shrink-0 transition-all"><i class="fa-solid fa-heart"></i></div>
                 <span class="text-sm font-semibold text-textDark">Anniversary</span>
               </div>
-              <div class="occ-pill" onclick="selectOccasion(this,'date')">
-                <div class="occ-icon"><i class="fa-solid fa-champagne-glasses"></i></div>
+              <div class="occ-pill flex items-center gap-2 p-2.5 rounded-xl border-[1.5px] border-borderSoft bg-white cursor-pointer transition hover:border-redPrimary hover:bg-redPale" onclick="selectOccasion(this,'date')">
+                <div class="occ-icon w-[30px] h-[30px] rounded-[9px] bg-cream flex items-center justify-center text-xs text-textMid flex-shrink-0 transition-all"><i class="fa-solid fa-champagne-glasses"></i></div>
                 <span class="text-sm font-semibold text-textDark">Date Night</span>
               </div>
-              <div class="occ-pill" onclick="selectOccasion(this,'business')">
-                <div class="occ-icon"><i class="fa-solid fa-briefcase"></i></div>
+              <div class="occ-pill flex items-center gap-2 p-2.5 rounded-xl border-[1.5px] border-borderSoft bg-white cursor-pointer transition hover:border-redPrimary hover:bg-redPale" onclick="selectOccasion(this,'business')">
+                <div class="occ-icon w-[30px] h-[30px] rounded-[9px] bg-cream flex items-center justify-center text-xs text-textMid flex-shrink-0 transition-all"><i class="fa-solid fa-briefcase"></i></div>
                 <span class="text-sm font-semibold text-textDark">Business</span>
               </div>
-              <div class="occ-pill" onclick="selectOccasion(this,'other')">
-                <div class="occ-icon"><i class="fa-solid fa-star"></i></div>
+              <div class="occ-pill flex items-center gap-2 p-2.5 rounded-xl border-[1.5px] border-borderSoft bg-white cursor-pointer transition hover:border-redPrimary hover:bg-redPale" onclick="selectOccasion(this,'other')">
+                <div class="occ-icon w-[30px] h-[30px] rounded-[9px] bg-cream flex items-center justify-center text-xs text-textMid flex-shrink-0 transition-all"><i class="fa-solid fa-star"></i></div>
                 <span class="text-sm font-semibold text-textDark">Other</span>
               </div>
             </div>
@@ -308,29 +349,22 @@
             <button onclick="goStep(1)" class="px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 hover:border-redPrimary hover:text-redPrimary transition text-textMid">
               <i class="fa-solid fa-arrow-left text-[10px]"></i> Back
             </button>
-            <button onclick="goStep(3)" class="book-btn text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2">
+            <button onclick="goStep(3)" class="text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
               Continue <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </button>
           </div>
         </div>
 
         <!-- ─── STEP 3: Dining Area ─── -->
-        <div class="step-panel form-card reveal" id="step3">
+        <div class="step-panel hidden bg-white border border-borderSoft rounded-[20px] px-8 py-7 shadow-[0_4px_32px_rgba(0,0,0,.05)] max-sm:rounded-2xl max-sm:px-4 max-sm:py-5" id="step3">
           <h2 class="font-playfair text-xl sm:text-2xl font-black text-textDark mb-1">Choose Your Dining Area</h2>
-          <p class="font-cormorant italic text-base mb-6 sm:mb-8" style="color:rgba(74,56,48,.5)">We have several beautiful spaces for an unforgettable dining experience.</p>
+          <p class="font-cormorant italic text-base mb-6 sm:mb-8 text-textMid/50">We have several beautiful spaces for an unforgettable dining experience.</p>
 
           <div class="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-2">
-
-            <div class="area-card active" id="area-main" onclick="selectArea(this,'main')">
+            <!-- Main Dining -->
+            <div class="area-card rounded-2xl border-2 border-redPrimary bg-white overflow-hidden cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(192,57,43,.1)] shadow-[0_0_0_4px_rgba(192,57,43,.1)]" id="area-main" onclick="selectArea(this,'main')">
               <div class="h-28 sm:h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#2d1a14,#1a1210)">
                 <div class="absolute inset-0 opacity-10" style="background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:20px 20px"></div>
-                <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
-                  <div class="flex gap-1.5">
-                    <div class="w-7 h-7 rounded-lg" style="background:rgba(192,57,43,.4)"></div>
-                    <div class="w-7 h-7 rounded-lg" style="background:rgba(192,57,43,.25)"></div>
-                    <div class="w-7 h-7 rounded-lg" style="background:rgba(192,57,43,.15)"></div>
-                  </div>
-                </div>
                 <div class="absolute inset-0 flex items-center justify-center">
                   <i class="fa-solid fa-utensils text-white/20 text-3xl sm:text-4xl"></i>
                 </div>
@@ -338,19 +372,20 @@
               <div class="p-3 sm:p-4 flex items-start justify-between gap-3">
                 <div class="min-w-0">
                   <p class="font-playfair font-black text-textDark text-sm sm:text-base leading-tight">Main Dining Room</p>
-                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Elegant setting · Up to 60 guests</p>
+                  <p class="text-xs mt-1 text-textMid/50">Elegant setting · Up to 60 guests</p>
                   <div class="flex flex-wrap gap-1.5 mt-2">
-                    <span class="tag tag-red">Most Popular</span>
-                    <span class="tag" style="background:#f5f0eb;color:var(--mid)">All day</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-redPrimary/[.12] text-redPrimary border border-redPrimary/25">Most Popular</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-cream text-textMid">All day</span>
                   </div>
                 </div>
-                <div class="area-check mt-1 flex-shrink-0">
+                <div class="area-check w-[22px] h-[22px] rounded-full border-2 border-redPrimary bg-redPrimary flex items-center justify-center flex-shrink-0 mt-1 transition-all">
                   <i class="fa-solid fa-check text-white text-[10px]"></i>
                 </div>
               </div>
             </div>
 
-            <div class="area-card" id="area-terrace" onclick="selectArea(this,'terrace')">
+            <!-- Garden Terrace -->
+            <div class="area-card rounded-2xl border-2 border-borderSoft bg-white overflow-hidden cursor-pointer transition-all hover:border-redPrimary hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(192,57,43,.1)]" id="area-terrace" onclick="selectArea(this,'terrace')">
               <div class="h-28 sm:h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#1e3a28,#0f2318)">
                 <div class="absolute inset-0 opacity-10" style="background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:20px 20px"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
@@ -360,19 +395,20 @@
               <div class="p-3 sm:p-4 flex items-start justify-between gap-3">
                 <div class="min-w-0">
                   <p class="font-playfair font-black text-textDark text-sm sm:text-base leading-tight">Garden Terrace</p>
-                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Al fresco dining · Up to 24 guests</p>
+                  <p class="text-xs mt-1 text-textMid/50">Al fresco dining · Up to 24 guests</p>
                   <div class="flex flex-wrap gap-1.5 mt-2">
-                    <span class="tag tag-veg">Outdoor</span>
-                    <span class="tag" style="background:#f5f0eb;color:var(--mid)">Seasonal</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-[rgba(34,139,34,.12)] text-[#228b22] border border-[rgba(34,139,34,.25)]">Outdoor</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-cream text-textMid">Seasonal</span>
                   </div>
                 </div>
-                <div class="area-check mt-1 flex-shrink-0">
+                <div class="area-check w-[22px] h-[22px] rounded-full border-2 border-borderSoft flex items-center justify-center flex-shrink-0 mt-1 transition-all">
                   <i class="fa-solid fa-check text-white text-[10px]"></i>
                 </div>
               </div>
             </div>
 
-            <div class="area-card" id="area-bar" onclick="selectArea(this,'bar')">
+            <!-- Bar Lounge -->
+            <div class="area-card rounded-2xl border-2 border-borderSoft bg-white overflow-hidden cursor-pointer transition-all hover:border-redPrimary hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(192,57,43,.1)]" id="area-bar" onclick="selectArea(this,'bar')">
               <div class="h-28 sm:h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#1a1a2e,#0f0f1e)">
                 <div class="absolute inset-0 opacity-10" style="background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:20px 20px"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
@@ -382,19 +418,20 @@
               <div class="p-3 sm:p-4 flex items-start justify-between gap-3">
                 <div class="min-w-0">
                   <p class="font-playfair font-black text-textDark text-sm sm:text-base leading-tight">Bar Lounge</p>
-                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Casual dining · Up to 12 guests</p>
+                  <p class="text-xs mt-1 text-textMid/50">Casual dining · Up to 12 guests</p>
                   <div class="flex flex-wrap gap-1.5 mt-2">
-                    <span class="tag tag-gold">Cocktails</span>
-                    <span class="tag" style="background:#f5f0eb;color:var(--mid)">Walk-in friendly</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-gold/[.15] text-gold border border-gold/30">Cocktails</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-cream text-textMid">Walk-in friendly</span>
                   </div>
                 </div>
-                <div class="area-check mt-1 flex-shrink-0">
+                <div class="area-check w-[22px] h-[22px] rounded-full border-2 border-borderSoft flex items-center justify-center flex-shrink-0 mt-1 transition-all">
                   <i class="fa-solid fa-check text-white text-[10px]"></i>
                 </div>
               </div>
             </div>
 
-            <div class="area-card" id="area-private" onclick="selectArea(this,'private')">
+            <!-- Private Dining -->
+            <div class="area-card rounded-2xl border-2 border-borderSoft bg-white overflow-hidden cursor-pointer transition-all hover:border-redPrimary hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(192,57,43,.1)]" id="area-private" onclick="selectArea(this,'private')">
               <div class="h-28 sm:h-36 relative overflow-hidden" style="background:linear-gradient(135deg,#2a1a0a,#1a0f00)">
                 <div class="absolute inset-0 opacity-10" style="background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:20px 20px"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
@@ -404,82 +441,80 @@
               <div class="p-3 sm:p-4 flex items-start justify-between gap-3">
                 <div class="min-w-0">
                   <p class="font-playfair font-black text-textDark text-sm sm:text-base leading-tight">Private Dining Room</p>
-                  <p class="text-xs mt-1" style="color:rgba(74,56,48,.5)">Exclusive setting · Up to 24 guests</p>
+                  <p class="text-xs mt-1 text-textMid/50">Exclusive setting · Up to 24 guests</p>
                   <div class="flex flex-wrap gap-1.5 mt-2">
-                    <span class="tag tag-gold">Premium</span>
-                    <span class="tag" style="background:#f5f0eb;color:var(--mid)">On request</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-gold/[.15] text-gold border border-gold/30">Premium</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-cream text-textMid">On request</span>
                   </div>
                 </div>
-                <div class="area-check mt-1 flex-shrink-0">
+                <div class="area-check w-[22px] h-[22px] rounded-full border-2 border-borderSoft flex items-center justify-center flex-shrink-0 mt-1 transition-all">
                   <i class="fa-solid fa-check text-white text-[10px]"></i>
                 </div>
               </div>
             </div>
-
           </div>
 
           <div class="flex justify-between mt-6 sm:mt-8">
             <button onclick="goStep(2)" class="px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 hover:border-redPrimary hover:text-redPrimary transition text-textMid">
               <i class="fa-solid fa-arrow-left text-[10px]"></i> Back
             </button>
-            <button onclick="goStep(4)" class="book-btn text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2">
+            <button onclick="goStep(4)" class="text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center gap-2 transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
               Continue <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </button>
           </div>
         </div>
 
         <!-- ─── STEP 4: Your Details ─── -->
-        <div class="step-panel form-card reveal" id="step4">
+        <div class="step-panel hidden bg-white border border-borderSoft rounded-[20px] px-8 py-7 shadow-[0_4px_32px_rgba(0,0,0,.05)] max-sm:rounded-2xl max-sm:px-4 max-sm:py-5" id="step4">
           <h2 class="font-playfair text-xl sm:text-2xl font-black text-textDark mb-1">Your Details</h2>
-          <p class="font-cormorant italic text-base mb-6 sm:mb-8" style="color:rgba(74,56,48,.5)">Almost done — just your contact information and any special requests.</p>
+          <p class="font-cormorant italic text-base mb-6 sm:mb-8 text-textMid/50">Almost done — just your contact information and any special requests.</p>
 
           <form id="detailsForm" onsubmit="confirmReservation(event)" novalidate class="space-y-4">
-
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
-                <label class="field-label">First Name *</label>
-                <input type="text" id="rfFirst" class="sv-input" placeholder="John" autocomplete="given-name"/>
-                <p class="err-msg" id="errFirst">Please enter your name.</p>
+                <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">First Name *</label>
+                <input type="text" id="rfFirst" class="w-full border-[1.5px] border-borderSoft rounded-xl px-3.5 py-3 font-jost text-sm text-textDark outline-none bg-white transition focus:border-redPrimary focus:shadow-[0_0_0_3px_rgba(192,57,43,.08)] placeholder:text-textMid/30" placeholder="John" autocomplete="given-name"/>
+                <p class="hidden text-[11px] text-[#e74c3c] mt-1.5" id="errFirst">Please enter your name.</p>
               </div>
               <div>
-                <label class="field-label">Last Name</label>
-                <input type="text" id="rfLast" class="sv-input" placeholder="Doe" autocomplete="family-name"/>
+                <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Last Name</label>
+                <input type="text" id="rfLast" class="w-full border-[1.5px] border-borderSoft rounded-xl px-3.5 py-3 font-jost text-sm text-textDark outline-none bg-white transition focus:border-redPrimary focus:shadow-[0_0_0_3px_rgba(192,57,43,.08)] placeholder:text-textMid/30" placeholder="Doe" autocomplete="family-name"/>
               </div>
             </div>
 
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
-                <label class="field-label">Email Address *</label>
-                <input type="email" id="rfEmail" class="sv-input" placeholder="your@email.com" autocomplete="email"/>
-                <p class="err-msg" id="errEmail">Please enter a valid email.</p>
+                <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Email Address *</label>
+                <input type="email" id="rfEmail" class="w-full border-[1.5px] border-borderSoft rounded-xl px-3.5 py-3 font-jost text-sm text-textDark outline-none bg-white transition focus:border-redPrimary focus:shadow-[0_0_0_3px_rgba(192,57,43,.08)] placeholder:text-textMid/30" placeholder="your@email.com" autocomplete="email"/>
+                <p class="hidden text-[11px] text-[#e74c3c] mt-1.5" id="errEmail">Please enter a valid email.</p>
               </div>
               <div>
-                <label class="field-label">Phone Number *</label>
-                <input type="tel" id="rfPhone" class="sv-input" placeholder="+1 (555) 000-0000" autocomplete="tel"/>
-                <p class="err-msg" id="errPhone">Please enter a phone number.</p>
+                <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Phone Number *</label>
+                <input type="tel" id="rfPhone" class="w-full border-[1.5px] border-borderSoft rounded-xl px-3.5 py-3 font-jost text-sm text-textDark outline-none bg-white transition focus:border-redPrimary focus:shadow-[0_0_0_3px_rgba(192,57,43,.08)] placeholder:text-textMid/30" placeholder="+1 (555) 000-0000" autocomplete="tel"/>
+                <p class="hidden text-[11px] text-[#e74c3c] mt-1.5" id="errPhone">Please enter a phone number.</p>
               </div>
             </div>
 
             <div>
-              <label class="field-label">Dietary Requirements <span style="opacity:.4">(optional)</span></label>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Dietary Requirements <span class="opacity-40">(optional)</span></label>
               <div class="flex flex-wrap gap-2" id="dietaryChips">
-                <button type="button" class="topic-pill" onclick="toggleDiet(this)">Vegetarian</button>
-                <button type="button" class="topic-pill" onclick="toggleDiet(this)">Vegan</button>
-                <button type="button" class="topic-pill" onclick="toggleDiet(this)">Gluten Free</button>
-                <button type="button" class="topic-pill" onclick="toggleDiet(this)">Halal</button>
-                <button type="button" class="topic-pill" onclick="toggleDiet(this)">Kosher</button>
-                <button type="button" class="topic-pill" onclick="toggleDiet(this)">Nut Allergy</button>
+                <button type="button" class="diet-pill px-3.5 py-1.5 rounded-full text-[11px] font-semibold border-[1.5px] border-borderSoft bg-white text-textMid cursor-pointer transition hover:border-redPrimary hover:bg-redPale hover:text-redPrimary" onclick="toggleDiet(this)">Vegetarian</button>
+                <button type="button" class="diet-pill px-3.5 py-1.5 rounded-full text-[11px] font-semibold border-[1.5px] border-borderSoft bg-white text-textMid cursor-pointer transition hover:border-redPrimary hover:bg-redPale hover:text-redPrimary" onclick="toggleDiet(this)">Vegan</button>
+                <button type="button" class="diet-pill px-3.5 py-1.5 rounded-full text-[11px] font-semibold border-[1.5px] border-borderSoft bg-white text-textMid cursor-pointer transition hover:border-redPrimary hover:bg-redPale hover:text-redPrimary" onclick="toggleDiet(this)">Gluten Free</button>
+                <button type="button" class="diet-pill px-3.5 py-1.5 rounded-full text-[11px] font-semibold border-[1.5px] border-borderSoft bg-white text-textMid cursor-pointer transition hover:border-redPrimary hover:bg-redPale hover:text-redPrimary" onclick="toggleDiet(this)">Halal</button>
+                <button type="button" class="diet-pill px-3.5 py-1.5 rounded-full text-[11px] font-semibold border-[1.5px] border-borderSoft bg-white text-textMid cursor-pointer transition hover:border-redPrimary hover:bg-redPale hover:text-redPrimary" onclick="toggleDiet(this)">Kosher</button>
+                <button type="button" class="diet-pill px-3.5 py-1.5 rounded-full text-[11px] font-semibold border-[1.5px] border-borderSoft bg-white text-textMid cursor-pointer transition hover:border-redPrimary hover:bg-redPale hover:text-redPrimary" onclick="toggleDiet(this)">Nut Allergy</button>
               </div>
             </div>
 
             <div>
-              <label class="field-label">Special Requests <span style="opacity:.4">(optional)</span></label>
-              <textarea id="rfRequests" class="sv-input" rows="3" placeholder="High chair needed, window seat preferred, celebrating a birthday…"></textarea>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Special Requests <span class="opacity-40">(optional)</span></label>
+              <textarea id="rfRequests" class="w-full border-[1.5px] border-borderSoft rounded-xl px-3.5 py-3 font-jost text-sm text-textDark outline-none bg-white transition focus:border-redPrimary focus:shadow-[0_0_0_3px_rgba(192,57,43,.08)] placeholder:text-textMid/30 resize-none leading-relaxed" rows="3" placeholder="High chair needed, window seat preferred, celebrating a birthday…"></textarea>
             </div>
 
             <div>
-              <label class="field-label">How did you hear about us? <span style="opacity:.4">(optional)</span></label>
-              <select id="rfSource" class="sv-input">
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">How did you hear about us? <span class="opacity-40">(optional)</span></label>
+              <select id="rfSource" class="w-full border-[1.5px] border-borderSoft rounded-xl px-3.5 py-3 font-jost text-sm text-textDark outline-none bg-white transition focus:border-redPrimary focus:shadow-[0_0_0_3px_rgba(192,57,43,.08)] cursor-pointer appearance-none" style="background:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'7\'%3E%3Cpath fill=\'%234a3830\' d=\'M1 1l5 5 5-5\'/%3E%3C/svg%3E') no-repeat right 14px center #fff">
                 <option value="">Select an option</option>
                 <option>Google</option>
                 <option>Instagram</option>
@@ -492,17 +527,17 @@
 
             <div class="flex items-start gap-3 p-4 rounded-xl bg-cream border border-borderSoft">
               <input type="checkbox" id="rfTerms" class="mt-0.5 w-4 h-4 rounded cursor-pointer flex-shrink-0" style="accent-color:#c0392b"/>
-              <label for="rfTerms" class="text-xs leading-relaxed cursor-pointer" style="color:rgba(74,56,48,.6)">
-                I agree to the <a href="#" style="color:var(--red)">cancellation policy</a>. Reservations can be modified or cancelled up to 2 hours before the booking time at no charge.
+              <label for="rfTerms" class="text-xs leading-relaxed cursor-pointer text-textMid/60">
+                I agree to the <a href="#" class="text-redPrimary underline">cancellation policy</a>. Reservations can be modified or cancelled up to 2 hours before the booking time at no charge.
               </label>
             </div>
-            <p class="err-msg" id="errTerms">Please accept the cancellation policy.</p>
+            <p class="hidden text-[11px] text-[#e74c3c] mt-1.5" id="errTerms">Please accept the cancellation policy.</p>
 
             <div class="flex flex-col-reverse sm:flex-row justify-between gap-3 pt-2">
               <button type="button" onclick="goStep(3)" class="px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase flex items-center justify-center gap-2 hover:border-redPrimary hover:text-redPrimary transition text-textMid">
                 <i class="fa-solid fa-arrow-left text-[10px]"></i> Back
               </button>
-              <button type="submit" id="confirmBtn" class="book-btn text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center justify-center gap-2">
+              <button type="submit" id="confirmBtn" class="text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase flex items-center justify-center gap-2 transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
                 <span id="confirmLabel"><i class="fa-solid fa-lock text-[10px]"></i> Confirm Reservation</span>
                 <span id="confirmSpinner" class="hidden"><i class="fa-solid fa-spinner fa-spin"></i> Booking…</span>
               </button>
@@ -511,22 +546,21 @@
         </div>
 
         <!-- ─── STEP 5: Confirmation ─── -->
-        <div class="step-panel form-card reveal" id="step5">
-          <div class="text-center py-4 sm:py-6 success-in">
+        <div class="step-panel hidden bg-white border border-borderSoft rounded-[20px] px-8 py-7 shadow-[0_4px_32px_rgba(0,0,0,.05)] max-sm:rounded-2xl max-sm:px-4 max-sm:py-5" id="step5">
+          <div class="text-center py-4 sm:py-6 animate-success-in">
             <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-5 sm:mb-6 relative">
               <svg viewBox="0 0 80 80" class="w-full h-full">
                 <circle cx="40" cy="40" r="38" fill="#fdf0ee" stroke="#fae0da" stroke-width="2"/>
-                <path class="tick-path" d="M22 40 L35 53 L58 27" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <path id="tickPath" d="M22 40 L35 53 L58 27" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:60;stroke-dashoffset:60;transition:stroke-dashoffset 0.6s 0.3s ease"/>
               </svg>
             </div>
-
             <h2 class="font-playfair text-2xl sm:text-3xl font-black text-textDark mb-2">You're All Set!</h2>
-            <p class="font-cormorant italic text-lg sm:text-xl mb-6 sm:mb-8" style="color:rgba(74,56,48,.55)">Your table has been reserved. We can't wait to welcome you.</p>
+            <p class="font-cormorant italic text-lg sm:text-xl mb-6 sm:mb-8 text-textMid/55">Your table has been reserved. We can't wait to welcome you.</p>
 
             <div class="bg-cream rounded-2xl border border-borderSoft p-5 sm:p-6 text-left max-w-md mx-auto mb-6 sm:mb-8">
               <div class="flex items-center justify-between mb-4">
-                <p class="text-[10px] font-bold uppercase tracking-[.25em]" style="color:rgba(74,56,48,.4)">Booking Summary</p>
-                <span class="tag tag-veg text-[9px]">Confirmed</span>
+                <p class="text-[10px] font-bold uppercase tracking-[.25em] text-textMid/40">Booking Summary</p>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-[rgba(34,139,34,.12)] text-[#228b22] border border-[rgba(34,139,34,.25)]">Confirmed</span>
               </div>
               <div class="space-y-3">
                 <div class="flex justify-between gap-4"><span class="text-sm text-textMid/60 flex-shrink-0">Reference</span><span class="text-sm font-bold text-textDark" id="bookRef">SVR-00000</span></div>
@@ -538,12 +572,12 @@
               </div>
             </div>
 
-            <p class="text-sm mb-5 sm:mb-6" style="color:rgba(74,56,48,.5)">
+            <p class="text-sm mb-5 sm:mb-6 text-textMid/50">
               A confirmation has been sent to <strong id="bookEmail" class="text-textDark break-all"></strong>
             </p>
 
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="category.html" class="book-btn text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase inline-flex items-center gap-2 justify-center">
+              <a href="category.html" class="text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-[11px] font-bold tracking-[.18em] uppercase inline-flex items-center gap-2 justify-center transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
                 <i class="fa-solid fa-utensils text-[10px]"></i> Browse Menu
               </a>
               <button onclick="newBooking()" class="px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl border border-borderSoft text-[11px] font-bold tracking-[.18em] uppercase hover:border-redPrimary hover:text-redPrimary transition text-textMid flex items-center gap-2 justify-center">
@@ -552,13 +586,11 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- ── SUMMARY SIDEBAR ── -->
-      <div id="summaryCol">
-
-        <!-- Mobile: inline summary strip (shows above form on mobile) -->
+      <div id="summaryCol" class="lg:order-last">
+        <!-- Mobile summary strip -->
         <div class="lg:hidden mb-5 bg-cream rounded-2xl border border-borderSoft p-4 flex items-center gap-3 flex-wrap" id="mobileSummaryStrip">
           <div class="flex items-center gap-2 text-xs">
             <i class="fa-regular fa-calendar text-redPrimary text-[11px]"></i>
@@ -576,117 +608,117 @@
           </div>
         </div>
 
-        <div class="summary-card reveal hidden lg:block">
-          <p class="text-[10px] font-bold uppercase tracking-[.25em] mb-5" style="color:rgba(74,56,48,.4)">Your Reservation</p>
-          <div class="space-y-1">
-            <div class="sum-row">
-              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-regular fa-calendar w-4 text-center text-xs" style="color:var(--red)"></i>Date</div>
+        <!-- Desktop summary card -->
+        <div class="hidden lg:block bg-white border border-borderSoft rounded-[18px] p-[22px] sticky top-[88px] opacity-0 translate-y-4 transition-all duration-500" id="summaryCard" data-reveal>
+          <p class="text-[10px] font-bold uppercase tracking-[.25em] mb-5 text-textMid/40">Your Reservation</p>
+          <div class="space-y-0">
+            <div class="flex justify-between items-center py-[9px] border-b border-borderSoft/50">
+              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-regular fa-calendar w-4 text-center text-xs text-redPrimary"></i>Date</div>
               <span class="text-sm font-semibold text-textDark" id="sumDate">Not selected</span>
             </div>
-            <div class="sum-row">
-              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-regular fa-clock w-4 text-center text-xs" style="color:var(--red)"></i>Time</div>
+            <div class="flex justify-between items-center py-[9px] border-b border-borderSoft/50">
+              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-regular fa-clock w-4 text-center text-xs text-redPrimary"></i>Time</div>
               <span class="text-sm font-semibold text-textDark" id="sumTime">Not selected</span>
             </div>
-            <div class="sum-row">
-              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-solid fa-user-group w-4 text-center text-xs" style="color:var(--red)"></i>Guests</div>
+            <div class="flex justify-between items-center py-[9px] border-b border-borderSoft/50">
+              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-solid fa-user-group w-4 text-center text-xs text-redPrimary"></i>Guests</div>
               <span class="text-sm font-semibold text-textDark" id="sumGuests">2</span>
             </div>
-            <div class="sum-row">
-              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-solid fa-chair w-4 text-center text-xs" style="color:var(--red)"></i>Area</div>
+            <div class="flex justify-between items-center py-[9px] border-b border-borderSoft/50">
+              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-solid fa-chair w-4 text-center text-xs text-redPrimary"></i>Area</div>
               <span class="text-sm font-semibold text-textDark" id="sumArea">Main Dining</span>
             </div>
-            <div class="sum-row">
-              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-solid fa-star w-4 text-center text-xs" style="color:var(--gold)"></i>Occasion</div>
+            <div class="flex justify-between items-center py-[9px]">
+              <div class="flex items-center gap-2 text-sm text-textMid/50"><i class="fa-solid fa-star w-4 text-center text-xs text-gold"></i>Occasion</div>
               <span class="text-sm font-semibold text-textDark" id="sumOccasion">None</span>
             </div>
           </div>
 
-          <div class="gold-line h-px my-5 opacity-30"></div>
+          <div class="h-px my-5 opacity-30" style="background:linear-gradient(90deg,transparent,#b8963e 30%,#d4af6a 60%,transparent)"></div>
 
           <div class="mb-4">
             <div class="flex justify-between text-[10px] font-bold uppercase tracking-[.15em] mb-2">
-              <span style="color:rgba(74,56,48,.4)">Progress</span>
-              <span id="stepPct" style="color:var(--red)">Step 1 of 4</span>
+              <span class="text-textMid/40">Progress</span>
+              <span id="stepPct" class="text-redPrimary">Step 1 of 4</span>
             </div>
             <div class="h-1.5 rounded-full bg-borderSoft overflow-hidden">
-              <div id="progressBar" class="h-full rounded-full transition-all duration-500" style="background:var(--red);width:25%"></div>
+              <div id="progressBar" class="h-full rounded-full transition-all duration-500 bg-redPrimary" style="width:25%"></div>
             </div>
           </div>
 
           <div class="space-y-2.5 mt-5">
             <div class="flex items-start gap-2.5 p-3 rounded-xl bg-cream">
-              <i class="fa-solid fa-circle-info text-xs mt-0.5 flex-shrink-0" style="color:var(--gold)"></i>
-              <p class="text-xs leading-relaxed" style="color:rgba(74,56,48,.6)">Free cancellation up to 2 hours before your booking.</p>
+              <i class="fa-solid fa-circle-info text-xs mt-0.5 flex-shrink-0 text-gold"></i>
+              <p class="text-xs leading-relaxed text-textMid/60">Free cancellation up to 2 hours before your booking.</p>
             </div>
             <div class="flex items-start gap-2.5 p-3 rounded-xl bg-cream">
-              <i class="fa-solid fa-circle-info text-xs mt-0.5 flex-shrink-0" style="color:var(--gold)"></i>
-              <p class="text-xs leading-relaxed" style="color:rgba(74,56,48,.6)">Tables are held for 15 minutes. Please arrive on time or call ahead.</p>
+              <i class="fa-solid fa-circle-info text-xs mt-0.5 flex-shrink-0 text-gold"></i>
+              <p class="text-xs leading-relaxed text-textMid/60">Tables are held for 15 minutes. Please arrive on time or call ahead.</p>
             </div>
           </div>
 
           <div class="mt-5 pt-5 border-t border-borderSoft/50">
-            <p class="text-[10px] font-bold uppercase tracking-[.2em] mb-3" style="color:rgba(74,56,48,.4)">Prefer to Call?</p>
+            <p class="text-[10px] font-bold uppercase tracking-[.2em] mb-3 text-textMid/40">Prefer to Call?</p>
             <a href="tel:+15559204200" class="flex items-center gap-3 p-3 rounded-xl border border-borderSoft bg-white hover:border-redPrimary transition">
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#fdf0ee">
-                <i class="fa-solid fa-phone text-xs" style="color:var(--red)"></i>
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-redPale">
+                <i class="fa-solid fa-phone text-xs text-redPrimary"></i>
               </div>
               <div>
                 <p class="font-semibold text-textDark text-xs">+1 (555) 920-4200</p>
-                <p class="text-[10px]" style="color:rgba(74,56,48,.4)">Mon–Sun · 10am–11pm</p>
+                <p class="text-[10px] text-textMid/40">Mon–Sun · 10am–11pm</p>
               </div>
             </a>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
 <!-- ═══════════ FOOTER ═══════════ -->
-<footer class="footer-bg">
+<footer style="background:linear-gradient(160deg,#1a1210,#2d1b16)">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-12 lg:py-16">
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 lg:gap-10 mb-10 lg:mb-12">
       <div class="col-span-2 sm:col-span-1">
         <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-        <p class="font-cormorant italic text-xs tracking-[.3em] uppercase mt-0.5 mb-4" style="color:rgba(184,150,62,.6)">Fine Dining</p>
-        <p class="text-sm leading-relaxed" style="color:rgba(255,255,255,.4)">Where every dish tells a story of passion, craft, and the finest ingredients.</p>
+        <p class="font-cormorant italic text-xs tracking-[.3em] uppercase mt-0.5 mb-4 text-gold/60">Fine Dining</p>
+        <p class="text-sm leading-relaxed text-white/40">Where every dish tells a story of passion, craft, and the finest ingredients.</p>
         <div class="flex gap-3 mt-5">
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs transition" style="color:rgba(255,255,255,.4)"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs text-white/40 hover:border-gold hover:text-gold transition"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs text-white/40 hover:border-gold hover:text-gold transition"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs text-white/40 hover:border-gold hover:text-gold transition"><i class="fa-brands fa-x-twitter"></i></a>
         </div>
       </div>
       <div>
-        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5" style="color:rgba(255,255,255,.7)">Navigation</p>
+        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5 text-white/70">Navigation</p>
         <ul class="space-y-3">
-          <li><a href="index.html"    class="text-sm hover:text-gold transition" style="color:rgba(255,255,255,.4)">Home</a></li>
-          <li><a href="category.html" class="text-sm hover:text-gold transition" style="color:rgba(255,255,255,.4)">Menu</a></li>
-          <li><a href="reserve.html"  class="text-sm" style="color:var(--gold)">Reserve</a></li>
-          <li><a href="contact.html"  class="text-sm hover:text-gold transition" style="color:rgba(255,255,255,.4)">Contact</a></li>
+          <li><a href="index.html" class="text-sm text-white/40 hover:text-gold transition">Home</a></li>
+          <li><a href="category.html" class="text-sm text-white/40 hover:text-gold transition">Menu</a></li>
+          <li><a href="reserve.html" class="text-sm text-gold">Reserve</a></li>
+          <li><a href="contact.html" class="text-sm text-white/40 hover:text-gold transition">Contact</a></li>
         </ul>
       </div>
       <div>
-        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5" style="color:rgba(255,255,255,.7)">Hours</p>
+        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5 text-white/70">Hours</p>
         <ul class="space-y-2">
-          <li class="text-sm" style="color:rgba(255,255,255,.4)">Mon–Fri · 12pm–10pm</li>
-          <li class="text-sm" style="color:rgba(255,255,255,.4)">Sat–Sun · 11am–11pm</li>
-          <li class="text-sm mt-3" style="color:rgba(255,255,255,.4)">Happy Hour · 4–6pm</li>
+          <li class="text-sm text-white/40">Mon–Fri · 12pm–10pm</li>
+          <li class="text-sm text-white/40">Sat–Sun · 11am–11pm</li>
+          <li class="text-sm mt-3 text-white/40">Happy Hour · 4–6pm</li>
         </ul>
       </div>
       <div>
-        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5" style="color:rgba(255,255,255,.7)">Contact</p>
+        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5 text-white/70">Contact</p>
         <ul class="space-y-3">
-          <li class="text-sm" style="color:rgba(255,255,255,.4)">📍 42 West 58th St, New York</li>
-          <li class="text-sm" style="color:rgba(255,255,255,.4)">📞 +1 (555) 920-4200</li>
-          <li class="text-sm" style="color:rgba(255,255,255,.4)">✉️ hello@savoria.com</li>
+          <li class="text-sm text-white/40">📍 42 West 58th St, New York</li>
+          <li class="text-sm text-white/40">📞 +1 (555) 920-4200</li>
+          <li class="text-sm text-white/40">✉️ hello@savoria.com</li>
         </ul>
       </div>
     </div>
-    <div class="gold-line h-px mb-6 opacity-20"></div>
+    <div class="h-px mb-6 opacity-20" style="background:linear-gradient(90deg,transparent,#b8963e 30%,#d4af6a 60%,transparent)"></div>
     <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
-      <p class="text-xs" style="color:rgba(255,255,255,.3)">© 2025 Savoria Fine Dining. All rights reserved.</p>
-      <p class="font-cormorant italic text-sm" style="color:rgba(184,150,62,.4)">Where every dish tells a story</p>
+      <p class="text-xs text-white/30">© 2025 Savoria Fine Dining. All rights reserved.</p>
+      <p class="font-cormorant italic text-sm text-gold/40">Where every dish tells a story</p>
     </div>
   </div>
 </footer>
@@ -694,19 +726,336 @@
 </main>
 
 <!-- MOBILE BOTTOM NAV -->
-<nav class="mobile-bottom-nav md:hidden">
-  <div class="nav-item" onclick="location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></div>
-  <div class="nav-item" onclick="location.href='category.html'"><i class="fa-solid fa-utensils"></i><span>Menu</span></div>
+<nav class="fixed bottom-0 left-0 right-0 z-[900] bg-white border-t border-borderSoft flex items-center justify-around py-2.5 shadow-[0_-4px_20px_rgba(26,18,16,.08)] md:hidden" style="padding-bottom:max(10px, env(safe-area-inset-bottom))">
+  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold tracking-[.06em] uppercase text-textMid/45 cursor-pointer transition px-1.5 hover:text-textMid" onclick="location.href='index.html'">
+    <i class="fa-solid fa-house text-[18px]"></i><span>Home</span>
+  </div>
+  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold tracking-[.06em] uppercase text-textMid/45 cursor-pointer transition px-1.5 hover:text-textMid" onclick="location.href='category.html'">
+    <i class="fa-solid fa-utensils text-[18px]"></i><span>Menu</span>
+  </div>
   <div>
-    <div class="cart-fab" onclick="window.scrollTo({top:400,behavior:'smooth'})">
-      <i class="fa-regular fa-calendar-check" style="font-size:20px"></i>
+    <div class="w-[52px] h-[52px] rounded-[18px] flex items-center justify-center text-white cursor-pointer transition hover:scale-105 -mt-3.5" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 16px rgba(192,57,43,.45)" onclick="window.scrollTo({top:400,behavior:'smooth'})">
+      <i class="fa-regular fa-calendar-check text-[20px]"></i>
     </div>
   </div>
-  <div class="nav-item" onclick="location.href='contact.html'"><i class="fa-solid fa-paper-plane"></i><span>Contact</span></div>
-  <div class="nav-item" onclick="location.href='profile.html'"><i class="fa-regular fa-circle-user"></i><span>Profile</span></div>
+  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold tracking-[.06em] uppercase text-textMid/45 cursor-pointer transition px-1.5 hover:text-textMid" onclick="location.href='contact.html'">
+    <i class="fa-solid fa-paper-plane text-[18px]"></i><span>Contact</span>
+  </div>
+  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold tracking-[.06em] uppercase text-textMid/45 cursor-pointer transition px-1.5 hover:text-textMid" onclick="location.href='profile.html'">
+    <i class="fa-regular fa-circle-user text-[18px]"></i><span>Profile</span>
+  </div>
 </nav>
- 
 
-<script src="/static/js/reserve.js"></script>
+<script>
+/* ═══════════ STATE ═══════════ */
+let currentStep = 1;
+let selectedDate = null;
+let selectedTime = null;
+let guestCount = 2;
+let selectedOccasion = 'none';
+let selectedArea = 'main';
+let weekOffset = 0;
+
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const TIME_SLOTS = ['12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','2:30 PM','6:00 PM','6:30 PM','7:00 PM','7:30 PM','8:00 PM','8:30 PM','9:00 PM'];
+const FULL_SLOTS = ['1:00 PM','2:30 PM','7:30 PM'];
+const AREA_LABELS = { main:'Main Dining', terrace:'Garden Terrace', bar:'Bar Lounge', private:'Private Room' };
+
+/* ═══════════ INIT ═══════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  buildCalendar();
+  buildTimeSlots();
+  initReveal();
+});
+
+/* ═══════════ REVEAL ═══════════ */
+function initReveal() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.remove('opacity-0','translate-y-4');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+}
+
+/* ═══════════ CALENDAR ═══════════ */
+function buildCalendar() {
+  const strip = document.getElementById('calStrip');
+  strip.innerHTML = '';
+  const today = new Date();
+  const base = new Date(today);
+  base.setDate(base.getDate() + weekOffset * 7);
+
+  // Show month label for the week
+  const startOfWeek = new Date(base);
+  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+  document.getElementById('calMonth').textContent = MONTHS[startOfWeek.getMonth()] + ' ' + startOfWeek.getFullYear();
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(startOfWeek);
+    d.setDate(d.getDate() + i);
+    const isPast = d < new Date(today.setHours(0,0,0,0));
+    const isToday = d.toDateString() === new Date().toDateString();
+    const isSelected = selectedDate && d.toDateString() === selectedDate.toDateString();
+
+    const el = document.createElement('div');
+    el.className = [
+      'flex flex-col items-center gap-1 py-2.5 px-2.5 rounded-xl cursor-pointer border-[1.5px] bg-white min-w-[52px] transition-all flex-shrink-0',
+      isPast ? 'opacity-30 cursor-not-allowed pointer-events-none border-borderSoft' :
+      isSelected ? 'bg-redPrimary border-redPrimary' :
+      isToday ? 'border-gold hover:border-redPrimary hover:bg-redPale' :
+      'border-borderSoft hover:border-redPrimary hover:bg-redPale'
+    ].join(' ');
+
+    const dayName = document.createElement('span');
+    dayName.className = 'text-[9px] font-bold uppercase tracking-[.1em] ' + (isSelected ? 'text-white' : 'text-textMid/50');
+    dayName.textContent = DAYS[d.getDay()];
+
+    const dayNum = document.createElement('span');
+    dayNum.className = 'text-base font-black leading-none ' + (isSelected ? 'text-white' : 'text-textDark');
+    dayNum.textContent = d.getDate();
+
+    el.appendChild(dayName);
+    el.appendChild(dayNum);
+    if (!isPast) el.onclick = () => selectDate(d);
+    strip.appendChild(el);
+  }
+}
+
+function selectDate(d) {
+  selectedDate = d;
+  buildCalendar();
+  updateSummary();
+  document.getElementById('errDate').classList.add('hidden');
+}
+
+function prevWeek() { weekOffset--; buildCalendar(); }
+function nextWeek() { weekOffset++; buildCalendar(); }
+
+/* ═══════════ TIME SLOTS ═══════════ */
+function buildTimeSlots() {
+  const container = document.getElementById('timeSlots');
+  container.innerHTML = '';
+  TIME_SLOTS.forEach(t => {
+    const isFull = FULL_SLOTS.includes(t);
+    const isActive = selectedTime === t;
+    const el = document.createElement('div');
+    el.className = [
+      'py-[9px] px-2.5 rounded-[10px] border-[1.5px] text-center text-[11px] font-bold leading-tight transition-all',
+      isFull ? 'opacity-35 cursor-not-allowed bg-[#f9f6f4] border-borderSoft text-textMid' :
+      isActive ? 'bg-redPrimary border-redPrimary text-white cursor-pointer' :
+      'bg-white border-borderSoft text-textMid cursor-pointer hover:border-redPrimary hover:text-redPrimary hover:bg-redPale'
+    ].join(' ');
+    el.textContent = t;
+    if (isFull) {
+      el.innerHTML = t + '<br><span class="text-[9px] font-medium opacity-70">Full</span>';
+    }
+    if (!isFull) el.onclick = () => { selectedTime = t; buildTimeSlots(); updateSummary(); document.getElementById('errTime').classList.add('hidden'); };
+    container.appendChild(el);
+  });
+}
+
+/* ═══════════ GUESTS ═══════════ */
+function changeGuests(delta) {
+  guestCount = Math.max(1, Math.min(9, guestCount + delta));
+  document.getElementById('guestVal').textContent = guestCount;
+  document.getElementById('guestMinus').disabled = guestCount <= 1;
+  document.getElementById('guestPlus').disabled = guestCount >= 9;
+  updateSummary();
+}
+
+/* ═══════════ OCCASION ═══════════ */
+function selectOccasion(el, val) {
+  selectedOccasion = val;
+  document.querySelectorAll('.occ-pill').forEach(p => {
+    p.classList.remove('border-redPrimary','bg-redPale');
+    p.querySelector('.occ-icon').classList.remove('bg-redPrimary','text-white');
+    p.querySelector('.occ-icon').classList.add('bg-cream','text-textMid');
+  });
+  el.classList.add('border-redPrimary','bg-redPale');
+  el.querySelector('.occ-icon').classList.remove('bg-cream','text-textMid');
+  el.querySelector('.occ-icon').classList.add('bg-redPrimary','text-white');
+  updateSummary();
+}
+
+/* ═══════════ AREA ═══════════ */
+function selectArea(el, val) {
+  selectedArea = val;
+  document.querySelectorAll('.area-card').forEach(c => {
+    c.classList.remove('border-redPrimary','shadow-[0_0_0_4px_rgba(192,57,43,.1)]');
+    c.classList.add('border-borderSoft');
+    const chk = c.querySelector('.area-check');
+    if (chk) { chk.classList.remove('bg-redPrimary','border-redPrimary'); chk.classList.add('border-borderSoft'); }
+  });
+  el.classList.add('border-redPrimary','shadow-[0_0_0_4px_rgba(192,57,43,.1)]');
+  el.classList.remove('border-borderSoft');
+  const chk = el.querySelector('.area-check');
+  if (chk) { chk.classList.add('bg-redPrimary','border-redPrimary'); chk.classList.remove('border-borderSoft'); }
+  updateSummary();
+}
+
+/* ═══════════ DIETARY ═══════════ */
+function toggleDiet(el) {
+  el.classList.toggle('border-redPrimary');
+  el.classList.toggle('bg-redPale');
+  el.classList.toggle('text-redPrimary');
+  el.classList.toggle('border-borderSoft');
+}
+
+/* ═══════════ SUMMARY ═══════════ */
+function updateSummary() {
+  const dateStr = selectedDate ? selectedDate.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) : 'Not selected';
+  const timeStr = selectedTime || 'Not selected';
+  const occ = selectedOccasion === 'none' ? 'None' : selectedOccasion.charAt(0).toUpperCase() + selectedOccasion.slice(1);
+
+  // desktop
+  if (document.getElementById('sumDate')) document.getElementById('sumDate').textContent = dateStr;
+  if (document.getElementById('sumTime')) document.getElementById('sumTime').textContent = timeStr;
+  if (document.getElementById('sumGuests')) document.getElementById('sumGuests').textContent = guestCount + ' guest' + (guestCount > 1 ? 's' : '');
+  if (document.getElementById('sumArea')) document.getElementById('sumArea').textContent = AREA_LABELS[selectedArea] || selectedArea;
+  if (document.getElementById('sumOccasion')) document.getElementById('sumOccasion').textContent = occ;
+
+  // mobile strip
+  if (document.getElementById('mobSumDate')) document.getElementById('mobSumDate').textContent = selectedDate ? selectedDate.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'No date';
+  if (document.getElementById('mobSumTime')) document.getElementById('mobSumTime').textContent = selectedTime || 'No time';
+  if (document.getElementById('mobSumGuests')) document.getElementById('mobSumGuests').textContent = guestCount + ' Guest' + (guestCount > 1 ? 's' : '');
+}
+
+/* ═══════════ STEP NAV ═══════════ */
+function goStep(n) {
+  if (n > currentStep) {
+    if (currentStep === 1) {
+      if (!selectedDate) { document.getElementById('errDate').classList.remove('hidden'); return; }
+      if (!selectedTime) { document.getElementById('errTime').classList.remove('hidden'); return; }
+    }
+  }
+
+  // hide all panels
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.add('hidden'));
+  document.getElementById('step' + n).classList.remove('hidden');
+  currentStep = n;
+
+  // update step bar
+  for (let i = 1; i <= 4; i++) {
+    const sc = document.getElementById('sc' + i);
+    const sl = document.getElementById('sl' + i);
+    if (!sc) continue;
+    sc.className = sc.className.replace(/bg-\S+|border-\S+|text-\S+|shadow-\S+/g, '');
+    sc.classList.remove('bg-redPrimary','border-redPrimary','text-white','bg-white','border-borderSoft','text-textMid');
+    if (i < n) {
+      sc.classList.add('bg-redPrimary','border-redPrimary','text-white');
+      if (sl) { sl.classList.add('text-redPrimary'); sl.classList.remove('text-textMid/40','opacity-40'); }
+    } else if (i === n) {
+      sc.classList.add('bg-redPrimary','border-redPrimary','text-white');
+      sc.style.boxShadow = '0 0 0 6px rgba(192,57,43,.12)';
+      if (sl) { sl.classList.add('text-redPrimary'); sl.classList.remove('text-textMid/40','opacity-40'); }
+    } else {
+      sc.classList.add('bg-white','border-borderSoft','text-textMid');
+      sc.style.boxShadow = '';
+      if (sl) { sl.classList.remove('text-redPrimary'); }
+    }
+    // connectors
+    if (i < 4) {
+      const con = document.getElementById('con' + i);
+      if (con) con.style.background = i < n ? '#c0392b' : '';
+    }
+  }
+
+  // progress bar
+  const pct = Math.min(n, 4) * 25;
+  if (document.getElementById('progressBar')) document.getElementById('progressBar').style.width = pct + '%';
+  if (document.getElementById('stepPct')) document.getElementById('stepPct').textContent = 'Step ' + Math.min(n,4) + ' of 4';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ═══════════ CONFIRM ═══════════ */
+function confirmReservation(e) {
+  e.preventDefault();
+  let ok = true;
+  const first = document.getElementById('rfFirst').value.trim();
+  const email = document.getElementById('rfEmail').value.trim();
+  const phone = document.getElementById('rfPhone').value.trim();
+  const terms = document.getElementById('rfTerms').checked;
+
+  ['errFirst','errEmail','errPhone','errTerms'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  ['rfFirst','rfEmail','rfPhone'].forEach(id => document.getElementById(id).classList.remove('border-[#e74c3c]'));
+
+  if (!first) { document.getElementById('errFirst').classList.remove('hidden'); document.getElementById('rfFirst').classList.add('border-[#e74c3c]'); ok = false; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('errEmail').classList.remove('hidden'); document.getElementById('rfEmail').classList.add('border-[#e74c3c]'); ok = false; }
+  if (!phone) { document.getElementById('errPhone').classList.remove('hidden'); document.getElementById('rfPhone').classList.add('border-[#e74c3c]'); ok = false; }
+  if (!terms) { document.getElementById('errTerms').classList.remove('hidden'); ok = false; }
+  if (!ok) return;
+
+  const btn = document.getElementById('confirmBtn');
+  document.getElementById('confirmLabel').classList.add('hidden');
+  document.getElementById('confirmSpinner').classList.remove('hidden');
+  btn.disabled = true;
+
+  setTimeout(() => {
+    const ref = 'SVR-' + Math.floor(10000 + Math.random() * 90000);
+    document.getElementById('bookRef').textContent = ref;
+    document.getElementById('bookDate').textContent = selectedDate ? selectedDate.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}) : '—';
+    document.getElementById('bookTime').textContent = selectedTime || '—';
+    document.getElementById('bookGuests').textContent = guestCount + ' guest' + (guestCount > 1 ? 's' : '');
+    document.getElementById('bookArea').textContent = AREA_LABELS[selectedArea] || selectedArea;
+    document.getElementById('bookName').textContent = first + ' ' + document.getElementById('rfLast').value.trim();
+    document.getElementById('bookEmail').textContent = email;
+
+    // animate tick
+    setTimeout(() => {
+      const tp = document.getElementById('tickPath');
+      if (tp) tp.style.strokeDashoffset = '0';
+    }, 100);
+
+    goStep(5);
+    document.getElementById('confirmLabel').classList.remove('hidden');
+    document.getElementById('confirmSpinner').classList.add('hidden');
+    btn.disabled = false;
+  }, 1500);
+}
+
+/* ═══════════ NEW BOOKING ═══════════ */
+function newBooking() {
+  selectedDate = null; selectedTime = null;
+  guestCount = 2; selectedOccasion = 'none'; selectedArea = 'main';
+  weekOffset = 0;
+  buildCalendar(); buildTimeSlots();
+  document.getElementById('detailsForm').reset();
+  document.querySelectorAll('.diet-pill').forEach(p => p.classList.remove('border-redPrimary','bg-redPale','text-redPrimary'));
+  updateSummary();
+  goStep(1);
+}
+
+/* ═══════════ MENU TOGGLE ═══════════ */
+function toggleMenu() {
+  const m = document.getElementById('mobileMenu');
+  const o = document.getElementById('overlay');
+  const isOpen = m.style.transform === 'translateX(0%)';
+  if (isOpen) {
+    m.style.transform = 'translateX(100%)';
+    o.classList.remove('opacity-100','pointer-events-auto');
+    o.classList.add('opacity-0','pointer-events-none');
+  } else {
+    m.style.display = 'flex';
+    m.style.flexDirection = 'column';
+    requestAnimationFrame(() => { m.style.transform = 'translateX(0%)'; });
+    o.classList.add('opacity-100','pointer-events-auto');
+    o.classList.remove('opacity-0','pointer-events-none');
+  }
+}
+
+function closeAll() {
+  const m = document.getElementById('mobileMenu');
+  const o = document.getElementById('overlay');
+  m.style.transform = 'translateX(100%)';
+  o.classList.remove('opacity-100','pointer-events-auto');
+  o.classList.add('opacity-0','pointer-events-none');
+}
+</script>
 </body>
 </html>
