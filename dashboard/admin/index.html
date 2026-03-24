@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Savoria — Admin Dashboard</title>
+  <meta name="description" content="Savoria Restaurant Admin Dashboard — Manage branches, sales, expenses, products, customers, reviews and more."/>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <!-- Charts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Playfair Display', 'serif'],
+            sans: ['Jost', 'sans-serif'],
+            italic: ['Cormorant Garamond', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Our theme -->
+  <link rel="stylesheet" href="theme.css"/>
+</head>
+
+<body>
+
+<!-- ════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════ -->
+<div id="sidebar">
+
+  <!-- Logo -->
+  <div class="sidebar-logo">
+    <div class="logo-wrapper">
+      <div class="logo-text">
+        <span class="sidebar-logo-brand">Sav<em>o</em>ria</span>
+        <span class="sidebar-logo-sub">Admin Panel</span>
+      </div>
+      <button class="sidebar-toggle-btn" onclick="Sidebar.toggle()" title="Collapse sidebar">
+        <i class="fa-solid fa-bars-staggered"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="gold-line"></div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+
+    <div class="nav-section-title">Overview</div>
+
+    <button class="nav-item active" data-view="dashboard" onclick="Router.go('dashboard',this)">
+      <i class="fa-solid fa-chart-pie"></i>
+      <span class="nav-lbl">Dashboard</span>
+    </button>
+
+    <button class="nav-item" data-view="report" onclick="Router.go('report',this)">
+      <i class="fa-solid fa-chart-bar"></i>
+      <span class="nav-lbl">Report</span>
+    </button>
+
+    <div class="nav-section-title">Management</div>
+
+    <button class="nav-item" data-view="customers" onclick="Router.go('customers',this)">
+      <i class="fa-solid fa-users"></i>
+      <span class="nav-lbl">Customers</span>
+    </button>
+
+    <button class="nav-item" data-view="reviews" onclick="Router.go('reviews',this)">
+      <i class="fa-solid fa-star"></i>
+      <span class="nav-lbl">Reviews</span>
+      <span class="badge-dot">3</span>
+    </button>
+
+    <button class="nav-item" data-view="transactions" onclick="Router.go('transactions',this)">
+      <i class="fa-solid fa-money-bill-transfer"></i>
+      <span class="nav-lbl">Transactions</span>
+    </button>
+
+    <div class="nav-section-title">Operations</div>
+
+    <button class="nav-item" data-view="expense" onclick="Router.go('expense',this)">
+      <i class="fa-solid fa-file-invoice-dollar"></i>
+      <span class="nav-lbl">Expense</span>
+    </button>
+
+    <button class="nav-item" data-view="product" onclick="Router.go('product',this)">
+      <i class="fa-solid fa-box-open"></i>
+      <span class="nav-lbl">Products</span>
+    </button>
+
+    <button class="nav-item" data-view="blog" onclick="Router.go('blog',this)">
+      <i class="fa-solid fa-newspaper"></i>
+      <span class="nav-lbl">Blog</span>
+    </button>
+
+    <div class="nav-section-title">System</div>
+
+    <button class="nav-item" data-view="profile" onclick="Router.go('profile',this)">
+      <i class="fa-solid fa-user-circle"></i>
+      <span class="nav-lbl">Profile</span>
+    </button>
+
+    <button class="nav-item" data-view="settings" onclick="Router.go('settings',this)">
+      <i class="fa-solid fa-gear"></i>
+      <span class="nav-lbl">Settings</span>
+    </button>
+
+  </nav>
+
+  <!-- Footer -->
+  <div class="sidebar-footer">
+    <div class="sidebar-avatar">UT</div>
+    <div class="sidebar-footer-text">
+      <p class="sidebar-footer-name">Umme Tahazzee</p>
+      <p class="sidebar-footer-role">Admin</p>
+    </div>
+    <button class="sidebar-logout-btn" onclick="window.location.href='login.html'" title="Log out">
+      <i class="fa-solid fa-right-from-bracket"></i>
+    </button>
+  </div>
+
+</div><!-- /sidebar -->
+
+<!-- Mobile overlay -->
+<div id="mobileOverlay" onclick="Sidebar.closeMobile()"></div>
+
+<!-- ════════════════════════════════════════
+     MAIN CONTENT
+════════════════════════════════════════ -->
+<div id="mainContent">
+
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <!-- Mobile menu button -->
+    <button class="topbar-icon-btn" style="display:none;border:none" id="mobileMenuBtn" onclick="Sidebar.openMobile()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- Search -->
+    <div class="topbar-search">
+      <i class="fa-solid fa-magnifying-glass" style="color:var(--text-3);font-size:12px;flex-shrink:0"></i>
+      <input id="globalSearch" type="text" placeholder="Search anything…" autocomplete="off"/>
+    </div>
+
+    <!-- Right side -->
+    <div class="topbar-right">
+
+      <!-- Live indicator -->
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        <span style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em">Live</span>
+      </div>
+
+      <!-- Clock -->
+      <div id="topClock" style="font-size:11px;color:var(--text-3);font-family:'Cormorant Garamond',serif;font-style:italic;white-space:nowrap"></div>
+
+      <!-- Theme toggle -->
+      <button class="topbar-icon-btn" onclick="Theme.toggle()" title="Toggle theme">
+        <i id="themeIcon" class="fa-solid fa-moon"></i>
+      </button>
+
+      <!-- Notification bell -->
+      <div style="position:relative">
+        <button class="topbar-icon-btn" id="notifBtn" onclick="toggleNotif()">
+          <i class="fa-regular fa-bell"></i>
+          <span style="position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--red)"></span>
+        </button>
+
+        <!-- Notification dropdown -->
+        <div id="notifDrop">
+          <div class="notif-header">
+            <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:14px">Notifications</span>
+            <span class="tag tag-pending">5 new</span>
+          </div>
+          <div style="max-height:260px;overflow-y:auto">
+            <div class="notif-item">
+              <span class="notif-dot" style="background:var(--red)"></span>
+              <div><p style="font-size:12px;font-weight:600">Expense approval: $2,400 — Downtown</p><p style="font-size:10px;color:var(--text-3)">2 min ago</p></div>
+            </div>
+            <div class="notif-item">
+              <span class="notif-dot" style="background:var(--orange)"></span>
+              <div><p style="font-size:12px;font-weight:600">Low stock alert: Wagyu A5 — 8kg left</p><p style="font-size:10px;color:var(--text-3)">15 min ago</p></div>
+            </div>
+            <div class="notif-item">
+              <span class="notif-dot" style="background:var(--green)"></span>
+              <div><p style="font-size:12px;font-weight:600">New 5-star review from Alexandra M.</p><p style="font-size:10px;color:var(--text-3)">22 min ago</p></div>
+            </div>
+            <div class="notif-item">
+              <span class="notif-dot" style="background:var(--blue)"></span>
+              <div><p style="font-size:12px;font-weight:600">Monthly report ready for download</p><p style="font-size:10px;color:var(--text-3)">1 hour ago</p></div>
+            </div>
+            <div class="notif-item">
+              <span class="notif-dot" style="background:var(--gold)"></span>
+              <div><p style="font-size:12px;font-weight:600">New blog post draft saved</p><p style="font-size:10px;color:var(--text-3)">2 hours ago</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User avatar -->
+      <div class="topbar-avatar" title="Umme Tahazzee">UT</div>
+    </div>
+  </div><!-- /topbar -->
+
+  <!-- PAGE AREA — views render here -->
+  <div id="pageArea"></div>
+
+</div><!-- /mainContent -->
+
+<!-- ════════════════════════════════════════
+     MODALS
+════════════════════════════════════════ -->
+
+<!-- Generic modal -->
+<div class="modal-overlay" id="genericModal">
+  <div class="modal">
+    <button class="modal-close" onclick="Modal.close('genericModal')"><i class="fa-solid fa-xmark"></i></button>
+    <div id="genericModalContent"></div>
+  </div>
+</div>
+
+<!-- Customer modal -->
+<div class="modal-overlay" id="customerModal">
+  <div class="modal">
+    <button class="modal-close" onclick="Modal.close('customerModal')"><i class="fa-solid fa-xmark"></i></button>
+    <div id="customerModalContent"></div>
+  </div>
+</div>
+
+<!-- Expense modal -->
+<div class="modal-overlay" id="expenseModal">
+  <div class="modal">
+    <button class="modal-close" onclick="Modal.close('expenseModal')"><i class="fa-solid fa-xmark"></i></button>
+    <div id="expenseModalContent"></div>
+  </div>
+</div>
+
+<!-- Product modal -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <button class="modal-close" onclick="Modal.close('productModal')"><i class="fa-solid fa-xmark"></i></button>
+    <div id="productModalContent"></div>
+  </div>
+</div>
+
+<!-- Blog modal -->
+<div class="modal-overlay" id="blogModal">
+  <div class="modal" style="max-width:600px">
+    <button class="modal-close" onclick="Modal.close('blogModal')"><i class="fa-solid fa-xmark"></i></button>
+    <div id="blogModalContent"></div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toastContainer"></div>
+
+<!-- ════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════ -->
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="dashboard.js"></script>
+<script src="report.js"></script>
+<script src="customers.js"></script>
+<script src="reviews.js"></script>
+<script src="transactions.js"></script>
+<script src="settings.js"></script>
+<script src="expense.js"></script>
+<script src="product.js"></script>
+<script src="blog.js"></script>
+<script src="profile.js"></script>
+
+<script>
+  /* Mobile menu button show/hide */
+  const mq = window.matchMedia('(max-width: 768px)');
+  function handleMQ(e) {
+    const btn = document.getElementById('mobileMenuBtn');
+    if (btn) btn.style.display = e.matches ? 'flex' : 'none';
+  }
+  mq.addEventListener('change', handleMQ);
+  handleMQ(mq);
+</script>
+
+</body>
+</html>
