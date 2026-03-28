@@ -5,8 +5,15 @@
 const BlogView = {
 
   _filter: 'all',
+  _data: null,
 
-  render() {
+  async render() {
+    try {
+      this._data = await API.getBlogPosts();
+    } catch(err) {
+      return `<div style="padding:40px;color:var(--red);">Failed to load blog data.</div>`;
+    }
+
     return `
       <div id="blogRoot">
         <div class="page-header anim-1">
@@ -21,10 +28,10 @@ const BlogView = {
 
         <!-- Summary -->
         <div class="grid-4 anim-1" style="margin-bottom:20px">
-          <div class="stat-card"><div class="stat-label">Total Posts</div><div class="stat-value">${DB.blog.length}</div></div>
-          <div class="stat-card"><div class="stat-label">Published</div><div class="stat-value" style="color:var(--green)">${DB.blog.filter(b=>b.status==='published').length}</div></div>
-          <div class="stat-card"><div class="stat-label">Drafts</div><div class="stat-value" style="color:var(--orange)">${DB.blog.filter(b=>b.status==='draft').length}</div></div>
-          <div class="stat-card"><div class="stat-label">Total Views</div><div class="stat-value">${DB.blog.reduce((s,b)=>s+b.views,0).toLocaleString()}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Posts</div><div class="stat-value">${this._data.length}</div></div>
+          <div class="stat-card"><div class="stat-label">Published</div><div class="stat-value" style="color:var(--green)">${this._data.filter(b=>b.status==='published').length}</div></div>
+          <div class="stat-card"><div class="stat-label">Drafts</div><div class="stat-value" style="color:var(--orange)">${this._data.filter(b=>b.status==='draft').length}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Views</div><div class="stat-value">${this._data.reduce((s,b)=>s+b.views,0).toLocaleString()}</div></div>
         </div>
 
         <!-- Filter -->
@@ -51,7 +58,7 @@ const BlogView = {
   renderPosts() {
     const el = document.getElementById('blogList');
     if (!el) return;
-    const filtered = this._filter === 'all' ? DB.blog : DB.blog.filter(b => b.status === this._filter);
+    const filtered = this._filter === 'all' ? this._data : this._data.filter(b => b.status === this._filter);
 
     el.innerHTML = filtered.map(b => `
       <div class="blog-card">

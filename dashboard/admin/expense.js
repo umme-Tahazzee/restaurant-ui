@@ -6,11 +6,18 @@ const ExpenseView = {
 
   _tab: 'list',
   _chart: null,
+  _data: null,
 
-  render() {
-    const total = DB.expenses.reduce((s,e) => s+e.amount, 0);
+  async render() {
+    try {
+       this._data = await API.getExpensesData();
+    } catch(err) {
+       return `<div style="padding:40px;color:var(--red);">Failed to load expenses data.</div>`;
+    }
+
+    const total = this._data.expenses.reduce((s,e) => s+e.amount, 0);
     const catTotals = {};
-    DB.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
+    this._data.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
 
     return `
       <div id="expenseRoot">
@@ -36,7 +43,7 @@ const ExpenseView = {
           <div class="stat-card"><div class="stat-label">Total Expenses</div><div class="stat-value" style="color:var(--red)">${Utils.money(total)}</div></div>
           <div class="stat-card"><div class="stat-label">This Month</div><div class="stat-value">${Utils.money(total)}</div></div>
           <div class="stat-card"><div class="stat-label">Categories</div><div class="stat-value">${Object.keys(catTotals).length}</div></div>
-          <div class="stat-card"><div class="stat-label">Avg per Entry</div><div class="stat-value">${Utils.money(Math.round(total/DB.expenses.length))}</div></div>
+          <div class="stat-card"><div class="stat-label">Avg per Entry</div><div class="stat-value">${Utils.money(Math.round(total/this._data.expenses.length))}</div></div>
         </div>
 
         <!-- Content -->
@@ -78,7 +85,7 @@ const ExpenseView = {
         <table class="data-table">
           <thead><tr><th>Category</th><th>Vendor</th><th>Amount</th><th>Date</th><th>Note</th><th>Branch</th><th>Actions</th></tr></thead>
           <tbody>
-            ${DB.expenses.map(e => `
+            ${this._data.expenses.map(e => `
               <tr>
                 <td>
                   <div style="display:flex;align-items:center;gap:8px">
@@ -107,8 +114,8 @@ const ExpenseView = {
 
   _renderGeneral() {
     const catTotals = {};
-    DB.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
-    const total = DB.expenses.reduce((s,e) => s+e.amount, 0);
+    this._data.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
+    const total = this._data.expenses.reduce((s,e) => s+e.amount, 0);
     const cats = Object.entries(catTotals).sort((a,b) => b[1]-a[1]);
     const colors = ['#c0392b','#1a5276','#c47a1a','#6d3b8e','#2d7a47','#b8963e','#96281b','#9b8c86'];
 
@@ -153,7 +160,7 @@ const ExpenseView = {
     if (this._chart) this._chart.destroy();
 
     const catTotals = {};
-    DB.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
+    this._data.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
     const cats = Object.entries(catTotals).sort((a,b) => b[1]-a[1]);
     const colors = ['#c0392b','#1a5276','#c47a1a','#6d3b8e','#2d7a47','#b8963e','#96281b','#9b8c86'];
 
@@ -186,7 +193,7 @@ const ExpenseView = {
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Branch</label>
-          <select class="form-control"><option>All</option>${DB.branches.map(b=>`<option>${b.name}</option>`).join('')}</select>
+          <select class="form-control"><option>All</option>${this._data.branches.map(b=>`<option>${b.name}</option>`).join('')}</select>
         </div>
         <div></div>
       </div>

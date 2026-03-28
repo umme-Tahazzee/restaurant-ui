@@ -6,8 +6,15 @@ const ReportView = {
 
   _tab: 'today',
   _charts: {},
+  _data: null,
 
-  render() {
+  async render() {
+    try {
+      this._data = await API.getReportsData();
+    } catch (err) {
+      return `<div style="padding:40px;color:var(--red);">Failed to load reports data.</div>`;
+    }
+
     return `
       <div id="reportRoot">
         <div class="page-header anim-1">
@@ -62,7 +69,7 @@ const ReportView = {
   renderSummary() {
     const el = document.getElementById('reportSummary');
     if (!el) return;
-    const d = this._tab === 'ingredient' ? null : DB.salesData[this._tab === 'today' ? 'today' : this._tab === 'weekly' ? 'week' : this._tab === 'monthly' ? 'month' : 'year'];
+    const d = this._tab === 'ingredient' ? null : this._data.salesData[this._tab === 'today' ? 'today' : this._tab === 'weekly' ? 'week' : this._tab === 'monthly' ? 'month' : 'year'];
 
     if (!d) {
       el.innerHTML = `
@@ -77,7 +84,7 @@ const ReportView = {
       <div class="stat-card"><div class="stat-label">Total Sales</div><div class="stat-value">${Utils.money(d.total)}</div></div>
       <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value">${d.orders.toLocaleString()}</div></div>
       <div class="stat-card"><div class="stat-label">Avg Ticket</div><div class="stat-value">${Utils.money(d.avgTicket)}</div></div>
-      <div class="stat-card"><div class="stat-label">Branches</div><div class="stat-value">${DB.branches.length}</div></div>`;
+      <div class="stat-card"><div class="stat-label">Branches</div><div class="stat-value">${this._data.branches.length}</div></div>`;
   },
 
   renderContent() {
@@ -93,7 +100,7 @@ const ReportView = {
         <table class="data-table">
           <thead><tr><th>Ingredient</th><th>Unit</th><th>Stock</th><th>Used</th><th>Cost</th><th>Supplier</th><th>Status</th></tr></thead>
           <tbody>
-            ${DB.ingredients.map(i => `
+            ${this._data.ingredients.map(i => `
               <tr>
                 <td style="font-weight:600;color:var(--text)">${i.name}</td>
                 <td>${i.unit}</td>
@@ -109,7 +116,7 @@ const ReportView = {
     }
 
     const key = this._tab === 'today' ? 'today' : this._tab === 'weekly' ? 'weekly' : this._tab === 'monthly' ? 'monthly' : 'yearly';
-    const branchData = DB.branchSales[key];
+    const branchData = this._data.branchSales[key];
 
     el.innerHTML = `
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">

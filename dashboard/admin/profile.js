@@ -4,8 +4,16 @@
 
 const ProfileView = {
 
-  render() {
-    const p = DB.profile;
+  _data: null,
+
+  async render() {
+    try {
+      this._data = await API.getProfile();
+    } catch(err) {
+      return `<div style="padding:40px;color:var(--red);">Failed to load profile data.</div>`;
+    }
+
+    const p = this._data;
     const joinDate = new Date(p.joinDate);
     const tenure = Math.floor((new Date() - joinDate) / (365.25 * 24 * 60 * 60 * 1000));
 

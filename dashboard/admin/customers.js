@@ -5,8 +5,15 @@
 const CustomersView = {
 
   _search: '',
+  _data: null,
 
-  render() {
+  async render() {
+    try {
+      this._data = await API.getCustomers();
+    } catch(err) {
+      return `<div style="padding:40px;color:var(--red);">Failed to load customers data.</div>`;
+    }
+
     return `
       <div id="custRoot">
         <div class="page-header anim-1">
@@ -25,10 +32,10 @@ const CustomersView = {
 
         <!-- Summary -->
         <div class="grid-4 anim-1" style="margin-bottom:20px">
-          <div class="stat-card"><div class="stat-label">Total Customers</div><div class="stat-value">${DB.customers.length}</div></div>
-          <div class="stat-card"><div class="stat-label">VIP Customers</div><div class="stat-value" style="color:var(--gold)">${DB.customers.filter(c=>c.status==='vip').length}</div></div>
-          <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value">${Utils.money(DB.customers.reduce((s,c)=>s+c.spent,0))}</div></div>
-          <div class="stat-card"><div class="stat-label">Avg Visits</div><div class="stat-value">${Math.round(DB.customers.reduce((s,c)=>s+c.visits,0)/DB.customers.length)}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Customers</div><div class="stat-value">${this._data.length}</div></div>
+          <div class="stat-card"><div class="stat-label">VIP Customers</div><div class="stat-value" style="color:var(--gold)">${this._data.filter(c=>c.status==='vip').length}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value">${Utils.money(this._data.reduce((s,c)=>s+c.spent,0))}</div></div>
+          <div class="stat-card"><div class="stat-label">Avg Visits</div><div class="stat-value">${Math.round(this._data.reduce((s,c)=>s+c.visits,0)/this._data.length)}</div></div>
         </div>
 
         <!-- Customer Table -->
@@ -51,8 +58,8 @@ const CustomersView = {
     const el = document.getElementById('customerBody');
     if (!el) return;
     const filtered = this._search
-      ? DB.customers.filter(c => c.name.toLowerCase().includes(this._search) || c.email.toLowerCase().includes(this._search))
-      : DB.customers;
+      ? this._data.filter(c => c.name.toLowerCase().includes(this._search) || c.email.toLowerCase().includes(this._search))
+      : this._data;
 
     el.innerHTML = filtered.map(c => `
       <tr>
@@ -83,7 +90,7 @@ const CustomersView = {
   },
 
   viewCustomer(id) {
-    const c = DB.customers.find(x => x.id === id);
+    const c = this._data.find(x => x.id === id);
     if (!c) return;
     document.getElementById('customerModalContent').innerHTML = `
       <div class="modal-title">Customer Details</div>

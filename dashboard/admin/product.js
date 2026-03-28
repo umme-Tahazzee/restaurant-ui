@@ -6,8 +6,15 @@ const ProductView = {
 
   _tab: 'products',
   _search: '',
+  _data: null,
 
-  render() {
+  async render() {
+    try {
+      this._data = await API.getProductsData();
+    } catch(err) {
+      return `<div style="padding:40px;color:var(--red);">Failed to load products data.</div>`;
+    }
+
     return `
       <div id="productRoot">
         <div class="page-header anim-1">
@@ -28,10 +35,10 @@ const ProductView = {
 
         <!-- Summary -->
         <div class="grid-4 anim-1" style="margin-bottom:20px">
-          <div class="stat-card"><div class="stat-label">Total Products</div><div class="stat-value">${DB.products.length}</div></div>
-          <div class="stat-card"><div class="stat-label">Active</div><div class="stat-value" style="color:var(--green)">${DB.products.filter(p=>p.status==='active').length}</div></div>
-          <div class="stat-card"><div class="stat-label">Categories</div><div class="stat-value">${DB.categories.length}</div></div>
-          <div class="stat-card"><div class="stat-label">Avg Price</div><div class="stat-value">${Utils.money(Math.round(DB.products.reduce((s,p)=>s+p.price,0)/DB.products.length))}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Products</div><div class="stat-value">${this._data.products.length}</div></div>
+          <div class="stat-card"><div class="stat-label">Active</div><div class="stat-value" style="color:var(--green)">${this._data.products.filter(p=>p.status==='active').length}</div></div>
+          <div class="stat-card"><div class="stat-label">Categories</div><div class="stat-value">${this._data.categories.length}</div></div>
+          <div class="stat-card"><div class="stat-label">Avg Price</div><div class="stat-value">${Utils.money(Math.round(this._data.products.reduce((s,p)=>s+p.price,0)/this._data.products.length))}</div></div>
         </div>
 
         <!-- Content -->
@@ -56,8 +63,8 @@ const ProductView = {
 
   _renderProducts() {
     const products = this._search
-      ? DB.products.filter(p => p.name.toLowerCase().includes(this._search))
-      : DB.products;
+      ? this._data.products.filter(p => p.name.toLowerCase().includes(this._search))
+      : this._data.products;
 
     return `
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
@@ -67,7 +74,7 @@ const ProductView = {
         </div>
         <select class="select-styled" onchange="ProductView._filterCat=this.value;ProductView.renderContent()">
           <option value="">All Categories</option>
-          ${DB.categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('')}
+          ${this._data.categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('')}
         </select>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px">
@@ -98,7 +105,7 @@ const ProductView = {
         <button class="btn btn-primary btn-sm" onclick="Toast.show('Add category coming soon','info')"><i class="fa-solid fa-plus"></i> Add Category</button>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px">
-        ${DB.categories.map(c => `
+        ${this._data.categories.map(c => `
           <div class="card" style="border-top:3px solid ${c.color}">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
               <div style="font-size:32px">${c.icon}</div>
@@ -121,7 +128,7 @@ const ProductView = {
       <div class="form-group" style="margin-bottom:14px"><label class="form-label">Product Name</label><input class="form-control" placeholder="Enter product name…"/></div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Category</label>
-          <select class="form-control">${DB.categories.map(c=>`<option>${c.name}</option>`).join('')}</select>
+          <select class="form-control">${this._data.categories.map(c=>`<option>${c.name}</option>`).join('')}</select>
         </div>
         <div class="form-group"><label class="form-label">Price</label><input class="form-control" type="number" placeholder="0.00"/></div>
       </div>

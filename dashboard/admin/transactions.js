@@ -5,9 +5,16 @@
 const TransactionsView = {
 
   _filter: 'all',
+  _data: null,
 
-  render() {
-    const completed = DB.transactions.filter(t => t.status === 'completed');
+  async render() {
+    try {
+      this._data = await API.getTransactions();
+    } catch(err) {
+      return `<div style="padding:40px;color:var(--red);">Failed to load transactions data.</div>`;
+    }
+
+    const completed = this._data.filter(t => t.status === 'completed');
     const totalAmt  = completed.reduce((s,t) => s+t.amount, 0);
 
     return `
@@ -27,10 +34,10 @@ const TransactionsView = {
 
         <!-- Summary -->
         <div class="grid-4 anim-1" style="margin-bottom:20px">
-          <div class="stat-card"><div class="stat-label">Total Transactions</div><div class="stat-value">${DB.transactions.length}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Transactions</div><div class="stat-value">${this._data.length}</div></div>
           <div class="stat-card"><div class="stat-label">Total Amount</div><div class="stat-value" style="color:var(--green)">${Utils.money(totalAmt)}</div></div>
-          <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" style="color:var(--orange)">${DB.transactions.filter(t=>t.status==='pending').length}</div></div>
-          <div class="stat-card"><div class="stat-label">Refunded</div><div class="stat-value" style="color:var(--red)">${DB.transactions.filter(t=>t.status==='refunded').length}</div></div>
+          <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" style="color:var(--orange)">${this._data.filter(t=>t.status==='pending').length}</div></div>
+          <div class="stat-card"><div class="stat-label">Refunded</div><div class="stat-value" style="color:var(--red)">${this._data.filter(t=>t.status==='refunded').length}</div></div>
         </div>
 
         <!-- Filter tabs -->
@@ -65,7 +72,7 @@ const TransactionsView = {
   renderTable() {
     const el = document.getElementById('txnBody');
     if (!el) return;
-    const filtered = this._filter === 'all' ? DB.transactions : DB.transactions.filter(t => t.status === this._filter);
+    const filtered = this._filter === 'all' ? this._data : this._data.filter(t => t.status === this._filter);
 
     const methodIcons = { card:'fa-credit-card', cash:'fa-money-bill', online:'fa-globe' };
 

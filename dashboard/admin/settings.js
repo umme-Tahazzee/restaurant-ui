@@ -4,8 +4,16 @@
 
 const SettingsView = {
 
-  render() {
-    const s = DB.settings;
+  _data: null,
+
+  async render() {
+    try {
+      this._data = await API.getSettings();
+    } catch(err) {
+      return `<div style="padding:40px;color:var(--red);">Failed to load settings data.</div>`;
+    }
+
+    const s = this._data;
     return `
       <div id="settingsRoot">
         <div class="page-header anim-1">
