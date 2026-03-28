@@ -112,7 +112,7 @@ window.DB = {
 
   /* ── CUSTOMERS ── */
   customers: [
-    { id:'c1',  name:'Alexandra Mitchell',  phone:'+1-555-0101', email:'alex@email.com',      visits:32, spent:4240, lastVisit:'2026-03-18', status:'vip',     color:'#c0392b', note:'Prefers corner table, anniversary dinner monthly' },
+    { id:'c1',  name:'karia',  phone:'+1-555-0101', email:'alex@email.com',      visits:32, spent:4240, lastVisit:'2026-03-18', status:'vip',     color:'#c0392b', note:'Prefers corner table, anniversary dinner monthly' },
     { id:'c2',  name:'James Rodriguez',     phone:'+1-555-0102', email:'james.r@email.com',   visits:18, spent:2180, lastVisit:'2026-03-17', status:'regular', color:'#1a5276', note:'Wine enthusiast' },
     { id:'c3',  name:'Kenji Nakamura',      phone:'+1-555-0103', email:'kenji@email.com',     visits:8,  spent:1540, lastVisit:'2026-03-15', status:'regular', color:'#b8963e', note:'Birthday celebration group' },
     { id:'c4',  name:'Dr. Sofia Chen',      phone:'+1-555-0104', email:'sofia.c@email.com',   visits:45, spent:6800, lastVisit:'2026-03-19', status:'vip',     color:'#2d7a47', note:'⚠️ Shellfish allergy! Loyal since opening' },
@@ -172,24 +172,11 @@ window.DB = {
 
   /* ── PRODUCTS ── */
   products: [
-    { id:'p1',  name:'Bistecca Fiorentina',   price:48,  category:'Main Courses',     status:'active', emoji:'🥩', description:'32oz T-bone grilled over Italian oak' },
-    { id:'p2',  name:'Wagyu Tenderloin',      price:165, category:'Main Courses',     status:'active', emoji:'🥩', description:'A5 Japanese wagyu, 8oz, pan-seared' },
-    { id:'p3',  name:'Truffle Risotto',       price:32,  category:'Pasta & Risotto',  status:'active', emoji:'🍄', description:'Arborio rice with black truffle shavings' },
-    { id:'p4',  name:'Tagliatelle al Ragù',   price:28,  category:'Pasta & Risotto',  status:'active', emoji:'🍝', description:'House-made pasta with slow-cooked Bolognese' },
-    { id:'p5',  name:'Spaghetti Carbonara',   price:26,  category:'Pasta & Risotto',  status:'active', emoji:'🍝', description:'Classic Roman carbonara with guanciale' },
-    { id:'p6',  name:'Burrata & Tomatoes',    price:18,  category:'Starters',         status:'active', emoji:'🧀', description:'Fresh burrata with heirloom tomatoes' },
-    { id:'p7',  name:'Tuna Tartare',          price:24,  category:'Starters',         status:'active', emoji:'🐟', description:'Yellowfin tuna with avocado & wasabi' },
-    { id:'p8',  name:'Tom Yum Soup',          price:16,  category:'Starters',         status:'active', emoji:'🍜', description:'Thai-inspired spicy shrimp soup' },
-    { id:'p9',  name:'Confit Duck Leg',       price:38,  category:'Main Courses',     status:'active', emoji:'🦆', description:'Slow-cooked duck leg, honey glaze' },
-    { id:'p10', name:'Rack of Lamb',          price:42,  category:'Main Courses',     status:'active', emoji:'🍖', description:'Herb-crusted lamb, rosemary jus' },
-    { id:'p11', name:'Seared Scallops',       price:34,  category:'Main Courses',     status:'active', emoji:'🦪', description:'Pan-seared with cauliflower puree' },
-    { id:'p12', name:'Panna Cotta',           price:14,  category:'Desserts',         status:'active', emoji:'🍮', description:'Vanilla bean panna cotta, berry compote' },
-    { id:'p13', name:'Tiramisu',              price:12,  category:'Desserts',         status:'active', emoji:'🍰', description:'Classic Italian tiramisu' },
-    { id:'p14', name:'Chocolate Soufflé',     price:16,  category:'Desserts',         status:'active', emoji:'🍫', description:'Rich dark chocolate soufflé' },
-    { id:'p15', name:'Chianti Classico',      price:16,  category:'Drinks',           status:'active', emoji:'🍷', description:'2018 Chianti Classico DOCG' },
-    { id:'p16', name:'Aperol Spritz',         price:14,  category:'Drinks',           status:'active', emoji:'🍊', description:'Classic Venetian aperitif' },
-    { id:'p17', name:'Negroni',               price:18,  category:'Drinks',           status:'active', emoji:'🍸', description:'Campari, gin, sweet vermouth' },
-    { id:'p18', name:'Lobster Bisque',        price:22,  category:'Starters',         status:'inactive', emoji:'🦞', description:'Creamy lobster soup, cognac finish' },
+    { id:'p1',  name:'Bistecca Fiorentina',   price:48,  category:'Main Courses',    image: 'https://images.unsplash.com/photo-1558030006-450675393462?w=400',     status:'active', emoji:'🥩', description:'32oz T-bone grilled over Italian oak' },
+    { id:'p2',  name:'Wagyu Tenderloin',      price:165, category:'Main Courses',    image: 'https://images.unsplash.com/photo-1558030006-450675393462?w=400',    status:'active', emoji:'🥩', description:'A5 Japanese wagyu, 8oz, pan-seared' },
+    { id:'p3',  name:'Truffle Risotto',       price:32,  category:'Pasta & Risotto', image: 'https://images.unsplash.com/photo-1558030006-450675393462?w=400',  status:'active', emoji:'🍄', description:'Arborio rice with black truffle shavings' },
+    { id:'p4',  name:'Tagliatelle al Ragù',   price:28,  category:'Pasta & Risotto', image: 'https://images.unsplash.com/photo-1558030006-450675393462?w=400',  status:'active', emoji:'🍝', description:'House-made pasta with slow-cooked Bolognese' },
+    
   ],
 
   /* ── CATEGORIES ── */
