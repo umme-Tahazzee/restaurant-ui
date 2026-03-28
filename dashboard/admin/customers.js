@@ -5,15 +5,8 @@
 const CustomersView = {
 
   _search: '',
-  _data: null,
 
-  async render() {
-    try {
-      this._data = await API.getCustomers();
-    } catch(err) {
-      return `<div style="padding:40px;color:var(--red);">Failed to load customers data.</div>`;
-    }
-
+  render() {
     return `
       <div id="custRoot">
         <div class="page-header anim-1">
@@ -32,10 +25,10 @@ const CustomersView = {
 
         <!-- Summary -->
         <div class="grid-4 anim-1" style="margin-bottom:20px">
-          <div class="stat-card"><div class="stat-label">Total Customers</div><div class="stat-value">${this._data.length}</div></div>
-          <div class="stat-card"><div class="stat-label">VIP Customers</div><div class="stat-value" style="color:var(--gold)">${this._data.filter(c=>c.status==='vip').length}</div></div>
-          <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value">${Utils.money(this._data.reduce((s,c)=>s+c.spent,0))}</div></div>
-          <div class="stat-card"><div class="stat-label">Avg Visits</div><div class="stat-value">${Math.round(this._data.reduce((s,c)=>s+c.visits,0)/this._data.length)}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Customers</div><div class="stat-value">${DB.customers.length}</div></div>
+          <div class="stat-card"><div class="stat-label">VIP Customers</div><div class="stat-value" style="color:var(--gold)">${DB.customers.filter(c=>c.status==='vip').length}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value">${Utils.money(DB.customers.reduce((s,c)=>s+c.spent,0))}</div></div>
+          <div class="stat-card"><div class="stat-label">Avg Visits</div><div class="stat-value">${Math.round(DB.customers.reduce((s,c)=>s+c.visits,0)/DB.customers.length)}</div></div>
         </div>
 
         <!-- Customer Table -->
@@ -50,7 +43,21 @@ const CustomersView = {
       </div>`;
   },
 
-  init() { this.renderTable(); },
+  // AJAX: JSONPlaceholder /users থেকে data load করে তারপর table render করে
+  async init() {
+    const el = document.getElementById('customerBody');
+    if (el) el.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-3)"><i class="fa-solid fa-spinner fa-spin"></i> Loading customers…</td></tr>';
+    await Api.getCustomers();
+    this.renderTable();
+    // Summary cards আপডেট করো নতুন data দিয়ে
+    const root = document.getElementById('custRoot');
+    if (root) {
+      root.querySelectorAll('.stat-value')[0].textContent = DB.customers.length;
+      root.querySelectorAll('.stat-value')[1].textContent = DB.customers.filter(c=>c.status==='vip').length;
+      root.querySelectorAll('.stat-value')[2].textContent = Utils.money(DB.customers.reduce((s,c)=>s+c.spent,0));
+      root.querySelectorAll('.stat-value')[3].textContent = Math.round(DB.customers.reduce((s,c)=>s+c.visits,0)/DB.customers.length);
+    }
+  },
 
   search(val) { this._search = val.toLowerCase(); this.renderTable(); },
 
@@ -58,8 +65,8 @@ const CustomersView = {
     const el = document.getElementById('customerBody');
     if (!el) return;
     const filtered = this._search
-      ? this._data.filter(c => c.name.toLowerCase().includes(this._search) || c.email.toLowerCase().includes(this._search))
-      : this._data;
+      ? DB.customers.filter(c => c.name.toLowerCase().includes(this._search) || c.email.toLowerCase().includes(this._search))
+      : DB.customers;
 
     el.innerHTML = filtered.map(c => `
       <tr>
@@ -90,7 +97,7 @@ const CustomersView = {
   },
 
   viewCustomer(id) {
-    const c = this._data.find(x => x.id === id);
+    const c = DB.customers.find(x => x.id === id);
     if (!c) return;
     document.getElementById('customerModalContent').innerHTML = `
       <div class="modal-title">Customer Details</div>
@@ -118,21 +125,62 @@ const CustomersView = {
     document.getElementById('customerModalContent').innerHTML = `
       <div class="modal-title">Add New Customer</div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Full Name</label><input class="form-control" placeholder="Enter name…"/></div>
-        <div class="form-group"><label class="form-label">Phone</label><input class="form-control" placeholder="+1-555-…"/></div>
+        <div class="form-group"><label class="form-label">Full Name</label><input id="addCustName" class="form-control" placeholder="Enter name…"/></div>
+        <div class="form-group"><label class="form-label">Phone</label><input id="addCustPhone" class="form-control" placeholder="+1-555-…"/></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Email</label><input class="form-control" placeholder="email@example.com"/></div>
+        <div class="form-group"><label class="form-label">Email</label><input id="addCustEmail" class="form-control" placeholder="email@example.com"/></div>
         <div class="form-group"><label class="form-label">Status</label>
-          <select class="form-control"><option>Regular</option><option>VIP</option><option>New</option></select>
+          <select id="addCustStatus" class="form-control"><option value="regular">Regular</option><option value="vip">VIP</option><option value="new">New</option></select>
         </div>
       </div>
-      <div class="form-group" style="margin-bottom:16px"><label class="form-label">Notes</label><textarea class="form-control" rows="3" placeholder="Any special notes…"></textarea></div>
+      <div class="form-group" style="margin-bottom:16px"><label class="form-label">Notes</label><textarea id="addCustNote" class="form-control" rows="3" placeholder="Any special notes…"></textarea></div>
       <div style="display:flex;gap:8px;justify-content:flex-end">
         <button class="btn btn-outline" onclick="Modal.close('customerModal')">Cancel</button>
-        <button class="btn btn-primary" onclick="Toast.show('Customer added!','success');Modal.close('customerModal')">Add Customer</button>
+        <button class="btn btn-primary" onclick="CustomersView.addCustomer()">Add Customer</button>
       </div>`;
     Modal.open('customerModal');
+  },
+
+  addCustomer() {
+    const name   = document.getElementById('addCustName').value.trim();
+    const phone  = document.getElementById('addCustPhone').value.trim();
+    const email  = document.getElementById('addCustEmail').value.trim();
+    const status = document.getElementById('addCustStatus').value;
+    const note   = document.getElementById('addCustNote').value.trim();
+
+    if (!name) { Toast.show('Please enter a name', 'warning'); return; }
+    if (!email) { Toast.show('Please enter an email', 'warning'); return; }
+
+    const COLORS = ['#c0392b','#1a5276','#c47a1a','#6d3b8e','#2d7a47','#96281b','#b8963e','#9b8c86'];
+    const newCustomer = {
+      id:        'c' + (Date.now()),
+      name,
+      phone:     phone || '+1-555-0000',
+      email,
+      visits:    0,
+      spent:     0,
+      lastVisit: new Date().toISOString().slice(0, 10),
+      status,
+      color:     COLORS[DB.customers.length % COLORS.length],
+      note,
+    };
+
+    DB.customers.unshift(newCustomer);
+    this.renderTable();
+    this._updateSummary();
+    Modal.close('customerModal');
+    Toast.show(`Customer "${name}" added successfully!`, 'success');
+  },
+
+  _updateSummary() {
+    const root = document.getElementById('custRoot');
+    if (!root) return;
+    const stats = root.querySelectorAll('.stat-value');
+    stats[0].textContent = DB.customers.length;
+    stats[1].textContent = DB.customers.filter(c => c.status === 'vip').length;
+    stats[2].textContent = Utils.money(DB.customers.reduce((s, c) => s + c.spent, 0));
+    stats[3].textContent = DB.customers.length ? Math.round(DB.customers.reduce((s, c) => s + c.visits, 0) / DB.customers.length) : 0;
   },
 
 };

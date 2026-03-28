@@ -105,44 +105,21 @@ const Router = {
     blog:         () => BlogView,
     profile:      () => ProfileView,
   },
-  async go(name, navEl) {
+  go(name, navEl) {
     const getView = this.views[name];
     if (!getView) return console.warn(`View "${name}" not found`);
-    
     const area = document.getElementById('pageArea');
     area.classList.add('loading');
-    
-    // Show a loading spinner while fetching data
-    area.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:300px">
-        <i class="fa-solid fa-circle-notch fa-spin" style="font-size:32px;color:var(--text-3)"></i>
-      </div>
-    `;
-
-    try {
+    setTimeout(() => {
       const view = getView();
-      
-      // Wait for the async view to fetch data and generate HTML
-      const html = await view.render();
-      
-      area.innerHTML = html;
-      
-      // Update sidebar active states
+      area.innerHTML = view.render();
+      area.classList.remove('loading');
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       const target = navEl || document.querySelector(`.nav-item[data-view="${name}"]`);
       if (target) target.classList.add('active');
-      
-      // Execute post-render initialization if present
-      if (view.init) await view.init();
-      
+      if (view.init) view.init();
       Sidebar.closeMobile();
-    } catch (error) {
-      console.error('Error loading view:', error);
-      area.innerHTML = `<div style="text-align:center;padding:40px;color:var(--red)">Failed to load data. Please try again.</div>`;
-    } finally {
-      // Fade in the new content
-      setTimeout(() => area.classList.remove('loading'), 10);
-    }
+    }, 80);
   },
 };
 

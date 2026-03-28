@@ -29,14 +29,13 @@
     body { font-family: 'Jost', sans-serif; height: 100vh; overflow: hidden; }
     .login-bg {
       position: fixed; inset: 0;
-      background: linear-gradient(135deg, #1a1210 0%, #2a1c18 50%, #1a1210 100%);
+      background: black;
       z-index: -1;
     }
     .login-bg::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(circle at 30% 40%, rgba(192,57,43,.15) 0%, transparent 60%),
-                  radial-gradient(circle at 70% 60%, rgba(184,150,62,.1) 0%, transparent 50%);
+      background: black;
     }
     .login-particles {
       position: absolute; inset: 0; overflow: hidden; pointer-events: none;

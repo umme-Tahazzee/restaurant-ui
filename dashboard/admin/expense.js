@@ -6,18 +6,11 @@ const ExpenseView = {
 
   _tab: 'list',
   _chart: null,
-  _data: null,
 
-  async render() {
-    try {
-       this._data = await API.getExpensesData();
-    } catch(err) {
-       return `<div style="padding:40px;color:var(--red);">Failed to load expenses data.</div>`;
-    }
-
-    const total = this._data.expenses.reduce((s,e) => s+e.amount, 0);
+  render() {
+    const total = DB.expenses.reduce((s,e) => s+e.amount, 0);
     const catTotals = {};
-    this._data.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
+    DB.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
 
     return `
       <div id="expenseRoot">
@@ -43,7 +36,7 @@ const ExpenseView = {
           <div class="stat-card"><div class="stat-label">Total Expenses</div><div class="stat-value" style="color:var(--red)">${Utils.money(total)}</div></div>
           <div class="stat-card"><div class="stat-label">This Month</div><div class="stat-value">${Utils.money(total)}</div></div>
           <div class="stat-card"><div class="stat-label">Categories</div><div class="stat-value">${Object.keys(catTotals).length}</div></div>
-          <div class="stat-card"><div class="stat-label">Avg per Entry</div><div class="stat-value">${Utils.money(Math.round(total/this._data.expenses.length))}</div></div>
+          <div class="stat-card"><div class="stat-label">Avg per Entry</div><div class="stat-value">${Utils.money(Math.round(total/DB.expenses.length))}</div></div>
         </div>
 
         <!-- Content -->
@@ -51,7 +44,24 @@ const ExpenseView = {
       </div>`;
   },
 
-  init() { this.renderContent(); },
+  // AJAX: JSONPlaceholder /photos থেকে expenses load করে
+  async init() {
+    const el = document.getElementById('expenseContent');
+    if (el) el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-3)"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Loading expenses…</div>';
+    await Api.getExpenses();
+    this.renderContent();
+    // Summary আপডেট
+    const total = DB.expenses.reduce((s,e) => s+e.amount, 0);
+    const catTotals = {};
+    DB.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
+    const root = document.getElementById('expenseRoot');
+    if (root) {
+      root.querySelectorAll('.stat-value')[0].textContent = Utils.money(total);
+      root.querySelectorAll('.stat-value')[1].textContent = Utils.money(total);
+      root.querySelectorAll('.stat-value')[2].textContent = Object.keys(catTotals).length;
+      root.querySelectorAll('.stat-value')[3].textContent = Utils.money(Math.round(total/DB.expenses.length));
+    }
+  },
 
   setTab(tab, btn) {
     this._tab = tab;
@@ -85,7 +95,7 @@ const ExpenseView = {
         <table class="data-table">
           <thead><tr><th>Category</th><th>Vendor</th><th>Amount</th><th>Date</th><th>Note</th><th>Branch</th><th>Actions</th></tr></thead>
           <tbody>
-            ${this._data.expenses.map(e => `
+            ${DB.expenses.map(e => `
               <tr>
                 <td>
                   <div style="display:flex;align-items:center;gap:8px">
@@ -114,8 +124,8 @@ const ExpenseView = {
 
   _renderGeneral() {
     const catTotals = {};
-    this._data.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
-    const total = this._data.expenses.reduce((s,e) => s+e.amount, 0);
+    DB.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
+    const total = DB.expenses.reduce((s,e) => s+e.amount, 0);
     const cats = Object.entries(catTotals).sort((a,b) => b[1]-a[1]);
     const colors = ['#c0392b','#1a5276','#c47a1a','#6d3b8e','#2d7a47','#b8963e','#96281b','#9b8c86'];
 
@@ -160,7 +170,7 @@ const ExpenseView = {
     if (this._chart) this._chart.destroy();
 
     const catTotals = {};
-    this._data.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
+    DB.expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category]||0) + e.amount; });
     const cats = Object.entries(catTotals).sort((a,b) => b[1]-a[1]);
     const colors = ['#c0392b','#1a5276','#c47a1a','#6d3b8e','#2d7a47','#b8963e','#96281b','#9b8c86'];
 
@@ -193,7 +203,7 @@ const ExpenseView = {
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Branch</label>
-          <select class="form-control"><option>All</option>${this._data.branches.map(b=>`<option>${b.name}</option>`).join('')}</select>
+          <select class="form-control"><option>All</option>${DB.branches.map(b=>`<option>${b.name}</option>`).join('')}</select>
         </div>
         <div></div>
       </div>

@@ -4,16 +4,8 @@
 
 const ProfileView = {
 
-  _data: null,
-
-  async render() {
-    try {
-      this._data = await API.getProfile();
-    } catch(err) {
-      return `<div style="padding:40px;color:var(--red);">Failed to load profile data.</div>`;
-    }
-
-    const p = this._data;
+  render() {
+    const p = DB.profile;
     const joinDate = new Date(p.joinDate);
     const tenure = Math.floor((new Date() - joinDate) / (365.25 * 24 * 60 * 60 * 1000));
 
@@ -98,6 +90,12 @@ const ProfileView = {
       </div>`;
   },
 
-  init() {},
+  // AJAX: JSONPlaceholder /users/1 থেকে profile load করে re-render করে
+  async init() {
+    await Api.getProfile();
+    // নতুন profile data দিয়ে পুরো view re-render
+    const area = document.getElementById('pageArea');
+    if (area) area.innerHTML = this.render();
+  },
 
 };

@@ -5,19 +5,12 @@
 const ReviewsView = {
 
   _filter: 'all',
-  _data: null,
 
-  async render() {
-    try {
-      this._data = await API.getReviews();
-    } catch(err) {
-      return `<div style="padding:40px;color:var(--red);">Failed to load reviews data.</div>`;
-    }
-
-    const avg = (this._data.reduce((s,r) => s+r.rating, 0) / this._data.length).toFixed(1);
-    const r5 = this._data.filter(r => r.rating === 5).length;
-    const r4 = this._data.filter(r => r.rating === 4).length;
-    const r3 = this._data.filter(r => r.rating === 3).length;
+  render() {
+    const avg = (DB.reviews.reduce((s,r) => s+r.rating, 0) / DB.reviews.length).toFixed(1);
+    const r5 = DB.reviews.filter(r => r.rating === 5).length;
+    const r4 = DB.reviews.filter(r => r.rating === 4).length;
+    const r3 = DB.reviews.filter(r => r.rating === 3).length;
 
     return `
       <div id="reviewRoot">
@@ -41,22 +34,22 @@ const ReviewsView = {
           <div class="stat-card" style="text-align:center">
             <div style="font-size:42px;font-family:'Playfair Display',serif;font-weight:900;color:var(--gold)">${avg}</div>
             <div>${Utils.starsHTML(Math.round(avg))}</div>
-            <div class="stat-sub">${this._data.length} reviews</div>
+            <div class="stat-sub">${DB.reviews.length} reviews</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">5 Star Reviews</div>
             <div class="stat-value" style="color:var(--green)">${r5}</div>
-            <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${r5/this._data.length*100}%;background:var(--green)"></div></div>
+            <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${r5/DB.reviews.length*100}%;background:var(--green)"></div></div>
           </div>
           <div class="stat-card">
             <div class="stat-label">4 Star Reviews</div>
             <div class="stat-value" style="color:var(--gold)">${r4}</div>
-            <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${r4/this._data.length*100}%;background:var(--gold)"></div></div>
+            <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${r4/DB.reviews.length*100}%;background:var(--gold)"></div></div>
           </div>
           <div class="stat-card">
             <div class="stat-label">3 Star Reviews</div>
             <div class="stat-value" style="color:var(--orange)">${r3}</div>
-            <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${r3/this._data.length*100}%;background:var(--orange)"></div></div>
+            <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${r3/DB.reviews.length*100}%;background:var(--orange)"></div></div>
           </div>
         </div>
 
@@ -65,14 +58,20 @@ const ReviewsView = {
       </div>`;
   },
 
-  init() { this.renderReviews(); },
+  // AJAX: JSONPlaceholder /comments থেকে reviews load করে
+  async init() {
+    const el = document.getElementById('reviewList');
+    if (el) el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-3)"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Loading reviews…</div>';
+    await Api.getReviews();
+    this.renderReviews();
+  },
 
   filter(val) { this._filter = val; this.renderReviews(); },
 
   renderReviews() {
     const el = document.getElementById('reviewList');
     if (!el) return;
-    const filtered = this._filter === 'all' ? this._data : this._data.filter(r => r.rating === parseInt(this._filter));
+    const filtered = this._filter === 'all' ? DB.reviews : DB.reviews.filter(r => r.rating === parseInt(this._filter));
 
     el.innerHTML = filtered.map(r => `
       <div class="review-card">
