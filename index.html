@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Savoria Fine Dining — Where every dish is a canvas. Award-winning cuisine by Chef Marco in New York City. Reserve your table today." />
   <title>Savoria — Fine Dining Experience</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap"
@@ -66,16 +67,11 @@
     </div>
     <div class="gold-line h-[1px] w-full mb-8"></div>
     <ul class="flex flex-col gap-1 flex-1">
-      <li><a href="/" onclick="toggleMenu()"
-          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
-      <li><a href="menu.html" onclick="toggleMenu()"
-          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-      <li><a href="/about.html" onclick="toggleMenu()"
-          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-      <li><a href="/reserve.html" onclick="toggleMenu()"
-          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-      <li><a href="/contact.html" onclick="toggleMenu()"
-          class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+      <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+      <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
+      <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+      <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+      <li><a href="contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
     </ul>
     <div class="mt-auto space-y-3">
       <a href="reserve.html" onclick="toggleMenu()"
@@ -284,11 +280,11 @@
         </a>
         <ul
           class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
-          <li><a href="#" class="nav-link transition">Home</a></li>
+          <li><a href="index.html" class="nav-link active-link transition">Home</a></li>
           <li><a href="menu.html" class="nav-link transition">Menu</a></li>
-          <li><a href="/about.html" class="nav-link transition">About</a></li>
-          <li><a href="/reserve.html" class="nav-link transition">Reserve</a></li>
-          <li><a href="/contact.html" class="nav-link transition">Contact</a></li>
+          <li><a href="about.html" class="nav-link transition">About</a></li>
+          <li><a href="reserve.html" class="nav-link transition">Reserve</a></li>
+          <li><a href="contact.html" class="nav-link transition">Contact</a></li>
         </ul>
         <div class="flex items-center gap-2 sm:gap-3">
           <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center
@@ -301,9 +297,9 @@
          font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold
           transition pl-3 border-l border-borderSoft ml-1">
             <i class="fa-regular fa-circle-user"></i>
-            <a href="/login.html">Login</a>
+            <a href="login.html">Login</a>
           </button>
-          <a href="/reserve.html"
+          <a href="reserve.html"
             class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
             <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
           </a>
@@ -340,7 +336,7 @@
               class="book-btn text-white px-8 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase inline-flex items-center gap-2">
               <i class="fa-solid fa-utensils text-[10px]"></i> Explore Menu
             </a>
-            <a href="/reserve.html"
+            <a href="reserve.html"
               class="border border-textDark/20 text-textDark px-8 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition">
               Reserve a Table
             </a>
@@ -810,9 +806,10 @@
             (555) 920-4200</p>
         </div>
         <div class="flex flex-col gap-3 flex-shrink-0">
-          <a href="/reserve.html"
-            class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center"><i
-              class="fa-regular fa-calendar-check"></i> Book Online</a>
+          <a href="reserve.html"
+            class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center">
+            <i class="fa-regular fa-calendar-check"></i> Book Online
+          </a>
           <a href="tel:+15559204200"
             class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center"><i
               class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us</a>
@@ -898,7 +895,7 @@
     </div>
     <div class="nav-item" onclick="setActive(this)">
       <i class="fa-regular fa-circle-user"></i><span>
-        <a href="/login.html">Profile</a>
+        <a href="login.html">Profile</a>
       </span>
     </div>
   </nav>

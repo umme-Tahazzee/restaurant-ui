@@ -1,0 +1,129 @@
+/* ═══════════════════════════════════════
+   style.css — Savoria Profile Dashboard
+   Shared styles used across all panels
+═══════════════════════════════════════ */
+
+/* ── Toggle switch ── */
+.toggle-wrap { position:relative; width:44px; height:24px; flex-shrink:0; }
+.toggle-wrap input { opacity:0; width:0; height:0; position:absolute; }
+.toggle-slider { position:absolute; inset:0; background:#e8ddd8; border-radius:999px; cursor:pointer; transition:background .3s; }
+.toggle-slider::before { content:''; position:absolute; width:18px; height:18px; border-radius:50%; background:#fff; top:3px; left:3px; transition:transform .3s; box-shadow:0 2px 6px rgba(0,0,0,.15); }
+input:checked + .toggle-slider { background:#c0392b; }
+input:checked + .toggle-slider::before { transform:translateX(20px); }
+
+/* ── Hero background ── */
+.hero-bg { background: linear-gradient(145deg,#1a1210 0%,#2d1a14 50%,#1a1210 100%); }
+
+/* ── Decorative blobs ── */
+.blob { position:absolute; border-radius:50%; pointer-events:none; }
+.blob-red  { top:0; right:0; width:500px; height:500px; background:radial-gradient(circle,rgba(192,57,43,.09) 0%,transparent 70%); transform:translate(30%,-30%); }
+.blob-gold { bottom:0; left:0; width:400px; height:400px; background:radial-gradient(circle,rgba(184,150,62,.07) 0%,transparent 70%); transform:translate(-30%,30%); }
+.scanlines  { position:absolute; inset:0; pointer-events:none; background-image:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(255,255,255,.012) 40px,rgba(255,255,255,.012) 41px); }
+
+/* ── Avatar ring ── */
+.avatar-ring { border:3px solid rgba(184,150,62,.45); box-shadow:0 0 0 6px rgba(184,150,62,.12), 0 16px 40px rgba(0,0,0,.4); transition:transform .2s; }
+.avatar-ring:hover { transform:scale(1.04); }
+
+/* ── Gold badge shimmer ── */
+.gold-badge { background:linear-gradient(90deg,#b8963e,#d4af6a,#b8963e); background-size:200%; animation:shimmer 3s linear infinite; }
+@keyframes shimmer { 0%,100%{background-position:0%} 50%{background-position:100%} }
+
+/* ── Stat cards ── */
+.stat-card { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:16px; text-align:center; backdrop-filter:blur(4px); transition:transform .2s, box-shadow .2s; cursor:default; }
+.stat-card:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(0,0,0,.18); }
+.stat-label { color:rgba(255,255,255,.3); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-top:4px; }
+
+/* ── Loyalty bar ── */
+.loyalty-wrap { background:rgba(255,255,255,.05); border-radius:16px; padding:20px; border:1px solid rgba(255,255,255,.08); }
+.loyalty-fill { animation:loyaltyGrow 1.2s .6s ease both; width:0; }
+@keyframes loyaltyGrow { from{width:0} to{width:var(--lw,48%)} }
+
+/* ── Sidebar tab ── */
+.prof-tab { display:flex; align-items:center; gap:8px; padding:12px 16px; border-radius:12px; font-size:13px; font-weight:600; color:#4a3830; cursor:pointer; transition:background .2s, color .2s; white-space:nowrap; width:100%; text-align:left; background:transparent; border:none; }
+.prof-tab:hover { background:#f5f0eb; }
+.prof-tab.active { background:#fdf0ee; color:#c0392b; }
+.tab-icon { width:18px; text-align:center; font-size:15px; }
+
+/* ── Panels ── */
+.panel { animation:fadeUp .4s ease both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── Section label + title ── */
+.section-label { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.section-label span { font-size:10px; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:#4a3830; }
+.section-title  { font-family:'Playfair Display',serif; font-size:24px; font-weight:900; color:#1a1210; }
+
+/* ── Generic card ── */
+.card { background:#fff; border:1px solid #e8ddd8; border-radius:16px; overflow:hidden; }
+.card-header { padding:16px 24px; border-bottom:1px solid #e8ddd8; display:flex; align-items:center; justify-content:space-between; }
+
+/* ── Buttons ── */
+.btn-primary { display:inline-flex; align-items:center; gap:6px; color:#fff; padding:8px 16px; border-radius:8px; font-size:10px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; transition:opacity .2s; background:linear-gradient(135deg,#c0392b,#96281b); border:none; cursor:pointer; }
+.btn-primary:hover { opacity:.88; }
+
+/* ── Form fields ── */
+.field-label { display:block; font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:rgba(74,56,48,.4); margin-bottom:8px; }
+.field-input  { width:100%; border:1.5px solid #e8ddd8; border-radius:12px; padding:12px 14px; font-family:'Jost',sans-serif; font-size:14px; color:#1a1210; outline:none; background:#fff; transition:border-color .2s; }
+.field-input:focus { border-color:#c0392b; }
+.field-error  { color:#c0392b; font-size:10px; margin-top:4px; }
+
+/* ── Filter chips ── */
+.chip { padding:6px 14px; border-radius:999px; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; border:1px solid #e8ddd8; transition:all .2s; color:rgba(74,56,48,.5); background:transparent; cursor:pointer; }
+.chip:hover { border-color:#b8963e; color:#b8963e; }
+.chip-active  { background:#fdf0ee; color:#c0392b; border-color:#c0392b; }
+
+/* ── Load more button ── */
+.load-more-btn { margin-top:20px; width:100%; border:1px solid #e8ddd8; border-radius:12px; padding:12px; font-size:11px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:rgba(74,56,48,.5); transition:all .2s; background:transparent; cursor:pointer; }
+.load-more-btn:hover { border-color:#c0392b; color:#c0392b; }
+
+/* ── Loading spinner ── */
+.loading-spinner { display:flex; align-items:center; justify-content:center; padding:48px; color:rgba(74,56,48,.3); font-size:24px; }
+.loading-spinner::after { content:'\f110'; font-family:'Font Awesome 6 Free'; font-weight:900; animation:spin 1s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ── Perk cards ── */
+.perk-card { border:1px solid #e8ddd8; border-radius:12px; padding:16px; text-align:center; transition:border-color .2s; }
+.perk-card:hover { border-color:rgba(184,150,62,.4); }
+
+/* ── Security row ── */
+.security-row { display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:transparent; border:none; cursor:pointer; }
+.security-icon { width:36px; height:36px; border-radius:12px; background:#f5f0eb; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .2s; }
+
+/* ── Invoice helpers ── */
+.inv-label { font-size:9px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:rgba(74,56,48,.4); margin-bottom:4px; }
+.inv-row   { display:flex; justify-content:space-between; font-size:14px; color:rgba(74,56,48,.6); }
+
+/* ── Modals ── */
+.sv-modal   { position:fixed; inset:0; z-index:9000; display:flex; align-items:center; justify-content:center; padding:20px; pointer-events:none; }
+.sv-modal.open { pointer-events:all; }
+.sv-backdrop { position:absolute; inset:0; background:rgba(26,18,16,.6); backdrop-filter:blur(6px); opacity:0; transition:opacity .3s; }
+.sv-modal.open .sv-backdrop { opacity:1; }
+.sv-sheet   { position:relative; z-index:1; background:#fff; border-radius:24px; width:100%; max-height:90vh; overflow-y:auto; transform:translateY(40px) scale(.97); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s; box-shadow:0 32px 80px rgba(0,0,0,.25); }
+.sv-modal.open .sv-sheet { transform:translateY(0) scale(1); opacity:1; }
+.modal-close-btn { width:32px; height:32px; border-radius:50%; background:#f5f0eb; display:flex; align-items:center; justify-content:center; color:rgba(74,56,48,.5); transition:color .2s; border:none; cursor:pointer; }
+.modal-close-btn:hover { color:#c0392b; }
+
+/* ── Mobile nav ── */
+.mob-nav-btn { display:flex; flex-direction:column; align-items:center; gap:4px; font-size:9px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:rgba(74,56,48,.5); transition:color .2s; padding:4px; background:transparent; border:none; cursor:pointer; }
+.mob-nav-btn:hover { color:#c0392b; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(192,57,43,.25); border-radius:99px; }
+.scroll-hide { scrollbar-width:none; }
+.scroll-hide::-webkit-scrollbar { display:none; }
+
+/* ── Input autofill ── */
+input:-webkit-autofill, input:-webkit-autofill:focus {
+  -webkit-text-fill-color:#1a1210;
+  -webkit-box-shadow:0 0 0 1000px #fff inset;
+}
+
+/* ── Print ── */
+@media print {
+  body > *:not(#invoiceModal) { display:none !important; }
+  #invoiceModal { position:static !important; display:block !important; pointer-events:all !important; }
+  .sv-backdrop  { display:none !important; }
+  .sv-sheet     { box-shadow:none !important; border-radius:0 !important; transform:none !important; max-height:none !important; width:100% !important; opacity:1 !important; }
+}

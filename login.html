@@ -746,7 +746,7 @@
           const result = Auth.login(email, pass);
           if (result.ok) {
             showToast(`Welcome back, ${result.user.name.split(' ')[0]}! 🍽️`, 'success');
-            setTimeout(() => { location.href = 'profile.html'; }, 800);
+            setTimeout(() => { location.href = '/dashboard/customer/profile_index.html'; }, 800);
           } else {
             document.getElementById('loginGlobalErrMsg').textContent = result.message;
             document.getElementById('loginGlobalErr').classList.remove('hidden');
@@ -806,7 +806,7 @@
             // Auto-login after registration
             Auth.login(email, pass);
             showToast(`Account created! Welcome, ${first}! 🎉`, 'success');
-            setTimeout(() => { location.href = 'profile.html'; }, 900);
+            setTimeout(() => { location.href = '/dashboard/customer/profile_index.html'; }, 900);
           } else {
             // FIX: reset button state on error
             document.getElementById('regGlobalErrMsg').textContent = result.message;
