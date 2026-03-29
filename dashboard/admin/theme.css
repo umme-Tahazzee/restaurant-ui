@@ -845,3 +845,178 @@ input, select, textarea { font-family: inherit; }
   background: rgba(0,0,0,.5);
   z-index: 150;
 }
+/* Bell shake animation */
+/* ================================================
+   NOTIFICATION SYSTEM
+   theme.css এর শেষে যোগ করো
+================================================ */
+
+/* ── Badge on bell icon ── */
+.notif-badge {
+  position: absolute;
+  top: 4px; right: 4px;
+  min-width: 16px; height: 16px;
+  background: var(--red);
+  color: #fff;
+  font-size: 9px; font-weight: 700;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 3px;
+  border: 2px solid var(--topbar-bg);
+  line-height: 1;
+}
+
+/* ── Dropdown panel ── */
+#notifDrop {
+  position: absolute;
+  top: 46px; right: 0;
+  width: 320px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  display: none;
+  z-index: 300;
+  overflow: hidden;
+  animation: notifIn .18s ease;
+}
+@keyframes notifIn {
+  from { opacity: 0; transform: translateY(-6px) scale(.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Header ── */
+.notif-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-surface2);
+}
+
+/* ── Action buttons (mark read / clear) ── */
+.notif-action-btn {
+  background: none; border: none;
+  font-size: 10px; font-weight: 600;
+  color: var(--text-3);
+  cursor: pointer; padding: 0;
+  font-family: 'Jost', sans-serif;
+  letter-spacing: .02em;
+  transition: color .2s;
+}
+.notif-action-btn:hover { color: var(--text); }
+
+/* ── Scrollable list ── */
+#notifList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* ── Individual item ── */
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+  cursor: pointer;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: var(--bg-surface2); }
+
+.notif-unread { background: var(--bg-surface); }
+.notif-read   { background: var(--bg-surface2); }
+
+/* ── Icon wrap (colored circle) ── */
+.notif-icon-wrap {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Message text ── */
+.notif-message {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-2);
+  line-height: 1.45;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.notif-message-unread {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ── Time text ── */
+.notif-time {
+  font-size: 10px;
+  color: var(--text-3);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* ── Unread indicator dot ── */
+.notif-unread-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+/* ── Empty state ── */
+.notif-empty {
+  padding: 36px 16px;
+  text-align: center;
+  color: var(--text-3);
+}
+.notif-empty i {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 10px;
+  opacity: .35;
+}
+.notif-empty p {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-3);
+  margin-bottom: 3px;
+}
+.notif-empty span {
+  font-size: 11px;
+  color: var(--text-3);
+  opacity: .7;
+}
+
+/* ── Footer ── */
+.notif-footer {
+  padding: 8px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-surface2);
+  font-size: 10px;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: .02em;
+}
+
+/* ── Bell shake animation ── */
+@keyframes bellShake {
+  0%,100% { transform: rotate(0); }
+  20%      { transform: rotate(-14deg); }
+  40%      { transform: rotate(14deg); }
+  60%      { transform: rotate(-8deg); }
+  80%      { transform: rotate(8deg); }
+}
+.bell-shake i { animation: bellShake .55s ease; }

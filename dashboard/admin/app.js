@@ -51,6 +51,7 @@ const Theme = {
     const saved = localStorage.getItem('savoria-admin-theme') || 'light';
     this._dark = (saved === 'dark');
     this._apply();
+    Notif.init();
   },
   toggle() {
     this._dark = !this._dark;
@@ -62,6 +63,7 @@ const Theme = {
     const icon = document.getElementById('themeIcon');
     if (icon) icon.className = this._dark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
   },
+  
 };
 
 const Sidebar = {

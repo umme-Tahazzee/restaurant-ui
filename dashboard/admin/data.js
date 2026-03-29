@@ -112,7 +112,7 @@ window.DB = {
 
   /* ── CUSTOMERS ── */
   customers: [
-    { id:'c1',  name:'karia',  phone:'+1-555-0101', email:'alex@email.com',      visits:32, spent:4240, lastVisit:'2026-03-18', status:'vip',     color:'#c0392b', note:'Prefers corner table, anniversary dinner monthly' },
+    { id:'c1',  name:'karia',               phone:'+1-555-0101', email:'alex@email.com',      visits:32, spent:4240, lastVisit:'2026-03-18', status:'vip',     color:'#c0392b', note:'Prefers corner table, anniversary dinner monthly' },
     { id:'c2',  name:'James Rodriguez',     phone:'+1-555-0102', email:'james.r@email.com',   visits:18, spent:2180, lastVisit:'2026-03-17', status:'regular', color:'#1a5276', note:'Wine enthusiast' },
     { id:'c3',  name:'Kenji Nakamura',      phone:'+1-555-0103', email:'kenji@email.com',     visits:8,  spent:1540, lastVisit:'2026-03-15', status:'regular', color:'#b8963e', note:'Birthday celebration group' },
     { id:'c4',  name:'Dr. Sofia Chen',      phone:'+1-555-0104', email:'sofia.c@email.com',   visits:45, spent:6800, lastVisit:'2026-03-19', status:'vip',     color:'#2d7a47', note:'⚠️ Shellfish allergy! Loyal since opening' },

@@ -27,9 +27,13 @@ const CustomersView = {
         <div class="grid-4 anim-1" style="margin-bottom:20px">
           <div class="stat-card"><div class="stat-label">Total Customers</div><div class="stat-value">
           ${DB.customers.length}</div></div>
-          <div class="stat-card"><div class="stat-label">VIP Customers</div><div class="stat-value" style="color:var(--gold)">${DB.customers.filter((c) => c.status === "vip").length}</div></div>
-          <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value">${Utils.money(DB.customers.reduce((s, c) => s + c.spent, 0))}</div></div>
-          <div class="stat-card"><div class="stat-label">Avg Visits</div><div class="stat-value">${Math.round(DB.customers.reduce((s, c) => s + c.visits, 0) / DB.customers.length)}</div></div>
+          <div class="stat-card"><div class="stat-label">VIP Customers</div><div class="stat-value" 
+          style="color:var(--gold)">${DB.customers.filter((c) => c.status === "vip").length}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value">
+          ${Utils.money(DB.customers.reduce((s, c) => s + c.spent, 0))}</div></div>
+          <div class="stat-card"><div class="stat-label">Avg Visits</div><div class="stat-value">
+          ${Math.round(DB.customers.reduce((s, c) => s + c.visits, 0) / DB.customers.length)}
+          </div></div>
         </div>
 
         <!-- Customer Table -->
@@ -46,28 +50,44 @@ const CustomersView = {
   },
 
   // AJAX: JSONPlaceholder /users থেকে data load করে তারপর table render করে
-  async init() {
-    const el = document.getElementById("customerBody");
-    if (el)
-      el.innerHTML =
-        '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-3)"><i class="fa-solid fa-spinner fa-spin"></i> Loading customers…</td></tr>';
-    await Api.getCustomers();
-    this.renderTable();
-    // Summary cards আপডেট করো নতুন data দিয়ে
-    const root = document.getElementById("custRoot");
-    if (root) {
-      root.querySelectorAll(".stat-value")[0].textContent = DB.customers.length;
-      root.querySelectorAll(".stat-value")[1].textContent = DB.customers.filter(
-        (c) => c.status === "vip",
-      ).length;
-      root.querySelectorAll(".stat-value")[2].textContent = Utils.money(
-        DB.customers.reduce((s, c) => s + c.spent, 0),
-      );
-      root.querySelectorAll(".stat-value")[3].textContent = Math.round(
-        DB.customers.reduce((s, c) => s + c.visits, 0) / DB.customers.length,
-      );
+ async init() {
+  // LocalStorage-এ আগের data থাকলে সেটা আগে load করো
+  const saved = localStorage.getItem("db_customers");
+  if (saved) {
+    try {
+      DB.customers = JSON.parse(saved);
+    } catch (e) {
+      console.warn("LocalStorage parse error, fetching fresh data.");
     }
-  },
+  }
+
+  const el = document.getElementById("customerBody");
+  if (el)
+    el.innerHTML =
+      '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-3)"><i class="fa-solid fa-spinner fa-spin"></i> Loading customers…</td></tr>';
+
+  // Saved data না থাকলেই API থেকে fetch করো
+  if (!saved) {
+    await Api.getCustomers();
+    this._persist(); // প্রথমবার fetch করার পর save করো
+  }
+
+  this.renderTable();
+  // Summary cards আপডেট
+  const root = document.getElementById("custRoot");
+  if (root) {
+    root.querySelectorAll(".stat-value")[0].textContent = DB.customers.length;
+    root.querySelectorAll(".stat-value")[1].textContent = DB.customers.filter(
+      (c) => c.status === "vip",
+    ).length;
+    root.querySelectorAll(".stat-value")[2].textContent = Utils.money(
+      DB.customers.reduce((s, c) => s + c.spent, 0),
+    );
+    root.querySelectorAll(".stat-value")[3].textContent = Math.round(
+      DB.customers.reduce((s, c) => s + c.visits, 0) / DB.customers.length,
+    );
+  }
+},
 
   search(val) {
     this._search = val.toLowerCase();
@@ -209,8 +229,10 @@ const CustomersView = {
     DB.customers.unshift(newCustomer);
     this.renderTable();
     this._updateSummary();
+    this._persist(); 
     Modal.close("customerModal");
     Toast.show(`Customer "${name}" added successfully!`, "success");
+    Notif.add('customer', `New customer "${name}" added`);
   },
 
   _updateSummary() {
@@ -302,7 +324,12 @@ const CustomersView = {
 
     this.renderTable();
     this._updateSummary();
+    this._persist();
     Modal.close("customerModal");
     Toast.show(`"${c.name}" updated successfully!`, "success");
+    Notif.add('customer', `Customer "${name}" updated`);
+  },
+  _persist() {
+  localStorage.setItem("db_customers", JSON.stringify(DB.customers));
   },
 };

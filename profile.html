@@ -1,214 +1,148 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Savoria — My Profile</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config={theme:{extend:{colors:{redPrimary:"#c0392b",redDeep:"#96281b",redPale:"#fdf0ee",cream:"#f5f0eb",textDark:"#1a1210",textMid:"#4a3830",borderSoft:"#e8ddd8",gold:"#b8963e",goldLight:"#d4af6a"},fontFamily:{playfair:["Playfair Display","serif"],jost:["Jost","sans-serif"],cormorant:["Cormorant Garamond","serif"]}}}};
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            red:    { DEFAULT:'#c0392b', deep:'#96281b', pale:'#fdf0ee' },
+            gold:   { DEFAULT:'#b8963e', light:'#d4af6a' },
+            cream:  '#f5f0eb',
+            ink:    { DEFAULT:'#1a1210', mid:'#4a3830' },
+            border: '#e8ddd8',
+          },
+          fontFamily: {
+            playfair:  ['Playfair Display','serif'],
+            jost:      ['Jost','sans-serif'],
+            cormorant: ['Cormorant Garamond','serif'],
+          },
+          keyframes: {
+            fadeUp:   { from:{opacity:'0',transform:'translateY(20px)'}, to:{opacity:'1',transform:'translateY(0)'} },
+            toastIn:  { '0%':{opacity:'0',transform:'translateX(-50%) translateY(16px)'},'15%':{opacity:'1',transform:'translateX(-50%) translateY(0)'},'85%':{opacity:'1'},'100%':{opacity:'0',transform:'translateX(-50%) translateY(16px)'} },
+            loyaltyW: { from:{width:'0%'}, to:{width:'48%'} },
+            shimmer:  { '0%,100%':{opacity:'0.5'},'50%':{opacity:'1'} },
+          },
+          animation: {
+            a1:'fadeUp .5s .05s ease both', a2:'fadeUp .5s .15s ease both',
+            a3:'fadeUp .5s .25s ease both', a4:'fadeUp .5s .35s ease both',
+            a5:'fadeUp .5s .45s ease both',
+            toast:'toastIn 2.4s ease forwards',
+            shimmer:'shimmer 2.5s ease infinite',
+          },
+        },
+      },
+    };
   </script>
   <style>
-    :root{--red:#c0392b;--gold:#b8963e;--cream:#f5f0eb;--dark:#1a1210;--mid:#4a3830;--border:#e8ddd8;}
-    .gold-line{background:linear-gradient(90deg,transparent,#b8963e,transparent);}
-    .scroll-hide{scrollbar-width:none;} .scroll-hide::-webkit-scrollbar{display:none;}
-    .book-btn{background:linear-gradient(135deg,#c0392b,#96281b);transition:opacity .2s,transform .15s;}
-    .book-btn:hover{opacity:.88;transform:translateY(-1px);}
-    .section-label{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--mid);}
-    .section-label::before{content:'';width:24px;height:1.5px;background:var(--gold);flex-shrink:0;}
-    .tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
-    .tag-gold{background:rgba(184,150,62,.12);color:#b8963e;border:1px solid rgba(184,150,62,.25);}
-    .tag-red{background:#fdf0ee;color:#c0392b;}
-    .footer-bg{background:linear-gradient(160deg,#1a1210 0%,#2a1c18 100%);}
-    .mobile-bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:900;box-shadow:0 -4px 20px rgba(0,0,0,.06);}
-    .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9a8880;cursor:pointer;transition:color .2s;padding:2px 0;}
-    .nav-item i{font-size:16px;}
-    .nav-item.active,.nav-item:hover{color:var(--red);}
-    .cart-fab{width:50px;height:50px;background:linear-gradient(135deg,#c0392b,#96281b);border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;margin:-16px auto 0;box-shadow:0 8px 24px rgba(192,57,43,.4);position:relative;transition:transform .2s;}
-    .cart-fab:hover{transform:scale(1.05);}
-    .badge{position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:#b8963e;color:#fff;font-size:9px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
-    @keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-    .a1{animation:fadeSlideUp .5s .05s ease both;}
-    .a2{animation:fadeSlideUp .5s .15s ease both;}
-    .a3{animation:fadeSlideUp .5s .25s ease both;}
-    .a4{animation:fadeSlideUp .5s .35s ease both;}
-    .a5{animation:fadeSlideUp .5s .45s ease both;}
-
-    /* profile hero */
-    .profile-hero{background:linear-gradient(145deg,#1a1210 0%,#2d1a14 50%,#1a1210 100%);position:relative;overflow:hidden;}
-
-    /* avatar */
-    .avatar-ring{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#c0392b,#96281b);display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:32px;font-weight:900;color:#fff;border:3px solid rgba(184,150,62,.4);box-shadow:0 0 0 6px rgba(184,150,62,.1),0 16px 40px rgba(0,0,0,.4);position:relative;flex-shrink:0;cursor:pointer;}
-    .avatar-edit{position:absolute;bottom:0;right:0;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#b8963e,#d4af6a);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;border:2px solid white;cursor:pointer;}
-
-    /* member badge */
-    .member-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(184,150,62,.15);border:1px solid rgba(184,150,62,.3);color:#b8963e;border-radius:999px;padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
-
-    /* stat card */
-    .stat-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;text-align:center;backdrop-filter:blur(8px);transition:background .2s;}
-    .stat-card:hover{background:rgba(255,255,255,.1);}
-
-    /* nav tabs */
-    .profile-tab{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--mid);transition:background .2s,color .2s;white-space:nowrap;}
-    .profile-tab:hover{background:var(--cream);}
-    .profile-tab.active{background:var(--redPale,#fdf0ee);color:var(--red);}
-    .profile-tab i{font-size:15px;width:18px;text-align:center;}
-
-    /* section card */
-    .section-card{background:#fff;border:1px solid var(--border);border-radius:20px;overflow:hidden;}
-    .section-card-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-
-    /* edit input */
-    .edit-input{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;font-family:"Jost",sans-serif;font-size:14px;color:var(--dark);outline:none;background:#fff;transition:border-color .2s;}
-    .edit-input:focus{border-color:var(--red);}
-    .edit-input:disabled{background:var(--cream);color:var(--mid);cursor:not-allowed;}
-
-    /* order card */
-    .order-card{border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:box-shadow .2s;}
-    .order-card:hover{box-shadow:0 6px 24px rgba(26,18,16,.07);}
-
-    /* wish card */
-    .wish-card{border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;}
-    .wish-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(26,18,16,.08);}
-
-    /* toggle */
-    .toggle-wrap{position:relative;width:44px;height:24px;flex-shrink:0;}
-    .toggle-wrap input{opacity:0;width:0;height:0;position:absolute;}
-    .toggle-slider{position:absolute;inset:0;background:#e8ddd8;border-radius:999px;cursor:pointer;transition:background .3s;}
-    .toggle-slider::before{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .3s;box-shadow:0 2px 6px rgba(0,0,0,.15);}
-    input:checked + .toggle-slider{background:var(--red);}
-    input:checked + .toggle-slider::before{transform:translateX(20px);}
-
-    /* addr card */
-    .addr-card{border:1.5px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:border-color .2s;}
-    .addr-card:hover{border-color:var(--red);}
-    .addr-card.selected{border-color:var(--red);background:var(--redPale,#fdf0ee);}
-
-    /* loyalty */
-    .loyalty-bar{height:6px;background:var(--border);border-radius:999px;overflow:hidden;}
-    .loyalty-fill{height:100%;background:linear-gradient(90deg,#c0392b,#b8963e);border-radius:999px;transition:width 1s ease;}
-
-    /* toast */
-    @keyframes toastIn{0%{opacity:0;transform:translateX(-50%) translateY(20px);}15%{opacity:1;transform:translateX(-50%) translateY(0);}85%{opacity:1;}100%{opacity:0;transform:translateX(-50%) translateY(20px);}}
-    .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1210;color:#fff;padding:10px 20px;border-radius:999px;font-size:12px;font-weight:600;z-index:9999;animation:toastIn 2.2s ease forwards;white-space:nowrap;pointer-events:none;}
-
-    /* ══════════════════════════════════════
-       INVOICE MODAL
-    ══════════════════════════════════════ */
-    #invoiceModal{
-      position:fixed;inset:0;z-index:2000;
-      display:flex;align-items:flex-end;justify-content:center;
-      pointer-events:none;
+    /* ── Toggle switch (pseudo-element, can't fully Tailwind) ── */
+    .toggle-wrap { position:relative; width:44px; height:24px; flex-shrink:0; }
+    .toggle-wrap input { opacity:0; width:0; height:0; position:absolute; }
+    .toggle-slider {
+      position:absolute; inset:0;
+      background:#e8ddd8; border-radius:999px;
+      cursor:pointer; transition:background .3s;
     }
-    #invoiceModal.open{ pointer-events:all; }
-
-    #invoiceBackdrop{
-      position:absolute;inset:0;
-      background:rgba(26,18,16,0.55);
-      backdrop-filter:blur(4px);
-      opacity:0;transition:opacity 0.35s ease;
+    .toggle-slider::before {
+      content:''; position:absolute;
+      width:18px; height:18px; border-radius:50%; background:#fff;
+      top:3px; left:3px;
+      transition:transform .3s;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
     }
-    #invoiceModal.open #invoiceBackdrop{ opacity:1; }
+    input:checked + .toggle-slider { background:#c0392b; }
+    input:checked + .toggle-slider::before { transform:translateX(20px); }
 
-    #invoiceSheet{
-      position:relative;z-index:1;
-      width:100%;max-width:680px;
-      background:#fff;
-      border-radius:28px 28px 0 0;
-      max-height:92vh;
-      display:flex;flex-direction:column;
-      transform:translateY(100%);
-      transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
-      box-shadow:0 -16px 60px rgba(26,18,16,0.2);
-      overflow:hidden;
-    }
-    @media(min-width:768px){
-      #invoiceModal{ align-items:center; }
-      #invoiceSheet{
-        border-radius:24px;
-        max-height:88vh;
-        margin:20px;
-      }
-    }
-    #invoiceModal.open #invoiceSheet{ transform:translateY(0); }
+    /* ── Loyalty bar animation ── */
+    .loyalty-fill { animation: loyaltyGrow 1.2s .6s ease both; }
+    @keyframes loyaltyGrow { from{width:0} to{width:48%} }
 
-    /* invoice print styles */
-    .inv-divider{ border:none;border-top:1px dashed var(--border);margin:0; }
-    .inv-row{ display:flex;align-items:center;justify-content:space-between;gap:12px; }
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:rgba(192,57,43,.25); border-radius:99px; }
+    .scroll-hide { scrollbar-width:none; }
+    .scroll-hide::-webkit-scrollbar { display:none; }
 
-    /* invoice header gradient */
-    .inv-header-grad{
-      background:linear-gradient(135deg,#1a1210 0%,#2d1a14 100%);
+    /* ── Input autofill ── */
+    input:-webkit-autofill, input:-webkit-autofill:focus {
+      -webkit-text-fill-color:#1a1210;
+      -webkit-box-shadow:0 0 0 1000px #f5f0eb inset;
     }
 
-    /* print button */
-    .print-btn{
-      background:rgba(184,150,62,0.12);
-      border:1px solid rgba(184,150,62,0.3);
-      color:#b8963e;
-      transition:all 0.2s;
-    }
-    .print-btn:hover{ background:rgba(184,150,62,0.2); }
-
-    /* invoice item row hover */
-    .inv-item-row:hover{ background:#fdf8f5; }
-
-    @media print{
-      body > *:not(#invoiceModal){ display:none!important; }
-      #invoiceModal{ position:static!important; pointer-events:all!important; display:block!important; }
-      #invoiceBackdrop{ display:none!important; }
-      #invoiceSheet{
-        box-shadow:none!important; border-radius:0!important;
-        max-height:none!important; transform:none!important;
-        width:100%!important; max-width:100%!important;
-      }
-      #invoicePrintBar{ display:none!important; }
-      #invDragHandle{ display:none!important; }
+    /* ── Print styles ── */
+    @media print {
+      body > *:not(#invoiceModal) { display:none !important; }
+      #invoiceModal { position:static !important; display:block !important; pointer-events:all !important; }
+      #invBackdrop, #invPrintBar, #invHandle { display:none !important; }
+      #invSheet { box-shadow:none !important; border-radius:0 !important; transform:none !important; max-height:none !important; width:100% !important; }
     }
   </style>
 </head>
-<body class="font-jost bg-cream text-textDark overflow-x-hidden">
+
+<body class="font-jost bg-cream text-ink overflow-x-hidden">
 
 <!-- ══════════════════════════════════════════
      INVOICE MODAL
 ══════════════════════════════════════════ -->
-<div id="invoiceModal" onclick="handleModalClick(event)">
-  <div id="invoiceBackdrop"></div>
-  <div id="invoiceSheet">
+<div id="invoiceModal"
+  class="fixed inset-0 z-[2000] flex items-end md:items-center justify-center pointer-events-none"
+  onclick="handleInvClick(event)">
 
-    <!-- drag handle (mobile) -->
-    <div id="invDragHandle" class="flex justify-center pt-3 pb-1 flex-shrink-0 md:hidden">
-      <div class="w-10 h-1 rounded-full bg-borderSoft"></div>
+  <!-- Backdrop -->
+  <div id="invBackdrop"
+    class="absolute inset-0 bg-ink/50 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+
+  <!-- Sheet -->
+  <div id="invSheet"
+    class="relative z-10 w-full md:max-w-[680px] md:mx-5 md:mb-5 bg-white rounded-t-[28px] md:rounded-[24px]
+           max-h-[92vh] md:max-h-[88vh] flex flex-col
+           translate-y-full transition-transform duration-400 ease-[cubic-bezier(.4,0,.2,1)]
+           shadow-[0_-16px_60px_rgba(26,18,16,.2)]">
+
+    <!-- Drag handle mobile -->
+    <div id="invHandle" class="flex justify-center pt-3 pb-1 flex-shrink-0 md:hidden">
+      <div class="w-10 h-1 rounded-full bg-border"></div>
     </div>
 
-    <!-- Scrollable invoice body -->
-    <div class="flex-1 overflow-y-auto" id="invoiceBody">
+    <!-- Scrollable body -->
+    <div class="flex-1 overflow-y-auto" id="invBody">
 
-      <!-- ── INVOICE HEADER ── -->
-      <div class="inv-header-grad px-6 pt-6 pb-8 relative overflow-hidden">
-        <!-- bg watermark -->
-        <div class="absolute right-4 top-0 text-[100px] opacity-5 font-playfair font-black text-white leading-none pointer-events-none select-none">★</div>
+      <!-- ── Invoice Header ── -->
+      <div class="relative overflow-hidden px-6 pt-6 pb-8"
+        style="background:linear-gradient(135deg,#1a1210 0%,#2d1a14 100%)">
+        <!-- Watermark -->
+        <div class="absolute right-4 top-0 font-playfair font-black text-white text-[110px] opacity-[.04] leading-none pointer-events-none select-none">★</div>
+        <!-- Top accent line -->
+        <div class="absolute top-0 left-8 right-8 h-px rounded-full"
+          style="background:linear-gradient(90deg,transparent,rgba(184,150,62,.5),transparent)"></div>
 
-        <div class="flex items-start justify-between gap-4 relative z-10">
+        <div class="relative z-10 flex items-start justify-between gap-4">
           <div>
-            <div class="flex items-center gap-2 mb-1">
-              <span class="font-playfair text-xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-              <span class="text-[9px] font-cormorant italic text-gold/60 tracking-widest hidden sm:block">Fine Dining</span>
+            <div class="flex items-center gap-2.5 mb-1">
+              <span class="font-playfair text-xl font-black text-white">
+                Sav<span class="italic font-light text-red">o</span>ria
+              </span>
+              <span class="font-cormorant italic text-[9px] text-gold/60 tracking-[.3em] hidden sm:block">Fine Dining</span>
             </div>
             <p class="text-white/30 text-[11px]">42 West 58th St, New York, NY 10019</p>
             <p class="text-white/30 text-[11px]">hello@savoria.com · +1 (555) 920-4200</p>
           </div>
           <div class="text-right flex-shrink-0">
             <p class="text-[9px] font-bold uppercase tracking-[.2em] text-white/30 mb-1">Invoice</p>
-            <p class="font-playfair text-lg font-black text-white" id="invOrderId">#SV-2024-0312</p>
-            <p class="text-white/40 text-[11px] mt-0.5" id="invDate">Mar 5, 2026</p>
+            <p id="invOrderId" class="font-playfair text-lg font-black text-white">#SV-2024-0312</p>
+            <p id="invDate" class="text-white/40 text-[11px] mt-0.5">Mar 5, 2026</p>
           </div>
         </div>
 
-        <!-- Status + type row -->
-        <div class="flex items-center gap-3 mt-5 pt-4 border-t border-white/10 relative z-10 flex-wrap">
+        <!-- Status row -->
+        <div class="relative z-10 flex items-center gap-3 mt-5 pt-4 border-t border-white/10 flex-wrap">
           <div class="flex items-center gap-2">
             <span id="invStatusDot" class="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
             <span id="invStatusText" class="text-[11px] font-bold text-white/80 uppercase tracking-[.12em]">Delivered</span>
@@ -220,158 +154,190 @@
         </div>
       </div>
 
-      <!-- ── CUSTOMER INFO ── -->
-      <div class="px-6 py-5 border-b border-borderSoft">
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          <div>
-            <p class="text-[9px] uppercase tracking-[.2em] font-bold text-textMid/40 mb-1">Billed To</p>
-            <p class="font-bold text-textDark text-sm" id="invCustomer">John Doe</p>
-            <p class="text-textMid/50 text-xs" id="invCustomerEmail">john@example.com</p>
+      <!-- ── Customer Info ── -->
+      <div class="px-6 py-5 border-b border-border grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div>
+          <p class="text-[9px] uppercase tracking-[.2em] font-bold text-ink-mid/40 mb-1">Billed To</p>
+          <p id="invCustomer" class="font-bold text-ink text-sm">John Doe</p>
+          <p id="invEmail" class="text-ink-mid/50 text-xs mt-0.5">john@example.com</p>
+        </div>
+        <div>
+          <p class="text-[9px] uppercase tracking-[.2em] font-bold text-ink-mid/40 mb-1">Payment</p>
+          <div class="flex items-center gap-1.5">
+            <i class="fa-regular fa-credit-card text-ink-mid/40 text-xs"></i>
+            <p id="invPayment" class="text-sm font-semibold text-ink">Visa •••• 4242</p>
           </div>
-          <div>
-            <p class="text-[9px] uppercase tracking-[.2em] font-bold text-textMid/40 mb-1">Payment</p>
-            <div class="flex items-center gap-1.5">
-              <i class="fa-regular fa-credit-card text-textMid/40 text-xs"></i>
-              <p class="text-sm font-semibold text-textDark" id="invPayment">Visa •••• 4242</p>
-            </div>
-            <p class="text-textMid/50 text-xs mt-0.5" id="invPayStatus">Paid</p>
-          </div>
-          <div class="col-span-2 sm:col-span-1">
-            <p class="text-[9px] uppercase tracking-[.2em] font-bold text-textMid/40 mb-1">Order Time</p>
-            <p class="text-sm font-semibold text-textDark" id="invTime">7:30 PM</p>
-            <p class="text-textMid/50 text-xs" id="invServedBy">Served by Chef Marco</p>
-          </div>
+          <p id="invPayStatus" class="text-ink-mid/50 text-xs mt-0.5">Paid ✓</p>
+        </div>
+        <div class="col-span-2 sm:col-span-1">
+          <p class="text-[9px] uppercase tracking-[.2em] font-bold text-ink-mid/40 mb-1">Order Time</p>
+          <p id="invTime" class="text-sm font-semibold text-ink">Mar 5 · 7:30 PM</p>
+          <p id="invServedBy" class="text-ink-mid/50 text-xs mt-0.5">Served by Chef Marco</p>
         </div>
       </div>
 
-      <!-- ── ORDER ITEMS ── -->
+      <!-- ── Order Items ── -->
       <div class="px-6 py-5">
-        <p class="text-[10px] uppercase tracking-[.25em] font-bold text-textMid/40 mb-4">Order Items</p>
-
-        <div id="invItemsList" class="space-y-0">
-          <!-- items rendered by JS -->
-        </div>
+        <p class="text-[10px] uppercase tracking-[.25em] font-bold text-ink-mid/40 mb-4">Order Items</p>
+        <div id="invItems" class="divide-y divide-border"></div>
       </div>
 
-      <hr class="inv-divider mx-6"/>
+      <!-- Dashed divider -->
+      <div class="mx-6 border-t border-dashed border-border"></div>
 
-      <!-- ── TOTALS ── -->
+      <!-- ── Totals ── -->
       <div class="px-6 py-5 space-y-2.5">
-        <div class="inv-row text-sm text-textMid/60">
-          <span>Subtotal</span>
-          <span id="invSubtotal">$78.10</span>
+        <div class="flex items-center justify-between text-sm text-ink-mid/60">
+          <span>Subtotal</span><span id="invSubtotal">$0.00</span>
         </div>
-        <div class="inv-row text-sm text-textMid/60">
-          <span>Tax (8%)</span>
-          <span id="invTax">$6.25</span>
+        <div class="flex items-center justify-between text-sm text-ink-mid/60">
+          <span>Tax (8%)</span><span id="invTax">$0.00</span>
         </div>
-        <div class="inv-row text-sm text-textMid/60" id="invDiscountRow">
+        <div id="invDiscountRow" class="flex items-center justify-between text-sm text-ink-mid/60 hidden">
           <span class="flex items-center gap-1.5">
             <i class="fa-solid fa-tag text-gold text-[10px]"></i>
-            Gold Member Discount (10%)
+            <span id="invDiscountLabel">Gold Member Discount (10%)</span>
           </span>
-          <span class="text-green-600" id="invDiscount">−$7.81</span>
+          <span id="invDiscount" class="text-green-600 font-semibold">−$0.00</span>
         </div>
-        <div class="inv-row text-sm text-textMid/60" id="invTipRow">
-          <span>Service Tip</span>
-          <span id="invTip">$5.00</span>
+        <div id="invTipRow" class="flex items-center justify-between text-sm text-ink-mid/60 hidden">
+          <span>Service Tip</span><span id="invTip">$0.00</span>
         </div>
-        <hr class="inv-divider"/>
-        <div class="inv-row">
-          <span class="font-playfair text-lg font-black text-textDark">Total Paid</span>
-          <span class="font-playfair text-2xl font-black text-redPrimary" id="invTotal">$82</span>
+        <div class="border-t border-dashed border-border pt-2.5 flex items-center justify-between">
+          <span class="font-playfair text-lg font-black text-ink">Total Paid</span>
+          <span id="invTotal" class="font-playfair text-2xl font-black text-red">$0.00</span>
         </div>
       </div>
 
-      <hr class="inv-divider mx-6"/>
+      <!-- Dashed divider -->
+      <div class="mx-6 border-t border-dashed border-border"></div>
 
-      <!-- ── LOYALTY EARNED ── -->
-      <div class="px-6 py-4 flex items-center gap-4 bg-cream/50">
+      <!-- ── Loyalty Earned ── -->
+      <div class="px-6 py-4 flex items-center gap-4 bg-cream/60">
         <div class="w-10 h-10 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center flex-shrink-0">
           <i class="fa-solid fa-crown text-gold text-sm"></i>
         </div>
         <div class="flex-1">
-          <p class="text-sm font-bold text-textDark" id="invPointsEarned">+164 Loyalty Points Earned</p>
-          <p class="text-xs text-textMid/50 font-cormorant italic">Added to your Gold membership account</p>
+          <p id="invPtsEarned" class="text-sm font-bold text-ink">+164 Loyalty Points Earned</p>
+          <p class="text-xs text-ink-mid/50 font-cormorant italic">Added to your Gold membership account</p>
         </div>
-        <p class="font-playfair font-black text-gold text-lg" id="invPointsTotal">2,400 pts</p>
+        <p id="invPtsTotal" class="font-playfair font-black text-gold text-lg">2,400 pts</p>
       </div>
 
-      <hr class="inv-divider mx-6"/>
+      <!-- Dashed divider -->
+      <div class="mx-6 border-t border-dashed border-border"></div>
 
-      <!-- ── THANK YOU NOTE ── -->
-      <div class="px-6 py-5 text-center">
-        <p class="font-playfair text-lg font-black text-textDark mb-1">Thank you for dining with us!</p>
-        <p class="font-cormorant italic text-textMid/50 text-sm">We hope to welcome you again soon at Savoria.</p>
+      <!-- ── Thank You ── -->
+      <div class="px-6 py-6 text-center">
+        <p class="font-playfair text-lg font-black text-ink mb-1">Thank you for dining with us!</p>
+        <p class="font-cormorant italic text-ink-mid/50 text-sm">We hope to welcome you again soon at Savoria.</p>
         <div class="flex items-center justify-center gap-1 mt-3">
-          <i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i>
-          <i class="fa-solid fa-star text-gold text-xs"></i><i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
+          <i class="fa-solid fa-star text-gold text-xs"></i>
           <i class="fa-solid fa-star text-gold text-xs"></i>
         </div>
-        <p class="text-[10px] text-textMid/30 mt-3 font-cormorant italic">savoria.com · @savorianyc</p>
+        <!-- Barcode-style decoration -->
+        <div class="flex items-center justify-center gap-0.5 mt-4 opacity-15">
+          <div class="w-0.5 h-8 bg-ink"></div><div class="w-px h-8 bg-ink"></div>
+          <div class="w-1 h-8 bg-ink"></div><div class="w-0.5 h-8 bg-ink"></div>
+          <div class="w-px h-8 bg-ink"></div><div class="w-1 h-8 bg-ink"></div>
+          <div class="w-0.5 h-8 bg-ink"></div><div class="w-px h-8 bg-ink"></div>
+          <div class="w-1.5 h-8 bg-ink"></div><div class="w-0.5 h-8 bg-ink"></div>
+          <div class="w-px h-8 bg-ink"></div><div class="w-1 h-8 bg-ink"></div>
+          <div class="w-0.5 h-8 bg-ink"></div><div class="w-1 h-8 bg-ink"></div>
+          <div class="w-px h-8 bg-ink"></div><div class="w-0.5 h-8 bg-ink"></div>
+          <div class="w-1 h-8 bg-ink"></div><div class="w-px h-8 bg-ink"></div>
+          <div class="w-0.5 h-8 bg-ink"></div>
+        </div>
+        <p class="text-[10px] text-ink-mid/25 mt-2 font-cormorant italic">savoria.com · @savorianyc</p>
       </div>
-
-      <!-- bottom padding for action bar -->
       <div class="h-4"></div>
     </div>
 
-    <!-- ── ACTION BAR ── -->
-    <div id="invoicePrintBar" class="flex-shrink-0 border-t border-borderSoft bg-white px-5 py-4 flex items-center gap-3"
-         style="padding-bottom:max(16px,env(safe-area-inset-bottom))">
+    <!-- ── Action Bar ── -->
+    <div id="invPrintBar"
+      class="flex-shrink-0 border-t border-border bg-white px-5 py-4 flex items-center gap-3"
+      style="padding-bottom:max(16px,env(safe-area-inset-bottom))">
       <button onclick="closeInvoice()"
-              class="flex-shrink-0 w-10 h-10 rounded-xl border border-borderSoft text-textMid/50 hover:border-redPrimary hover:text-redPrimary transition flex items-center justify-center text-sm">
+        class="w-10 h-10 rounded-xl border border-border text-ink-mid/50 hover:border-red hover:text-red transition flex items-center justify-center text-sm flex-shrink-0">
         <i class="fa-solid fa-xmark"></i>
       </button>
       <button onclick="window.print()"
-              class="print-btn flex-1 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[.15em] flex items-center justify-center gap-2">
+        class="flex-1 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[.15em] flex items-center justify-center gap-2
+               bg-gold/10 border border-gold/25 text-gold hover:bg-gold/18 transition">
         <i class="fa-solid fa-print text-[10px]"></i> Print Invoice
       </button>
-      <button onclick="downloadInvoice()"
-              class="book-btn flex-1 py-3 rounded-xl text-white text-[11px] font-bold uppercase tracking-[.15em] flex items-center justify-center gap-2">
-        <i class="fa-solid fa-download text-[10px]"></i> Download PDF
+      <button onclick="window.print()"
+        class="flex-1 py-3 rounded-xl text-white text-[11px] font-bold uppercase tracking-[.15em] flex items-center justify-center gap-2 transition hover:opacity-90 hover:-translate-y-px"
+        style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 16px rgba(192,57,43,.3)">
+        <i class="fa-solid fa-download text-[10px]"></i> Save PDF
       </button>
     </div>
+  </div>
+</div>
 
-  </div><!-- /invoiceSheet -->
-</div><!-- /invoiceModal -->
-
-
-<!-- ═══════════ NAVBAR ═══════════ -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-sm border-b border-borderSoft shadow-sm">
+<!-- ══════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════ -->
+<nav class="fixed top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-sm border-b border-border shadow-sm">
   <div class="h-[72px] flex items-center justify-between px-5 sm:px-8 lg:px-14">
     <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
-      <span class="font-playfair text-[24px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition">
-        Sav<span class="italic font-light text-redPrimary">o</span>ria
+      <span class="font-playfair text-[24px] font-black text-ink tracking-tight group-hover:text-red transition">
+        Sav<span class="italic font-light text-red">o</span>ria
       </span>
       <span class="font-cormorant italic text-[9px] text-gold/80 tracking-[.35em] uppercase hidden sm:block" style="margin-top:-1px">Fine Dining</span>
     </a>
-    <ul class="hidden md:flex items-center gap-7 text-[11.5px] font-medium uppercase tracking-[.15em] text-textMid">
-      <li><a href="index.html" class="hover:text-redPrimary transition">Home</a></li>
-      <li><a href="menu.html" class="hover:text-redPrimary transition">Menu</a></li>
-      <li><a href="about.html" class="hover:text-redPrimary transition">About</a></li>
-      <li><a href="index.html#reservation" class="hover:text-redPrimary transition">Reserve</a></li>
+    <ul class="hidden md:flex items-center gap-7 text-[11.5px] font-medium uppercase tracking-[.15em] text-ink-mid">
+      <li><a href="index.html" class="hover:text-red transition">Home</a></li>
+      <li><a href="menu.html" class="hover:text-red transition">Menu</a></li>
+      <li><a href="about.html" class="hover:text-red transition">About</a></li>
+      <li><a href="index.html#reservation" class="hover:text-red transition">Reserve</a></li>
     </ul>
     <div class="flex items-center gap-3">
-      <a href="index.html#reservation" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[.18em] uppercase">
+      <a href="index.html#reservation"
+        class="hidden md:inline-flex items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[.18em] uppercase transition hover:opacity-88 hover:-translate-y-px"
+        style="background:linear-gradient(135deg,#c0392b,#96281b)">
         <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
       </a>
-      <button onclick="location.href='index.html'" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
+      <button onclick="location.href='index.html'"
+        class="md:hidden w-9 h-9 flex items-center justify-center rounded-full hover:bg-red-pale text-ink-mid hover:text-red transition">
         <i class="fa-solid fa-house text-[15px]"></i>
       </button>
     </div>
   </div>
 </nav>
 
-<!-- ═══════════ PROFILE HERO ═══════════ -->
-<section class="profile-hero pt-[72px]">
+<!-- ══════════════════════════════════════════
+     PROFILE HERO
+══════════════════════════════════════════ -->
+<section class="pt-[72px] relative overflow-hidden" style="background:linear-gradient(145deg,#1a1210 0%,#2d1a14 50%,#1a1210 100%)">
+  <!-- Decorative blobs -->
+  <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
+    style="background:radial-gradient(circle,rgba(192,57,43,.08) 0%,transparent 70%);transform:translate(30%,-30%)"></div>
+  <div class="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none"
+    style="background:radial-gradient(circle,rgba(184,150,62,.06) 0%,transparent 70%);transform:translate(-30%,30%)"></div>
+
   <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 lg:py-14">
+
+    <!-- Top row: avatar + info + actions -->
     <div class="flex flex-col sm:flex-row items-start sm:items-end gap-6 lg:gap-10">
-      <div class="avatar-ring a1" onclick="triggerAvatarUpload()">
-        <span id="avatarLetter">J</span>
-        <div class="avatar-edit"><i class="fa-solid fa-camera text-[9px]"></i></div>
+
+      <!-- Avatar -->
+      <div class="animate-a1 relative w-[88px] h-[88px] rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
+        style="background:linear-gradient(135deg,#c0392b,#96281b);border:3px solid rgba(184,150,62,.4);box-shadow:0 0 0 6px rgba(184,150,62,.1),0 16px 40px rgba(0,0,0,.4)"
+        onclick="showToast('Avatar upload coming soon!')">
+        <span id="avatarLetter" class="font-playfair text-[32px] font-black text-white">J</span>
+        <div class="absolute bottom-0 right-0 w-[26px] h-[26px] rounded-full flex items-center justify-center text-white border-2 border-white text-[10px]"
+          style="background:linear-gradient(135deg,#b8963e,#d4af6a)">
+          <i class="fa-solid fa-camera"></i>
+        </div>
       </div>
-      <div class="flex-1 a2">
-        <div class="member-badge mb-3">
+
+      <!-- Info -->
+      <div class="flex-1 animate-a2">
+        <div class="inline-flex items-center gap-2 bg-gold/15 border border-gold/30 text-gold rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[.1em] mb-3">
           <i class="fa-solid fa-crown text-[9px]"></i>
           <span id="memberBadge">Gold Member</span>
         </div>
@@ -385,28 +351,51 @@
           <span><i class="fa-solid fa-star text-gold/50 mr-1.5"></i>4.9 Avg Rating</span>
         </div>
       </div>
-      <div class="flex gap-2.5 flex-shrink-0 a3">
-        <button onclick="logout()" class="flex items-center gap-2 border border-white/15 text-white/50 hover:border-white/30 hover:text-white/80 transition px-4 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-[.12em]">
+
+      <!-- Actions -->
+      <div class="flex gap-2.5 flex-shrink-0 animate-a3">
+        <button onclick="logout()"
+          class="flex items-center gap-2 border border-white/15 text-white/50 hover:border-white/30 hover:text-white/80 transition px-4 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-[.12em]">
           <i class="fa-solid fa-right-from-bracket text-[10px]"></i> Sign Out
         </button>
-        <button onclick="showTab('settings')" class="book-btn flex items-center gap-2 text-white px-4 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-[.12em]">
+        <button onclick="showTab('settings')"
+          class="flex items-center gap-2 text-white px-4 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-[.12em] transition hover:opacity-88 hover:-translate-y-px"
+          style="background:linear-gradient(135deg,#c0392b,#96281b)">
           <i class="fa-solid fa-pen-to-square text-[10px]"></i> Edit Profile
         </button>
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-8 a4">
-      <div class="stat-card"><p class="font-playfair text-2xl font-black text-white" id="statOrders">34</p><p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Orders</p></div>
-      <div class="stat-card"><p class="font-playfair text-2xl font-black text-white" id="statVisits">12</p><p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Visits</p></div>
-      <div class="stat-card"><p class="font-playfair text-2xl font-black text-white" id="statWishlist">8</p><p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Saved</p></div>
-      <div class="stat-card hidden sm:block"><p class="font-playfair text-2xl font-black text-gold">★ 4.9</p><p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Rating</p></div>
-      <div class="stat-card hidden lg:block"><p class="font-playfair text-2xl font-black text-white">$680</p><p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Spent</p></div>
-      <div class="stat-card hidden lg:block"><p class="font-playfair text-2xl font-black text-white">2,400</p><p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Points</p></div>
+    <!-- Stats grid -->
+    <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-8 animate-a4">
+      <div class="bg-white/[.06] border border-white/[.08] rounded-[16px] p-4 text-center backdrop-blur-sm hover:bg-white/10 transition">
+        <p id="statOrders" class="font-playfair text-2xl font-black text-white">34</p>
+        <p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Orders</p>
+      </div>
+      <div class="bg-white/[.06] border border-white/[.08] rounded-[16px] p-4 text-center backdrop-blur-sm hover:bg-white/10 transition">
+        <p id="statVisits" class="font-playfair text-2xl font-black text-white">12</p>
+        <p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Visits</p>
+      </div>
+      <div class="bg-white/[.06] border border-white/[.08] rounded-[16px] p-4 text-center backdrop-blur-sm hover:bg-white/10 transition">
+        <p id="statWishlist" class="font-playfair text-2xl font-black text-white">8</p>
+        <p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Saved</p>
+      </div>
+      <div class="bg-white/[.06] border border-white/[.08] rounded-[16px] p-4 text-center backdrop-blur-sm hover:bg-white/10 transition hidden sm:block">
+        <p class="font-playfair text-2xl font-black text-gold">★ 4.9</p>
+        <p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Rating</p>
+      </div>
+      <div class="bg-white/[.06] border border-white/[.08] rounded-[16px] p-4 text-center backdrop-blur-sm hover:bg-white/10 transition hidden lg:block">
+        <p class="font-playfair text-2xl font-black text-white">$680</p>
+        <p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Spent</p>
+      </div>
+      <div class="bg-white/[.06] border border-white/[.08] rounded-[16px] p-4 text-center backdrop-blur-sm hover:bg-white/10 transition hidden lg:block">
+        <p class="font-playfair text-2xl font-black text-white">2,400</p>
+        <p class="text-white/30 text-[10px] font-bold uppercase tracking-[.1em] mt-1">Points</p>
+      </div>
     </div>
 
     <!-- Loyalty bar -->
-    <div class="mt-6 bg-white/5 rounded-2xl p-5 border border-white/8 a5">
+    <div class="mt-6 animate-a5 bg-white/[.05] rounded-2xl p-5 border border-white/[.08]">
       <div class="flex items-center justify-between mb-3">
         <div>
           <p class="text-[10px] font-bold uppercase tracking-[.2em] text-white/30 mb-0.5">Loyalty Progress</p>
@@ -417,561 +406,822 @@
           <p class="text-white/30 text-[10px]">to next tier</p>
         </div>
       </div>
-      <div class="loyalty-bar"><div class="loyalty-fill" id="loyaltyFill" style="width:0%"></div></div>
-      <div class="flex justify-between mt-2 text-[9px] text-white/20 font-bold uppercase tracking-wider"><span>Gold</span><span>Platinum</span></div>
+      <div class="h-[6px] rounded-full overflow-hidden bg-white/[.08]">
+        <div class="loyalty-fill h-full rounded-full" style="background:linear-gradient(90deg,#c0392b,#b8963e)"></div>
+      </div>
+      <div class="flex justify-between mt-2 text-[9px] text-white/20 font-bold uppercase tracking-wider">
+        <span>Gold</span><span>Platinum</span>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<!-- ══════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════ -->
 <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-8 pb-28 md:pb-12">
   <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
 
-    <!-- Sidebar Tabs -->
+    <!-- ── SIDEBAR ── -->
     <aside class="lg:w-[240px] flex-shrink-0">
-      <div class="bg-white border border-borderSoft rounded-2xl overflow-hidden shadow-sm">
+      <div class="bg-white border border-border rounded-2xl overflow-hidden shadow-sm">
         <div class="flex lg:flex-col p-2 gap-1 overflow-x-auto scroll-hide">
-          <div class="profile-tab active" id="tab-orders" onclick="showTab('orders')"><i class="fa-solid fa-receipt"></i><span class="hidden sm:inline">Order History</span><span class="sm:hidden">Orders</span></div>
-          <div class="profile-tab" id="tab-wishlist" onclick="showTab('wishlist')"><i class="fa-regular fa-heart"></i><span class="hidden sm:inline">Wishlist</span><span class="sm:hidden">Saved</span></div>
-          <div class="profile-tab" id="tab-reservations" onclick="showTab('reservations')"><i class="fa-regular fa-calendar-check"></i><span class="hidden sm:inline">Reservations</span><span class="sm:hidden">Reserve</span></div>
-          <div class="profile-tab" id="tab-addresses" onclick="showTab('addresses')"><i class="fa-solid fa-location-dot"></i><span class="hidden sm:inline">Addresses</span><span class="sm:hidden">Address</span></div>
-          <div class="profile-tab" id="tab-loyalty" onclick="showTab('loyalty')"><i class="fa-solid fa-crown"></i><span class="hidden sm:inline">Loyalty</span><span class="sm:hidden">Points</span></div>
-          <div class="profile-tab" id="tab-settings" onclick="showTab('settings')"><i class="fa-solid fa-gear"></i><span class="hidden sm:inline">Settings</span><span class="sm:hidden">Settings</span></div>
+          <button id="tab-orders"       onclick="showTab('orders')"       class="prof-tab active">
+            <i class="fa-solid fa-receipt w-[18px] text-center text-[15px]"></i>
+            <span class="hidden sm:inline">Order History</span><span class="sm:hidden">Orders</span>
+          </button>
+          <button id="tab-wishlist"     onclick="showTab('wishlist')"     class="prof-tab">
+            <i class="fa-regular fa-heart w-[18px] text-center text-[15px]"></i>
+            <span class="hidden sm:inline">Wishlist</span><span class="sm:hidden">Saved</span>
+          </button>
+          <button id="tab-reservations" onclick="showTab('reservations')" class="prof-tab">
+            <i class="fa-regular fa-calendar-check w-[18px] text-center text-[15px]"></i>
+            <span class="hidden sm:inline">Reservations</span><span class="sm:hidden">Reserve</span>
+          </button>
+          <button id="tab-addresses"    onclick="showTab('addresses')"    class="prof-tab">
+            <i class="fa-solid fa-location-dot w-[18px] text-center text-[15px]"></i>
+            <span class="hidden sm:inline">Addresses</span><span class="sm:hidden">Address</span>
+          </button>
+          <button id="tab-loyalty"      onclick="showTab('loyalty')"      class="prof-tab">
+            <i class="fa-solid fa-crown w-[18px] text-center text-[15px]"></i>
+            <span class="hidden sm:inline">Loyalty</span><span class="sm:hidden">Points</span>
+          </button>
+          <button id="tab-settings"     onclick="showTab('settings')"     class="prof-tab">
+            <i class="fa-solid fa-gear w-[18px] text-center text-[15px]"></i>
+            <span class="hidden sm:inline">Settings</span><span class="sm:hidden">Settings</span>
+          </button>
         </div>
-        <div class="hidden lg:block border-t border-borderSoft p-2">
-          <button onclick="logout()" class="profile-tab w-full text-left hover:bg-redPale hover:text-redPrimary"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
+        <div class="hidden lg:block border-t border-border p-2">
+          <button onclick="logout()"
+            class="prof-tab w-full text-left hover:bg-red-pale hover:text-red">
+            <i class="fa-solid fa-right-from-bracket w-[18px] text-center text-[15px]"></i> Sign Out
+          </button>
         </div>
       </div>
     </aside>
 
-    <!-- Content Panels -->
+    <!-- ── PANELS ── -->
     <div class="flex-1 min-w-0">
 
-      <!-- ── ORDERS ── -->
+      <!-- ─── ORDERS ─── -->
       <div id="panel-orders" class="panel">
-        <div class="section-label mb-4">Order History</div>
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-6 h-[1.5px] bg-gold"></div>
+          <span class="text-[10px] font-bold uppercase tracking-[.25em] text-ink-mid">Order History</span>
+        </div>
         <div class="flex justify-between items-start mb-6">
-          <h2 class="font-playfair text-2xl font-black text-textDark">Recent Orders</h2>
+          <h2 class="font-playfair text-2xl font-black text-ink">Recent Orders</h2>
           <a href="order.html" class="text-[10px] font-bold text-gold uppercase tracking-widest hover:underline mt-1">Track Order</a>
         </div>
         <div class="space-y-4" id="orderList"></div>
-        <button class="mt-5 w-full border border-borderSoft rounded-xl py-3 text-[11px] font-bold uppercase tracking-[.15em] text-textMid/50 hover:border-redPrimary hover:text-redPrimary transition">
+        <button class="mt-5 w-full border border-border rounded-xl py-3 text-[11px] font-bold uppercase tracking-[.15em] text-ink-mid/50 hover:border-red hover:text-red transition">
           Load More Orders
         </button>
       </div>
 
-      <!-- ── WISHLIST ── -->
+      <!-- ─── WISHLIST ─── -->
       <div id="panel-wishlist" class="panel hidden">
-        <div class="section-label mb-4">Saved Dishes</div>
-        <h2 class="font-playfair text-2xl font-black text-textDark mb-6">My Wishlist</h2>
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-6 h-[1.5px] bg-gold"></div>
+          <span class="text-[10px] font-bold uppercase tracking-[.25em] text-ink-mid">Saved Dishes</span>
+        </div>
+        <h2 class="font-playfair text-2xl font-black text-ink mb-6">My Wishlist</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="wishlistGrid"></div>
       </div>
 
-      <!-- ── RESERVATIONS ── -->
+      <!-- ─── RESERVATIONS ─── -->
       <div id="panel-reservations" class="panel hidden">
-        <div class="section-label mb-4">Table Bookings</div>
-        <h2 class="font-playfair text-2xl font-black text-textDark mb-6">My Reservations</h2>
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-6 h-[1.5px] bg-gold"></div>
+          <span class="text-[10px] font-bold uppercase tracking-[.25em] text-ink-mid">Table Bookings</span>
+        </div>
+        <h2 class="font-playfair text-2xl font-black text-ink mb-6">My Reservations</h2>
         <div class="space-y-4" id="resvList"></div>
-        <div class="mt-6 bg-cream rounded-2xl p-6 border border-borderSoft flex items-center justify-between gap-4">
+        <div class="mt-6 bg-cream rounded-2xl p-6 border border-border flex items-center justify-between gap-4">
           <div>
-            <p class="font-playfair text-lg font-black text-textDark">Reserve a New Table</p>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-0.5">Mon–Sun · 12:00pm – 11:00pm</p>
+            <p class="font-playfair text-lg font-black text-ink">Reserve a New Table</p>
+            <p class="font-cormorant italic text-ink-mid/60 text-sm mt-0.5">Mon–Sun · 12:00pm – 11:00pm</p>
           </div>
-          <a href="index.html#reservation" class="book-btn text-white px-5 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[.15em] flex items-center gap-2 flex-shrink-0">
+          <a href="index.html#reservation"
+            class="flex-shrink-0 flex items-center gap-2 text-white px-5 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[.15em] transition hover:opacity-88"
+            style="background:linear-gradient(135deg,#c0392b,#96281b)">
             <i class="fa-regular fa-calendar-check"></i> Book Now
           </a>
         </div>
       </div>
 
-      <!-- ── ADDRESSES ── -->
+      <!-- ─── ADDRESSES ─── -->
       <div id="panel-addresses" class="panel hidden">
-        <div class="section-label mb-4">Delivery Locations</div>
-        <h2 class="font-playfair text-2xl font-black text-textDark mb-6">Saved Addresses</h2>
-        <div class="grid sm:grid-cols-2 gap-4 mb-5">
-          <div class="addr-card selected">
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-6 h-[1.5px] bg-gold"></div>
+          <span class="text-[10px] font-bold uppercase tracking-[.25em] text-ink-mid">Delivery Locations</span>
+        </div>
+        <h2 class="font-playfair text-2xl font-black text-ink mb-6">Saved Addresses</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+
+          <div class="border-[1.5px] border-red bg-red-pale/30 rounded-[14px] p-4 transition hover:border-red cursor-pointer">
             <div class="flex items-start justify-between mb-3">
-              <div class="w-9 h-9 rounded-xl bg-redPale flex items-center justify-center"><i class="fa-solid fa-house text-redPrimary text-sm"></i></div>
-              <span class="tag tag-gold">Default</span>
+              <div class="w-9 h-9 rounded-xl bg-red-pale flex items-center justify-center">
+                <i class="fa-solid fa-house text-red text-sm"></i>
+              </div>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-gold/12 text-gold border border-gold/25">Default</span>
             </div>
-            <p class="font-bold text-textDark text-sm">Home</p>
-            <p class="text-textMid/50 text-sm mt-1">42 West 58th St, Apt 12B<br/>New York, NY 10019</p>
+            <p class="font-bold text-ink text-sm">Home</p>
+            <p class="text-ink-mid/50 text-sm mt-1 leading-relaxed">42 West 58th St, Apt 12B<br/>New York, NY 10019</p>
             <div class="flex gap-2 mt-3">
-              <button class="text-[10px] font-bold text-redPrimary uppercase tracking-widest hover:underline">Edit</button>
-              <span class="text-textMid/30">·</span>
-              <button class="text-[10px] font-bold text-textMid/40 uppercase tracking-widest hover:underline">Delete</button>
+              <button class="text-[10px] font-bold text-red uppercase tracking-widest hover:underline">Edit</button>
+              <span class="text-ink-mid/30">·</span>
+              <button class="text-[10px] font-bold text-ink-mid/40 uppercase tracking-widest hover:underline">Delete</button>
             </div>
           </div>
-          <div class="addr-card">
+
+          <div class="border-[1.5px] border-border rounded-[14px] p-4 transition hover:border-red cursor-pointer">
             <div class="flex items-start justify-between mb-3">
-              <div class="w-9 h-9 rounded-xl bg-cream flex items-center justify-center"><i class="fa-solid fa-briefcase text-textMid text-sm"></i></div>
+              <div class="w-9 h-9 rounded-xl bg-cream flex items-center justify-center">
+                <i class="fa-solid fa-briefcase text-ink-mid text-sm"></i>
+              </div>
             </div>
-            <p class="font-bold text-textDark text-sm">Office</p>
-            <p class="text-textMid/50 text-sm mt-1">1 World Trade Center, Floor 55<br/>New York, NY 10007</p>
+            <p class="font-bold text-ink text-sm">Office</p>
+            <p class="text-ink-mid/50 text-sm mt-1 leading-relaxed">1 World Trade Center, Floor 55<br/>New York, NY 10007</p>
             <div class="flex gap-2 mt-3">
-              <button class="text-[10px] font-bold text-redPrimary uppercase tracking-widest hover:underline">Edit</button>
-              <span class="text-textMid/30">·</span>
-              <button class="text-[10px] font-bold text-textMid/40 uppercase tracking-widest hover:underline">Delete</button>
+              <button class="text-[10px] font-bold text-red uppercase tracking-widest hover:underline">Edit</button>
+              <span class="text-ink-mid/30">·</span>
+              <button class="text-[10px] font-bold text-ink-mid/40 uppercase tracking-widest hover:underline">Delete</button>
             </div>
           </div>
-          <div class="addr-card border-dashed flex flex-col items-center justify-center gap-3 text-center py-8 cursor-pointer hover:border-redPrimary" onclick="showToast('Address form coming soon!')">
-            <div class="w-10 h-10 rounded-xl bg-cream flex items-center justify-center"><i class="fa-solid fa-plus text-textMid/40"></i></div>
-            <p class="font-bold text-textMid/40 text-sm">Add New Address</p>
-          </div>
+
+          <button onclick="showToast('Address form coming soon!')"
+            class="border-[1.5px] border-dashed border-border rounded-[14px] p-4 flex flex-col items-center justify-center gap-3 text-center py-8 hover:border-red transition">
+            <div class="w-10 h-10 rounded-xl bg-cream flex items-center justify-center">
+              <i class="fa-solid fa-plus text-ink-mid/40"></i>
+            </div>
+            <p class="font-bold text-ink-mid/40 text-sm">Add New Address</p>
+          </button>
         </div>
       </div>
 
-      <!-- ── LOYALTY ── -->
+      <!-- ─── LOYALTY ─── -->
       <div id="panel-loyalty" class="panel hidden">
-        <div class="section-label mb-4">Rewards Program</div>
-        <h2 class="font-playfair text-2xl font-black text-textDark mb-6">Savoria Loyalty</h2>
-        <div class="bg-gradient-to-br from-[#1a1210] to-[#2d1a14] rounded-2xl p-6 mb-6 text-white relative overflow-hidden">
-          <div class="absolute top-0 right-0 text-[120px] opacity-5 leading-none font-playfair font-black" style="line-height:1;">★</div>
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-6 h-[1.5px] bg-gold"></div>
+          <span class="text-[10px] font-bold uppercase tracking-[.25em] text-ink-mid">Rewards Program</span>
+        </div>
+        <h2 class="font-playfair text-2xl font-black text-ink mb-6">Savoria Loyalty</h2>
+
+        <!-- Membership card -->
+        <div class="relative overflow-hidden rounded-2xl p-6 mb-6 text-white"
+          style="background:linear-gradient(135deg,#1a1210 0%,#2d1a14 100%)">
+          <div class="absolute top-0 right-4 font-playfair font-black text-[120px] text-white opacity-[.04] leading-none">★</div>
           <div class="relative z-10">
             <p class="text-[10px] font-bold uppercase tracking-[.2em] text-white/40 mb-1">Current Tier</p>
-            <div class="flex items-center gap-3 mb-4"><i class="fa-solid fa-crown text-gold text-2xl"></i><h3 class="font-playfair text-3xl font-black text-white">Gold Member</h3></div>
-            <p class="text-white/50 text-sm font-cormorant italic mb-5">Enjoy exclusive perks, early access to events, and priority reservations.</p>
-            <div class="flex gap-4">
-              <div><p class="font-playfair text-2xl font-black text-white">2,400</p><p class="text-white/30 text-[10px] uppercase tracking-[.1em]">Points Earned</p></div>
+            <div class="flex items-center gap-3 mb-4">
+              <i class="fa-solid fa-crown text-gold text-2xl"></i>
+              <h3 class="font-playfair text-3xl font-black text-white">Gold Member</h3>
+            </div>
+            <p class="text-white/50 text-sm font-cormorant italic mb-5">
+              Enjoy exclusive perks, early access to events, and priority reservations.
+            </p>
+            <div class="flex gap-6">
+              <div><p class="font-playfair text-2xl font-black text-white">2,400</p><p class="text-white/30 text-[10px] uppercase tracking-[.1em]">Points</p></div>
               <div class="w-px bg-white/10"></div>
-              <div><p class="font-playfair text-2xl font-black text-gold">$48</p><p class="text-white/30 text-[10px] uppercase tracking-[.1em]">Available Credit</p></div>
+              <div><p class="font-playfair text-2xl font-black text-gold">$48</p><p class="text-white/30 text-[10px] uppercase tracking-[.1em]">Credit</p></div>
               <div class="w-px bg-white/10"></div>
-              <div><p class="font-playfair text-2xl font-black text-white">34</p><p class="text-white/30 text-[10px] uppercase tracking-[.1em]">Orders Made</p></div>
+              <div><p class="font-playfair text-2xl font-black text-white">34</p><p class="text-white/30 text-[10px] uppercase tracking-[.1em]">Orders</p></div>
             </div>
           </div>
         </div>
-        <div class="section-card mb-6">
-          <div class="section-card-header"><p class="font-bold text-textDark">Membership Tiers</p></div>
-          <div class="divide-y divide-borderSoft">
-            <div class="flex items-center gap-4 p-4"><div class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center"><i class="fa-solid fa-medal text-gray-400"></i></div><div class="flex-1"><p class="font-bold text-textDark text-sm">Silver</p><p class="text-textMid/50 text-xs">0 – 999 points</p></div><span class="text-[10px] text-textMid/30 font-bold uppercase tracking-widest">Starter</span></div>
-            <div class="flex items-center gap-4 p-4 bg-redPale/30"><div class="w-9 h-9 rounded-full bg-gold/10 flex items-center justify-center"><i class="fa-solid fa-crown text-gold"></i></div><div class="flex-1"><p class="font-bold text-textDark text-sm">Gold <span class="tag tag-gold ml-2">Current</span></p><p class="text-textMid/50 text-xs">1,000 – 4,999 points</p></div><i class="fa-solid fa-check text-gold text-sm"></i></div>
-            <div class="flex items-center gap-4 p-4"><div class="w-9 h-9 rounded-full bg-cream flex items-center justify-center"><i class="fa-solid fa-gem text-textMid/30"></i></div><div class="flex-1"><p class="font-bold text-textDark/40 text-sm">Platinum</p><p class="text-textMid/30 text-xs">5,000+ points</p></div><span class="text-[10px] text-textMid/30 font-bold uppercase tracking-widest">2,600 pts away</span></div>
+
+        <!-- Tiers -->
+        <div class="bg-white border border-border rounded-2xl overflow-hidden mb-6">
+          <div class="px-6 py-4 border-b border-border"><p class="font-bold text-ink">Membership Tiers</p></div>
+          <div class="divide-y divide-border">
+            <div class="flex items-center gap-4 p-4">
+              <div class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
+                <i class="fa-solid fa-medal text-gray-400"></i>
+              </div>
+              <div class="flex-1"><p class="font-bold text-ink text-sm">Silver</p><p class="text-ink-mid/50 text-xs">0 – 999 points</p></div>
+              <span class="text-[10px] text-ink-mid/30 font-bold uppercase tracking-widest">Starter</span>
+            </div>
+            <div class="flex items-center gap-4 p-4 bg-red-pale/20">
+              <div class="w-9 h-9 rounded-full bg-gold/10 flex items-center justify-center">
+                <i class="fa-solid fa-crown text-gold"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-bold text-ink text-sm flex items-center gap-2">
+                  Gold
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-[.1em] bg-gold/12 text-gold border border-gold/25">Current</span>
+                </p>
+                <p class="text-ink-mid/50 text-xs">1,000 – 4,999 points</p>
+              </div>
+              <i class="fa-solid fa-check text-gold text-sm"></i>
+            </div>
+            <div class="flex items-center gap-4 p-4">
+              <div class="w-9 h-9 rounded-full bg-cream flex items-center justify-center">
+                <i class="fa-solid fa-gem text-ink-mid/30"></i>
+              </div>
+              <div class="flex-1"><p class="font-bold text-ink/40 text-sm">Platinum</p><p class="text-ink-mid/30 text-xs">5,000+ points</p></div>
+              <span class="text-[10px] text-ink-mid/30 font-bold uppercase tracking-widest">2,600 pts away</span>
+            </div>
           </div>
         </div>
+
+        <!-- Perks -->
         <div class="grid sm:grid-cols-3 gap-3">
-          <div class="border border-borderSoft rounded-xl p-4 text-center"><i class="fa-solid fa-percent text-gold text-xl mb-2"></i><p class="font-bold text-textDark text-sm">10% Off</p><p class="text-textMid/50 text-xs mt-0.5">Every order</p></div>
-          <div class="border border-borderSoft rounded-xl p-4 text-center"><i class="fa-solid fa-champagne-glasses text-gold text-xl mb-2"></i><p class="font-bold text-textDark text-sm">Priority Booking</p><p class="text-textMid/50 text-xs mt-0.5">Weekend tables</p></div>
-          <div class="border border-borderSoft rounded-xl p-4 text-center"><i class="fa-solid fa-gift text-gold text-xl mb-2"></i><p class="font-bold text-textDark text-sm">Birthday Gift</p><p class="text-textMid/50 text-xs mt-0.5">Free dessert</p></div>
+          <div class="border border-border rounded-xl p-4 text-center hover:border-gold/40 transition">
+            <i class="fa-solid fa-percent text-gold text-xl mb-2"></i>
+            <p class="font-bold text-ink text-sm">10% Off</p>
+            <p class="text-ink-mid/50 text-xs mt-0.5">Every order</p>
+          </div>
+          <div class="border border-border rounded-xl p-4 text-center hover:border-gold/40 transition">
+            <i class="fa-solid fa-champagne-glasses text-gold text-xl mb-2"></i>
+            <p class="font-bold text-ink text-sm">Priority Booking</p>
+            <p class="text-ink-mid/50 text-xs mt-0.5">Weekend tables</p>
+          </div>
+          <div class="border border-border rounded-xl p-4 text-center hover:border-gold/40 transition">
+            <i class="fa-solid fa-gift text-gold text-xl mb-2"></i>
+            <p class="font-bold text-ink text-sm">Birthday Gift</p>
+            <p class="text-ink-mid/50 text-xs mt-0.5">Free dessert</p>
+          </div>
         </div>
       </div>
 
-      <!-- ── SETTINGS ── -->
+      <!-- ─── SETTINGS ─── -->
       <div id="panel-settings" class="panel hidden">
-        <div class="section-label mb-4">Account Management</div>
-        <h2 class="font-playfair text-2xl font-black text-textDark mb-6">Profile Settings</h2>
-        <div class="section-card mb-5">
-          <div class="section-card-header">
-            <p class="font-bold text-textDark">Personal Information</p>
-            <button onclick="saveProfile()" class="book-btn text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-[.15em]">Save Changes</button>
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-6 h-[1.5px] bg-gold"></div>
+          <span class="text-[10px] font-bold uppercase tracking-[.25em] text-ink-mid">Account Management</span>
+        </div>
+        <h2 class="font-playfair text-2xl font-black text-ink mb-6">Profile Settings</h2>
+
+        <!-- Personal Info -->
+        <div class="bg-white border border-border rounded-2xl overflow-hidden mb-5">
+          <div class="px-6 py-4 border-b border-border flex items-center justify-between">
+            <p class="font-bold text-ink">Personal Information</p>
+            <button onclick="saveProfile()"
+              class="text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-[.15em] transition hover:opacity-88"
+              style="background:linear-gradient(135deg,#c0392b,#96281b)">Save Changes</button>
           </div>
           <div class="p-6 grid sm:grid-cols-2 gap-4">
-            <div><label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/40 mb-2">First Name</label><input type="text" id="settFirst" class="edit-input" placeholder="John"/></div>
-            <div><label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/40 mb-2">Last Name</label><input type="text" id="settLast" class="edit-input" placeholder="Doe"/></div>
-            <div><label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/40 mb-2">Email Address</label><input type="email" id="settEmail" class="edit-input" placeholder="your@email.com"/></div>
-            <div><label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/40 mb-2">Phone Number</label><input type="tel" id="settPhone" class="edit-input" placeholder="+1 (555) 000-0000"/></div>
-            <div><label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/40 mb-2">Date of Birth</label><input type="date" id="settDob" class="edit-input"/></div>
-            <div><label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/40 mb-2">Dietary Preference</label>
-              <select id="settDiet" class="edit-input" style="appearance:none;cursor:pointer;"><option>No preference</option><option>Vegetarian</option><option>Vegan</option><option>Gluten-free</option><option>Halal</option><option>Kosher</option></select>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-ink-mid/40 mb-2">First Name</label>
+              <input type="text" id="settFirst" placeholder="John"
+                class="w-full border-[1.5px] border-border rounded-xl px-3.5 py-3 font-jost text-sm text-ink outline-none bg-white focus:border-red transition"/>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-ink-mid/40 mb-2">Last Name</label>
+              <input type="text" id="settLast" placeholder="Doe"
+                class="w-full border-[1.5px] border-border rounded-xl px-3.5 py-3 font-jost text-sm text-ink outline-none bg-white focus:border-red transition"/>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-ink-mid/40 mb-2">Email Address</label>
+              <input type="email" id="settEmail" placeholder="your@email.com"
+                class="w-full border-[1.5px] border-border rounded-xl px-3.5 py-3 font-jost text-sm text-ink outline-none bg-white focus:border-red transition"/>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-ink-mid/40 mb-2">Phone Number</label>
+              <input type="tel" id="settPhone" placeholder="+1 (555) 000-0000"
+                class="w-full border-[1.5px] border-border rounded-xl px-3.5 py-3 font-jost text-sm text-ink outline-none bg-white focus:border-red transition"/>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-ink-mid/40 mb-2">Date of Birth</label>
+              <input type="date" id="settDob"
+                class="w-full border-[1.5px] border-border rounded-xl px-3.5 py-3 font-jost text-sm text-ink outline-none bg-white focus:border-red transition"/>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-ink-mid/40 mb-2">Dietary Preference</label>
+              <select id="settDiet"
+                class="w-full border-[1.5px] border-border rounded-xl px-3.5 py-3 font-jost text-sm text-ink outline-none bg-white focus:border-red transition cursor-pointer appearance-none">
+                <option>No preference</option>
+                <option>Vegetarian</option><option>Vegan</option>
+                <option>Gluten-free</option><option>Halal</option><option>Kosher</option>
+              </select>
             </div>
           </div>
         </div>
-        <div class="section-card mb-5">
-          <div class="section-card-header"><p class="font-bold text-textDark">Notifications</p></div>
-          <div class="divide-y divide-borderSoft">
-            <div class="flex items-center justify-between p-5"><div><p class="font-semibold text-textDark text-sm">Order Updates</p><p class="text-textMid/50 text-xs mt-0.5">Get notified when your order status changes</p></div><label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="flex items-center justify-between p-5"><div><p class="font-semibold text-textDark text-sm">Reservation Reminders</p><p class="text-textMid/50 text-xs mt-0.5">Reminder 2 hours before your table time</p></div><label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="flex items-center justify-between p-5"><div><p class="font-semibold text-textDark text-sm">Special Offers & Events</p><p class="text-textMid/50 text-xs mt-0.5">Exclusive deals, seasonal menus & new dishes</p></div><label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="flex items-center justify-between p-5"><div><p class="font-semibold text-textDark text-sm">Loyalty Points</p><p class="text-textMid/50 text-xs mt-0.5">Alerts when you earn or are close to a new tier</p></div><label class="toggle-wrap"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+
+        <!-- Notifications -->
+        <div class="bg-white border border-border rounded-2xl overflow-hidden mb-5">
+          <div class="px-6 py-4 border-b border-border"><p class="font-bold text-ink">Notifications</p></div>
+          <div class="divide-y divide-border">
+            <div class="flex items-center justify-between p-5">
+              <div><p class="font-semibold text-ink text-sm">Order Updates</p><p class="text-ink-mid/50 text-xs mt-0.5">Get notified when your order status changes</p></div>
+              <label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="flex items-center justify-between p-5">
+              <div><p class="font-semibold text-ink text-sm">Reservation Reminders</p><p class="text-ink-mid/50 text-xs mt-0.5">Reminder 2 hours before your table time</p></div>
+              <label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="flex items-center justify-between p-5">
+              <div><p class="font-semibold text-ink text-sm">Special Offers & Events</p><p class="text-ink-mid/50 text-xs mt-0.5">Exclusive deals, seasonal menus & new dishes</p></div>
+              <label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="flex items-center justify-between p-5">
+              <div><p class="font-semibold text-ink text-sm">Loyalty Points</p><p class="text-ink-mid/50 text-xs mt-0.5">Alerts when you earn or reach a new tier</p></div>
+              <label class="toggle-wrap"><input type="checkbox"><span class="toggle-slider"></span></label>
+            </div>
           </div>
         </div>
-        <div class="section-card mb-5">
-          <div class="section-card-header"><p class="font-bold text-textDark">Security</p></div>
+
+        <!-- Security -->
+        <div class="bg-white border border-border rounded-2xl overflow-hidden mb-5">
+          <div class="px-6 py-4 border-b border-border"><p class="font-bold text-ink">Security</p></div>
           <div class="p-6 space-y-4">
-            <button onclick="showToast('Password reset email sent!')" class="flex items-center gap-3 w-full text-left group"><div class="w-9 h-9 rounded-xl bg-cream flex items-center justify-center flex-shrink-0 group-hover:bg-redPale transition"><i class="fa-solid fa-lock text-textMid/50 text-sm group-hover:text-redPrimary transition"></i></div><div class="flex-1"><p class="font-semibold text-textDark text-sm group-hover:text-redPrimary transition">Change Password</p><p class="text-textMid/50 text-xs mt-0.5">We'll send a reset link to your email</p></div><i class="fa-solid fa-chevron-right text-textMid/30 text-xs group-hover:text-redPrimary transition"></i></button>
-            <button onclick="showToast('Two-factor authentication enabled!')" class="flex items-center gap-3 w-full text-left group"><div class="w-9 h-9 rounded-xl bg-cream flex items-center justify-center flex-shrink-0 group-hover:bg-redPale transition"><i class="fa-solid fa-shield-halved text-textMid/50 text-sm group-hover:text-redPrimary transition"></i></div><div class="flex-1"><p class="font-semibold text-textDark text-sm group-hover:text-redPrimary transition">Two-Factor Authentication</p><p class="text-textMid/50 text-xs mt-0.5">Add an extra layer of security</p></div><i class="fa-solid fa-chevron-right text-textMid/30 text-xs group-hover:text-redPrimary transition"></i></button>
+            <button onclick="showToast('Password reset email sent!')"
+              class="flex items-center gap-3 w-full text-left group">
+              <div class="w-9 h-9 rounded-xl bg-cream flex items-center justify-center flex-shrink-0 group-hover:bg-red-pale transition">
+                <i class="fa-solid fa-lock text-ink-mid/50 text-sm group-hover:text-red transition"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-ink text-sm group-hover:text-red transition">Change Password</p>
+                <p class="text-ink-mid/50 text-xs mt-0.5">We'll send a reset link to your email</p>
+              </div>
+              <i class="fa-solid fa-chevron-right text-ink-mid/30 text-xs group-hover:text-red transition"></i>
+            </button>
+            <button onclick="showToast('Two-factor authentication enabled!')"
+              class="flex items-center gap-3 w-full text-left group">
+              <div class="w-9 h-9 rounded-xl bg-cream flex items-center justify-center flex-shrink-0 group-hover:bg-red-pale transition">
+                <i class="fa-solid fa-shield-halved text-ink-mid/50 text-sm group-hover:text-red transition"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-ink text-sm group-hover:text-red transition">Two-Factor Authentication</p>
+                <p class="text-ink-mid/50 text-xs mt-0.5">Add an extra layer of security</p>
+              </div>
+              <i class="fa-solid fa-chevron-right text-ink-mid/30 text-xs group-hover:text-red transition"></i>
+            </button>
           </div>
         </div>
-        <div class="border border-red-200 rounded-2xl p-5">
-          <p class="font-bold text-textDark text-sm mb-3 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-redPrimary"></i> Danger Zone</p>
-          <p class="text-textMid/50 text-xs mb-4 leading-relaxed">Permanently delete your account and all associated data. This action cannot be undone.</p>
-          <button onclick="showToast('Please contact support to delete account.')" class="border border-red-200 text-redPrimary hover:bg-redPale transition px-5 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-[.15em]">Delete Account</button>
+
+        <!-- Danger Zone -->
+        <div class="border border-red/20 rounded-2xl p-5">
+          <p class="font-bold text-ink text-sm mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-red"></i> Danger Zone
+          </p>
+          <p class="text-ink-mid/50 text-xs mb-4 leading-relaxed">
+            Permanently delete your account and all associated data. This action cannot be undone.
+          </p>
+          <button onclick="showToast('Please contact support to delete account.')"
+            class="border border-red/20 text-red hover:bg-red-pale transition px-5 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-[.15em]">
+            Delete Account
+          </button>
         </div>
       </div>
 
-    </div>
+    </div><!-- /panels -->
   </div>
 </div>
 
-<!-- MOBILE BOTTOM NAV -->
-<nav class="mobile-bottom-nav md:hidden">
-  <div class="nav-item" onclick="location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></div>
-  <div class="nav-item" onclick="location.href='menu.html'"><i class="fa-solid fa-utensils"></i><span>Menu</span></div>
-  <div onclick="location.href='index.html#reservation'"><div class="cart-fab"><i class="fa-regular fa-calendar-check text-lg"></i></div></div>
-  <div class="nav-item" onclick="location.href='index.html#reservation'"><i class="fa-regular fa-calendar-check"></i><span>Reserve</span></div>
-  <div class="nav-item active"><i class="fa-regular fa-circle-user"></i><span>Profile</span></div>
+<!-- ══ MOBILE BOTTOM NAV ══ -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-border grid grid-cols-5 py-2 md:hidden z-[900] shadow-[0_-4px_20px_rgba(0,0,0,.06)]" style="padding-bottom:max(8px,env(safe-area-inset-bottom))">
+  <button onclick="location.href='index.html'"
+    class="flex flex-col items-center gap-1 text-[9px] font-semibold uppercase tracking-[.08em] text-ink-mid/50 hover:text-red transition py-1">
+    <i class="fa-solid fa-house text-base"></i><span>Home</span>
+  </button>
+  <button onclick="location.href='menu.html'"
+    class="flex flex-col items-center gap-1 text-[9px] font-semibold uppercase tracking-[.08em] text-ink-mid/50 hover:text-red transition py-1">
+    <i class="fa-solid fa-utensils text-base"></i><span>Menu</span>
+  </button>
+  <button onclick="location.href='index.html#reservation'" class="flex flex-col items-center">
+    <div class="w-[50px] h-[50px] rounded-[16px] flex items-center justify-center text-white -mt-4 shadow-[0_8px_24px_rgba(192,57,43,.4)] transition hover:scale-105 active:scale-95"
+      style="background:linear-gradient(135deg,#c0392b,#96281b)">
+      <i class="fa-regular fa-calendar-check text-lg"></i>
+    </div>
+  </button>
+  <button onclick="location.href='index.html#reservation'"
+    class="flex flex-col items-center gap-1 text-[9px] font-semibold uppercase tracking-[.08em] text-ink-mid/50 hover:text-red transition py-1">
+    <i class="fa-regular fa-calendar-check text-base"></i><span>Reserve</span>
+  </button>
+  <button class="flex flex-col items-center gap-1 text-[9px] font-semibold uppercase tracking-[.08em] text-red py-1">
+    <i class="fa-regular fa-circle-user text-base"></i><span>Profile</span>
+  </button>
 </nav>
 
+<!-- Tab styling via JS (can't use Tailwind @apply in CDN mode cleanly) -->
+<style>
+  .prof-tab {
+    display:flex; align-items:center; gap:8px;
+    padding:12px 16px; border-radius:12px;
+    font-size:13px; font-weight:600;
+    color:#4a3830; cursor:pointer;
+    transition:background .2s, color .2s;
+    white-space:nowrap; width:100%; text-align:left;
+    background:transparent; border:none;
+  }
+  .prof-tab:hover { background:#f5f0eb; }
+  .prof-tab.active { background:#fdf0ee; color:#c0392b; }
+</style>
+
 <script>
-// ── MOCK DATA ──
+/* ════════════════════════════════════
+   MOCK DATA
+════════════════════════════════════ */
 const ORDERS = [
   {
-    id:"#SV-2024-0312", date:"Mar 5, 2026", time:"7:30 PM", type:"Dine In", table:"Table 7",
-    status:"delivered", payment:"Visa •••• 4242",
+    id:'#SV-2024-0312', date:'Mar 5, 2026', time:'7:30 PM', type:'Dine In', table:'Table 7',
+    status:'delivered', payment:'Visa •••• 4242',
     items:[
-      {name:"Bistecca Fiorentina",qty:1,price:48,note:"Medium rare"},
-      {name:"Chianti Classico 2018",qty:1,price:18,note:""},
-      {name:"Panna Cotta",qty:2,price:14,note:"Extra berry coulis on one"},
+      {name:'Bistecca Fiorentina', qty:1, price:48, note:'Medium rare'},
+      {name:'Chianti Classico 2018', qty:1, price:18, note:''},
+      {name:'Panna Cotta', qty:2, price:14, note:'Extra berry coulis on one'},
     ],
     discount:10, tip:5,
   },
   {
-    id:"#SV-2024-0289", date:"Feb 18, 2026", time:"1:15 PM", type:"Takeout", table:"—",
-    status:"delivered", payment:"Mastercard •••• 5591",
+    id:'#SV-2024-0289', date:'Feb 18, 2026', time:'1:15 PM', type:'Takeout', table:'—',
+    status:'delivered', payment:'Mastercard •••• 5591',
     items:[
-      {name:"Tom Yum Goong",qty:1,price:24,note:"Extra spicy"},
-      {name:"Green Curry",qty:1,price:26,note:"Chicken, no eggplant"},
-      {name:"Mango Sticky Rice",qty:1,price:14,note:""},
+      {name:'Tom Yum Goong', qty:1, price:24, note:'Extra spicy'},
+      {name:'Green Curry', qty:1, price:26, note:'Chicken, no eggplant'},
+      {name:'Mango Sticky Rice', qty:1, price:14, note:''},
     ],
     discount:10, tip:0,
   },
   {
-    id:"#SV-2024-0264", date:"Feb 1, 2026", time:"8:00 PM", type:"Dine In", table:"Table 3",
-    status:"delivered", payment:"Amex •••• 3001",
+    id:'#SV-2024-0264', date:'Feb 1, 2026', time:'8:00 PM', type:'Dine In', table:'Table 3',
+    status:'delivered', payment:'Amex •••• 3001',
     items:[
-      {name:"Tagliatelle al Ragù",qty:2,price:28,note:""},
-      {name:"Duck Confit",qty:1,price:42,note:"Extra crispy skin"},
+      {name:'Tagliatelle al Ragù', qty:2, price:28, note:''},
+      {name:'Duck Confit', qty:1, price:42, note:'Extra crispy skin'},
     ],
     discount:10, tip:8,
   },
   {
-    id:"#SV-2024-0241", date:"Jan 20, 2026", time:"7:00 PM", type:"Dine In", table:"Table 12",
-    status:"cancelled", payment:"Visa •••• 4242",
+    id:'#SV-2024-0241', date:'Jan 20, 2026', time:'7:00 PM', type:'Dine In', table:'Table 12',
+    status:'cancelled', payment:'Visa •••• 4242',
     items:[
-      {name:"Omakase Sashimi",qty:1,price:55,note:""},
-      {name:"Wagyu Gyoza",qty:1,price:22,note:""},
-      {name:"Matcha Tiramisu",qty:2,price:16,note:""},
+      {name:'Omakase Sashimi', qty:1, price:55, note:''},
+      {name:'Wagyu Gyoza', qty:1, price:22, note:''},
+      {name:'Matcha Tiramisu', qty:2, price:16, note:''},
     ],
     discount:0, tip:0,
   },
-  {
-    id:"#SV-2024-0210", date:"Jan 4, 2026", time:"2:00 PM", type:"Dine In", table:"Table 5",
-    status:"delivered", payment:"Visa •••• 4242",
-    items:[
-      {name:"Crème Brûlée",qty:1,price:13,note:""},
-      {name:"Soupe à l'Oignon",qty:1,price:18,note:"Extra gruyère"},
-    ],
-    discount:10, tip:3,
-  },
 ];
 
-const WISHLIST_ITEMS = [
-  {name:"Duck Confit",cat:"French",price:42,rating:4.9,img:"./assests/thai.png"},
-  {name:"Wagyu Gyoza",cat:"Japanese",price:24,rating:4.8,img:"./assests/thai.png"},
-  {name:"Crème Brûlée",cat:"French",price:13,rating:4.8,img:"./assests/thai.png"},
-  {name:"Massaman Lamb",cat:"Thai",price:34,rating:4.9,img:"./assests/thai.png"},
-  {name:"Miso Black Cod",cat:"Japanese",price:46,rating:4.9,img:"./assests/thai.png"},
-  {name:"Chocolate Fondant",cat:"Desserts",price:16,rating:4.9,img:"./assests/thai.png"},
+const WISHLIST = [
+  {name:'Duck Confit',      cat:'French',   price:42, rating:4.9, img:'./assests/thai.png'},
+  {name:'Wagyu Gyoza',      cat:'Japanese', price:24, rating:4.8, img:'./assests/thai.png'},
+  {name:'Crème Brûlée',     cat:'French',   price:13, rating:4.8, img:'./assests/thai.png'},
+  {name:'Massaman Lamb',    cat:'Thai',     price:34, rating:4.9, img:'./assests/thai.png'},
+  {name:'Miso Black Cod',   cat:'Japanese', price:46, rating:4.9, img:'./assests/thai.png'},
+  {name:'Chocolate Fondant',cat:'Desserts', price:16, rating:4.9, img:'./assests/thai.png'},
 ];
 
 const RESERVATIONS = [
-  {date:"Mar 15, 2026",time:"7:30 PM",guests:2,table:"Table 7",status:"upcoming",occasion:"Anniversary"},
-  {date:"Feb 14, 2026",time:"8:00 PM",guests:4,table:"Private Dining",status:"completed",occasion:"Valentine's Dinner"},
-  {date:"Jan 1, 2026",time:"9:00 PM",guests:6,table:"Table 12",status:"completed",occasion:"New Year"},
+  {date:'Mar 15, 2026', time:'7:30 PM', guests:2, table:'Table 7',       status:'upcoming',   occasion:"Anniversary"},
+  {date:'Feb 14, 2026', time:'8:00 PM', guests:4, table:'Private Dining',status:'completed',  occasion:"Valentine's Dinner"},
+  {date:'Jan 1, 2026',  time:'9:00 PM', guests:6, table:'Table 12',      status:'completed',  occasion:"New Year"},
 ];
 
-// ── INIT ──
-document.addEventListener('DOMContentLoaded',()=>{
+/* ════════════════════════════════════
+   INIT
+════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
   loadUser();
   renderOrders();
   renderWishlist();
   renderReservations();
-  setTimeout(()=>{ document.getElementById('loyaltyFill').style.width='48%'; },600);
 });
 
-function loadUser(){
-  // demo fallback since localStorage may be empty
-  const raw = localStorage.getItem('sv_user');
-  const u = raw ? JSON.parse(raw) : {name:'John Doe',email:'john@example.com',member:'Gold Member',joined:'March 2026'};
-  document.getElementById('profileName').textContent  = u.name||'Guest';
-  document.getElementById('profileEmail').textContent = u.email||'';
-  document.getElementById('memberBadge').textContent  = u.member||'Member';
-  document.getElementById('avatarLetter').textContent = (u.name||'G').charAt(0).toUpperCase();
-  document.getElementById('profileJoined').textContent= u.joined||'';
-  const parts=(u.name||'').split(' ');
-  document.getElementById('settFirst').value=parts[0]||'John';
-  document.getElementById('settLast').value=parts.slice(1).join(' ')||'Doe';
-  document.getElementById('settEmail').value=u.email||'john@example.com';
-  document.getElementById('settPhone').value=u.phone||'';
+/* ════════════════════════════════════
+   USER
+════════════════════════════════════ */
+function loadUser() {
+  const u = JSON.parse(localStorage.getItem('sv_user') || 'null') ||
+    { name:'John Doe', email:'john@example.com', member:'Gold Member', joined:'March 2026' };
+
+  document.getElementById('profileName').textContent   = u.name   || 'Guest';
+  document.getElementById('profileEmail').textContent  = u.email  || '';
+  document.getElementById('memberBadge').textContent   = u.member || 'Member';
+  document.getElementById('avatarLetter').textContent  = (u.name||'G').charAt(0).toUpperCase();
+  document.getElementById('profileJoined').textContent = u.joined || '';
+
+  const [first,...rest] = (u.name||'John Doe').split(' ');
+  document.getElementById('settFirst').value = first || '';
+  document.getElementById('settLast').value  = rest.join(' ') || '';
+  document.getElementById('settEmail').value = u.email || '';
+  document.getElementById('settPhone').value = u.phone || '';
 }
 
-// ── TABS ──
-function showTab(id){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.add('hidden'));
-  document.querySelectorAll('[id^="tab-"]').forEach(t=>t.classList.remove('active'));
-  const panel=document.getElementById('panel-'+id);
-  const tab=document.getElementById('tab-'+id);
-  if(panel) panel.classList.remove('hidden');
-  if(tab)   tab.classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
+/* ════════════════════════════════════
+   TABS
+════════════════════════════════════ */
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+  document.querySelectorAll('[id^="tab-"]').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id)?.classList.remove('hidden');
+  document.getElementById('tab-' + id)?.classList.add('active');
+  window.scrollTo({ top: 0, behavior:'smooth' });
 }
 
-// ── RENDER ORDERS (with Invoice button) ──
-function renderOrders(){
-  const list=document.getElementById('orderList');
-  list.innerHTML=ORDERS.map((o,idx)=>{
-    const statusColor = o.status==='delivered' ? {bg:'#edf7ed',color:'#2e7d32'}
-                      : o.status==='cancelled' ? {bg:'#fdf0ee',color:'#c0392b'}
-                      : {bg:'#fff8e1',color:'#f57f17'};
-    const label = o.status.charAt(0).toUpperCase()+o.status.slice(1);
-
-    // item preview (first 2)
-    const preview = o.items.map(i=>i.name).join(' · ');
+/* ════════════════════════════════════
+   RENDER: ORDERS
+════════════════════════════════════ */
+function renderOrders() {
+  document.getElementById('orderList').innerHTML = ORDERS.map((o, idx) => {
+    const isDelivered = o.status === 'delivered';
+    const isCancelled = o.status === 'cancelled';
+    const statusCls   = isDelivered ? 'bg-green-50 text-green-700'
+                      : isCancelled ? 'bg-red-pale text-red'
+                      : 'bg-yellow-50 text-yellow-700';
+    const label = o.status.charAt(0).toUpperCase() + o.status.slice(1);
+    const rawTotal = o.items.reduce((s,i) => s + i.price * i.qty, 0);
 
     return `
-    <div class="order-card">
+    <div class="border border-border rounded-[16px] overflow-hidden hover:shadow-md transition-shadow">
       <div class="p-4 sm:p-5">
         <div class="flex items-start justify-between gap-3">
-
-          <!-- left: info -->
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-2 flex-wrap">
-              <p class="font-bold text-textDark text-sm">${o.id}</p>
-              <span class="tag" style="background:${statusColor.bg};color:${statusColor.color};">${label}</span>
-              <span class="text-[10px] text-textMid/40 font-semibold">${o.type}</span>
+              <p class="font-bold text-ink text-sm">${o.id}</p>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.1em] ${statusCls}">${label}</span>
+              <span class="text-[10px] text-ink-mid/40 font-semibold">${o.type}</span>
             </div>
-            <p class="text-textMid/50 text-xs mb-2">
+            <p class="text-ink-mid/50 text-xs mb-2">
               <i class="fa-regular fa-calendar mr-1.5"></i>${o.date}
-              <span class="mx-1.5 text-textMid/25">·</span>
+              <span class="mx-1.5 text-ink-mid/25">·</span>
               <i class="fa-regular fa-clock mr-1.5"></i>${o.time}
             </p>
-            <p class="font-cormorant italic text-textMid/60 text-sm truncate">${preview}</p>
+            <p class="font-cormorant italic text-ink-mid/60 text-sm truncate">
+              ${o.items.map(i => i.name).join(' · ')}
+            </p>
           </div>
-
-          <!-- right: price + actions -->
           <div class="flex flex-col items-end gap-2 flex-shrink-0">
-            <p class="font-playfair text-lg font-black text-textDark">$${o.items.reduce((s,i)=>s+i.price*i.qty,0)+o.tip}</p>
+            <p class="font-playfair text-lg font-black text-ink">$${rawTotal + o.tip}</p>
             <div class="flex gap-1.5">
-              <!-- Invoice Button -->
               <button onclick="openInvoice(${idx})"
-                class="flex items-center gap-1.5 border border-borderSoft text-textMid/60 hover:border-gold hover:text-gold transition px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-[.12em]">
+                class="flex items-center gap-1.5 border border-border text-ink-mid/60 hover:border-gold hover:text-gold transition px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-[.1em]">
                 <i class="fa-regular fa-file-lines text-[11px]"></i>
                 <span class="hidden sm:inline">Invoice</span>
               </button>
-              ${o.status!=='cancelled'?`
+              ${!isCancelled ? `
               <button onclick="showToast('Reorder placed!')"
-                class="book-btn flex items-center gap-1.5 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-[.12em]">
+                class="flex items-center gap-1.5 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-[.1em] transition hover:opacity-88"
+                style="background:linear-gradient(135deg,#c0392b,#96281b)">
                 <i class="fa-solid fa-rotate-right text-[10px]"></i>
                 <span class="hidden sm:inline">Reorder</span>
-              </button>`:''}
+              </button>` : ''}
             </div>
           </div>
         </div>
       </div>
-
-      <!-- rating strip (delivered only) -->
-      ${o.status==='delivered'?`
-      <div class="border-t border-borderSoft px-5 py-3 bg-cream/40 flex items-center justify-between gap-4">
-        <p class="text-xs text-textMid/40 font-cormorant italic">Enjoyed your meal?</p>
-        <div class="flex gap-1">
-          ${[1,2,3,4,5].map(i=>`<button onclick="this.style.color='#b8963e';this.parentElement.querySelectorAll('button').forEach((b,j)=>{b.style.color=j<${i}?'#b8963e':''})" class="text-borderSoft text-sm hover:text-gold transition"><i class="fa-solid fa-star"></i></button>`).join('')}
+      ${isDelivered ? `
+      <div class="border-t border-border px-5 py-3 bg-cream/50 flex items-center justify-between gap-4">
+        <p class="text-xs text-ink-mid/40 font-cormorant italic">Enjoyed your meal?</p>
+        <div class="flex gap-0.5" id="stars-${idx}">
+          ${[1,2,3,4,5].map(i => `
+            <button onclick="rateStar(${idx},${i})" class="star-btn text-border text-sm hover:text-gold transition p-0.5">
+              <i class="fa-solid fa-star"></i>
+            </button>`).join('')}
         </div>
-      </div>`:''}
+      </div>` : ''}
     </div>`;
   }).join('');
 }
 
-// ── INVOICE MODAL ──
-function openInvoice(idx){
+function rateStar(ordIdx, rating) {
+  const stars = document.querySelectorAll(`#stars-${ordIdx} .star-btn`);
+  stars.forEach((btn, i) => {
+    btn.style.color = i < rating ? '#b8963e' : '';
+    btn.className = btn.className.replace('text-border','').replace('text-gold','') + (i < rating ? ' text-gold' : ' text-border');
+  });
+  showToast('Thanks for your rating! ⭐');
+}
+
+/* ════════════════════════════════════
+   INVOICE MODAL
+════════════════════════════════════ */
+function openInvoice(idx) {
   const o = ORDERS[idx];
-  const raw=localStorage.getItem('sv_user');
-  const u=raw?JSON.parse(raw):{name:'John Doe',email:'john@example.com'};
+  const u = JSON.parse(localStorage.getItem('sv_user') || '{}');
 
-  // Calc
-  const subtotal = o.items.reduce((s,i)=>s+i.price*i.qty, 0);
-  const tax = +(subtotal * 0.08).toFixed(2);
+  const subtotal    = o.items.reduce((s,i) => s + i.price * i.qty, 0);
+  const tax         = +(subtotal * 0.08).toFixed(2);
   const discountAmt = o.discount > 0 ? +(subtotal * o.discount / 100).toFixed(2) : 0;
-  const total = subtotal + tax - discountAmt + o.tip;
-  const pointsEarned = Math.round(total * 2);
+  const total       = +(subtotal + tax - discountAmt + o.tip).toFixed(2);
+  const ptsEarned   = Math.round(total * 2);
 
-  // Status styling
-  const dotColor = o.status==='delivered'?'#4ade80':o.status==='cancelled'?'#f87171':'#fbbf24';
+  const dotColor = o.status === 'delivered' ? '#4ade80'
+                 : o.status === 'cancelled' ? '#f87171' : '#fbbf24';
 
-  // Fill header
-  document.getElementById('invOrderId').textContent  = o.id;
-  document.getElementById('invDate').textContent     = o.date;
+  // Header
+  document.getElementById('invOrderId').textContent    = o.id;
+  document.getElementById('invDate').textContent       = o.date;
   document.getElementById('invStatusDot').style.background = dotColor;
-  document.getElementById('invStatusText').textContent = o.status.charAt(0).toUpperCase()+o.status.slice(1);
-  document.getElementById('invType').textContent     = o.type;
-  document.getElementById('invTable').textContent    = o.table !== '—' ? o.table : 'Takeout';
+  document.getElementById('invStatusText').textContent = o.status.charAt(0).toUpperCase() + o.status.slice(1);
+  document.getElementById('invType').textContent       = o.type;
+  document.getElementById('invTable').textContent      = o.table !== '—' ? o.table : 'Takeout';
 
   // Customer
-  document.getElementById('invCustomer').textContent      = u.name||'John Doe';
-  document.getElementById('invCustomerEmail').textContent = u.email||'john@example.com';
-  document.getElementById('invPayment').textContent       = o.payment;
-  document.getElementById('invPayStatus').textContent     = o.status==='cancelled' ? 'Refunded' : 'Paid ✓';
-  document.getElementById('invTime').textContent          = o.date + ' · ' + o.time;
-  document.getElementById('invServedBy').textContent      = o.type==='Takeout' ? 'Takeout Order' : 'Served by Chef Marco';
+  document.getElementById('invCustomer').textContent  = u.name  || 'John Doe';
+  document.getElementById('invEmail').textContent     = u.email || 'john@example.com';
+  document.getElementById('invPayment').textContent   = o.payment;
+  document.getElementById('invPayStatus').textContent = o.status === 'cancelled' ? 'Refunded' : 'Paid ✓';
+  document.getElementById('invTime').textContent      = o.date + ' · ' + o.time;
+  document.getElementById('invServedBy').textContent  = o.type === 'Takeout' ? 'Takeout Order' : 'Served by Chef Marco';
 
-  // Items list
-  document.getElementById('invItemsList').innerHTML = o.items.map(item=>`
-    <div class="inv-item-row flex items-start justify-between gap-4 py-3.5 border-b border-borderSoft last:border-0 px-1 rounded-lg transition-colors">
+  // Items
+  document.getElementById('invItems').innerHTML = o.items.map(item => `
+    <div class="flex items-start justify-between gap-4 py-3.5 border-b border-border last:border-0 hover:bg-cream/50 rounded-lg px-1 transition">
       <div class="flex items-start gap-3 flex-1 min-w-0">
         <div class="w-8 h-8 rounded-lg bg-cream flex items-center justify-center flex-shrink-0 mt-0.5">
-          <i class="fa-solid fa-utensils text-textMid/30 text-xs"></i>
+          <i class="fa-solid fa-utensils text-ink-mid/30 text-xs"></i>
         </div>
         <div class="flex-1 min-w-0">
-          <p class="font-bold text-textDark text-sm leading-tight">${item.name}</p>
-          ${item.note?`<p class="text-[11px] font-cormorant italic text-textMid/50 mt-0.5">Note: ${item.note}</p>`:''}
-          <p class="text-[11px] text-textMid/40 mt-0.5">$${item.price} × ${item.qty}</p>
+          <p class="font-bold text-ink text-sm leading-tight">${item.name}</p>
+          ${item.note ? `<p class="text-[11px] font-cormorant italic text-ink-mid/50 mt-0.5">Note: ${item.note}</p>` : ''}
+          <p class="text-[11px] text-ink-mid/40 mt-0.5">$${item.price} × ${item.qty}</p>
         </div>
       </div>
-      <p class="font-playfair font-black text-textDark text-sm flex-shrink-0 pt-0.5">$${item.price*item.qty}</p>
+      <p class="font-playfair font-black text-ink text-sm flex-shrink-0 pt-0.5">$${item.price * item.qty}</p>
     </div>
   `).join('');
 
   // Totals
-  document.getElementById('invSubtotal').textContent = '$'+subtotal.toFixed(2);
-  document.getElementById('invTax').textContent      = '$'+tax.toFixed(2);
+  document.getElementById('invSubtotal').textContent = '$' + subtotal.toFixed(2);
+  document.getElementById('invTax').textContent      = '$' + tax.toFixed(2);
 
   const discRow = document.getElementById('invDiscountRow');
-  if(discountAmt > 0){
-    discRow.style.display='flex';
-    document.getElementById('invDiscount').textContent = '−$'+discountAmt.toFixed(2);
-    discRow.querySelector('span').lastChild.textContent = ` ${u.member||'Gold'} Discount (${o.discount}%)`;
+  if (discountAmt > 0) {
+    discRow.classList.remove('hidden');
+    document.getElementById('invDiscount').textContent      = '−$' + discountAmt.toFixed(2);
+    document.getElementById('invDiscountLabel').textContent = `${u.member || 'Gold'} Discount (${o.discount}%)`;
   } else {
-    discRow.style.display='none';
+    discRow.classList.add('hidden');
   }
 
   const tipRow = document.getElementById('invTipRow');
-  if(o.tip > 0){
-    tipRow.style.display='flex';
-    document.getElementById('invTip').textContent = '$'+o.tip.toFixed(2);
+  if (o.tip > 0) {
+    tipRow.classList.remove('hidden');
+    document.getElementById('invTip').textContent = '$' + o.tip.toFixed(2);
   } else {
-    tipRow.style.display='none';
+    tipRow.classList.add('hidden');
   }
 
-  document.getElementById('invTotal').textContent      = '$'+total.toFixed(2);
-  document.getElementById('invPointsEarned').textContent = '+'+pointsEarned+' Loyalty Points Earned';
-  document.getElementById('invPointsTotal').textContent  = '2,400 pts';
+  document.getElementById('invTotal').textContent    = '$' + total.toFixed(2);
+  document.getElementById('invPtsEarned').textContent = '+' + ptsEarned + ' Loyalty Points Earned';
 
-  // Open
-  const modal = document.getElementById('invoiceModal');
-  modal.classList.add('open');
-  document.body.style.overflow='hidden';
+  // Open modal
+  const modal   = document.getElementById('invoiceModal');
+  const sheet   = document.getElementById('invSheet');
+  const backdrop= document.getElementById('invBackdrop');
+  modal.classList.remove('pointer-events-none');
+  modal.classList.add('pointer-events-all');
+  backdrop.style.opacity = '1';
+  sheet.style.transform  = 'translateY(0)';
+  document.body.style.overflow = 'hidden';
 }
 
-function closeInvoice(){
-  document.getElementById('invoiceModal').classList.remove('open');
-  document.body.style.overflow='';
+function closeInvoice() {
+  const modal   = document.getElementById('invoiceModal');
+  const sheet   = document.getElementById('invSheet');
+  const backdrop= document.getElementById('invBackdrop');
+  backdrop.style.opacity = '0';
+  sheet.style.transform  = 'translateY(100%)';
+  setTimeout(() => {
+    modal.classList.add('pointer-events-none');
+    modal.classList.remove('pointer-events-all');
+    document.body.style.overflow = '';
+  }, 400);
 }
 
-function handleModalClick(e){
-  if(e.target===document.getElementById('invoiceBackdrop')) closeInvoice();
+function handleInvClick(e) {
+  if (e.target === document.getElementById('invBackdrop')) closeInvoice();
 }
 
-// Download PDF (opens print dialog as PDF)
-function downloadInvoice(){
-  window.print();
-}
-
-// ── WISHLIST ──
-function renderWishlist(){
-  const grid=document.getElementById('wishlistGrid');
-  grid.innerHTML=WISHLIST_ITEMS.map(d=>`
-    <div class="wish-card" onclick="location.href='dish.html'">
+/* ════════════════════════════════════
+   RENDER: WISHLIST
+════════════════════════════════════ */
+function renderWishlist() {
+  document.getElementById('wishlistGrid').innerHTML = WISHLIST.map(d => `
+    <div class="border border-border rounded-[16px] overflow-hidden cursor-pointer transition-transform duration-200 hover:-translate-y-[3px] hover:shadow-lg" onclick="location.href='dish.html'">
       <div class="relative overflow-hidden h-[140px]">
         <img src="${d.img}" alt="${d.name}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"/>
-        <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center text-[12px] text-red-500 hover:bg-white transition" onclick="event.stopPropagation();removeWish(this)">
+        <button onclick="event.stopPropagation();this.closest('.border').remove();showToast('Removed from wishlist')"
+          class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center text-[12px] text-red hover:bg-white transition">
           <i class="fa-solid fa-heart"></i>
         </button>
-        <div class="absolute bottom-2 left-2"><span class="tag tag-gold text-[8px]">${d.cat}</span></div>
+        <div class="absolute bottom-2 left-2">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-[.1em] bg-gold/85 text-white border border-gold/50">${d.cat}</span>
+        </div>
       </div>
       <div class="p-3.5">
-        <div class="flex items-start justify-between gap-2">
-          <p class="font-playfair text-[13px] font-bold text-textDark leading-tight">${d.name}</p>
-          <div class="flex items-center gap-1 flex-shrink-0 bg-cream border border-borderSoft rounded-full px-2 py-0.5">
+        <div class="flex items-start justify-between gap-2 mb-2">
+          <p class="font-playfair text-[13px] font-bold text-ink leading-tight">${d.name}</p>
+          <div class="flex items-center gap-1 flex-shrink-0 bg-cream border border-border rounded-full px-2 py-0.5">
             <i class="fa-solid fa-star text-gold text-[8px]"></i>
             <span class="text-[10px] font-bold text-gold">${d.rating}</span>
           </div>
         </div>
-        <div class="flex items-center justify-between mt-2.5">
-          <p class="font-playfair text-base font-black text-textDark">$${d.price}</p>
-          <button onclick="event.stopPropagation();showToast('${d.name} added to cart!')" class="book-btn text-white text-[9px] font-bold uppercase tracking-[.15em] px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+        <div class="flex items-center justify-between">
+          <p class="font-playfair text-base font-black text-ink">$${d.price}</p>
+          <button onclick="event.stopPropagation();showToast('${d.name} added to cart!')"
+            class="text-white text-[9px] font-bold uppercase tracking-[.15em] px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition hover:opacity-88"
+            style="background:linear-gradient(135deg,#c0392b,#96281b)">
             <i class="fa-solid fa-plus text-[8px]"></i> Add
           </button>
         </div>
       </div>
     </div>
   `).join('');
-  document.getElementById('statWishlist').textContent=WISHLIST_ITEMS.length;
+  document.getElementById('statWishlist').textContent = WISHLIST.length;
 }
 
-function removeWish(btn){
-  const card=btn.closest('.wish-card');
-  card.style.transition='all .3s'; card.style.opacity='0'; card.style.transform='scale(.9)';
-  setTimeout(()=>card.remove(),300);
-  showToast('Removed from wishlist');
-}
-
-// ── RESERVATIONS ──
-function renderReservations(){
-  const list=document.getElementById('resvList');
-  list.innerHTML=RESERVATIONS.map(r=>`
-    <div class="order-card">
-      <div class="p-5 flex items-start justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-2xl ${r.status==='upcoming'?'book-btn':'bg-cream border border-borderSoft'} flex flex-col items-center justify-center flex-shrink-0">
-            <span class="text-[9px] font-bold ${r.status==='upcoming'?'text-white':'text-textMid/50'} uppercase leading-none">${r.date.split(' ')[0]}</span>
-            <span class="font-playfair text-lg font-black ${r.status==='upcoming'?'text-white':'text-textDark'} leading-none">${r.date.split(' ')[1].replace(',','')}</span>
-          </div>
-          <div>
-            <div class="flex items-center gap-2 mb-1 flex-wrap">
-              <p class="font-bold text-textDark text-sm">${r.occasion}</p>
-              <span class="tag ${r.status==='upcoming'?'tag-gold':''}" style="${r.status!=='upcoming'?'background:#edf7ed;color:#2e7d32':''}">
-                ${r.status==='upcoming'?'Upcoming':'Completed'}
-              </span>
-            </div>
-            <p class="text-textMid/50 text-xs"><i class="fa-regular fa-clock mr-1.5"></i>${r.time} · ${r.guests} guests · ${r.table}</p>
-          </div>
+/* ════════════════════════════════════
+   RENDER: RESERVATIONS
+════════════════════════════════════ */
+function renderReservations() {
+  document.getElementById('resvList').innerHTML = RESERVATIONS.map(r => {
+    const isUpcoming = r.status === 'upcoming';
+    return `
+    <div class="border border-border rounded-[16px] p-5 flex items-start justify-between gap-4 hover:shadow-md transition-shadow">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl flex flex-col items-center justify-center flex-shrink-0 ${isUpcoming
+          ? '' : 'bg-cream border border-border'}"
+          ${isUpcoming ? 'style="background:linear-gradient(135deg,#c0392b,#96281b)"' : ''}>
+          <span class="text-[9px] font-bold ${isUpcoming ? 'text-white' : 'text-ink-mid/50'} uppercase leading-none">
+            ${r.date.split(' ')[0]}
+          </span>
+          <span class="font-playfair text-lg font-black ${isUpcoming ? 'text-white' : 'text-ink'} leading-none">
+            ${r.date.split(' ')[1].replace(',','')}
+          </span>
         </div>
-        <div class="flex-shrink-0 flex flex-col gap-1.5 text-right">
-          ${r.status==='upcoming'
-            ?`<button onclick="showToast('Reservation cancelled.')" class="text-[10px] font-bold text-redPrimary uppercase tracking-widest hover:underline">Cancel</button>
-               <button onclick="showToast('Modification requested!')" class="text-[10px] font-bold text-textMid/40 uppercase tracking-widest hover:underline">Modify</button>`
-            :`<button onclick="showToast('Booking again!')" class="text-[10px] font-bold text-gold uppercase tracking-widest hover:underline">Book Again</button>`}
+        <div>
+          <div class="flex items-center gap-2 mb-1 flex-wrap">
+            <p class="font-bold text-ink text-sm">${r.occasion}</p>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.1em]
+              ${isUpcoming ? 'bg-gold/12 text-gold border border-gold/25' : 'bg-green-50 text-green-700'}">
+              ${isUpcoming ? 'Upcoming' : 'Completed'}
+            </span>
+          </div>
+          <p class="text-ink-mid/50 text-xs">
+            <i class="fa-regular fa-clock mr-1.5"></i>${r.time} · ${r.guests} guests · ${r.table}
+          </p>
         </div>
       </div>
-    </div>
-  `).join('');
+      <div class="flex-shrink-0 flex flex-col gap-1.5 text-right">
+        ${isUpcoming ? `
+          <button onclick="showToast('Reservation cancelled.')" class="text-[10px] font-bold text-red uppercase tracking-widest hover:underline">Cancel</button>
+          <button onclick="showToast('Modification requested!')" class="text-[10px] font-bold text-ink-mid/40 uppercase tracking-widest hover:underline">Modify</button>
+        ` : `
+          <button onclick="showToast('Opening booking form!')" class="text-[10px] font-bold text-gold uppercase tracking-widest hover:underline">Book Again</button>
+        `}
+      </div>
+    </div>`;
+  }).join('');
 }
 
-// ── SAVE PROFILE ──
-function saveProfile(){
-  const raw=localStorage.getItem('sv_user')||'{}';
-  const u=JSON.parse(raw);
-  const first=document.getElementById('settFirst').value.trim();
-  const last=document.getElementById('settLast').value.trim();
-  u.name=(first+' '+last).trim()||u.name;
-  u.email=document.getElementById('settEmail').value.trim()||u.email;
-  u.phone=document.getElementById('settPhone').value.trim();
-  localStorage.setItem('sv_user',JSON.stringify(u));
+/* ════════════════════════════════════
+   SAVE PROFILE
+════════════════════════════════════ */
+function saveProfile() {
+  const u     = JSON.parse(localStorage.getItem('sv_user') || '{}');
+  const first = document.getElementById('settFirst').value.trim();
+  const last  = document.getElementById('settLast').value.trim();
+  u.name  = (first + ' ' + last).trim() || u.name;
+  u.email = document.getElementById('settEmail').value.trim() || u.email;
+  u.phone = document.getElementById('settPhone').value.trim();
+  localStorage.setItem('sv_user', JSON.stringify(u));
   loadUser();
-  showToast('Profile updated successfully!');
+  showToast('Profile updated successfully! ✓');
 }
 
-function logout(){ localStorage.removeItem('sv_user'); location.href='login.html'; }
-function triggerAvatarUpload(){ showToast('Avatar upload coming soon!'); }
+/* ════════════════════════════════════
+   LOGOUT
+════════════════════════════════════ */
+function logout() {
+  localStorage.removeItem('sv_user');
+  location.href = 'login.html';
+}
 
-function showToast(msg){
-  const t=document.createElement('div');
-  t.className='toast'; t.textContent=msg;
+/* ════════════════════════════════════
+   TOAST
+════════════════════════════════════ */
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = `
+    position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:#1a1210; color:#fff; padding:10px 20px; border-radius:999px;
+    font-family:'Jost',sans-serif; font-size:12px; font-weight:600;
+    z-index:9999; white-space:nowrap; pointer-events:none;
+    box-shadow:0 8px 32px rgba(0,0,0,.3);
+    opacity:0; transition:opacity .2s, transform .25s cubic-bezier(.34,1.56,.64,1);
+  `;
+  t.textContent = msg;
   document.body.appendChild(t);
-  setTimeout(()=>t.remove(),2300);
+  requestAnimationFrame(() => {
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+  });
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(10px)';
+    setTimeout(() => t.remove(), 300);
+  }, 2200);
 }
 
-// ESC key closes invoice
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeInvoice(); });
+/* ════════════════════════════════════
+   KEYBOARD: ESC closes invoice
+════════════════════════════════════ */
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeInvoice(); });
 </script>
-
-
 </body>
 </html>
