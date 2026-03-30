@@ -420,7 +420,7 @@ const ReportView = {
     }
 
    el.innerHTML = `
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px">
     <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700">${title}</div>
     <button class="btn btn-outline btn-sm" onclick="ReportView.exportReport()">
       <i class="fa-solid fa-download"></i> Export CSV

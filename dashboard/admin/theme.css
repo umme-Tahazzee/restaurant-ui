@@ -1024,3 +1024,9 @@ input, select, textarea { font-family: inherit; }
 .bell-shake i { animation: bellShake .55s ease; }
 
 
+@media (max-width: 768px) {
+  #pageArea {
+    padding: 16px;
+    padding-bottom: 60px; 
+  }
+}
