@@ -356,7 +356,7 @@ input, select, textarea { font-family: inherit; }
 /* ================================================
    PAGE AREA
 ================================================ */
-#pageArea { flex: 1; overflow-y: auto; padding: 24px; transition: opacity .15s; }
+#pageArea { flex: 1; overflow-y: auto; padding: 24px; padding-bottom: 40px; transition: opacity .15s; }
 #pageArea.loading { opacity: 0; }
 
 /* ================================================

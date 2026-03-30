@@ -13,7 +13,7 @@ const ReportView = {
         <div class="page-header anim-1">
           <div>
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
-            color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:10px">
               <span style="width:20px;height:1px;background:var(--gold);display:inline-block"></span>Reports
             </div>
             <h1 class="page-title">Sales <em style="color:var(--red);font-style:italic">Reports</em></h1>
