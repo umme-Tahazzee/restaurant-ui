@@ -26,7 +26,7 @@ const ReportView = {
               onclick="ReportView.applyFilter()">
               <i class="fa-solid fa-filter"></i> Filter
             </button>
-            <button class="btn btn-outline btn-sm" onclick="ReportView.exportReport()">
+            <button class="hidden md:flex btn btn-outline btn-sm" onclick="ReportView.exportReport()">
               <i class="fa-solid fa-download"></i> Export
             </button>
           </div>
@@ -481,7 +481,7 @@ const ReportView = {
     if (!ings || ings.length === 0) { el.innerHTML = this._noDataHTML(); return; }
 
     el.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
         <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700">
           Ingredient Usage Report
           ${this._filtered ? '<span style="font-size:11px;font-weight:400;color:var(--text-3);margin-left:8px">(filtered period)</span>' : ''}

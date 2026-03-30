@@ -736,6 +736,8 @@ input, select, textarea { font-family: inherit; }
 
 /* Date input styling */
 .date-input {
+  min-width: 0;      /* flex এর ভেতরে shrink হতে পারবে */
+  width: auto;
   background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -1020,3 +1022,5 @@ input, select, textarea { font-family: inherit; }
   80%      { transform: rotate(8deg); }
 }
 .bell-shake i { animation: bellShake .55s ease; }
+
+
