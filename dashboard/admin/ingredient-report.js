@@ -31,6 +31,10 @@ window.IngredientReportView = {
             </h1>
           </div>
           <div style="display:flex;gap:8px;align-items:center">
+            <select class="date-input" id="irBranchFilter" onchange="IngredientReportView.applyFilter()" style="padding:4px 8px;font-size:12px">
+              <option value="All">All Branches</option>
+              ${DB.branches.map(b => `<option value="${b.name}">${b.name}</option>`).join('')}
+            </select>
             <input type="date" class="date-input" id="irDateFrom" value="${Utils.todayMinus(30)}"/>
             <span style="color:var(--text-3);font-size:12px">to</span>
             <input type="date" class="date-input" id="irDateTo"   value="${Utils.today()}"/>
@@ -85,6 +89,7 @@ window.IngredientReportView = {
     this._tab           = 'ingredients';
     this._activeIngIdx  = null;
     this._activeRecipeIdx = null;
+    this._computedIngredients = [];
     this._destroyCharts();
     this._refresh();
   },
@@ -120,9 +125,60 @@ window.IngredientReportView = {
 
   // ── internal render orchestrator
   _refresh() {
+    this._calculateData();
     this._renderSummary();
     this._renderChart();
     this._renderContent();
+  },
+
+  // ── computes ingredient used properties dynamically based on product sold count and selected branch
+  _calculateData() {
+    const branchFilter = document.getElementById('irBranchFilter')?.value || 'All';
+    
+    // Copy base ingredients
+    this._computedIngredients = DB.ingredients.map(ing => ({
+      ...ing,
+      used: 0,
+      dishBreakdown: [] // array of { dishName, sold, qtyPerItem, totalUsedQty }
+    }));
+
+    // Calculate usage from productIngredients
+    (DB.productIngredients || []).forEach(product => {
+      // Determine how many of this product were sold for the selected branch filter
+      let soldCount = 0;
+      if (product.soldByBranch) {
+        if (branchFilter === 'All') {
+          soldCount = Object.values(product.soldByBranch).reduce((sum, val) => sum + val, 0);
+        } else {
+          soldCount = product.soldByBranch[branchFilter] || 0;
+        }
+      }
+
+      // If product was sold, calculate ingredient usage
+      if (soldCount > 0) {
+        (product.ingredients || []).forEach(pIng => {
+          const compIng = this._computedIngredients.find(x => x.name === pIng.name);
+          if (compIng && pIng.qtyVal) {
+            const totalUsed = pIng.qtyVal * soldCount;
+            compIng.used += totalUsed;
+            compIng.dishBreakdown.push({
+              dishName: product.name,
+              sold: soldCount,
+              qtyPerItem: pIng.qtyVal,
+              unit: pIng.qtyUnit || compIng.unit,
+              totalUsedQty: totalUsed
+            });
+          }
+        });
+      }
+    });
+
+    // Finalize formatting
+    this._computedIngredients.forEach(ing => {
+      // round to 2 decimal places to avoid floating point issues
+      ing.used = Math.round(ing.used * 100) / 100;
+      ing.closing = Math.round(Math.max(0, ing.opening - ing.used) * 100) / 100;
+    });
   },
 
   // ══════════════════════════════════════════
@@ -142,15 +198,15 @@ window.IngredientReportView = {
 
     const cards = {
       ingredients: () => {
-        const ings      = DB.ingredients;
+        const ings      = this._computedIngredients;
         const totalUsed = ings.reduce((s, i) => s + i.used, 0);
         const totalCost = ings.reduce((s, i) => s + i.cost, 0);
-        const lowStock  = ings.filter(i => i.status === 'low').length;
+        const lowStock  = ings.filter(i => (i.opening - i.used) / i.opening < 0.2).length;
         const suppliers = [...new Set(ings.map(i => i.supplier))].length;
         return [
           { label: 'Total Consumed',  value: totalUsed.toLocaleString(), sub: 'all ingredients',     color: '' },
           { label: 'Total Cost',      value: Utils.money(totalCost),      sub: 'purchase cost',        color: '' },
-          { label: 'Low Stock Items', value: lowStock,                    sub: 'needs reorder',        color: 'var(--red)' },
+          { label: 'Low Stock Items', value: lowStock,                    sub: 'needs reorder (<20%)', color: 'var(--red)' },
           { label: 'Suppliers',       value: suppliers,                   sub: 'active suppliers',     color: '' },
         ];
       },
@@ -223,9 +279,9 @@ window.IngredientReportView = {
 
   // ── Chart: Ingredient stock vs consumed (horizontal bar)
   _chartIngredients(wrap) {
-    const top5     = [...DB.ingredients].sort((a, b) => b.used - a.used).slice(0, 5);
+    const top5     = [...this._computedIngredients].sort((a, b) => b.used - a.used).slice(0, 5);
     const labels   = top5.map(i => i.name);
-    const stocks   = top5.map(i => i.stock);
+    const stocks   = top5.map(i => i.opening);
     const consumed = top5.map(i => i.used);
     const h        = top5.length * 56 + 80;
 
@@ -428,7 +484,7 @@ window.IngredientReportView = {
 
   // ── TAB 1: INGREDIENTS — table + click detail panel
   _contentIngredients(el) {
-    const ings = DB.ingredients;
+    const ings = this._computedIngredients;
 
     el.innerHTML = `
       <div style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px">
@@ -471,19 +527,18 @@ window.IngredientReportView = {
   },
 
   _ingRow(i, idx) {
-    const closing = Math.max(0, i.stock - i.used);
-    const pct     = i.stock > 0 ? Math.round((closing / i.stock) * 100) : 0;
-    const isLow   = i.status === 'low';
+    const pct     = i.opening > 0 ? Math.round((i.closing / i.opening) * 100) : 0;
+    const isLow   = pct < 20;
     const barClr  = pct <= 15 ? '#c0392b' : pct <= 35 ? '#c47a1a' : '#2d7a47';
     return `
-      <tr class="ir-ing-row" data-idx="${idx}" data-name="${i.name.toLowerCase()}"
+      <tr class="ir-ing-row" data-idx="${idx}" data-name="${(i.name||'').toLowerCase()}"
           onclick="IngredientReportView._selectIng(${idx}, this)"
           style="cursor:pointer">
         <td style="font-weight:600;color:var(--text)">${i.name}</td>
         <td style="color:var(--text-3);font-size:11px;text-transform:uppercase;letter-spacing:.04em">${i.unit}</td>
-        <td style="font-weight:600">${i.stock.toLocaleString()}</td>
+        <td style="font-weight:600">${i.opening.toLocaleString()}</td>
         <td style="font-weight:700;color:var(--red)">${i.used.toLocaleString()}</td>
-        <td style="font-weight:700;color:${isLow ? 'var(--red)' : 'var(--green)'}">${closing.toLocaleString()}</td>
+        <td style="font-weight:700;color:${isLow ? 'var(--red)' : 'var(--green)'}">${i.closing.toLocaleString()}</td>
         <td>
           <div style="display:flex;align-items:center;gap:6px">
             <div class="progress-bar" style="width:56px">
@@ -492,7 +547,7 @@ window.IngredientReportView = {
             <span style="font-size:11px;font-weight:600">${pct}%</span>
           </div>
         </td>
-        <td><span class="tag tag-${isLow ? 'cancelled' : 'delivered'}">${i.status}</span></td>
+        <td><span class="tag tag-${isLow ? 'cancelled' : 'delivered'}">${isLow ? 'low' : 'ok'}</span></td>
       </tr>`;
   },
 
@@ -514,23 +569,26 @@ window.IngredientReportView = {
     row.style.background = 'var(--bg-surface2)';
     this._activeIngIdx = idx;
 
-    const i       = DB.ingredients[idx];
-    const closing = Math.max(0, i.stock - i.used);
-    const pct     = i.stock > 0 ? Math.round((closing / i.stock) * 100) : 0;
-    const isLow   = i.status === 'low';
+    const i       = this._computedIngredients[idx];
+    const pct     = i.opening > 0 ? Math.round((i.closing / i.opening) * 100) : 0;
+    const isLow   = pct < 20;
 
-    // dish breakdown — use productIngredients to map dishes that use this ingredient
-    const dishRows = (DB.productIngredients || [])
-      .filter(r => r.ingredients.some(x => x.name === i.name))
-      .map(r => {
-        const qty = r.ingredients.find(x => x.name === i.name)?.qty || '—';
+    // dish breakdown — dynamic from i.dishBreakdown
+    const dishRows = (i.dishBreakdown || [])
+      .map(d => {
+        // d: { dishName, sold, qtyPerItem, unit, totalUsedQty }
         return `
-          <tr>
-            <td style="font-size:12px;color:var(--text)">${r.name}</td>
-            <td style="font-size:12px;font-weight:600;color:var(--text)">${qty}</td>
+          <tr style="border-bottom: 1px dashed var(--border)">
+            <td style="font-size:12px;color:var(--text);padding:8px 0">${d.dishName}</td>
+            <td style="font-size:11px;color:var(--text-3);padding:8px 0">
+              <span style="font-weight:600;color:var(--text-2)">${d.sold}</span> sold &times; ${d.qtyPerItem} ${d.unit}
+            </td>
+            <td style="font-size:12px;font-weight:700;color:var(--red);text-align:right;padding:8px 0">
+               ${Math.round(d.totalUsedQty * 100)/100} ${d.unit}
+            </td>
           </tr>`;
-      }).join('') || `<tr><td colspan="2" style="font-size:12px;color:var(--text-3);text-align:center;padding:12px">
-                        No recipe mapping found</td></tr>`;
+      }).join('') || `<tr><td colspan="3" style="font-size:12px;color:var(--text-3);text-align:center;padding:12px">
+                        No recipe usage for selected branch</td></tr>`;
 
     document.getElementById('irIngDetail').innerHTML = `
       <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin-bottom:2px">
@@ -543,13 +601,13 @@ window.IngredientReportView = {
       <!-- Stock summary mini-cards -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
         ${[
-          { label: 'Opening',  val: i.stock.toLocaleString(),   clr: '' },
+          { label: 'Opening',  val: i.opening.toLocaleString(), clr: '' },
           { label: 'Consumed', val: i.used.toLocaleString(),    clr: 'var(--red)' },
-          { label: 'Closing',  val: closing.toLocaleString(),   clr: isLow ? 'var(--red)' : 'var(--green)' },
+          { label: 'Closing',  val: i.closing.toLocaleString(), clr: isLow ? 'var(--red)' : 'var(--green)' },
         ].map(c => `
           <div style="background:var(--bg-surface2);border-radius:8px;padding:10px 12px">
             <div style="font-size:10px;color:var(--text-3);margin-bottom:4px">${c.label}</div>
-            <div style="font-size:14px;font-weight:700;${c.clr ? `color:${c.clr}` : ''}">${c.val} ${i.unit}</div>
+            <div style="font-size:14px;font-weight:700;${c.clr ? `color:${c.clr}` : ''}">${c.val} <span style="font-size:10px;font-weight:normal;color:var(--text-3)">${i.unit}</span></div>
           </div>`).join('')}
       </div>
 
@@ -560,33 +618,49 @@ window.IngredientReportView = {
           <span>Stock remaining</span><span style="font-weight:700">${pct}%</span>
         </div>
         <div class="progress-bar" style="width:100%;height:8px">
-          <div class="progress-fill"
-               style="width:${Math.max(pct,1)}%;height:8px;
-                      background:${pct <= 15 ? 'var(--red)' : pct <= 35 ? '#c47a1a' : 'var(--green)'}">
-          </div>
+          <div class="progress-fill" style="width:${Math.max(pct,1)}%;height:8px;background:${pct <= 15 ? 'var(--red)' : pct <= 35 ? '#c47a1a' : 'var(--green)'}"></div>
         </div>
       </div>
 
-      <!-- Cost -->
-      <div style="display:flex;justify-content:space-between;align-items:center;
-                  padding:10px 0;border-top:1px solid var(--border);
-                  border-bottom:1px solid var(--border);margin-bottom:14px">
-        <span style="font-size:12px;color:var(--text-3)">Purchase Cost</span>
-        <span style="font-size:15px;font-weight:700;font-family:'Playfair Display',serif">
-          ${Utils.money(i.cost)}
-        </span>
+      <!-- Financial Calculation -->
+      <div style="background:var(--bg-panel);border-radius:8px;padding:12px;margin-bottom:16px;border:1px solid var(--border)">
+        <div style="font-size:11px;font-weight:700;color:var(--text-3);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em">
+          Financial Impact (Unit Cost: ${Utils.money(i.cost)})
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px">
+          <span style="color:var(--text-2)">Opening Value (${i.opening} &times; ${Utils.money(i.cost)})</span>
+          <span style="font-weight:600">${Utils.money(i.opening * i.cost)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px">
+          <span style="color:var(--red)">Consumed Value (${i.used} &times; ${Utils.money(i.cost)})</span>
+          <span style="font-weight:600;color:var(--red)">- ${Utils.money(i.used * i.cost)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding-top:8px;border-top:1px dashed var(--border)">
+          <span style="color:var(--text);font-weight:600">Remaining Value</span>
+          <span style="font-weight:700;color:var(--green)">${Utils.money(i.closing * i.cost)}</span>
+        </div>
       </div>
 
       <!-- Used in dishes -->
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;
                   letter-spacing:.08em;color:var(--text-3);margin-bottom:8px">
-        Used In Dishes
+        Usage Breakdown & Calculation
       </div>
       <table class="data-table" style="font-size:12px">
         <thead>
-          <tr><th>Dish</th><th>Qty / Serving</th></tr>
+          <tr>
+            <th style="padding:8px 0;background:transparent">Dish</th>
+            <th style="padding:8px 0;background:transparent">Calculation</th>
+            <th style="padding:8px 0;background:transparent;text-align:right">Consumed</th>
+          </tr>
         </thead>
-        <tbody>${dishRows}</tbody>
+        <tbody>
+          ${dishRows}
+          <tr>
+            <td colspan="2" style="font-weight:600;font-size:11px;color:var(--text-2);padding:10px 0;text-align:right">Total Consumed:</td>
+            <td style="font-weight:700;color:var(--red);text-align:right;padding:10px 0">${Math.round(i.used*100)/100} ${i.unit}</td>
+          </tr>
+        </tbody>
       </table>`;
   },
 
@@ -675,14 +749,15 @@ window.IngredientReportView = {
           </thead>
           <tbody>
             ${r.ingredients.map((ing, i) => {
-              const dbIng = DB.ingredients.find(x => x.name === ing.name);
-              const status = dbIng ? dbIng.status : 'ok';
+              const dbIng = this._computedIngredients.find(x => x.name === ing.name);
+              const isLow = dbIng ? (dbIng.closing / dbIng.opening < 0.2) : false;
+              const status = isLow ? 'low' : 'ok';
               return `
                 <tr>
                   <td style="color:var(--text-3);font-size:11px">${i + 1}</td>
                   <td style="font-weight:600;color:var(--text)">${ing.name}</td>
-                  <td>${ing.qty}</td>
-                  <td><span class="tag tag-${status === 'low' ? 'cancelled' : 'delivered'}">${status}</span></td>
+                  <td>${ing.qtyVal} ${ing.qtyUnit}</td>
+                  <td><span class="tag tag-${isLow ? 'cancelled' : 'delivered'}">${status}</span></td>
                 </tr>`;
             }).join('')}
           </tbody>
