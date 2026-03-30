@@ -12,7 +12,8 @@ const ReportView = {
       <div id="reportRoot">
         <div class="page-header anim-1">
           <div>
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+            color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:4px">
               <span style="width:20px;height:1px;background:var(--gold);display:inline-block"></span>Reports
             </div>
             <h1 class="page-title">Sales <em style="color:var(--red);font-style:italic">Reports</em></h1>
@@ -102,9 +103,8 @@ const ReportView = {
     if (this._filteredBranch.length === 0)
       this._filteredBranch = [{ branch: 'No data', sales: 0, orders: 0 }];
 
-    // ── Ingredient usage: DB.ingredients এর প্রতিটির used কে
-    //    date-range-এর order count অনুপাতে scale করি
-    //    (real DB থাকলে এখানে actual recipe lookup বসবে)
+    // ── Ingredient usage
+
     const totalTx   = DB.transactions.length || 1;
     const ratio     = filtered.length / totalTx;
     this._filteredIngredients = DB.ingredients.map(ing => ({
@@ -419,21 +419,23 @@ const ReportView = {
       return;
     }
 
-    el.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700">${title}</div>
-        <button class="btn btn-outline btn-sm" onclick="ReportView.exportReport()">
-          <i class="fa-solid fa-download"></i> Export CSV
-        </button>
-      </div>
-      <table class="data-table">
-        <thead>
-          <tr><th>Branch</th><th>Sales</th><th>Orders</th><th>Avg / Order</th><th>Share</th></tr>
-        </thead>
-        <tbody>
-          ${branchData.map(b => {
-            const total = branchData.reduce((s, x) => s + x.sales, 0);
-            const pct   = total > 0 ? Math.round(b.sales / total * 100) : 0;
+   el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700">${title}</div>
+    <button class="btn btn-outline btn-sm" onclick="ReportView.exportReport()">
+      <i class="fa-solid fa-download"></i> Export CSV
+    </button>
+  </div>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table class="data-table" style="min-width:500px">
+      <thead>
+        <tr><th>Branch</th><th>Sales</th><th>Orders</th><th>Avg / Order</th><th>Share</th></tr>
+      </thead>
+      <tbody>
+        ${(() => {
+          const total = branchData.reduce((s, x) => s + x.sales, 0);
+          return branchData.map(b => {
+            const pct = total > 0 ? Math.round(b.sales / total * 100) : 0;
             return `
               <tr>
                 <td style="font-weight:600;color:var(--text)">
@@ -454,19 +456,21 @@ const ReportView = {
                   </div>
                 </td>
               </tr>`;
-          }).join('')}
-          <tr style="background:var(--bg-surface2)">
-            <td style="font-weight:700;color:var(--text)">Total</td>
-            <td style="font-weight:900;font-family:'Playfair Display',serif;font-size:14px;color:var(--red)">
-              ${Utils.money(branchData.reduce((s, x) => s + x.sales, 0))}
-            </td>
-            <td style="font-weight:700">
-              ${branchData.reduce((s, x) => s + x.orders, 0).toLocaleString()}
-            </td>
-            <td></td><td></td>
-          </tr>
-        </tbody>
-      </table>`;
+          }).join('');
+        })()}
+        <tr style="background:var(--bg-surface2)">
+          <td style="font-weight:700;color:var(--text)">Total</td>
+          <td style="font-weight:900;font-family:'Playfair Display',serif;font-size:14px;color:var(--red)">
+            ${Utils.money(branchData.reduce((s, x) => s + x.sales, 0))}
+          </td>
+          <td style="font-weight:700">
+            ${branchData.reduce((s, x) => s + x.orders, 0).toLocaleString()}
+          </td>
+          <td></td><td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>`;
   },
 
   _renderIngredientTable(el) {

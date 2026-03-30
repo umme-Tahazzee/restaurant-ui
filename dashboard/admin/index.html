@@ -153,13 +153,15 @@
   <!-- TOP BAR -->
   <div id="topbar">
     <!-- Mobile menu button -->
-    <button class="topbar-icon-btn" style="display:none;border:none" id="mobileMenuBtn" onclick="Sidebar.openMobile()">
+    <button class="topbar-icon-btn" style="display:none;border:none" 
+    id="mobileMenuBtn" onclick="Sidebar.openMobile()">
       <i class="fa-solid fa-bars"></i>
     </button>
 
     <!-- Search -->
-    <div class="topbar-search">
-      <i class="fa-solid fa-magnifying-glass" style="color:var(--text-3);font-size:12px;flex-shrink:0"></i>
+    <div class=" topbar-search flex items-center gap-3 md:gap-3 px-5 md:px-5 px-3 h-8">
+      <i class="fa-solid fa-magnifying-glass" style="
+        color:var(--text-3);font-size:12px;flex-shrink:0"></i>
       <input id="globalSearch" type="text" placeholder="Search anything…" autocomplete="off"/>
     </div>
 
@@ -167,13 +169,15 @@
     <div class="topbar-right">
 
       <!-- Live indicator -->
-      <div class="live-badge">
+      <div class="live-badge hidden md:flex ">
         <span class="live-dot"></span>
         <span style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em">Live</span>
       </div>
 
       <!-- Clock -->
-      <div id="topClock" style="font-size:11px;color:var(--text-3);font-family:'Cormorant Garamond',serif;font-style:italic;white-space:nowrap"></div>
+      <div id="topClock" class="hidden md:block" 
+      style="font-size:11px;color:var(--text-3);
+     white-space:nowrap"></div>
 
       <!-- Theme toggle -->
       <button class="topbar-icon-btn" onclick="Theme.toggle()" title="Toggle theme">
