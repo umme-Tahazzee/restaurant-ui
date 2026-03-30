@@ -15,72 +15,91 @@ window.IngredientReportView = {
   //  RENDER SHELL
   // ══════════════════════════════════════════
   render() {
-    return `
-      <div id="ingReportRoot">
+  return `
+    <div id="ingReportRoot">
 
-        <div class="page-header anim-1">
-          <div>
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;
-                        letter-spacing:.12em;color:var(--gold);display:flex;
-                        align-items:center;gap:8px;margin-bottom:4px">
-              <span style="width:20px;height:1px;background:var(--gold);display:inline-block"></span>
-              Ingredient Report
-            </div>
-            <h1 class="page-title">
-              Ingredient <em style="color:var(--red);font-style:italic">Report</em>
-            </h1>
+      <div class="page-header anim-1">
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;
+                      letter-spacing:.12em;color:var(--gold);display:flex;
+                      align-items:center;gap:8px;margin-bottom:4px">
+            <span style="width:20px;height:1px;background:var(--gold);display:inline-block"></span>
+            Ingredient Report
           </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <select class="date-input" id="irBranchFilter" onchange="IngredientReportView.applyFilter()" style="padding:4px 8px;font-size:12px">
-              <option value="All">All Branches</option>
-              ${DB.branches.map(b => `<option value="${b.name}">${b.name}</option>`).join('')}
-            </select>
-            <input type="date" class="date-input" id="irDateFrom" value="${Utils.todayMinus(30)}"/>
-            <span style="color:var(--text-3);font-size:12px">to</span>
-            <input type="date" class="date-input" id="irDateTo"   value="${Utils.today()}"/>
-            <button class="btn btn-primary btn-sm" onclick="IngredientReportView.applyFilter()">
-              <i class="fa-solid fa-filter"></i> Filter
-            </button>
-            <button class="btn btn-outline btn-sm" onclick="IngredientReportView.exportCSV()">
-              <i class="fa-solid fa-download"></i> Export
-            </button>
-          </div>
+          <h1 class="page-title">
+            Ingredient <em style="color:var(--red);font-style:italic">Report</em>
+          </h1>
         </div>
 
-        <div class="tab-bar anim-1">
-          <button class="tab-btn active"
-            onclick="IngredientReportView.setTab('ingredients',this)">
-            <i class="fa-solid fa-box-open" style="font-size:11px;margin-right:5px"></i>
-            Ingredients
-          </button>
-          <button class="tab-btn"
-            onclick="IngredientReportView.setTab('recipe',this)">
-            <i class="fa-solid fa-book-open" style="font-size:11px;margin-right:5px"></i>
-            Product Ingredients
-          </button>
-          <button class="tab-btn"
-            onclick="IngredientReportView.setTab('rawmat',this)">
-            <i class="fa-solid fa-wheat-awn" style="font-size:11px;margin-right:5px"></i>
-            Raw Materials
-          </button>
-          <button class="tab-btn"
-            onclick="IngredientReportView.setTab('expense',this)">
-            <i class="fa-solid fa-receipt" style="font-size:11px;margin-right:5px"></i>
-            General Expense
-          </button>
+        <!-- Filter controls — mobile এ wrap হবে -->
+        <div class="flex flex-wrap gap-2 items-center w-full md:w-auto mt-3 md:mt-0">
+
+          <!-- Branch select -->
+          <select class="date-input" id="irBranchFilter"
+                  onchange="IngredientReportView.applyFilter()"
+                  style="padding:5px 8px;font-size:12px;min-width:0;flex:1 1 auto">
+            <option value="All">All Branches</option>
+            ${DB.branches.map(b => `<option value="${b.name}">${b.name}</option>`).join('')}
+          </select>
+
+          <!-- Date range -->
+          <div class="flex items-center gap-1" style="flex:1 1 auto;min-width:0">
+            <input type="date" class="date-input" id="irDateFrom"
+                   value="${Utils.todayMinus(30)}"
+                   style="flex:1;min-width:0;font-size:11px"/>
+            <span style="color:var(--text-3);font-size:11px;white-space:nowrap">to</span>
+            <input type="date" class="date-input" id="irDateTo"
+                   value="${Utils.today()}"
+                   style="flex:1;min-width:0;font-size:11px"/>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex gap-2">
+            <button class="btn btn-primary btn-sm"
+                    onclick="IngredientReportView.applyFilter()">
+              <i class="fa-solid fa-filter"></i>
+              <span class="hidden sm:inline">Filter</span>
+            </button>
+            <button class="btn btn-outline btn-sm"
+                    onclick="IngredientReportView.exportCSV()">
+              <i class="fa-solid fa-download"></i>
+              <span class="hidden sm:inline">Export</span>
+            </button>
+          </div>
+
         </div>
+      </div>
 
-        <!-- Summary cards -->
-        <div class="grid-4 anim-2" style="margin-bottom:20px" id="irSummary"></div>
+      <!-- Tab bar — mobile এ scroll হবে -->
+      <div class="tab-bar anim-1" style="overflow-x:auto;flex-wrap:nowrap;white-space:nowrap">
+        <button class="tab-btn active"
+          onclick="IngredientReportView.setTab('ingredients',this)">
+          <i class="fa-solid fa-box-open" style="font-size:11px;margin-right:5px"></i>
+          Ingredients
+        </button>
+        <button class="tab-btn"
+          onclick="IngredientReportView.setTab('recipe',this)">
+          <i class="fa-solid fa-book-open" style="font-size:11px;margin-right:5px"></i>
+          Product Ingredients
+        </button>
+        <button class="tab-btn"
+          onclick="IngredientReportView.setTab('rawmat',this)">
+          <i class="fa-solid fa-wheat-awn" style="font-size:11px;margin-right:5px"></i>
+          Raw Materials
+        </button>
+        <button class="tab-btn"
+          onclick="IngredientReportView.setTab('expense',this)">
+          <i class="fa-solid fa-receipt" style="font-size:11px;margin-right:5px"></i>
+          General Expense
+        </button>
+      </div>
 
-        <!-- Chart area -->
-        <div id="irChart" style="margin-bottom:20px"></div>
+      <div class="grid-4 anim-2" style="margin-bottom:20px" id="irSummary"></div>
+      <div id="irChart" style="margin-bottom:20px"></div>
+      <div id="irContent" class="anim-2 mb-8"></div>
 
-        <!-- Main content -->
-        <div id="irContent" class="anim-2"></div>
-
-      </div>`;
-  },
+    </div>`;
+},
 
   // ══════════════════════════════════════════
   //  INIT
@@ -483,24 +502,29 @@ window.IngredientReportView = {
   },
 
   // ── TAB 1: INGREDIENTS — table + click detail panel
-  _contentIngredients(el) {
-    const ings = this._computedIngredients;
+ _contentIngredients(el) {
+  const ings = this._computedIngredients;
 
-    el.innerHTML = `
-      <div style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px">
+  el.innerHTML = `
+    <!-- Mobile: stack, Desktop: side by side -->
+    <div class="flex flex-col lg:grid gap-4"
+         style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)">
 
-        <!-- Left: table -->
-        <div class="card" style="padding:0;overflow:hidden">
-          <div style="display:flex;align-items:center;justify-content:space-between;
-                      padding:14px 18px;border-bottom:1px solid var(--border)">
-            <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700">
-              Stock & Consumption
-            </div>
-            <input type="text" class="date-input" placeholder="🔍 Search..."
-              style="width:160px;padding:6px 10px;font-size:12px"
-              oninput="IngredientReportView._filterIngTable(this.value)">
+      <!-- Left: table -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;
+                    padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700">
+            Stock & Consumption
           </div>
-          <table class="data-table" id="irIngTable">
+          <input type="text" class="date-input" placeholder="🔍 Search..."
+            style="width:150px;padding:6px 10px;font-size:12px"
+            oninput="IngredientReportView._filterIngTable(this.value)">
+        </div>
+
+        <!-- Table scroll wrapper -->
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+          <table class="data-table" id="irIngTable" style="min-width:520px">
             <thead>
               <tr>
                 <th>Ingredient</th>
@@ -517,14 +541,15 @@ window.IngredientReportView = {
             </tbody>
           </table>
         </div>
+      </div>
 
-        <!-- Right: detail panel -->
-        <div class="card" id="irIngDetail" style="padding:18px">
-          ${this._ingDetailEmpty()}
-        </div>
+      <!-- Right: detail panel -->
+      <div class="card" id="irIngDetail" style="padding:18px">
+        ${this._ingDetailEmpty()}
+      </div>
 
-      </div>`;
-  },
+    </div>`;
+},
 
   _ingRow(i, idx) {
     const pct     = i.opening > 0 ? Math.round((i.closing / i.opening) * 100) : 0;
@@ -767,20 +792,24 @@ window.IngredientReportView = {
 
   // ── TAB 3: RAW MATERIALS
   _contentRawMat(el) {
-    const rms = DB.rawMaterials || [];
+  const rms = DB.rawMaterials || [];
 
-    el.innerHTML = `
-      <div class="card" style="padding:0;overflow:hidden">
-        <div style="display:flex;align-items:center;justify-content:space-between;
-                    padding:14px 18px;border-bottom:1px solid var(--border)">
-          <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700">
-            Raw Material Inventory
-          </div>
-          <button class="btn btn-outline btn-sm" onclick="IngredientReportView.exportCSV()">
-            <i class="fa-solid fa-download"></i> Export CSV
-          </button>
+  el.innerHTML = `
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;
+                  padding:14px 18px;border-bottom:1px solid var(--border)">
+        <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700">
+          Raw Material Inventory
         </div>
-        <table class="data-table">
+        <button class="btn btn-outline btn-sm" onclick="IngredientReportView.exportCSV()">
+          <i class="fa-solid fa-download"></i>
+          <span class="hidden sm:inline">Export CSV</span>
+        </button>
+      </div>
+
+      <!-- ১০ column — scroll ছাড়া উপায় নেই -->
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <table class="data-table" style="min-width:780px">
           <thead>
             <tr>
               <th>Material</th>
@@ -804,10 +833,9 @@ window.IngredientReportView = {
                             : 'cancelled';
               return `
                 <tr>
-                  <td style="font-weight:600;color:var(--text)">${m.name}</td>
-                  <td style="color:var(--text-3)">${m.supplier}</td>
-                  <td style="color:var(--text-3);font-size:11px;text-transform:uppercase;
-                             letter-spacing:.04em">${m.unit}</td>
+                  <td style="font-weight:600;color:var(--text);white-space:nowrap">${m.name}</td>
+                  <td style="color:var(--text-3);white-space:nowrap">${m.supplier}</td>
+                  <td style="color:var(--text-3);font-size:11px;text-transform:uppercase">${m.unit}</td>
                   <td style="font-weight:600">${m.opening.toLocaleString()}</td>
                   <td style="font-weight:600;color:var(--green)">
                     ${m.received > 0 ? '+' + m.received : '—'}
@@ -825,42 +853,46 @@ window.IngredientReportView = {
               <td colspan="8" style="font-weight:700;color:var(--text)">Total Stock Value</td>
               <td style="font-weight:900;font-family:'Playfair Display',serif;
                          font-size:14px;color:var(--red)">
-                ${Utils.money(rms.reduce((s, m) => s + (m.opening + m.received - m.consumed) * m.unitCost, 0))}
+                ${Utils.money(rms.reduce((s,m) => s+(m.opening+m.received-m.consumed)*m.unitCost, 0))}
               </td>
               <td></td>
             </tr>
           </tbody>
         </table>
-      </div>`;
-  },
+      </div>
+    </div>`;
+},
 
   // ── TAB 4: GENERAL EXPENSE
-  _contentExpense(el) {
-    const exps  = DB.expenses;
-    const total = exps.reduce((s, e) => s + e.amount, 0);
+ _contentExpense(el) {
+  const exps  = DB.expenses;
+  const total = exps.reduce((s, e) => s + e.amount, 0);
+  const catMap = {};
+  exps.forEach(e => {
+    if (!catMap[e.category]) catMap[e.category] = { amount: 0, color: e.color };
+    catMap[e.category].amount += e.amount;
+  });
 
-    // group by category for summary
-    const catMap = {};
-    exps.forEach(e => {
-      if (!catMap[e.category]) catMap[e.category] = { amount: 0, color: e.color };
-      catMap[e.category].amount += e.amount;
-    });
+  el.innerHTML = `
+    <!-- Mobile: stack, Desktop: side by side -->
+    <div class="flex flex-col lg:grid gap-4"
+         style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)">
 
-    el.innerHTML = `
-      <div style="display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px">
-
-        <!-- Left: expense table -->
-        <div class="card" style="padding:0;overflow:hidden">
-          <div style="display:flex;align-items:center;justify-content:space-between;
-                      padding:14px 18px;border-bottom:1px solid var(--border)">
-            <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700">
-              Expense Detail
-            </div>
-            <button class="btn btn-outline btn-sm" onclick="IngredientReportView.exportCSV()">
-              <i class="fa-solid fa-download"></i> Export CSV
-            </button>
+      <!-- Left: expense table -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;
+                    padding:14px 18px;border-bottom:1px solid var(--border)">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700">
+            Expense Detail
           </div>
-          <table class="data-table">
+          <button class="btn btn-outline btn-sm" onclick="IngredientReportView.exportCSV()">
+            <i class="fa-solid fa-download"></i>
+            <span class="hidden sm:inline">Export CSV</span>
+          </button>
+        </div>
+
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+          <table class="data-table" style="min-width:600px">
             <thead>
               <tr>
                 <th>Category</th>
@@ -883,37 +915,36 @@ window.IngredientReportView = {
                       <div style="display:flex;align-items:center;gap:7px">
                         <div style="width:8px;height:8px;border-radius:50%;
                                     background:${e.color};flex-shrink:0"></div>
-                        <span style="font-weight:600;color:var(--text)">${e.category}</span>
+                        <span style="font-weight:600;color:var(--text);white-space:nowrap">${e.category}</span>
                       </div>
                     </td>
-                    <td style="color:var(--text-3)">${e.vendor}</td>
-                    <td style="color:var(--text-3);font-size:11px;max-width:180px;
+                    <td style="color:var(--text-3);white-space:nowrap">${e.vendor}</td>
+                    <td style="color:var(--text-3);font-size:11px;max-width:160px;
                                overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
                       ${e.note}
                     </td>
-                    <td style="font-size:11px;color:var(--text-3)">${Utils.formatDate(e.date)}</td>
-                    <td style="font-weight:700;font-family:'Playfair Display',serif">
+                    <td style="font-size:11px;color:var(--text-3);white-space:nowrap">
+                      ${Utils.formatDate(e.date)}
+                    </td>
+                    <td style="font-weight:700;font-family:'Playfair Display',serif;white-space:nowrap">
                       ${Utils.money(e.amount)}
                     </td>
                     <td>
                       <div style="display:flex;align-items:center;gap:6px">
-                        <div class="progress-bar" style="width:56px">
+                        <div class="progress-bar" style="width:50px">
                           <div class="progress-fill"
-                               style="width:${Math.max(pct,1)}%;background:${e.color}">
-                          </div>
+                               style="width:${Math.max(pct,1)}%;background:${e.color}"></div>
                         </div>
                         <span style="font-size:11px;font-weight:600">${pct}%</span>
                       </div>
                     </td>
-                    <td>
-                      <span class="tag tag-${sCls}">${status}</span>
-                    </td>
+                    <td><span class="tag tag-${sCls}">${status}</span></td>
                   </tr>`;
               }).join('')}
               <tr style="background:var(--bg-surface2)">
                 <td colspan="4" style="font-weight:700;color:var(--text)">Total</td>
                 <td style="font-weight:900;font-family:'Playfair Display',serif;
-                           font-size:14px;color:var(--red)">
+                           font-size:14px;color:var(--red);white-space:nowrap">
                   ${Utils.money(total)}
                 </td>
                 <td colspan="2"></td>
@@ -921,39 +952,41 @@ window.IngredientReportView = {
             </tbody>
           </table>
         </div>
+      </div>
 
-        <!-- Right: category summary -->
-        <div class="card" style="padding:18px">
-          <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;
-                      margin-bottom:14px">Category Summary</div>
-          ${Object.entries(catMap).map(([cat, d]) => {
-            const pct = total > 0 ? Math.round(d.amount / total * 100) : 0;
-            return `
-              <div style="display:flex;align-items:center;justify-content:space-between;
-                          padding:9px 0;border-bottom:1px solid var(--border)">
-                <div style="display:flex;align-items:center;gap:8px">
-                  <div style="width:8px;height:8px;border-radius:50%;
-                              background:${d.color};flex-shrink:0"></div>
-                  <span style="font-size:12px;color:var(--text)">${cat}</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:10px">
-                  <span style="font-size:11px;color:var(--text-3)">${pct}%</span>
-                  <span style="font-size:13px;font-weight:700">${Utils.money(d.amount)}</span>
-                </div>
-              </div>`;
-          }).join('')}
-          <div style="display:flex;justify-content:space-between;align-items:center;
-                      padding:12px 0 0;margin-top:4px">
-            <span style="font-size:13px;font-weight:700;color:var(--text)">Total</span>
-            <span style="font-size:16px;font-weight:900;
-                         font-family:'Playfair Display',serif;color:var(--red)">
-              ${Utils.money(total)}
-            </span>
-          </div>
+      <!-- Right: category summary -->
+      <div class="card" style="padding:18px">
+        <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;
+                    margin-bottom:14px">Category Summary</div>
+        ${Object.entries(catMap).map(([cat, d]) => {
+          const pct = total > 0 ? Math.round(d.amount / total * 100) : 0;
+          return `
+            <div style="display:flex;align-items:center;justify-content:space-between;
+                        padding:9px 0;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0">
+                <div style="width:8px;height:8px;border-radius:50%;
+                            background:${d.color};flex-shrink:0"></div>
+                <span style="font-size:12px;color:var(--text);
+                             overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;margin-left:8px">
+                <span style="font-size:11px;color:var(--text-3)">${pct}%</span>
+                <span style="font-size:13px;font-weight:700">${Utils.money(d.amount)}</span>
+              </div>
+            </div>`;
+        }).join('')}
+        <div style="display:flex;justify-content:space-between;align-items:center;
+                    padding:12px 0 0;margin-top:4px">
+          <span style="font-size:13px;font-weight:700;color:var(--text)">Total</span>
+          <span style="font-size:16px;font-weight:900;
+                       font-family:'Playfair Display',serif;color:var(--red)">
+            ${Utils.money(total)}
+          </span>
         </div>
+      </div>
 
-      </div>`;
-  },
+    </div>`;
+},
 
   // ══════════════════════════════════════════
   //  CSV EXPORT
