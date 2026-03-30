@@ -100,15 +100,164 @@ window.DB = {
 
   /* ── INGREDIENT REPORT ── */
   ingredients: [
-    { name:'Wagyu A5 (Japan)',      unit:'kg',  stock:8,   used:12,  cost:1200, supplier:'Premium Meats Co.',   status:'low' },
-    { name:'Black Truffle',         unit:'g',   stock:450, used:680, cost:820,  supplier:'Italian Imports Ltd.', status:'ok' },
-    { name:'Burrata (Fresh)',       unit:'pcs', stock:24,  used:48,  cost:180,  supplier:'Fresh Market Co.',     status:'ok' },
-    { name:'Tagliatelle (House)',   unit:'ptn', stock:120, used:180, cost:240,  supplier:'In-house',             status:'ok' },
-    { name:'Bistecca T-bone',      unit:'kg',  stock:18,  used:32,  cost:640,  supplier:'Premium Meats Co.',    status:'ok' },
-    { name:'Lobster (Maine)',       unit:'kg',  stock:4,   used:8,   cost:520,  supplier:'Seafood Express',      status:'low' },
-    { name:'Chianti Classico 2018',unit:'btl', stock:48,  used:72,  cost:580,  supplier:'Wine Imports Ltd.',    status:'ok' },
-    { name:'Parmigiano Reggiano',  unit:'kg',  stock:6,   used:12,  cost:280,  supplier:'Italian Imports Ltd.', status:'ok' },
+    { name:'Salt',      unit:'kg',  stock:8,   used:12,  cost:1200, supplier:'Premium Meats Co.',   status:'low' },
+    { name:'Flour (Maida)	',         unit:'g',   stock:450, used:680, cost:820,  supplier:'Italian Imports Ltd.', status:'ok' },
+    { name:'Olive Oil',       unit:'pcs', stock:24,  used:48,  cost:180,  supplier:'Fresh Market Co.',     status:'ok' },
+    { name:'Mozzarella',   unit:'ptn', stock:120, used:180, cost:240,  supplier:'In-house',             status:'ok' },
+    { name:'Tomato Sauce',      unit:'kg',  stock:18,  used:32,  cost:640,  supplier:'Premium Meats Co.',    status:'ok' },
+    { name:'Chicken Breast',       unit:'kg',  stock:4,   used:8,   cost:520,  supplier:'Seafood Express',      status:'low' },
+    { name:'Black Pepper',unit:'btl', stock:48,  used:72,  cost:580,  supplier:'Wine Imports Ltd.',    status:'ok' },
+    { name:'Yeast',  unit:'kg',  stock:6,   used:12,  cost:280,  supplier:'Italian Imports Ltd.', status:'ok' },
   ],
+
+  
+
+/* ── PRODUCT INGREDIENTS (Recipe) ── */
+
+productIngredients: [
+  {
+    name: 'Bistecca Fiorentina',
+    category: 'Main Courses',
+    servings: 1,
+    cost: 52,
+    ingredients: [
+      { name: 'Bistecca T-bone',       qty: '900g' },
+      { name: 'Parmigiano Reggiano',   qty: '20g'  },
+      { name: 'Black Truffle',         qty: '8g'   },
+    ],
+  },
+  {
+    name: 'Wagyu Tenderloin',
+    category: 'Main Courses',
+    servings: 1,
+    cost: 175,
+    ingredients: [
+      { name: 'Wagyu A5 (Japan)',      qty: '230g' },
+      { name: 'Parmigiano Reggiano',   qty: '15g'  },
+    ],
+  },
+  {
+    name: 'Truffle Risotto',
+    category: 'Pasta & Risotto',
+    servings: 1,
+    cost: 38,
+    ingredients: [
+      { name: 'Tagliatelle (House)',   qty: '1 ptn' },
+      { name: 'Black Truffle',         qty: '12g'   },
+      { name: 'Parmigiano Reggiano',   qty: '30g'   },
+      { name: 'Burrata (Fresh)',       qty: '1 pcs' },
+    ],
+  },
+  {
+    name: 'Tagliatelle al Ragù',
+    category: 'Pasta & Risotto',
+    servings: 1,
+    cost: 30,
+    ingredients: [
+      { name: 'Tagliatelle (House)',   qty: '1 ptn' },
+      { name: 'Parmigiano Reggiano',   qty: '25g'   },
+      { name: 'Burrata (Fresh)',       qty: '1 pcs' },
+    ],
+  },
+  {
+    name: 'Lobster Thermidor',
+    category: 'Main Courses',
+    servings: 1,
+    cost: 95,
+    ingredients: [
+      { name: 'Lobster (Maine)',       qty: '600g'  },
+      { name: 'Burrata (Fresh)',       qty: '1 pcs' },
+      { name: 'Chianti Classico 2018', qty: '100ml' },
+    ],
+  },
+  {
+    name: 'Chianti & Cheese Board',
+    category: 'Starters',
+    servings: 2,
+    cost: 42,
+    ingredients: [
+      { name: 'Chianti Classico 2018', qty: '1 btl' },
+      { name: 'Parmigiano Reggiano',   qty: '80g'   },
+    ],
+  },
+],
+
+/* ── RAW MATERIALS ── */
+
+rawMaterials: [
+  {
+    name: 'Premium Beef (Whole)',
+    supplier: 'Premium Meats Co.',
+    unit: 'kg',
+    opening: 80,
+    received: 20,
+    consumed: 62,
+    unitCost: 85,
+    orderStatus: 'Delivered',
+  },
+  {
+    name: 'Fresh Lobster',
+    supplier: 'Seafood Express',
+    unit: 'kg',
+    opening: 15,
+    received: 5,
+    consumed: 16,
+    unitCost: 120,
+    orderStatus: 'Critical',
+  },
+  {
+    name: 'Black Truffle (Raw)',
+    supplier: 'Italian Imports Ltd.',
+    unit: 'g',
+    opening: 800,
+    received: 200,
+    consumed: 750,
+    unitCost: 1.8,
+    orderStatus: 'Pending',
+  },
+  {
+    name: 'Arborio Rice',
+    supplier: 'Italian Imports Ltd.',
+    unit: 'kg',
+    opening: 50,
+    received: 20,
+    consumed: 45,
+    unitCost: 12,
+    orderStatus: 'Delivered',
+  },
+  {
+    name: 'Chianti Classico (Cases)',
+    supplier: 'Wine Imports Ltd.',
+    unit: 'btl',
+    opening: 72,
+    received: 24,
+    consumed: 48,
+    unitCost: 22,
+    orderStatus: 'Delivered',
+  },
+  {
+    name: 'Wagyu A5 (Whole Cut)',
+    supplier: 'Premium Meats Co.',
+    unit: 'kg',
+    opening: 12,
+    received: 0,
+    consumed: 9,
+    unitCost: 280,
+    orderStatus: 'Critical',
+  },
+  {
+    name: 'Parmigiano Block',
+    supplier: 'Italian Imports Ltd.',
+    unit: 'kg',
+    opening: 18,
+    received: 6,
+    consumed: 18,
+    unitCost: 38,
+    orderStatus: 'Pending',
+  },
+],
+
+
 
   /* ── CUSTOMERS ── */
   customers: [
