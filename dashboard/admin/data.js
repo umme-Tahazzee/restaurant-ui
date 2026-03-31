@@ -99,156 +99,14 @@ window.DB = {
   },
 
   /* ── INGREDIENT REPORT ── */
-  ingredients: [
-    { name:'Salt',               unit:'kg',  opening:50,  cost:30,   supplier:'Local BD Mart',    status:'ok' },
-    { name:'Flour (Maida)',      unit:'kg',  opening:450, cost:55,   supplier:'ACME Flour Mills', status:'ok' },
-    { name:'Cooking Oil',        unit:'L',   opening:200, cost:180,  supplier:'Rupchanda',        status:'ok' },
-    { name:'Mozzarella Cheese',  unit:'kg',  opening:120, cost:850,  supplier:'Aarong Dairy',     status:'ok' },
-    { name:'Tomato Sauce',       unit:'kg',  opening:80,  cost:120,  supplier:'Pran Foods',       status:'low' },
-    { name:'Chicken Breast',     unit:'kg',  opening:150, cost:220,  supplier:'Kazi Farms',       status:'low' },
-    { name:'Beef Patty',         unit:'pcs', opening:600, cost:85,   supplier:'Bengal Meat',      status:'ok' },
-    { name:'Burger Bun',         unit:'pcs', opening:800, cost:15,   supplier:'Cooper Bakery',    status:'ok' },
-    { name:'Lettuce',            unit:'kg',  opening:30,  cost:150,  supplier:'Deshi Farm',       status:'low' },
-    { name:'Yeast',              unit:'kg',  opening:15,  cost:450,  supplier:'Baking BD',        status:'ok' },
-  ],
+  ingredients: [],
 
 
 /* ── PRODUCT INGREDIENTS (Recipe) ── */
-
-productIngredients: [
-  {
-    name: 'Beef Burger Combo',
-    category: 'Fast Food',
-    servings: 1,
-    cost: 160,
-    soldByBranch: { 'Dhanmondi Branch': 120, 'Gulshan Branch': 80, 'Banani Branch': 50, 'Uttara Branch': 70 }, // Defines total sold
-    ingredients: [
-      { name: 'Beef Patty',        qtyVal: 1,    qtyUnit: 'pcs' },
-      { name: 'Burger Bun',        qtyVal: 1,    qtyUnit: 'pcs' },
-      { name: 'Lettuce',           qtyVal: 0.05, qtyUnit: 'kg'  },
-      { name: 'Tomato Sauce',      qtyVal: 0.02, qtyUnit: 'kg'  },
-      { name: 'Cooking Oil',       qtyVal: 0.05, qtyUnit: 'L'   },
-      { name: 'Salt',              qtyVal: 0.01, qtyUnit: 'kg'  },
-    ],
-  },
-  {
-    name: 'BBQ Chicken Pizza (12 inch)',
-    category: 'Pizza',
-    servings: 1,
-    cost: 450,
-    soldByBranch: { 'Dhanmondi Branch': 90, 'Gulshan Branch': 110, 'Banani Branch': 60, 'Uttara Branch': 40 },
-    ingredients: [
-      { name: 'Flour (Maida)',     qtyVal: 0.3,  qtyUnit: 'kg'  },
-      { name: 'Yeast',             qtyVal: 0.01, qtyUnit: 'kg'  },
-      { name: 'Chicken Breast',    qtyVal: 0.2,  qtyUnit: 'kg'  },
-      { name: 'Mozzarella Cheese', qtyVal: 0.25, qtyUnit: 'kg'  },
-      { name: 'Tomato Sauce',      qtyVal: 0.1,  qtyUnit: 'kg'  },
-      { name: 'Cooking Oil',       qtyVal: 0.02, qtyUnit: 'L'   },
-    ],
-  },
-  {
-    name: 'Crispy Fried Chicken (2 pcs)',
-    category: 'Fast Food',
-    servings: 1,
-    cost: 130,
-    soldByBranch: { 'Dhanmondi Branch': 200, 'Gulshan Branch': 150, 'Banani Branch': 100, 'Uttara Branch': 80 },
-    ingredients: [
-      { name: 'Chicken Breast',    qtyVal: 0.25, qtyUnit: 'kg'  },
-      { name: 'Flour (Maida)',     qtyVal: 0.1,  qtyUnit: 'kg'  },
-      { name: 'Cooking Oil',       qtyVal: 0.1,  qtyUnit: 'L'   },
-      { name: 'Salt',              qtyVal: 0.01, qtyUnit: 'kg'  },
-    ],
-  },
-  {
-    name: 'Cheese Pasta',
-    category: 'Pasta',
-    servings: 1,
-    cost: 180,
-    soldByBranch: { 'Dhanmondi Branch': 60, 'Gulshan Branch': 90, 'Banani Branch': 40, 'Uttara Branch': 30 },
-    ingredients: [
-      { name: 'Flour (Maida)',     qtyVal: 0.15, qtyUnit: 'kg'  },
-      { name: 'Mozzarella Cheese', qtyVal: 0.10, qtyUnit: 'kg'  },
-      { name: 'Tomato Sauce',      qtyVal: 0.05, qtyUnit: 'kg'  },
-      { name: 'Salt',              qtyVal: 0.01, qtyUnit: 'kg'  },
-      { name: 'Cooking Oil',       qtyVal: 0.02, qtyUnit: 'L'   },
-    ],
-  }
-],
+productIngredients: [],
 
 /* ── RAW MATERIALS ── */
-
-rawMaterials: [
-  {
-    name: 'Premium Beef (Whole)',
-    supplier: 'Premium Meats Co.',
-    unit: 'kg',
-    opening: 80,
-    received: 20,
-    consumed: 62,
-    unitCost: 85,
-    orderStatus: 'Delivered',
-  },
-  {
-    name: 'Fresh Lobster',
-    supplier: 'Seafood Express',
-    unit: 'kg',
-    opening: 15,
-    received: 5,
-    consumed: 16,
-    unitCost: 120,
-    orderStatus: 'Critical',
-  },
-  {
-    name: 'Black Truffle (Raw)',
-    supplier: 'Italian Imports Ltd.',
-    unit: 'g',
-    opening: 800,
-    received: 200,
-    consumed: 750,
-    unitCost: 1.8,
-    orderStatus: 'Pending',
-  },
-  {
-    name: 'Arborio Rice',
-    supplier: 'Italian Imports Ltd.',
-    unit: 'kg',
-    opening: 50,
-    received: 20,
-    consumed: 45,
-    unitCost: 12,
-    orderStatus: 'Delivered',
-  },
-  {
-    name: 'Chianti Classico (Cases)',
-    supplier: 'Wine Imports Ltd.',
-    unit: 'btl',
-    opening: 72,
-    received: 24,
-    consumed: 48,
-    unitCost: 22,
-    orderStatus: 'Delivered',
-  },
-  {
-    name: 'Wagyu A5 (Whole Cut)',
-    supplier: 'Premium Meats Co.',
-    unit: 'kg',
-    opening: 12,
-    received: 0,
-    consumed: 9,
-    unitCost: 280,
-    orderStatus: 'Critical',
-  },
-  {
-    name: 'Parmigiano Block',
-    supplier: 'Italian Imports Ltd.',
-    unit: 'kg',
-    opening: 18,
-    received: 6,
-    consumed: 18,
-    unitCost: 38,
-    orderStatus: 'Pending',
-  },
-],
+rawMaterials: [],
 
 
 
@@ -299,18 +157,7 @@ rawMaterials: [
   ],
 
   /* ── EXPENSES ── */
-  expenses: [
-    { id:'e1',  category:'Ingredients',  vendor:'Fresh Market Co.',      amount:4240, date:'2026-03-18', note:'Weekly produce order — all branches', icon:'fa-carrot',       color:'#2d7a47', branch:'All' },
-    { id:'e2',  category:'Staff',        vendor:'Payroll',               amount:18200,date:'2026-03-15', note:'Bi-weekly payroll — all staff',       icon:'fa-users',        color:'#1a5276', branch:'All' },
-    { id:'e3',  category:'Utilities',    vendor:'City Power & Gas',      amount:1680, date:'2026-03-14', note:'Monthly electricity & gas',           icon:'fa-bolt',         color:'#c47a1a', branch:'Dhanmondi' },
-    { id:'e4',  category:'Equipment',    vendor:'Chef Supplies Ltd.',    amount:2380, date:'2026-03-12', note:'Kitchen equipment repair + new pans', icon:'fa-wrench',       color:'#6d3b8e', branch:'Banani' },
-    { id:'e5',  category:'Ingredients',  vendor:'Premium Meats Co.',     amount:3890, date:'2026-03-11', note:'Wagyu, lamb & beef bulk order',       icon:'fa-carrot',       color:'#2d7a47', branch:'All' },
-    { id:'e6',  category:'Marketing',    vendor:'Social Media Agency',   amount:1200, date:'2026-03-10', note:'March social campaign + photos',      icon:'fa-bullhorn',     color:'#c0392b', branch:'All' },
-    { id:'e7',  category:'Cleaning',     vendor:'CleanPro Services',     amount:850,  date:'2026-03-09', note:'Deep cleaning — all branches',        icon:'fa-broom',        color:'#9b8c86', branch:'All' },
-    { id:'e8',  category:'Beverages',    vendor:'Wine Imports Ltd.',     amount:2680, date:'2026-03-08', note:'Monthly wine & spirits order',        icon:'fa-wine-bottle',  color:'#96281b', branch:'All' },
-    { id:'e9',  category:'Rent',         vendor:'NYC Properties LLC',    amount:12000,date:'2026-03-01', note:'March rent —Dhanmondi location',      icon:'fa-building',     color:'#1a5276', branch:'Dhanmondi' },
-    { id:'e10', category:'Insurance',    vendor:'SafeGuard Insurance',   amount:1800, date:'2026-03-01', note:'Monthly business insurance',          icon:'fa-shield-halved',color:'#b8963e', branch:'All' },
-  ],
+  expenses: [],
 
   /* ── PRODUCTS ── */
   products: [

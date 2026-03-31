@@ -154,26 +154,57 @@ window.IngredientReportView = {
     const list = JSON.parse(localStorage.getItem('savoria-custom-ingredients') || '[]');
     return list.map(item => ({ ...item, isCustom: true }));
   },
-
   _saveCustomIngredients(list) {
     localStorage.setItem('savoria-custom-ingredients', JSON.stringify(list));
+  },
+  _getCustomRecipes() {
+    return JSON.parse(localStorage.getItem('savoria-custom-recipes') || '[]');
+  },
+  _saveCustomRecipes(list) {
+    localStorage.setItem('savoria-custom-recipes', JSON.stringify(list));
+  },
+  _getCustomPurchases() {
+    return JSON.parse(localStorage.getItem('savoria-custom-purchases') || '[]');
+  },
+  _saveCustomPurchases(list) {
+    localStorage.setItem('savoria-custom-purchases', JSON.stringify(list));
+  },
+  _getCustomExpenses() {
+    return JSON.parse(localStorage.getItem('savoria-custom-expenses') || '[]');
+  },
+  _saveCustomExpenses(list) {
+    localStorage.setItem('savoria-custom-expenses', JSON.stringify(list));
   },
 
   // ── computes ingredient used properties dynamically based on product sold count and selected branch
   _calculateData() {
     const branchFilter = document.getElementById('irBranchFilter')?.value || 'All';
+    const purchases = this._getCustomPurchases();
     
     // Copy base ingredients
     const baseIngredients = [...DB.ingredients, ...this._getCustomIngredients()];
-    this._computedIngredients = baseIngredients.map(ing => ({
-      ...ing,
-      used: 0,
-      dishBreakdown: [] // array of { dishName, sold, qtyPerItem, totalUsedQty }
-    }));
+    
+    // Track total received per ingredient from purchases
+    const receivedMap = {};
+    purchases.forEach(p => {
+       receivedMap[p.ingredientId] = (receivedMap[p.ingredientId] || 0) + parseFloat(p.qtyReceived || 0);
+    });
 
-    // Calculate usage from productIngredients
-    (DB.productIngredients || []).forEach(product => {
-      // Determine how many of this product were sold for the selected branch filter
+    this._computedIngredients = baseIngredients.map(ing => {
+      const openingStock = ing.isCustom ? (receivedMap[ing.id] || 0) : ing.opening;
+      return {
+        ...ing,
+        opening: openingStock,
+        used: 0,
+        dishBreakdown: [] 
+      };
+    });
+
+    // Merge DB Product Ingredients and Custom Recipes
+    const allRecipes = [...(DB.productIngredients || []), ...this._getCustomRecipes()];
+
+    // Calculate usage
+    allRecipes.forEach(product => {
       let soldCount = 0;
       if (product.soldByBranch) {
         if (branchFilter === 'All') {
@@ -181,14 +212,17 @@ window.IngredientReportView = {
         } else {
           soldCount = product.soldByBranch[branchFilter] || 0;
         }
+      } else {
+        // For newly created recipes, we simulate standard sales across branches
+        const mockSales = product.mockSales || 45;
+        soldCount = branchFilter === 'All' ? mockSales : Math.round(mockSales / 4);
       }
 
-      // If product was sold, calculate ingredient usage
       if (soldCount > 0) {
         (product.ingredients || []).forEach(pIng => {
-          const compIng = this._computedIngredients.find(x => x.name === pIng.name);
+          const compIng = this._computedIngredients.find(x => x.id === pIng.ingredientId || x.name === pIng.name);
           if (compIng && pIng.qtyVal) {
-            const totalUsed = pIng.qtyVal * soldCount;
+            const totalUsed = parseFloat(pIng.qtyVal) * soldCount;
             compIng.used += totalUsed;
             compIng.dishBreakdown.push({
               dishName: product.name,
@@ -204,7 +238,7 @@ window.IngredientReportView = {
 
     // Finalize formatting
     this._computedIngredients.forEach(ing => {
-      // round to 2 decimal places to avoid floating point issues
+      // round to 2 decimal places
       ing.used = Math.round(ing.used * 100) / 100;
       ing.closing = Math.round(Math.max(0, ing.opening - ing.used) * 100) / 100;
     });
@@ -240,12 +274,12 @@ window.IngredientReportView = {
         ];
       },
       recipe: () => {
-        const recipes   = DB.productIngredients || [];
+        const recipes   = [...(DB.productIngredients || []), ...this._getCustomRecipes()];
         const totalDish = recipes.length;
         const avgCost   = totalDish > 0
-          ? Math.round(recipes.reduce((s, r) => s + r.cost, 0) / totalDish) : 0;
-        const maxCost   = totalDish > 0 ? Math.max(...recipes.map(r => r.cost)) : 0;
-        const minCost   = totalDish > 0 ? Math.min(...recipes.map(r => r.cost)) : 0;
+          ? Math.round(recipes.reduce((s, r) => s + (r.cost||0), 0) / totalDish) : 0;
+        const maxCost   = totalDish > 0 ? Math.max(...recipes.map(r => r.cost||0)) : 0;
+        const minCost   = totalDish > 0 ? Math.min(...recipes.map(r => r.cost||0)) : 0;
         return [
           { label: 'Total Products',  value: totalDish,              sub: 'active menu items',   color: '' },
           { label: 'Avg Cost / Dish', value: Utils.money(avgCost),   sub: 'per serving',          color: '' },
@@ -254,23 +288,22 @@ window.IngredientReportView = {
         ];
       },
       rawmat: () => {
-        const rms        = DB.rawMaterials || [];
-        const totalVal   = rms.reduce((s, r) => s + (r.closing * r.unitCost), 0);
-        const pending    = rms.filter(r => r.orderStatus === 'Pending').length;
-        const critical   = rms.filter(r => r.orderStatus === 'Critical').length;
+        const rms        = this._getCustomPurchases();
+        const totalVal   = rms.reduce((s, r) => s + (parseFloat(r.qtyReceived) * parseFloat(r.unitCost)), 0);
+        const pending    = rms.filter(r => r.status === 'Pending').length;
+        
         return [
-          { label: 'Raw Materials',   value: rms.length,             sub: 'in inventory',         color: '' },
-          { label: 'Stock Value',     value: Utils.money(totalVal),  sub: 'current closing value', color: '' },
-          { label: 'Pending Orders',  value: pending,                sub: 'awaiting delivery',    color: 'var(--gold)' },
-          { label: 'Critical Stock',  value: critical,               sub: 'order immediately',    color: 'var(--red)' },
+          { label: 'Purchases',       value: rms.length,             sub: 'recorded entries',     color: '' },
+          { label: 'Total Intake Val',value: Utils.money(totalVal),  sub: 'historical purchases', color: '' },
+          { label: 'Pending Status',  value: pending,                sub: 'awaiting clearance',   color: 'var(--gold)' },
         ];
       },
       expense: () => {
-        const exps     = DB.expenses;
-        const total    = exps.reduce((s, e) => s + e.amount, 0);
+        const exps     = [...(DB.expenses || []), ...this._getCustomExpenses()];
+        const total    = exps.reduce((s, e) => s + (parseFloat(e.amount)||0), 0);
         const cats     = [...new Set(exps.map(e => e.category))].length;
-        const largest  = exps.reduce((a, b) => a.amount > b.amount ? a : b, { amount: 0, category: '—' });
-        const unpaid   = exps.filter(e => e.status === 'pending').length;
+        const largest  = exps.length ? exps.reduce((a, b) => (parseFloat(a.amount)||0) > (parseFloat(b.amount)||0) ? a : b) : { category:'—', amount:0 };
+        const unpaid   = exps.filter(e => e.status === 'Pending').length;
         return [
           { label: 'Total Expense',       value: Utils.money(total),         sub: 'this period',           color: '' },
           { label: 'Categories',          value: cats,                        sub: 'expense categories',    color: '' },
@@ -350,7 +383,7 @@ window.IngredientReportView = {
 
   // ── Chart: Recipe cost bar
   _chartRecipe(wrap) {
-    const recipes = (DB.productIngredients || []).slice(0, 6);
+    const recipes = [...(DB.productIngredients || []), ...this._getCustomRecipes()].slice(0, 6);
     if (!recipes.length) { wrap.innerHTML = ''; return; }
     const labels = recipes.map(r => r.name);
     const costs  = recipes.map(r => r.cost);
@@ -391,10 +424,10 @@ window.IngredientReportView = {
 
   // ── Chart: Raw material closing stock value
   _chartRawMat(wrap) {
-    const rms    = (DB.rawMaterials || []).slice(0, 7);
+    const rms    = this._getCustomPurchases().slice(0, 7);
     if (!rms.length) { wrap.innerHTML = ''; return; }
-    const labels = rms.map(r => r.name);
-    const values = rms.map(r => r.closing * r.unitCost);
+    const labels = rms.map(r => r.ingredientName);
+    const values = rms.map(r => r.qtyReceived * r.unitCost);
 
     wrap.innerHTML = this._chartCard(
       'Raw Material — Closing Stock Value',
@@ -432,10 +465,12 @@ window.IngredientReportView = {
 
   // ── Chart: Expense doughnut
   _chartExpense(wrap) {
-    const exps   = DB.expenses;
+    const exps   = [...(DB.expenses || []), ...this._getCustomExpenses()];
     const catMap = {};
+    if (!exps.length) { wrap.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-3)">No expenses recorded yet.</div>'; return; }
+    
     exps.forEach(e => {
-      catMap[e.category] = (catMap[e.category] || 0) + e.amount;
+      catMap[e.category] = (catMap[e.category] || 0) + (parseFloat(e.amount)||0);
     });
     const labels = Object.keys(catMap);
     const values = Object.values(catMap);
@@ -693,22 +728,24 @@ window.IngredientReportView = {
                   letter-spacing:.08em;color:var(--text-3);margin-bottom:8px">
         Usage Breakdown & Calculation
       </div>
-      <table class="data-table" style="font-size:12px">
-        <thead>
-          <tr>
-            <th style="padding:8px 0;background:transparent">Dish</th>
-            <th style="padding:8px 0;background:transparent">Calculation</th>
-            <th style="padding:8px 0;background:transparent;text-align:right">Consumed</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${dishRows}
-          <tr>
-            <td colspan="2" style="font-weight:600;font-size:11px;color:var(--text-2);padding:10px 0;text-align:right">Total Consumed:</td>
-            <td style="font-weight:700;color:var(--red);text-align:right;padding:10px 0">${Math.round(i.used*100)/100} ${i.unit}</td>
-          </tr>
-        </tbody>
-      </table>`;
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <table class="data-table" style="font-size:12px;min-width:350px">
+          <thead>
+            <tr>
+              <th style="padding:8px 0;background:transparent">Dish</th>
+              <th style="padding:8px 0;background:transparent">Calculation</th>
+              <th style="padding:8px 0;background:transparent;text-align:right">Consumed</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${dishRows}
+            <tr>
+              <td colspan="2" style="font-weight:600;font-size:11px;color:var(--text-2);padding:10px 0;text-align:right">Total Consumed:</td>
+              <td style="font-weight:700;color:var(--red);text-align:right;padding:10px 0">${Math.round(i.used*100)/100} ${i.unit}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>`;
   },
 
   _filterIngTable(q) {
@@ -722,6 +759,7 @@ window.IngredientReportView = {
     const id = item ? item.id : '';
     const name = item ? item.name : '';
     const unit = item ? item.unit : '';
+    const cost = item ? item.cost : 0;
 
     const html = `
       <div style="padding:20px">
@@ -733,9 +771,15 @@ window.IngredientReportView = {
           <input type="text" id="irIngModalName" class="date-input" style="width:100%;padding:8px" value="${name}" />
         </div>
 
-        <div style="margin-bottom:16px">
-          <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Unit (e.g., kg, L, pcs)</label>
-          <input type="text" id="irIngModalUnit" class="date-input" style="width:100%;padding:8px" value="${unit}" />
+        <div style="display:flex;gap:12px;margin-bottom:16px">
+          <div style="flex:1">
+            <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Unit (kg, L, pcs)</label>
+            <input type="text" id="irIngModalUnit" class="date-input" style="width:100%;padding:8px" value="${unit}" />
+          </div>
+          <div style="flex:1">
+            <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Unit Cost ($)</label>
+            <input type="number" id="irIngModalCost" step="0.01" min="0" class="date-input" style="width:100%;padding:8px" value="${cost}" />
+          </div>
         </div>
 
         <div style="display:flex;gap:10px;justify-content:flex-end">
@@ -753,6 +797,7 @@ window.IngredientReportView = {
     const id = document.getElementById('irIngModalId').value;
     const name = document.getElementById('irIngModalName').value;
     const unit = document.getElementById('irIngModalUnit').value;
+    const cost = parseFloat(document.getElementById('irIngModalCost').value) || 0;
 
     if (!name || !unit) {
       Toast.show('Please fill in all fields', 'warning');
@@ -761,7 +806,7 @@ window.IngredientReportView = {
 
     let list = this._getCustomIngredients();
     if (id) {
-      list = list.map(item => item.id === id ? { ...item, name, unit } : item);
+      list = list.map(item => item.id === id ? { ...item, name, unit, cost } : item);
       Toast.show('Ingredient updated successfully', 'success');
     } else {
       list.push({
@@ -769,7 +814,7 @@ window.IngredientReportView = {
         name,
         unit,
         opening: 0,
-        cost: 0,
+        cost: cost,
         supplier: 'Custom',
         status: 'ok'
       });
@@ -806,20 +851,28 @@ window.IngredientReportView = {
 
   // ── TAB 2: PRODUCT INGREDIENTS (RECIPE)
   _contentRecipe(el) {
-    const recipes = DB.productIngredients || [];
+    const allRecipes = [...(DB.productIngredients || []), ...this._getCustomRecipes()];
 
     el.innerHTML = `
       <!-- Recipe grid -->
       <div style="margin-bottom:16px">
-        <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin-bottom:12px">
-          Product Recipe Cards
-          <span style="font-size:11px;font-weight:400;color:var(--text-3);margin-left:8px">
-            — click a card to view ingredients
-          </span>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div>
+            <span style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;">
+              Product Recipe Cards
+            </span>
+            <span style="font-size:11px;font-weight:400;color:var(--text-3);margin-left:8px">
+              — click a card to view ingredients
+            </span>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="IngredientReportView.openAddRecipeModal()">
+            <i class="fa-solid fa-plus"></i> Add Recipe
+          </button>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px"
              id="irRecipeGrid">
-          ${recipes.map((r, idx) => `
+          ${allRecipes.length === 0 ? '<div style="font-size:12px;color:var(--text-3)">No recipes added yet.</div>' : ''}
+          ${allRecipes.map((r, idx) => `
             <div class="card ir-recipe-card" data-idx="${idx}"
                  onclick="IngredientReportView._selectRecipe(${idx}, this)"
                  style="padding:14px 16px;cursor:pointer;transition:border-color .15s">
@@ -827,15 +880,27 @@ window.IngredientReportView = {
                 <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;
                             line-height:1.3">${r.name}</div>
                 <span class="tag tag-delivered" style="font-size:9px;margin-left:6px;white-space:nowrap">
-                  ${r.category}
+                  ${r.category || 'Custom'}
                 </span>
               </div>
               <div style="font-size:11px;color:var(--text-3);margin-bottom:8px">
-                ${r.ingredients.length} ingredients &nbsp;·&nbsp; ${r.servings} serving
+                ${r.ingredients ? r.ingredients.length : 0} ingredients
               </div>
-              <div style="font-size:14px;font-weight:700;
-                          font-family:'Playfair Display',serif;color:var(--gold)">
-                ${Utils.money(r.cost)}
+              <div style="display:flex;justify-content:space-between;align-items:flex-end">
+                <div style="font-size:14px;font-weight:700;
+                            font-family:'Playfair Display',serif;color:var(--gold)">
+                  ${Utils.money(r.cost || 0)}
+                </div>
+                ${r.isCustom ? `
+                   <div style="display:flex;gap:8px">
+                     <button onclick="event.stopPropagation(); IngredientReportView.openAddRecipeModal('${r.id}')" style="color:var(--text-3);background:transparent;border:none;cursor:pointer">
+                       <i class="fa-solid fa-pen" style="font-size:12px"></i>
+                     </button>
+                     <button onclick="event.stopPropagation(); IngredientReportView.deleteRecipe('${r.id}')" style="color:var(--red);background:transparent;border:none;cursor:pointer">
+                       <i class="fa-solid fa-trash" style="font-size:12px"></i>
+                     </button>
+                   </div>
+                ` : ''}
               </div>
             </div>`).join('')}
         </div>
@@ -853,7 +918,8 @@ window.IngredientReportView = {
     card.style.border = '1.5px solid var(--gold)';
     this._activeRecipeIdx = idx;
 
-    const r   = (DB.productIngredients || [])[idx];
+    const allRecipes = [...(DB.productIngredients || []), ...this._getCustomRecipes()];
+    const r   = allRecipes[idx];
     const det = document.getElementById('irRecipeDetail');
     if (!r) { det.innerHTML = ''; return; }
 
@@ -872,114 +938,456 @@ window.IngredientReportView = {
           </div>
           <span class="tag tag-delivered">${r.ingredients.length} ingredients</span>
         </div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Ingredient</th>
-              <th>Qty / Serving</th>
-              <th>Stock Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${r.ingredients.map((ing, i) => {
-              const dbIng = this._computedIngredients.find(x => x.name === ing.name);
-              const isLow = dbIng ? (dbIng.closing / dbIng.opening < 0.2) : false;
-              const status = isLow ? 'low' : 'ok';
-              return `
-                <tr>
-                  <td style="color:var(--text-3);font-size:11px">${i + 1}</td>
-                  <td style="font-weight:600;color:var(--text)">${ing.name}</td>
-                  <td>${ing.qtyVal} ${ing.qtyUnit}</td>
-                  <td><span class="tag tag-${isLow ? 'cancelled' : 'delivered'}">${status}</span></td>
-                </tr>`;
-            }).join('')}
-          </tbody>
-        </table>
+        </div>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+          <table class="data-table" style="min-width:400px">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Ingredient</th>
+                <th>Qty / Serving</th>
+                <th>Stock Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${r.ingredients.map((ing, i) => {
+                const dbIng = this._computedIngredients.find(x => x.name === ing.name);
+                const isLow = dbIng ? (dbIng.closing / dbIng.opening < 0.2) : false;
+                const status = isLow ? 'low' : 'ok';
+                return `
+                  <tr>
+                    <td style="color:var(--text-3);font-size:11px">${i + 1}</td>
+                    <td style="font-weight:600;color:var(--text)">${ing.name}</td>
+                    <td>${ing.qtyVal} ${ing.qtyUnit}</td>
+                    <td><span class="tag tag-${isLow ? 'cancelled' : 'delivered'}">${status}</span></td>
+                  </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>`;
+  },
+
+  openAddRecipeModal(editId = null) {
+    // Generate Product Options (from custom DB.products if available, else standard set)
+    const prods = Store.KEYS && localStorage.getItem(Store.KEYS.products) 
+                    ? JSON.parse(localStorage.getItem(Store.KEYS.products)) 
+                    : DB.products || [];
+                    
+    let existing = null;
+    if (editId) {
+       existing = this._getCustomRecipes().find(r => r.id === editId);
+    }
+    
+    const prodOpts = prods.map(p => {
+       const sel = (existing && existing.productId === p.id) ? 'selected' : '';
+       return `<option value="${p.id}" data-name="${p.name}" data-cat="${p.category}" ${sel}>${p.name}</option>`;
+    }).join('');
+    
+    let rowHtml = '';
+    if (existing && existing.ingredients && existing.ingredients.length > 0) {
+       rowHtml = existing.ingredients.map(ing => this._recipeRowHtml(ing.ingredientId, ing.qtyVal)).join('');
+    } else {
+       rowHtml = this._recipeRowHtml();
+    }
+    
+    const html = `
+      <div style="padding:20px;max-height:80vh;overflow-y:auto">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:15px">
+           ${existing ? 'Edit Recipe' : 'Add Recipe'}
+        </h3>
+        <input type="hidden" id="irRecipeEditId" value="${existing ? existing.id : ''}" />
+        
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Select Product</label>
+          <select id="irRecipeProduct" class="date-input" style="width:100%;padding:8px">
+            ${prodOpts}
+          </select>
+        </div>
+
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:8px">Ingredients</label>
+          <div id="irRecipeRows" style="display:flex;flex-direction:column;gap:8px">
+            ${rowHtml}
+          </div>
+          <button class="btn btn-outline btn-sm" style="margin-top:10px;width:100%" onclick="IngredientReportView.addRecipeIngredientRow()">
+            <i class="fa-solid fa-plus"></i> Add Ingredient Row
+          </button>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
+          <button class="btn btn-outline btn-sm" onclick="Modal.close('genericModal')">Cancel</button>
+          <button class="btn btn-primary btn-sm" onclick="IngredientReportView.saveRecipeForm()">Save Recipe</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('genericModalContent').innerHTML = html;
+    Modal.open('genericModal');
+  },
+
+  _recipeRowHtml(selId = '', selQty = '') {
+    const ings = this._computedIngredients;
+    const ingOpts = ings.map(i => {
+       const valId = i.id || i.name;
+       const sel = (valId === selId) ? 'selected' : '';
+       return `<option value="${valId}" data-unit="${i.unit}" data-cost="${i.cost||0}" ${sel}>${i.name} (${i.unit})</option>`;
+    }).join('');
+    
+    let unitLabel = '';
+    if (selId) {
+       const found = ings.find(x => (x.id || x.name) === selId);
+       if (found) unitLabel = found.unit || '';
+    }
+
+    return `
+      <div class="ir-recipe-row" style="display:flex;gap:8px;align-items:center">
+        <select class="date-input ir-rr-ing" style="flex:2;padding:8px" onchange="IngredientReportView._updateRecipeRowUnit(this)">
+          <option value="">Select ingredient...</option>
+          ${ingOpts}
+        </select>
+        <div style="flex:1;position:relative">
+          <input type="number" step="0.01" min="0" class="date-input ir-rr-qty" style="width:100%;padding:8px" placeholder="Qty" value="${selQty}" />
+          <span class="ir-rr-unit-label" style="position:absolute;right:10px;top:8px;font-size:11px;color:var(--text-3)">${unitLabel}</span>
+        </div>
+        <button onclick="IngredientReportView.removeRecipeIngredientRow(this)" style="color:var(--text-3);background:none;border:none;cursor:pointer;padding:4px">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    `;
+  },
+
+  _updateRecipeRowUnit(sel) {
+    const opt = sel.options[sel.selectedIndex];
+    const unit = opt ? opt.getAttribute('data-unit') : '';
+    const row = sel.closest('.ir-recipe-row');
+    const label = row.querySelector('.ir-rr-unit-label');
+    if(label) label.textContent = unit || '';
+  },
+
+  addRecipeIngredientRow() {
+    const wrap = document.getElementById('irRecipeRows');
+    wrap.insertAdjacentHTML('beforeend', this._recipeRowHtml());
+  },
+
+  removeRecipeIngredientRow(btn) {
+    const wrap = document.getElementById('irRecipeRows');
+    if (wrap.children.length > 1) {
+      btn.closest('.ir-recipe-row').remove();
+    }
+  },
+
+  saveRecipeForm() {
+    const prodSel = document.getElementById('irRecipeProduct');
+    const prodOpt = prodSel.options[prodSel.selectedIndex];
+    if (!prodOpt) return;
+    
+    const productId = prodSel.value;
+    const productName = prodOpt.getAttribute('data-name');
+    const productCat = prodOpt.getAttribute('data-cat');
+
+    const rows = document.querySelectorAll('.ir-recipe-row');
+    const ingredients = [];
+    let totalCost = 0;
+
+    for (let row of rows) {
+      const ingSel = row.querySelector('.ir-rr-ing');
+      const qtyInp = row.querySelector('.ir-rr-qty');
+      
+      const ingId = ingSel.value;
+      const qtyVal = parseFloat(qtyInp.value) || 0;
+      
+      if (ingId && qtyVal > 0) {
+        const iOpt = ingSel.options[ingSel.selectedIndex];
+        const ingName = iOpt.text.split(' (')[0];
+        const unit = iOpt.getAttribute('data-unit');
+        const cost = parseFloat(iOpt.getAttribute('data-cost')) || 0;
+        
+        ingredients.push({
+          ingredientId: ingId,
+          name: ingName,
+          qtyVal: qtyVal,
+          qtyUnit: unit
+        });
+        totalCost += (qtyVal * cost);
+      }
+    }
+
+    if (ingredients.length === 0) {
+      Toast.show('Please add valid ingredients with quantities', 'warning');
+      return;
+    }
+
+    const editId = document.getElementById('irRecipeEditId').value;
+    let list = this._getCustomRecipes();
+    
+    if (editId) {
+      list = list.map(r => r.id === editId ? {
+        ...r,
+        productId, name: productName, category: productCat, cost: totalCost, ingredients
+      } : r);
+      Toast.show('Recipe updated successfully', 'success');
+    } else {
+      // Overwrite if same product for new additions to avoid dupes
+      list = list.filter(r => r.productId !== productId);
+      list.push({
+        id: 'rec_' + Date.now(),
+        productId,
+        name: productName,
+        category: productCat,
+        cost: totalCost,
+        servings: 1,
+        isCustom: true,
+        ingredients
+      });
+      Toast.show('Recipe saved successfully', 'success');
+    }
+
+    this._saveCustomRecipes(list);
+    Modal.close('genericModal');
+    Toast.show('Recipe saved successfully', 'success');
+    this._refresh();
+  },
+
+  deleteRecipe(id) {
+    if(!confirm('Delete this recipe?')) return;
+    let list = this._getCustomRecipes();
+    list = list.filter(r => r.id !== id);
+    this._saveCustomRecipes(list);
+    Toast.show('Recipe deleted', 'success');
+    this._refresh();
   },
 
   // ── TAB 3: RAW MATERIALS
   _contentRawMat(el) {
-  const rms = DB.rawMaterials || [];
+    const rawMaterials = this._getCustomPurchases();
+    // Pre-calculate sums for display
+    const totalValue = rawMaterials.reduce((sum, p) => sum + (parseFloat(p.qtyReceived) * parseFloat(p.unitCost)), 0);
 
-  el.innerHTML = `
-    <div class="card" style="padding:0;overflow:hidden">
-      <div style="display:flex;align-items:center;justify-content:space-between;
-                  padding:14px 18px;border-bottom:1px solid var(--border)">
-        <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700">
-          Raw Material Inventory
+    el.innerHTML = `
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;
+                    padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700">
+            Purchases & Intake Logs
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-outline btn-sm" onclick="IngredientReportView.exportCSV()">
+              <i class="fa-solid fa-download"></i>
+              <span class="hidden sm:inline">Export CSV</span>
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="IngredientReportView.openAddRawMatModal()">
+              <i class="fa-solid fa-plus"></i> Add Entry
+            </button>
+          </div>
         </div>
-        <button class="btn btn-outline btn-sm" onclick="IngredientReportView.exportCSV()">
-          <i class="fa-solid fa-download"></i>
-          <span class="hidden sm:inline">Export CSV</span>
-        </button>
-      </div>
 
-      <!-- ১০ column — scroll ছাড়া উপায় নেই -->
-      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-        <table class="data-table" style="min-width:780px">
-          <thead>
-            <tr>
-              <th>Material</th>
-              <th>Supplier</th>
-              <th>Unit</th>
-              <th>Opening</th>
-              <th>Received</th>
-              <th>Consumed</th>
-              <th>Closing</th>
-              <th>Unit Cost</th>
-              <th>Stock Value</th>
-              <th>Order Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rms.map(m => {
-              const closing = m.opening + m.received - m.consumed;
-              const val     = closing * m.unitCost;
-              const sCls    = m.orderStatus === 'Delivered' ? 'delivered'
-                            : m.orderStatus === 'Pending'   ? 'pending'
-                            : 'cancelled';
-              return `
-                <tr>
-                  <td style="font-weight:600;color:var(--text);white-space:nowrap">${m.name}</td>
-                  <td style="color:var(--text-3);white-space:nowrap">${m.supplier}</td>
-                  <td style="color:var(--text-3);font-size:11px;text-transform:uppercase">${m.unit}</td>
-                  <td style="font-weight:600">${m.opening.toLocaleString()}</td>
-                  <td style="font-weight:600;color:var(--green)">
-                    ${m.received > 0 ? '+' + m.received : '—'}
-                  </td>
-                  <td style="font-weight:700;color:var(--red)">${m.consumed.toLocaleString()}</td>
-                  <td style="font-weight:700">${closing.toLocaleString()}</td>
-                  <td>${Utils.money(m.unitCost)}</td>
-                  <td style="font-weight:700;font-family:'Playfair Display',serif">
-                    ${Utils.money(val)}
-                  </td>
-                  <td><span class="tag tag-${sCls}">${m.orderStatus}</span></td>
-                </tr>`;
-            }).join('')}
-            <tr style="background:var(--bg-surface2)">
-              <td colspan="8" style="font-weight:700;color:var(--text)">Total Stock Value</td>
-              <td style="font-weight:900;font-family:'Playfair Display',serif;
-                         font-size:14px;color:var(--red)">
-                ${Utils.money(rms.reduce((s,m) => s+(m.opening+m.received-m.consumed)*m.unitCost, 0))}
-              </td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+          <table class="data-table" style="min-width:780px">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Ingredient</th>
+                <th>Supplier</th>
+                <th>Received Qty</th>
+                <th>Unit Cost</th>
+                <th>Total Value</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rawMaterials.length === 0 ? '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--text-3)">No purchases recorded yet</td></tr>' : ''}
+              ${rawMaterials.map(m => {
+                const val = m.qtyReceived * m.unitCost;
+                const sCls = m.status === 'Completed' ? 'delivered' : m.status === 'Pending' ? 'pending' : 'cancelled';
+                return `
+                  <tr>
+                    <td style="color:var(--text-3);font-size:12px">${m.date}</td>
+                    <td style="font-weight:600;color:var(--text);white-space:nowrap">${m.ingredientName}</td>
+                    <td style="color:var(--text-3);white-space:nowrap">${m.supplier}</td>
+                    <td style="font-weight:600;color:var(--green)">+${m.qtyReceived} ${m.unit}</td>
+                    <td>${Utils.money(m.unitCost)}</td>
+                    <td style="font-weight:700;font-family:'Playfair Display',serif">${Utils.money(val)}</td>
+                    <td><span class="tag tag-${sCls}">${m.status}</span></td>
+                    <td>
+                      <div style="display:flex;gap:8px">
+                        <button onclick="IngredientReportView.openAddRawMatModal('${m.id}')" style="color:var(--text-3);background:none;border:none;cursor:pointer"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="IngredientReportView.deleteRawMat('${m.id}')" style="color:var(--red);background:none;border:none;cursor:pointer"><i class="fa-solid fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>`;
+              }).join('')}
+              <tr style="background:var(--bg-surface2)">
+                <td colspan="5" style="font-weight:700;color:var(--text);text-align:right">Total Historical Purchases Value:</td>
+                <td style="font-weight:900;font-family:'Playfair Display',serif;font-size:14px;color:var(--red)">
+                  ${Utils.money(totalValue)}
+                </td>
+                <td colspan="2"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+  },
+
+  openAddRawMatModal(editId = null) {
+    const ings = this._computedIngredients;
+    if (ings.length === 0) {
+      Toast.show('Please add an ingredient first', 'warning');
+      return;
+    }
+    
+    let existing = null;
+    if (editId) {
+       existing = this._getCustomPurchases().find(p => p.id === editId);
+    }
+    
+    const ingOpts = ings.map(i => {
+       const valId = i.id || i.name;
+       const sel = (existing && existing.ingredientId === valId) ? 'selected' : '';
+       return `<option value="${valId}" data-name="${i.name}" data-unit="${i.unit}" data-cost="${i.cost||0}" ${sel}>${i.name} (${i.unit})</option>`;
+    }).join('');
+
+    const html = `
+      <div style="padding:20px">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:15px">
+           ${existing ? 'Edit Purchase Entry' : 'Add Purchase Entry'}
+        </h3>
+        <input type="hidden" id="irRmEditId" value="${existing ? existing.id : ''}" />
+        <input type="hidden" id="irRmEditDate" value="${existing ? existing.date : ''}" />
+        
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Select Ingredient</label>
+          <select id="irRmIng" class="date-input" style="width:100%;padding:8px" onchange="IngredientReportView._updateRmCost(this)">
+            <option value="">Select ingredient...</option>
+            ${ingOpts}
+          </select>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-bottom:12px">
+          <div style="flex:1">
+            <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Received Qty</label>
+            <input type="number" id="irRmQty" class="date-input" style="width:100%;padding:8px" placeholder="0" value="${existing ? existing.qtyReceived : ''}" />
+          </div>
+          <div style="flex:1">
+            <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Unit Cost ($)</label>
+            <input type="number" id="irRmCost" class="date-input" style="width:100%;padding:8px" placeholder="0" value="${existing ? existing.unitCost : ''}" />
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Supplier Name</label>
+          <input type="text" id="irRmSupplier" class="date-input" style="width:100%;padding:8px" value="${existing ? existing.supplier : 'Fresh Market Co.'}" />
+        </div>
+        
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Status</label>
+          <select id="irRmStatus" class="date-input" style="width:100%;padding:8px">
+            <option value="Completed" ${existing && existing.status === 'Completed' ? 'selected' : ''}>Completed</option>
+            <option value="Pending" ${existing && existing.status === 'Pending' ? 'selected' : ''}>Pending</option>
+          </select>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button class="btn btn-outline btn-sm" onclick="Modal.close('genericModal')">Cancel</button>
+          <button class="btn btn-primary btn-sm" onclick="IngredientReportView.saveRawMatForm()">Save Entry</button>
+        </div>
       </div>
-    </div>`;
-},
+    `;
+
+    document.getElementById('genericModalContent').innerHTML = html;
+    Modal.open('genericModal');
+  },
+
+  _updateRmCost(sel) {
+    const opt = sel.options[sel.selectedIndex];
+    if(opt && opt.value) {
+       document.getElementById('irRmCost').value = opt.getAttribute('data-cost');
+    }
+  },
+
+  saveRawMatForm() {
+    const ingSel = document.getElementById('irRmIng');
+    const opt = ingSel.options[ingSel.selectedIndex];
+    if (!opt || !opt.value) {
+      Toast.show('Select an ingredient', 'warning'); return;
+    }
+
+    const qty = parseFloat(document.getElementById('irRmQty').value) || 0;
+    const cost = parseFloat(document.getElementById('irRmCost').value) || 0;
+    const sup = document.getElementById('irRmSupplier').value;
+    const stat = document.getElementById('irRmStatus').value;
+
+    if (qty <= 0) {
+      Toast.show('Quantity must be greater than 0', 'warning'); return;
+    }
+
+    const id = opt.value;
+    const name = opt.getAttribute('data-name');
+    const unit = opt.getAttribute('data-unit');
+
+    const editId = document.getElementById('irRmEditId').value;
+    const editDate = document.getElementById('irRmEditDate').value;
+
+    const dt = new Date();
+    const formattedDate = editDate || `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+
+    let list = this._getCustomPurchases();
+    
+    if (editId) {
+      list = list.map(p => p.id === editId ? {
+        ...p,
+        ingredientId: id,
+        ingredientName: name,
+        unit: unit,
+        qtyReceived: qty,
+        unitCost: cost,
+        supplier: sup,
+        status: stat,
+        date: formattedDate
+      } : p);
+      Toast.show('Purchase entry updated', 'success');
+    } else {
+      list.unshift({
+        id: 'purch_' + Date.now(),
+        ingredientId: id,
+        ingredientName: name,
+        unit: unit,
+        qtyReceived: qty,
+        unitCost: cost,
+        supplier: sup,
+        status: stat,
+        date: formattedDate
+      });
+      Toast.show('Purchase entry saved', 'success');
+    }
+
+    this._saveCustomPurchases(list);
+    Modal.close('genericModal');
+    this._refresh();
+  },
+
+  deleteRawMat(id) {
+    if(!confirm('Delete this purchase entry? This will permanently remove it from inventory logs.')) return;
+    let list = this._getCustomPurchases();
+    list = list.filter(p => p.id !== id);
+    this._saveCustomPurchases(list);
+    Toast.show('Purchase entry deleted', 'success');
+    this._refresh();
+  },
 
   // ── TAB 4: GENERAL EXPENSE
  _contentExpense(el) {
-  const exps  = DB.expenses;
-  const total = exps.reduce((s, e) => s + e.amount, 0);
+  const exps  = [...(DB.expenses || []), ...this._getCustomExpenses()];
+  const total = exps.reduce((s, e) => s + (parseFloat(e.amount)||0), 0);
   const catMap = {};
-  exps.forEach(e => {
-    if (!catMap[e.category]) catMap[e.category] = { amount: 0, color: e.color };
-    catMap[e.category].amount += e.amount;
+  
+  const colors = ['#c0392b','#2d7a47','#1a5276','#b8963e','#6d3b8e','#96281b','#c47a1a','#9b8c86'];
+  
+  exps.forEach((e, i) => {
+    if (!catMap[e.category]) catMap[e.category] = { amount: 0, color: e.color || colors[Object.keys(catMap).length % colors.length] };
+    catMap[e.category].amount += (parseFloat(e.amount)||0);
   });
 
   el.innerHTML = `
@@ -990,68 +1398,73 @@ window.IngredientReportView = {
       <!-- Left: expense table -->
       <div class="card" style="padding:0;overflow:hidden">
         <div style="display:flex;align-items:center;justify-content:space-between;
-                    padding:14px 18px;border-bottom:1px solid var(--border)">
+                    padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px">
           <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700">
             Expense Detail
           </div>
-          <button class="btn btn-outline btn-sm" onclick="IngredientReportView.exportCSV()">
-            <i class="fa-solid fa-download"></i>
-            <span class="hidden sm:inline">Export CSV</span>
-          </button>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-outline btn-sm" onclick="IngredientReportView.exportCSV()">
+              <i class="fa-solid fa-download"></i>
+              <span class="hidden sm:inline">Export CSV</span>
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="IngredientReportView.openAddExpenseModal()">
+              <i class="fa-solid fa-plus"></i> Add Expense
+            </button>
+          </div>
         </div>
 
         <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-          <table class="data-table" style="min-width:600px">
+          <table class="data-table" style="min-width:700px">
             <thead>
               <tr>
-                <th>Category</th>
-                <th>Vendor</th>
-                <th>Note</th>
                 <th>Date</th>
+                <th>Category</th>
+                <th>Branch</th>
+                <th>Description</th>
                 <th>Amount</th>
-                <th>Share</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              ${exps.map(e => {
-                const pct    = total > 0 ? Math.round(e.amount / total * 100) : 0;
-                const status = e.status || 'approved';
-                const sCls   = status === 'pending' ? 'pending' : 'delivered';
+              ${exps.length === 0 ? '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-3)">No expenses recorded</td></tr>' : ''}
+              ${exps.map((e, idx) => {
+                const status = e.status || 'Approved';
+                const sCls   = status.toLowerCase() === 'pending' ? 'pending' : 'delivered';
+                const color  = e.color || catMap[e.category].color;
                 return `
                   <tr>
+                    <td style="font-size:11px;color:var(--text-3);white-space:nowrap">
+                      ${Utils.formatDate(e.date)}
+                    </td>
                     <td>
                       <div style="display:flex;align-items:center;gap:7px">
                         <div style="width:8px;height:8px;border-radius:50%;
-                                    background:${e.color};flex-shrink:0"></div>
+                                    background:${color};flex-shrink:0"></div>
                         <span style="font-weight:600;color:var(--text);white-space:nowrap">${e.category}</span>
                       </div>
                     </td>
-                    <td style="color:var(--text-3);white-space:nowrap">${e.vendor}</td>
-                    <td style="color:var(--text-3);font-size:11px;max-width:160px;
+                    <td style="color:var(--text-3);white-space:nowrap">${e.branch || 'All'}</td>
+                    <td style="color:var(--text-3);font-size:11px;max-width:200px;
                                overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-                      ${e.note}
-                    </td>
-                    <td style="font-size:11px;color:var(--text-3);white-space:nowrap">
-                      ${Utils.formatDate(e.date)}
+                      ${e.note || e.description || ''}
                     </td>
                     <td style="font-weight:700;font-family:'Playfair Display',serif;white-space:nowrap">
                       ${Utils.money(e.amount)}
                     </td>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:6px">
-                        <div class="progress-bar" style="width:50px">
-                          <div class="progress-fill"
-                               style="width:${Math.max(pct,1)}%;background:${e.color}"></div>
-                        </div>
-                        <span style="font-size:11px;font-weight:600">${pct}%</span>
-                      </div>
-                    </td>
                     <td><span class="tag tag-${sCls}">${status}</span></td>
+                    <td>
+                       ${e.isCustom ? `
+                         <div style="display:flex;gap:8px">
+                           <button onclick="IngredientReportView.openAddExpenseModal('${e.id}')" style="color:var(--text-3);background:none;border:none;cursor:pointer"><i class="fa-solid fa-pen"></i></button>
+                           <button onclick="IngredientReportView.deleteExpense('${e.id}')" style="color:var(--red);background:none;border:none;cursor:pointer"><i class="fa-solid fa-trash"></i></button>
+                         </div>
+                       ` : ''}
+                    </td>
                   </tr>`;
               }).join('')}
               <tr style="background:var(--bg-surface2)">
-                <td colspan="4" style="font-weight:700;color:var(--text)">Total</td>
+                <td colspan="4" style="font-weight:700;color:var(--text);text-align:right">Total</td>
                 <td style="font-weight:900;font-family:'Playfair Display',serif;
                            font-size:14px;color:var(--red);white-space:nowrap">
                   ${Utils.money(total)}
@@ -1067,6 +1480,7 @@ window.IngredientReportView = {
       <div class="card" style="padding:18px">
         <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;
                     margin-bottom:14px">Category Summary</div>
+        ${Object.keys(catMap).length === 0 ? '<div style="font-size:12px;color:var(--text-3)">No data</div>' : ''}
         ${Object.entries(catMap).map(([cat, d]) => {
           const pct = total > 0 ? Math.round(d.amount / total * 100) : 0;
           return `
@@ -1079,8 +1493,11 @@ window.IngredientReportView = {
                              overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</span>
               </div>
               <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;margin-left:8px">
-                <span style="font-size:11px;color:var(--text-3)">${pct}%</span>
-                <span style="font-size:13px;font-weight:700">${Utils.money(d.amount)}</span>
+                <span class="progress-bar" style="width:40px;height:4px;border-radius:2px;display:inline-block;background:var(--border);overflow:hidden">
+                  <span style="display:block;height:100%;background:${d.color};width:${pct}%"></span>
+                </span>
+                <span style="font-size:11px;color:var(--text-3);width:24px;text-align:right">${pct}%</span>
+                <span style="font-size:13px;font-weight:700;width:55px;text-align:right">${Utils.money(d.amount)}</span>
               </div>
             </div>`;
         }).join('')}
@@ -1096,6 +1513,125 @@ window.IngredientReportView = {
 
     </div>`;
 },
+
+  openAddExpenseModal(editId = null) {
+    const branches = ['All', 'Dhanmondi Branch', 'Gulshan Branch', 'Banani Branch', 'Uttara Branch'];
+    const categories = ['Ingredients', 'Staff', 'Utilities', 'Equipment', 'Marketing', 'Cleaning', 'Beverages', 'Rent', 'Insurance', 'Other'];
+    
+    let existing = null;
+    if (editId) {
+       existing = this._getCustomExpenses().find(e => e.id === editId);
+    }
+    
+    const html = `
+      <div style="padding:20px;max-height:85vh;overflow-y:auto">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:15px">
+           ${existing ? 'Edit Expense' : 'Add Expense'}
+        </h3>
+        <input type="hidden" id="irExpEditId" value="${existing ? existing.id : ''}" />
+        
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Date</label>
+          <input type="date" id="irExpDate" class="date-input" style="width:100%;padding:8px" value="${existing ? existing.date : new Date().toISOString().split('T')[0]}" />
+        </div>
+
+        <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:140px">
+            <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Category</label>
+            <select id="irExpCategory" class="date-input" style="width:100%;padding:8px">
+              ${categories.map(c => `<option value="${c}" ${existing && existing.category === c ? 'selected' : ''}>${c}</option>`).join('')}
+            </select>
+          </div>
+          <div style="flex:1;min-width:140px">
+            <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Branch</label>
+            <select id="irExpBranch" class="date-input" style="width:100%;padding:8px">
+              ${branches.map(b => `<option value="${b}" ${existing && existing.branch === b ? 'selected' : ''}>${b}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Description / Note</label>
+          <input type="text" id="irExpDesc" class="date-input" style="width:100%;padding:8px" placeholder="Details about this expense" value="${existing ? (existing.note || existing.description || '') : ''}" />
+        </div>
+        
+        <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+          <div style="flex:1;min-width:140px">
+            <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Amount ($)</label>
+            <input type="number" id="irExpAmount" step="0.01" min="0" class="date-input" style="width:100%;padding:8px" placeholder="0.00" value="${existing ? existing.amount : ''}" />
+          </div>
+          <div style="flex:1;min-width:140px">
+            <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Status</label>
+            <select id="irExpStatus" class="date-input" style="width:100%;padding:8px">
+              <option value="Approved" ${existing && existing.status === 'Approved' ? 'selected' : ''}>Approved</option>
+              <option value="Pending" ${existing && existing.status === 'Pending' ? 'selected' : ''}>Pending</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button class="btn btn-outline btn-sm" onclick="Modal.close('genericModal')">Cancel</button>
+          <button class="btn btn-primary btn-sm" onclick="IngredientReportView.saveExpenseForm()">Save Expense</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('genericModalContent').innerHTML = html;
+    Modal.open('genericModal');
+  },
+
+  saveExpenseForm() {
+    const date = document.getElementById('irExpDate').value;
+    const cat = document.getElementById('irExpCategory').value;
+    const branch = document.getElementById('irExpBranch').value;
+    const desc = document.getElementById('irExpDesc').value;
+    const amt = parseFloat(document.getElementById('irExpAmount').value) || 0;
+    const status = document.getElementById('irExpStatus').value;
+
+    if (amt <= 0) {
+      Toast.show('Amount must be greater than 0', 'warning'); return;
+    }
+    if (!desc) {
+      Toast.show('Please provide a description', 'warning'); return;
+    }
+
+    const editId = document.getElementById('irExpEditId').value;
+    let list = this._getCustomExpenses();
+    
+    if (editId) {
+      list = list.map(e => e.id === editId ? {
+        ...e,
+        date, category: cat, branch, description: desc, note: desc, amount: amt, status
+      } : e);
+      Toast.show('Expense updated', 'success');
+    } else {
+      list.unshift({
+        id: 'exp_' + Date.now(),
+        date,
+        category: cat,
+        branch,
+        description: desc,
+        note: desc,
+        amount: amt,
+        status,
+        isCustom: true
+      });
+      Toast.show('Expense saved', 'success');
+    }
+
+    this._saveCustomExpenses(list);
+    Modal.close('genericModal');
+    this._refresh();
+  },
+
+  deleteExpense(id) {
+    if(!confirm('Delete this expense?')) return;
+    let list = this._getCustomExpenses();
+    list = list.filter(e => e.id !== id);
+    this._saveCustomExpenses(list);
+    Toast.show('Expense deleted', 'success');
+    this._refresh();
+  },
 
   // ══════════════════════════════════════════
   //  CSV EXPORT
