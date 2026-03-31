@@ -150,12 +150,22 @@ window.IngredientReportView = {
     this._renderContent();
   },
 
+  _getCustomIngredients() {
+    const list = JSON.parse(localStorage.getItem('savoria-custom-ingredients') || '[]');
+    return list.map(item => ({ ...item, isCustom: true }));
+  },
+
+  _saveCustomIngredients(list) {
+    localStorage.setItem('savoria-custom-ingredients', JSON.stringify(list));
+  },
+
   // ── computes ingredient used properties dynamically based on product sold count and selected branch
   _calculateData() {
     const branchFilter = document.getElementById('irBranchFilter')?.value || 'All';
     
     // Copy base ingredients
-    this._computedIngredients = DB.ingredients.map(ing => ({
+    const baseIngredients = [...DB.ingredients, ...this._getCustomIngredients()];
+    this._computedIngredients = baseIngredients.map(ing => ({
       ...ing,
       used: 0,
       dishBreakdown: [] // array of { dishName, sold, qtyPerItem, totalUsedQty }
@@ -517,9 +527,14 @@ window.IngredientReportView = {
           <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700">
             Stock & Consumption
           </div>
-          <input type="text" class="date-input" placeholder="🔍 Search..."
-            style="width:150px;padding:6px 10px;font-size:12px"
-            oninput="IngredientReportView._filterIngTable(this.value)">
+          <div style="display:flex; gap:8px;">
+            <input type="text" class="date-input" placeholder="🔍 Search..."
+              style="width:150px;padding:6px 10px;font-size:12px"
+              oninput="IngredientReportView._filterIngTable(this.value)">
+            <button class="btn btn-primary btn-sm" onclick="IngredientReportView.openAddModal()" style="padding:6px 12px;font-size:12px">
+              <i class="fa-solid fa-plus"></i> Add
+            </button>
+          </div>
         </div>
 
         <!-- Table scroll wrapper -->
@@ -534,6 +549,7 @@ window.IngredientReportView = {
                 <th>Closing</th>
                 <th>Rem %</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -573,6 +589,12 @@ window.IngredientReportView = {
           </div>
         </td>
         <td><span class="tag tag-${isLow ? 'cancelled' : 'delivered'}">${isLow ? 'low' : 'ok'}</span></td>
+        <td>
+          ${i.isCustom ? `
+            <button onclick="event.stopPropagation(); IngredientReportView.editIngredient('${i.id}')" style="color:var(--gold);margin-right:8px"><i class="fa-solid fa-pen"></i></button>
+            <button onclick="event.stopPropagation(); IngredientReportView.deleteIngredient('${i.id}')" style="color:var(--red)"><i class="fa-solid fa-trash"></i></button>
+          ` : `<span style="font-size:10px;color:var(--text-3)">System</span>`}
+        </td>
       </tr>`;
   },
 
@@ -693,6 +715,93 @@ window.IngredientReportView = {
     document.querySelectorAll('.ir-ing-row').forEach(r => {
       r.style.display = r.dataset.name.includes(q.toLowerCase()) ? '' : 'none';
     });
+  },
+
+  openAddModal(item = null) {
+    const title = item ? 'Edit Ingredient' : 'Add Ingredient';
+    const id = item ? item.id : '';
+    const name = item ? item.name : '';
+    const unit = item ? item.unit : '';
+
+    const html = `
+      <div style="padding:20px">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:15px">${title}</h3>
+        <input type="hidden" id="irIngModalId" value="${id}" />
+        
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Ingredient Name</label>
+          <input type="text" id="irIngModalName" class="date-input" style="width:100%;padding:8px" value="${name}" />
+        </div>
+
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;color:var(--text-3);margin-bottom:4px">Unit (e.g., kg, L, pcs)</label>
+          <input type="text" id="irIngModalUnit" class="date-input" style="width:100%;padding:8px" value="${unit}" />
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button class="btn btn-outline btn-sm" onclick="Modal.close('genericModal')">Cancel</button>
+          <button class="btn btn-primary btn-sm" onclick="IngredientReportView.saveIngredientForm()">Save</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('genericModalContent').innerHTML = html;
+    Modal.open('genericModal');
+  },
+
+  saveIngredientForm() {
+    const id = document.getElementById('irIngModalId').value;
+    const name = document.getElementById('irIngModalName').value;
+    const unit = document.getElementById('irIngModalUnit').value;
+
+    if (!name || !unit) {
+      Toast.show('Please fill in all fields', 'warning');
+      return;
+    }
+
+    let list = this._getCustomIngredients();
+    if (id) {
+      list = list.map(item => item.id === id ? { ...item, name, unit } : item);
+      Toast.show('Ingredient updated successfully', 'success');
+    } else {
+      list.push({
+        id: 'cust_' + Date.now(),
+        name,
+        unit,
+        opening: 0,
+        cost: 0,
+        supplier: 'Custom',
+        status: 'ok'
+      });
+      Toast.show('Ingredient added successfully', 'success');
+    }
+
+    this._saveCustomIngredients(list.map(i => {
+      const { isCustom, ...rest } = i;
+      return rest;
+    }));
+    Modal.close('genericModal');
+    this._refresh();
+  },
+
+  deleteIngredient(id) {
+    if(!confirm('Are you sure you want to delete this ingredient?')) return;
+    let list = this._getCustomIngredients();
+    list = list.filter(item => item.id !== id);
+    this._saveCustomIngredients(list.map(i => {
+      const { isCustom, ...rest } = i;
+      return rest;
+    }));
+    Toast.show('Ingredient deleted successfully', 'success');
+    this._refresh();
+  },
+
+  editIngredient(id) {
+    const list = this._getCustomIngredients();
+    const item = list.find(x => x.id === id);
+    if(item) {
+      this.openAddModal(item);
+    }
   },
 
   // ── TAB 2: PRODUCT INGREDIENTS (RECIPE)
