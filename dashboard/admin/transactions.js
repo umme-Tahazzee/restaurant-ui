@@ -43,12 +43,14 @@ const TransactionsView = {
 
         <!-- Table -->
         <div class="card anim-2">
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
           <table class="data-table">
             <thead>
               <tr><th>ID</th><th>Order</th><th>Customer</th><th>Method</th><th>Amount</th><th>Date & Time</th><th>Branch</th><th>Status</th></tr>
             </thead>
             <tbody id="txnBody"></tbody>
           </table>
+          </div>
         </div>
       </div>`;
   },

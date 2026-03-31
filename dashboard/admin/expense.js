@@ -92,6 +92,7 @@ const ExpenseView = {
             <input type="text" placeholder="Search expenses…"/>
           </div>
         </div>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
         <table class="data-table">
           <thead><tr><th>Category</th><th>Vendor</th><th>Amount</th><th>Date</th><th>Note</th><th>Branch</th><th>Actions</th></tr></thead>
           <tbody>
@@ -119,6 +120,7 @@ const ExpenseView = {
               </tr>`).join('')}
           </tbody>
         </table>
+        </div>
       </div>`;
   },
 

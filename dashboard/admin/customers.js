@@ -37,7 +37,8 @@ const CustomersView = {
         </div>
 
         <!-- Customer Table -->
-        <div class="card anim-2">
+        <div class="card anim-2" >
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
           <table class="data-table" id="customerTable">
             <thead>
               <tr><th>Customer</th><th>Contact</th><th>Visits</th><th>Total Spent
@@ -45,6 +46,7 @@ const CustomersView = {
             </thead>
             <tbody id="customerBody"></tbody>
           </table>
+        </div>
         </div>
       </div>`;
   },
@@ -114,7 +116,8 @@ const CustomersView = {
             <div class="customer-avatar" style="background:${c.color}">${c.name.charAt(0)}</div>
             <div>
               <div style="font-weight:600;color:var(--text)">${c.name}</div>
-              ${c.note ? `<div style="font-size:10px;color:var(--text-3);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.note}</div>` : ""}
+              ${c.note ? `<div style="font-size:10px;color:var(--text-3);
+                max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.note}</div>` : ""}
             </div>
           </div>
         </td>
