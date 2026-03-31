@@ -5,6 +5,8 @@
 const BlogView = {
 
   _filter: 'all',
+  _loaded: false,
+  _editId: null,
 
   render() {
     return `
@@ -21,10 +23,10 @@ const BlogView = {
 
         <!-- Summary -->
         <div class="grid-4 anim-1" style="margin-bottom:20px">
-          <div class="stat-card"><div class="stat-label">Total Posts</div><div class="stat-value">${DB.blog.length}</div></div>
-          <div class="stat-card"><div class="stat-label">Published</div><div class="stat-value" style="color:var(--green)">${DB.blog.filter(b=>b.status==='published').length}</div></div>
-          <div class="stat-card"><div class="stat-label">Drafts</div><div class="stat-value" style="color:var(--orange)">${DB.blog.filter(b=>b.status==='draft').length}</div></div>
-          <div class="stat-card"><div class="stat-label">Total Views</div><div class="stat-value">${DB.blog.reduce((s,b)=>s+b.views,0).toLocaleString()}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Posts</div><div class="stat-value" id="blogTotal">${DB.blog.length}</div></div>
+          <div class="stat-card"><div class="stat-label">Published</div><div class="stat-value" style="color:var(--green)" id="blogPublished">${DB.blog.filter(b=>b.status==='published').length}</div></div>
+          <div class="stat-card"><div class="stat-label">Drafts</div><div class="stat-value" style="color:var(--orange)" id="blogDrafts">${DB.blog.filter(b=>b.status==='draft').length}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Views</div><div class="stat-value" id="blogViews">${DB.blog.reduce((s,b)=>s+b.views,0).toLocaleString()}</div></div>
         </div>
 
         <!-- Filter -->
@@ -39,12 +41,32 @@ const BlogView = {
       </div>`;
   },
 
-  // AJAX: JSONPlaceholder /posts থেকে blog posts load করে
   async init() {
     const el = document.getElementById('blogList');
-    if (el) el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-3);grid-column:1/-1"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Loading posts…</div>';
-    await Api.getPosts();
+    if (!this._loaded) {
+      if (el) el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-3);grid-column:1/-1"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Loading posts…</div>';
+      await Api.getPosts();
+      this._loaded = true;
+    }
+    this.updateStats();
     this.renderPosts();
+  },
+
+  updateStats() {
+    const total = DB.blog.length;
+    const published = DB.blog.filter(b=>b.status==='published').length;
+    const drafts = DB.blog.filter(b=>b.status==='draft').length;
+    const views = DB.blog.reduce((s,b)=>s+b.views,0).toLocaleString();
+
+    const tEl = document.getElementById('blogTotal');
+    const pEl = document.getElementById('blogPublished');
+    const dEl = document.getElementById('blogDrafts');
+    const vEl = document.getElementById('blogViews');
+
+    if(tEl) tEl.innerText = total;
+    if(pEl) pEl.innerText = published;
+    if(dEl) dEl.innerText = drafts;
+    if(vEl) vEl.innerText = views;
   },
 
   setFilter(filter, btn) {
@@ -59,9 +81,14 @@ const BlogView = {
     if (!el) return;
     const filtered = this._filter === 'all' ? DB.blog : DB.blog.filter(b => b.status === this._filter);
 
+    if (filtered.length === 0) {
+      el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-3)">No posts found.</div>';
+      return;
+    }
+
     el.innerHTML = filtered.map(b => `
       <div class="blog-card">
-        <div class="blog-card-img">${b.emoji}</div>
+        <div class="blog-card-img">${b.emoji || '📝'}</div>
         <div class="blog-card-body">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
             <span class="tag tag-${b.status}">${b.status}</span>
@@ -80,34 +107,143 @@ const BlogView = {
             </div>
           </div>
           <div style="display:flex;gap:6px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
-            <button class="btn btn-outline btn-sm" style="flex:1" onclick="Toast.show('Edit post','info')"><i class="fa-solid fa-pen"></i> Edit</button>
-            ${b.status === 'draft' ? `<button class="btn btn-green btn-sm" style="flex:1" onclick="Toast.show('Post published!','success')"><i class="fa-solid fa-globe"></i> Publish</button>` : ''}
-            <button class="btn btn-outline btn-sm btn-icon" onclick="Toast.show('Post deleted','error')"><i class="fa-solid fa-trash" style="color:var(--red)"></i></button>
+            <button class="btn btn-outline btn-sm" style="flex:1" onclick="BlogView.openEditModal('${b.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
+            ${b.status === 'draft' ? `<button class="btn btn-green btn-sm" style="flex:1" onclick="BlogView.publishPost('${b.id}')"><i class="fa-solid fa-globe"></i> Publish</button>` : ''}
+            <button class="btn btn-outline btn-sm btn-icon" onclick="BlogView.deletePost('${b.id}')"><i class="fa-solid fa-trash" style="color:var(--red)"></i></button>
           </div>
         </div>
       </div>`).join('');
   },
 
+  getEmojiForCategory(cat) {
+    const map = {
+      'Culinary': '🥩',
+      'Menu Updates': '🌸',
+      'Wine': '🍷',
+      'Behind Scenes': '👨‍🍳',
+      'Sustainability': '🌿',
+      'News': '🎉'
+    };
+    return map[cat] || '📝';
+  },
+
   openAddModal() {
+    this._editId = null;
+    this.renderModal('New Blog Post', {}, 'Draft saved');
+  },
+
+  openEditModal(id) {
+    const post = DB.blog.find(b => b.id === id);
+    if (!post) return;
+    this._editId = id;
+    this.renderModal('Edit Blog Post', post, 'Changes saved');
+  },
+  
+  escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe.toString()
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+  },
+
+  renderModal(title, p = {}, successMsg) {
     document.getElementById('blogModalContent').innerHTML = `
-      <div class="modal-title">New Blog Post</div>
-      <div class="form-group" style="margin-bottom:14px"><label class="form-label">Title</label><input class="form-control" placeholder="Enter post title…"/></div>
+      <div class="modal-title">${title}</div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label class="form-label">Title</label>
+        <input id="blogModalTitle" class="form-control" placeholder="Enter post title…" value="${this.escapeHtml(p.title || '')}"/>
+      </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Category</label>
-          <select class="form-control"><option>Culinary</option><option>Menu Updates</option><option>Wine</option><option>Behind Scenes</option><option>Sustainability</option><option>News</option></select>
+          <select id="blogModalCategory" class="form-control">
+            ${['Culinary','Menu Updates','Wine','Behind Scenes','Sustainability','News'].map(c => `<option value="${c}" ${p.category === c ? 'selected' : ''}>${c}</option>`).join('')}
+          </select>
         </div>
         <div class="form-group"><label class="form-label">Author</label>
-          <select class="form-control"><option>Marco Ferretti</option><option>Sophia Laurent</option><option>Kenji Nakamura</option><option>Amara Osei</option></select>
+          <select id="blogModalAuthor" class="form-control">
+            ${['Marco Ferretti','Sophia Laurent','Kenji Nakamura','Amara Osei'].map(a => `<option value="${a}" ${p.author === a ? 'selected' : ''}>${a}</option>`).join('')}
+          </select>
         </div>
       </div>
-      <div class="form-group" style="margin-bottom:14px"><label class="form-label">Excerpt</label><textarea class="form-control" rows="2" placeholder="Short summary…"></textarea></div>
-      <div class="form-group" style="margin-bottom:16px"><label class="form-label">Content</label><textarea class="form-control" rows="6" placeholder="Write your blog post content…"></textarea></div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label class="form-label">Excerpt</label>
+        <textarea id="blogModalExcerpt" class="form-control" rows="2" placeholder="Short summary…">${this.escapeHtml(p.excerpt || '')}</textarea>
+      </div>
+      <div class="form-group" style="margin-bottom:16px">
+        <label class="form-label">Content</label>
+        <textarea id="blogModalContentText" class="form-control" rows="6" placeholder="Write your blog post content…">${this.escapeHtml(p.content || '')}</textarea>
+      </div>
       <div style="display:flex;gap:8px;justify-content:flex-end">
         <button class="btn btn-outline" onclick="Modal.close('blogModal')">Cancel</button>
-        <button class="btn btn-gold" onclick="Toast.show('Draft saved','info');Modal.close('blogModal')"><i class="fa-solid fa-save"></i> Save Draft</button>
-        <button class="btn btn-primary" onclick="Toast.show('Post published!','success');Modal.close('blogModal')"><i class="fa-solid fa-globe"></i> Publish</button>
+        <button class="btn btn-gold" onclick="BlogView.savePost('draft', '${successMsg}')"><i class="fa-solid fa-save"></i> Save Draft</button>
+        <button class="btn btn-primary" onclick="BlogView.savePost('published', 'Post published!')"><i class="fa-solid fa-globe"></i> Publish</button>
       </div>`;
     Modal.open('blogModal');
   },
+
+  savePost(status, msg) {
+    const titleEl = document.getElementById('blogModalTitle');
+    const catEl = document.getElementById('blogModalCategory');
+    const authEl = document.getElementById('blogModalAuthor');
+    const excEl = document.getElementById('blogModalExcerpt');
+    const contentEl = document.getElementById('blogModalContentText');
+
+    const title = titleEl.value.trim();
+    if (!title) {
+        Toast.show('Title is required', 'error');
+        return;
+    }
+
+    if (this._editId) {
+      const post = DB.blog.find(b => b.id === this._editId);
+      if (post) {
+        post.title = title;
+        post.category = catEl.value;
+        post.author = authEl.value;
+        post.excerpt = excEl.value.trim();
+        post.content = contentEl.value.trim();
+        if (status) post.status = status;
+        post.emoji = this.getEmojiForCategory(post.category);
+      }
+    } else {
+      DB.blog.unshift({
+        id: 'bl' + Date.now(),
+        title,
+        category: catEl.value,
+        author: authEl.value,
+        excerpt: excEl.value.trim(),
+        content: contentEl.value.trim(),
+        status: status,
+        date: new Date().toISOString().split('T')[0],
+        views: 0,
+        emoji: this.getEmojiForCategory(catEl.value)
+      });
+    }
+
+    this.updateStats();
+    this.renderPosts();
+    Modal.close('blogModal');
+    Toast.show(msg, 'success');
+  },
+
+  publishPost(id) {
+    const post = DB.blog.find(b => b.id === id);
+    if (!post) return;
+    post.status = 'published';
+    this.updateStats();
+    this.renderPosts();
+    Toast.show('Post published!', 'success');
+  },
+
+  deletePost(id) {
+    if (!confirm('Are you sure you want to delete this post?')) return;
+    DB.blog = DB.blog.filter(b => b.id !== id);
+    this.updateStats();
+    this.renderPosts();
+    Toast.show('Post deleted', 'success');
+  }
 
 };
