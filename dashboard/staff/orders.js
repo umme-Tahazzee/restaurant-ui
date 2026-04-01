@@ -1,8 +1,10 @@
 /* ================================================
    ORDERS VIEW  (views/orders.js)
 
-   Shows all orders with 6 status filters:
-   Pending → Preparing → Ready → Confirmed → Delivered → Cancelled
+   Shows all orders with 6 status filters.
+   advance() → API.updateOrderStatus (AJAX PATCH)
+   cancel()  → API.cancelOrder       (AJAX DELETE)
+   refresh() → re-renders from current DB.orders
 ================================================ */
 
 const OrdersView = {
@@ -11,8 +13,7 @@ const OrdersView = {
   currentFilter: 'all',
 
   /* ────────────────────────────────────────────
-     render() — returns the full HTML string
-     Called once by Router when view is loaded
+     render()
   ──────────────────────────────────────────── */
   render() {
     return `
@@ -63,7 +64,7 @@ const OrdersView = {
   },
 
   /* ────────────────────────────────────────────
-     init() — runs after render() inserts HTML
+     init()
   ──────────────────────────────────────────── */
   init() {
     this.currentFilter = 'all';
@@ -71,7 +72,7 @@ const OrdersView = {
     this.renderTable();
   },
 
-  /* ── STATUS PILLS (top count row) ── */
+  /* ── STATUS PILLS ── */
   renderStatusPills() {
     const counts = {};
     DB.orders.forEach(o => { counts[o.status] = (counts[o.status] || 0) + 1; });
@@ -104,50 +105,66 @@ const OrdersView = {
     if (!tbody) return;
 
     if (!orders.length) {
-      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-3)">No orders found</td></tr>`;
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" style="text-align:center;padding:40px;color:var(--text-3)">
+            No orders found
+          </td>
+        </tr>`;
       return;
     }
 
     tbody.innerHTML = orders.map(o => this._rowHTML(o)).join('');
   },
 
-  /* ── SINGLE TABLE ROW ── */
+  /* ── SINGLE ROW ── */
   _rowHTML(o) {
-    const cfg      = ORDER_STATUS[o.status];
-    const nextCfg  = cfg.next ? ORDER_STATUS[cfg.next] : null;
+    const cfg       = ORDER_STATUS[o.status];
+    const nextCfg   = cfg.next ? ORDER_STATUS[cfg.next] : null;
     const canCancel = o.status !== 'delivered' && o.status !== 'cancelled';
 
     return `
-      <tr>
+      <tr id="row-${o.id.replace('#','')}">
         <td><b style="font-family:'Playfair Display',serif">${o.id}</b></td>
-        <td><span style="background:var(--gold-pale);color:var(--gold);font-weight:700;padding:3px 8px;border-radius:6px;font-size:11px">T-${o.table}</span></td>
+        <td>
+          <span style="background:var(--gold-pale);color:var(--gold);font-weight:700;padding:3px 8px;border-radius:6px;font-size:11px">
+            T-${o.table}
+          </span>
+        </td>
         <td style="font-weight:500">${o.customer}</td>
-        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-3)">${o.items.join(', ')}</td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-3)">
+          ${o.items.join(', ')}
+        </td>
         <td style="font-weight:700;color:var(--green)">${Utils.money(o.total)}</td>
         <td><span class="tag ${cfg.tagClass}">${cfg.label}</span></td>
         <td style="color:var(--text-3)">${Utils.timeAgo(o.created)}</td>
         <td>
           <div style="display:flex;gap:4px">
+            <!-- View detail -->
             <button class="btn btn-outline btn-sm" onclick="OrdersView.viewOrder('${o.id}')">
               <i class="fa-solid fa-eye"></i>
             </button>
+            <!-- Advance status — AJAX PATCH -->
             ${nextCfg ? `
-              <button class="btn btn-primary btn-sm" onclick="OrdersView.advance('${o.id}')">
+              <button class="btn btn-primary btn-sm" id="adv-${o.id.replace('#','')}"
+                onclick="OrdersView.advance('${o.id}')">
                 → ${nextCfg.label}
               </button>` : ''}
+            <!-- Cancel — AJAX DELETE -->
             ${canCancel ? `
-              <button class="btn btn-danger btn-sm" onclick="OrdersView.cancel('${o.id}')">✕</button>` : ''}
+              <button class="btn btn-danger btn-sm" id="cxl-${o.id.replace('#','')}"
+                onclick="OrdersView.cancel('${o.id}')">✕</button>` : ''}
           </div>
         </td>
       </tr>`;
   },
 
-  /* ── MODAL: view order details ── */
+  /* ── MODAL: view order detail ── */
   viewOrder(id) {
     const o   = DB.orders.find(x => x.id === id);
     if (!o) return;
-    const cfg     = ORDER_STATUS[o.status];
-    const nextCfg = cfg.next ? ORDER_STATUS[cfg.next] : null;
+    const cfg       = ORDER_STATUS[o.status];
+    const nextCfg   = cfg.next ? ORDER_STATUS[cfg.next] : null;
     const canCancel = o.status !== 'delivered' && o.status !== 'cancelled';
 
     document.getElementById('orderModalContent').innerHTML = `
@@ -187,38 +204,69 @@ const OrdersView = {
     Modal.open('orderModal');
   },
 
-  /* ── ADVANCE order to next status ── */
-  advance(id) {
+  /* ────────────────────────────────────────────
+     advance() — AJAX PATCH দিয়ে status বাড়ায়
+  ──────────────────────────────────────────── */
+  async advance(id) {
     const o = DB.orders.find(x => x.id === id);
     if (!o || !ORDER_STATUS[o.status].next) return;
-    o.status  = ORDER_STATUS[o.status].next;
-    o.created = new Date(Date.now() - Math.random() * 5 * 60000);
-    Toast.show(`Order ${id} → ${ORDER_STATUS[o.status].label}`, 'success');
-    this._updateBadge();
+
+    const nextStatus = ORDER_STATUS[o.status].next;
+
+    // Button loading state
+    const btn = document.getElementById(`adv-${id.replace('#','')}`);
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; }
+
+    try {
+      // ── AJAX PATCH ──
+      await API.updateOrderStatus(id, nextStatus);
+
+      // o.status ইতিমধ্যে API এর ভেতরে update হয়ে গেছে
+      Toast.show(`Order ${id} → ${ORDER_STATUS[nextStatus].label}`, 'success');
+
+    } catch (err) {
+      console.error('Advance error:', err);
+      Toast.show('Status update failed. Try again.', 'error');
+      if (btn) { btn.disabled = false; btn.innerHTML = `→ ${ORDER_STATUS[nextStatus].label}`; }
+      return;
+    }
+
     this.renderStatusPills();
     this.renderTable();
   },
 
-  /* ── CANCEL an order ── */
-  cancel(id) {
+  /* ────────────────────────────────────────────
+     cancel() — AJAX DELETE দিয়ে cancel করে
+  ──────────────────────────────────────────── */
+  async cancel(id) {
     const o = DB.orders.find(x => x.id === id);
     if (!o) return;
-    o.status = 'cancelled';
-    Toast.show(`Order ${id} cancelled`, 'warning');
-    this._updateBadge();
+
+    // Button loading
+    const btn = document.getElementById(`cxl-${id.replace('#','')}`);
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; }
+
+    try {
+      // ── AJAX DELETE ──
+      await API.cancelOrder(id);
+
+      Toast.show(`Order ${id} cancelled`, 'warning');
+
+    } catch (err) {
+      console.error('Cancel error:', err);
+      Toast.show('Cancel failed. Try again.', 'error');
+      if (btn) { btn.disabled = false; btn.innerHTML = '✕'; }
+      return;
+    }
+
     this.renderStatusPills();
     this.renderTable();
   },
 
-  /* ── Update sidebar pending badge count ── */
-  _updateBadge() {
-    const count = DB.orders.filter(o => o.status === 'pending').length;
-    const badge = document.getElementById('pendingBadge');
-    if (badge) badge.textContent = count;
-  },
-
+  /* ── Refresh — DB.orders থেকে re-render ── */
   refresh() {
-    this.init();
+    this.renderStatusPills();
+    this.renderTable();
     Toast.show('Orders refreshed', 'info');
   },
 };

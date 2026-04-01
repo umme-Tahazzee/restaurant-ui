@@ -1,277 +1,338 @@
 /* ================================================
-   CUSTOMERS VIEW  (views/customers.js)
-
-   Shows customer profiles in a card grid.
-   Can filter by status, search by name/email,
-   add new customers, and start orders for them.
+   CUSTOMERS VIEW
 ================================================ */
 
 const CustomersView = {
+  _search: "",
 
-  /* ── STATE ── */
-  currentFilter: 'all',
-  searchTerm:    '',
-
-  /* ────────────────────────────────────────────
-     render() — page HTML shell
-  ──────────────────────────────────────────── */
   render() {
-    const total = DB.customers.length;
-    const vip   = DB.customers.filter(c => c.status === 'vip').length;
-    const spent = DB.customers.reduce((s, c) => s + c.spent, 0);
-
     return `
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Customers</h1>
-          <p class="page-subtitle">Manage customer profiles and history</p>
+      <div id="custRoot">
+        <div class="page-header anim-1">
+          <div>
+            <div class="page-subtitle">Management</div>
+            <h1 class="page-title">Custo<em style="color:var(--red);font-style:italic">mers</em></h1>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div class="topbar-search" style="max-width:220px">
+              <i class="fa-solid fa-magnifying-glass" style="color:var(--text-3);font-size:12px"></i>
+              <input type="text" placeholder="Search customers…" oninput="CustomersView.search(this.value)"/>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="CustomersView.openAddModal()">
+            <i class="fa-solid fa-plus"></i> Add Customer</button>
+          </div>
         </div>
-        <button class="btn btn-primary" onclick="CustomersView.openAddForm()">
-          <i class="fa-solid fa-user-plus"></i> Add Customer
-        </button>
-      </div>
 
-      <!-- Summary stats -->
-      <div class="grid-3" style="margin-bottom:16px">
-        <div class="stat-card">
-          <div class="stat-label">Total Customers</div>
-          <div class="stat-value">${total}</div>
-          <div class="stat-sub">All time</div>
+        <!-- Summary -->
+        <div class="grid-4 anim-1" style="margin-bottom:20px">
+          <div class="stat-card"><div class="stat-label">Total Customers</div><div class="stat-value">
+          ${DB.customers.length}</div></div>
+          <div class="stat-card"><div class="stat-label">VIP Customers</div><div class="stat-value" 
+          style="color:var(--gold)">${DB.customers.filter((c) => c.status === "vip").length}</div></div>
+          <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value">
+          ${Utils.money(DB.customers.reduce((s, c) => s + c.spent, 0))}</div></div>
+          <div class="stat-card"><div class="stat-label">Avg Visits</div><div class="stat-value">
+          ${Math.round(DB.customers.reduce((s, c) => s + c.visits, 0) / DB.customers.length)}
+          </div></div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">VIP Members</div>
-          <div class="stat-value">${vip}</div>
-          <div class="stat-sub">Top spenders</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Total Revenue</div>
-          <div class="stat-value">$${(spent / 1000).toFixed(1)}k</div>
-          <div class="stat-sub">From all customers</div>
-        </div>
-      </div>
 
-      <!-- Search + filter row -->
-      <div style="display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap">
-        <div class="topbar-search" style="max-width:260px">
-          <i class="fa-solid fa-magnifying-glass" style="color:var(--text-3);font-size:12px;flex-shrink:0"></i>
-          <input type="text" placeholder="Search by name or email…"
-            oninput="CustomersView.search(this.value)"/>
+        <!-- Customer Table -->
+        <div class="card anim-2" >
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+          <table class="data-table" id="customerTable">
+            <thead>
+              <tr><th>Customer</th><th>Contact</th><th>Visits</th><th>Total Spent
+              </th><th>Last Visit</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="customerBody"></tbody>
+          </table>
         </div>
-        <div class="tab-bar" style="margin-bottom:0" id="customerTabs">
-          <button class="tab-btn active" onclick="CustomersView.setFilter('all',this)">All</button>
-          <button class="tab-btn" onclick="CustomersView.setFilter('vip',this)">⭐ VIP</button>
-          <button class="tab-btn" onclick="CustomersView.setFilter('regular',this)">Regular</button>
-          <button class="tab-btn" onclick="CustomersView.setFilter('new',this)">New</button>
         </div>
-      </div>
-
-      <!-- Customer card grid -->
-      <div id="customerGrid"></div>`;
+      </div>`;
   },
 
-  /* ── init() ── */
-  init() {
-    this.renderGrid();
-  },
+  // AJAX: JSONPlaceholder /users থেকে data load করে তারপর table render করে
+ async init() {
+  // LocalStorage-এ আগের data থাকলে সেটা আগে load করো
+  const saved = localStorage.getItem("db_customers");
+  if (saved) {
+    try {
+      DB.customers = JSON.parse(saved);
+    } catch (e) {
+      console.warn("LocalStorage parse error, fetching fresh data.");
+    }
+  }
 
-  /* ── Filter by status ── */
-  setFilter(status, btn) {
-    this.currentFilter = status;
-    document.querySelectorAll('#customerTabs .tab-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    this.renderGrid();
-  },
+  const el = document.getElementById("customerBody");
+  if (el)
+    el.innerHTML =
+      '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-3)"><i class="fa-solid fa-spinner fa-spin"></i> Loading customers…</td></tr>';
 
-  /* ── Live search ── */
+  // Saved data না থাকলেই API থেকে fetch করো
+  if (!saved) {
+    await Api.getCustomers();
+    this._persist(); // প্রথমবার fetch করার পর save করো
+  }
+
+  this.renderTable();
+  // Summary cards আপডেট
+  const root = document.getElementById("custRoot");
+  if (root) {
+    root.querySelectorAll(".stat-value")[0].textContent = DB.customers.length;
+    root.querySelectorAll(".stat-value")[1].textContent = DB.customers.filter(
+      (c) => c.status === "vip",
+    ).length;
+    root.querySelectorAll(".stat-value")[2].textContent = Utils.money(
+      DB.customers.reduce((s, c) => s + c.spent, 0),
+    );
+    root.querySelectorAll(".stat-value")[3].textContent = Math.round(
+      DB.customers.reduce((s, c) => s + c.visits, 0) / DB.customers.length,
+    );
+  }
+},
+
   search(val) {
-    this.searchTerm = val.toLowerCase();
-    this.renderGrid();
+    this._search = val.toLowerCase();
+    this.renderTable();
   },
 
-  /* ── Draw customer cards ── */
-  renderGrid() {
-    const grid = document.getElementById('customerGrid');
-    if (!grid) return;
+  renderTable() {
+    const el = document.getElementById("customerBody");
+    if (!el) return;
+    const filtered = this._search
+      ? DB.customers.filter(
+          (c) =>
+            c.name.toLowerCase().includes(this._search) ||
+            c.email.toLowerCase().includes(this._search),
+        )
+      : DB.customers;
 
-    let list = DB.customers;
-    if (this.currentFilter !== 'all') list = list.filter(c => c.status === this.currentFilter);
-    if (this.searchTerm) list = list.filter(c =>
-      c.name.toLowerCase().includes(this.searchTerm) ||
-      c.email.toLowerCase().includes(this.searchTerm));
+    el.innerHTML = filtered
+      .map(
+        (c) => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="customer-avatar" style="background:${c.color}">${Utils.sanitize(c.name.charAt(0))}</div>
+            <div>
+              <div style="font-weight:600;color:var(--text)">${Utils.sanitize(c.name)}</div>
+              ${c.note ? `<div style="font-size:10px;color:var(--text-3);
+                max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${Utils.sanitize(c.note)}</div>` : ""}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div style="font-size:11px">${Utils.sanitize(c.email)}</div>
+          <div style="font-size:10px;color:var(--text-3)">${Utils.sanitize(c.phone)}</div>
+        </td>
+        <td style="font-weight:700">${c.visits}</td>
+        <td style="font-weight:700;font-family:'Playfair Display',serif">${Utils.money(c.spent)}</td>
+        <td style="font-size:11px;color:var(--text-3)">${Utils.formatDate(c.lastVisit)}</td>
+        <td><span class="tag tag-${c.status}">${c.status}</span></td>
+        <td>
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-outline btn-sm btn-icon" onclick="CustomersView.viewCustomer('${c.id}')"><i class="fa-solid fa-eye"></i></button>
+            <button class="btn btn-outline btn-sm btn-icon"  onclick="CustomersView.openEditModal('${c.id}')">
+            <i class="fa-solid fa-pen" ></i></button>
+          </div>
+        </td>
+      </tr>`,
+      )
+      .join("");
+  },
 
-    if (!list.length) {
-      grid.innerHTML = `
-        <div style="text-align:center;padding:60px;color:var(--text-3)">
-          <i class="fa-solid fa-users" style="font-size:32px;opacity:.2;margin-bottom:10px;display:block"></i>
-          No customers found
-        </div>`;
+  viewCustomer(id) {
+    const c = DB.customers.find((x) => x.id === id);
+    if (!c) return;
+    document.getElementById("customerModalContent").innerHTML = `
+      <div class="modal-title">Customer Details</div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+        <div class="customer-avatar" style="width:56px;height:56px;font-size:22px;background:${c.color}">${Utils.sanitize(c.name.charAt(0))}</div>
+        <div>
+          <div style="font-size:18px;font-weight:700;font-family:'Playfair Display',serif">${Utils.sanitize(c.name)}</div>
+          <span class="tag tag-${c.status}">${c.status}</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+        <div class="form-group"><div class="form-label">Email</div><div style="font-size:12px">${Utils.sanitize(c.email)}</div></div>
+        <div class="form-group"><div class="form-label">Phone</div><div style="font-size:12px">${Utils.sanitize(c.phone)}</div></div>
+        <div class="form-group"><div class="form-label">Total Visits</div><div style="font-size:16px;font-weight:700;font-family:'Playfair Display',serif">${c.visits}</div></div>
+        <div class="form-group"><div class="form-label">Total Spent</div><div style="font-size:16px;
+        font-weight:700;font-family:'Playfair Display',serif;color:var(--green)">${Utils.money(c.spent)}</div></div>
+        <div class="form-group"><div class="form-label">Last Visit</div><div style="font-size:12px">${Utils.formatDate(c.lastVisit)}</div></div>
+        <div class="form-group"><div class="form-label">Avg per Visit</div><div style="font-size:12px;font-weight:700">${Utils.money(Math.round(c.spent / c.visits))}</div></div>
+      </div>
+      ${c.note ? `<div style="background:var(--bg-surface2);border-radius:8px;padding:12px;font-size:12px;color:var(--text-2)"><i class="fa-solid fa-note-sticky" style="color:var(--gold);margin-right:6px"></i>${Utils.sanitize(c.note)}</div>` : ""}
+    `;
+    Modal.open("customerModal");
+  },
+
+  openAddModal() {
+    document.getElementById("customerModalContent").innerHTML = `
+      <div class="modal-title">Add New Customer</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Full Name</label><input id="addCustName"
+         class="form-control" placeholder="Enter name…"/></div>
+        <div class="form-group"><label class="form-label">Phone</label><input id="addCustPhone"
+         class="form-control" placeholder="+1-555-…"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Email</label><input id="addCustEmail" class="form-control" placeholder="email@example.com"/></div>
+        <div class="form-group"><label class="form-label">Status</label>
+          <select id="addCustStatus" class="form-control"><option value="regular">Regular</option><option value="vip">VIP</option><option value="new">New</option></select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px"><label class="form-label">Notes</label><textarea id="addCustNote" class="form-control" rows="3" placeholder="Any special notes…"></textarea></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn btn-outline" onclick="Modal.close('customerModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="CustomersView.addCustomer()">Add Customer</button>
+      </div>`;
+    Modal.open("customerModal");
+  },
+
+  addCustomer() {
+    const name = document.getElementById("addCustName").value.trim();
+    const phone = document.getElementById("addCustPhone").value.trim();
+    const email = document.getElementById("addCustEmail").value.trim();
+    const status = document.getElementById("addCustStatus").value;
+    const note = document.getElementById("addCustNote").value.trim();
+
+    if (!name) {
+      Toast.show("Please enter a name", "warning");
+      return;
+    }
+    if (!email) {
+      Toast.show("Please enter an email", "warning");
       return;
     }
 
-    grid.innerHTML = `<div class="grid-3">${list.map(c => this._cardHTML(c)).join('')}</div>`;
+    const COLORS = [
+      "#c0392b",
+      "#1a5276",
+      "#c47a1a",
+      "#6d3b8e",
+      "#2d7a47",
+      "#96281b",
+      "#b8963e",
+      "#9b8c86",
+    ];
+    const newCustomer = {
+      id: "c" + Date.now(),
+      name,
+      phone: phone || "+1-555-0000",
+      email,
+      visits: 0,
+      spent: 0,
+      lastVisit: new Date().toISOString().slice(0, 10),
+      status,
+      color: COLORS[DB.customers.length % COLORS.length],
+      note,
+    };
+
+    DB.customers.unshift(newCustomer);
+    this.renderTable();
+    this._updateSummary();
+    this._persist(); 
+    Modal.close("customerModal");
+    Toast.show(`Customer "${name}" added successfully!`, "success");
+    Notif.add('customer', `New customer "${name}" added`);
   },
 
-  /* ── Single customer card ── */
-  _cardHTML(c) {
-    const tagMap  = { vip:'tag-vip', regular:'tag-regular', new:'tag-new' };
-    const tagClass = tagMap[c.status] || 'tag-pending';
-
-    return `
-      <div class="card" style="transition:all .2s"
-        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'"
-        onmouseout="this.style.transform='';this.style.boxShadow=''">
-
-        <!-- Header row: avatar + name + status -->
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-          <div class="customer-avatar" style="background:${c.color}">${c.name[0]}</div>
-          <div style="flex:1;overflow:hidden">
-            <p style="font-weight:700;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.name}</p>
-            <p style="font-size:10px;color:var(--text-3)">${c.phone}</p>
-          </div>
-          <span class="tag ${tagClass}">${c.status.toUpperCase()}</span>
-        </div>
-
-        <!-- Visits & Spent stats -->
-        <div class="grid-2" style="gap:8px;margin-bottom:12px">
-          <div style="background:var(--bg-surface2);border-radius:8px;padding:8px">
-            <p style="font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em">Visits</p>
-            <p style="font-size:18px;font-weight:700;font-family:'Playfair Display',serif">${c.visits}</p>
-          </div>
-          <div style="background:var(--bg-surface2);border-radius:8px;padding:8px">
-            <p style="font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em">Total Spent</p>
-            <p style="font-size:18px;font-weight:700;font-family:'Playfair Display',serif;color:var(--green)">$${c.spent}</p>
-          </div>
-        </div>
-
-        <!-- Note (if any) -->
-        ${c.note ? `
-          <p style="font-size:10px;color:var(--text-3);background:var(--gold-pale);border-radius:6px;padding:5px 8px;margin-bottom:10px">
-            <i class="fa-solid fa-note-sticky" style="color:var(--gold);margin-right:4px"></i>${c.note}
-          </p>` : ''}
-
-        <!-- Action buttons -->
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-outline btn-sm" style="flex:1" onclick="CustomersView.viewDetails('${c.id}')">
-            <i class="fa-solid fa-eye"></i> View
-          </button>
-          <button class="btn btn-green btn-sm" style="flex:1" onclick="CustomersView.startOrderFor('${c.id}')">
-            <i class="fa-solid fa-plus"></i> Order
-          </button>
-        </div>
-      </div>`;
+  _updateSummary() {
+    const root = document.getElementById("custRoot");
+    if (!root) return;
+    const stats = root.querySelectorAll(".stat-value");
+    stats[0].textContent = DB.customers.length;
+    stats[1].textContent = DB.customers.filter(
+      (c) => c.status === "vip",
+    ).length;
+    stats[2].textContent = Utils.money(
+      DB.customers.reduce((s, c) => s + c.spent, 0),
+    );
+    stats[3].textContent = DB.customers.length
+      ? Math.round(
+          DB.customers.reduce((s, c) => s + c.visits, 0) / DB.customers.length,
+        )
+      : 0;
   },
 
-  /* ── Customer detail modal ── */
-  viewDetails(id) {
-    const c = DB.customers.find(x => x.id === id);
+  openEditModal(id) {
+    const c = DB.customers.find((x) => x.id === id);
     if (!c) return;
 
-    document.getElementById('customerModalContent').innerHTML = `
-      <div class="modal-title">${c.name}</div>
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
-        <div class="customer-avatar" style="background:${c.color};width:56px;height:56px;font-size:22px">${c.name[0]}</div>
-        <div>
-          <p style="font-size:14px;font-weight:700">${c.name}</p>
-          <p style="font-size:12px;color:var(--text-3)">${c.email}</p>
-          <p style="font-size:12px;color:var(--text-3)">${c.phone}</p>
-        </div>
+    document.getElementById("customerModalContent").innerHTML = `
+    <div class="modal-title">Edit Customer</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input id="editName" class="form-control" value="${c.name}"/>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
-        ${[
-          ['Visits',     c.visits],
-          ['Total Spent', '$' + c.spent],
-          ['Avg/Visit',   '$' + Math.round(c.spent / (c.visits || 1))],
-        ].map(([label, val]) => `
-          <div class="card" style="padding:12px;box-shadow:none;text-align:center">
-            <p style="font-size:9px;color:var(--text-3);text-transform:uppercase">${label}</p>
-            <p style="font-size:20px;font-weight:700;font-family:'Playfair Display',serif;color:var(--text)">${val}</p>
-          </div>`).join('')}
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input id="editPhone" class="form-control" value="${c.phone}"/>
       </div>
-      ${c.note ? `
-        <div style="background:var(--gold-pale);border-radius:8px;padding:12px;margin-bottom:14px">
-          <p style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:4px">📝 Note</p>
-          <p style="font-size:12px">${c.note}</p>
-        </div>` : ''}
-      <p style="font-size:11px;color:var(--text-3);margin-bottom:16px">Last visit: ${c.lastVisit}</p>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-primary" style="flex:1" onclick="CustomersView.startOrderFor('${c.id}');Modal.close('customerModal')">
-          <i class="fa-solid fa-plus"></i> New Order
-        </button>
-        <button class="btn btn-outline" onclick="Modal.close('customerModal')">Close</button>
-      </div>`;
-
-    Modal.open('customerModal');
-  },
-
-  /* ── Go to Get Order screen pre-filled with customer name ── */
-  startOrderFor(id) {
-    const c = DB.customers.find(x => x.id === id);
-    if (!c) return;
-    GetOrderView.customerName = c.name;
-    GetOrderView.cart = [];
-    Modal.close('customerModal');
-    Router.go('getorder');
-  },
-
-  /* ── Add customer form modal ── */
-  openAddForm() {
-    document.getElementById('customerModalContent').innerHTML = `
-      <div class="modal-title"><i class="fa-solid fa-user-plus" style="color:var(--red)"></i> Add New Customer</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Full Name *</label>
-          <input class="form-control" id="cnName" placeholder="e.g. John Smith"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Phone *</label>
-          <input class="form-control" id="cnPhone" placeholder="+1-555-0100"/>
-        </div>
-      </div>
-      <div class="form-group" style="margin-bottom:14px">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
         <label class="form-label">Email</label>
-        <input class="form-control" id="cnEmail" placeholder="email@example.com"/>
+        <input id="editEmail" class="form-control" value="${c.email}"/>
       </div>
-      <div class="form-group" style="margin-bottom:14px">
-        <label class="form-label">Special Note (allergies, preferences)</label>
-        <input class="form-control" id="cnNote" placeholder="e.g. Shellfish allergy"/>
-      </div>
-      <div class="form-group" style="margin-bottom:16px">
+      <div class="form-group">
         <label class="form-label">Status</label>
-        <select class="form-control" id="cnStatus">
-          <option value="new">New</option>
-          <option value="regular">Regular</option>
-          <option value="vip">VIP</option>
+        <select id="editStatus" class="form-control">
+          ${["regular", "vip", "new"]
+            .map(
+              (s) =>
+                `<option value="${s}" ${c.status === s ? "selected" : ""}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`,
+            )
+            .join("")}
         </select>
       </div>
-      <button class="btn btn-primary" style="width:100%" onclick="CustomersView.saveCustomer()">
-        <i class="fa-solid fa-save"></i> Save Customer
-      </button>`;
-    Modal.open('customerModal');
+    </div>
+    <div class="form-group" style="margin-bottom:16px">
+      <label class="form-label">Notes</label>
+      <textarea id="editNote" class="form-control" rows="3">${c.note || ""}</textarea>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="Modal.close('customerModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="CustomersView.saveEdit('${c.id}')">
+        <i class="fa-solid fa-floppy-disk"></i> Save Changes
+      </button>
+    </div>`;
+    Modal.open("customerModal");
   },
 
-  /* ── Save new customer ── */
-  saveCustomer() {
-    const name  = document.getElementById('cnName').value.trim();
-    const phone = document.getElementById('cnPhone').value.trim();
-    if (!name || !phone) { Toast.show('Name and phone are required', 'warning'); return; }
+  saveEdit(id) {
+    const c = DB.customers.find((x) => x.id === id);
+    if (!c) return;
 
-    const palette = ['#c0392b','#1a5276','#2d7a47','#b8963e','#6d3b8e','#c47a1a','#96281b'];
+    const name = document.getElementById("editName").value.trim();
+    const email = document.getElementById("editEmail").value.trim();
 
-    DB.customers.push({
-      id:        'c' + Date.now(),
-      name,
-      phone,
-      email:     document.getElementById('cnEmail').value,
-      note:      document.getElementById('cnNote').value,
-      status:    document.getElementById('cnStatus').value,
-      visits:    0,
-      spent:     0,
-      lastVisit: '—',
-      color:     palette[Math.floor(Math.random() * palette.length)],
-    });
+    if (!name) {
+      Toast.show("Please enter a name", "warning");
+      return;
+    }
+    if (!email) {
+      Toast.show("Please enter an email", "warning");
+      return;
+    }
 
-    Modal.close('customerModal');
-    Toast.show('Customer added!', 'success');
-    this.renderGrid();
+    // শুধু editable fields update — visits, spent, color অপরিবর্তিত
+    c.name   = Utils.sanitize(name);
+    c.email  = Utils.sanitize(email);
+    c.phone  = Utils.sanitize(document.getElementById("editPhone").value.trim() || c.phone);
+    c.status = document.getElementById("editStatus").value;
+    c.note   = Utils.sanitize(document.getElementById("editNote").value.trim());
+
+    this.renderTable();
+    this._updateSummary();
+    this._persist();
+    Modal.close("customerModal");
+    Toast.show(`"${c.name}" updated successfully!`, "success");
+    Notif.add('customer', `Customer "${name}" updated`);
+  },
+  _persist() {
+    Store.saveCustomers(); // Service layer এ delegate
   },
 };

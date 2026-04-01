@@ -3,13 +3,13 @@
 
    A simple POS (Point of Sale) screen.
    Staff pick items from the menu, add to cart,
-   then place the order.
+   then place the order via AJAX (API.createOrder).
 ================================================ */
 
 const GetOrderView = {
 
   /* ── STATE ── */
-  cart:         [],   // Array of { id, name, price, emoji, qty }
+  cart:         [],
   currentCat:   'all',
   tableNum:     '',
   customerName: '',
@@ -75,9 +75,9 @@ const GetOrderView = {
 
           <!-- Totals + Place Order button -->
           <div style="padding:16px;border-top:1px solid var(--border)">
-            ${this._totalRowHTML('Subtotal',    'cartSubtotal', '$0.00')}
-            ${this._totalRowHTML('Tax (8.5%)',  'cartTax',      '$0.00')}
-            ${this._totalRowHTML('Service (10%)','cartService', '$0.00')}
+            ${this._totalRowHTML('Subtotal',     'cartSubtotal', '$0.00')}
+            ${this._totalRowHTML('Tax (8.5%)',   'cartTax',      '$0.00')}
+            ${this._totalRowHTML('Service (10%)','cartService',  '$0.00')}
             <div style="display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:16px;border-top:1px solid var(--border);padding-top:10px;margin-top:6px">
               <span>Total</span>
               <span id="cartTotal" style="color:var(--green)">$0.00</span>
@@ -86,7 +86,8 @@ const GetOrderView = {
               <button class="btn btn-outline" style="flex:1" onclick="GetOrderView.clearCart()">
                 <i class="fa-solid fa-trash"></i> Clear
               </button>
-              <button class="btn btn-primary" style="flex:2" onclick="GetOrderView.placeOrder()">
+              <!-- Place Order — async, shows loading state -->
+              <button class="btn btn-primary" style="flex:2" id="placeOrderBtn" onclick="GetOrderView.placeOrder()">
                 <i class="fa-solid fa-check"></i> Place Order
               </button>
             </div>
@@ -96,7 +97,6 @@ const GetOrderView = {
       </div>`;
   },
 
-  /* ── Small helper: one total row ── */
   _totalRowHTML(label, id, defaultVal) {
     return `
       <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
@@ -105,13 +105,13 @@ const GetOrderView = {
       </div>`;
   },
 
-  /* ── init() — runs after render ── */
+  /* ── init() ── */
   init() {
     this.renderMenu();
     this.renderCart();
   },
 
-  /* ── Switch category tab ── */
+  /* ── Category tab switch ── */
   setCat(cat, btn) {
     this.currentCat = cat;
     document.querySelectorAll('#catTabs .tab-btn').forEach(b => b.classList.remove('active'));
@@ -119,12 +119,11 @@ const GetOrderView = {
     this.renderMenu();
   },
 
-  /* ── Draw the menu item cards ── */
+  /* ── Menu grid ── */
   renderMenu() {
     const grid = document.getElementById('menuGrid');
     if (!grid) return;
 
-    // Filter categories if one is selected
     const cats = this.currentCat === 'all'
       ? DB.menu
       : DB.menu.filter(c => c.cat === this.currentCat);
@@ -145,33 +144,22 @@ const GetOrderView = {
       </div>`).join('');
   },
 
-  /* ── Add item to cart (or increase qty) ── */
+  /* ── Cart operations ── */
   addItem(itemId) {
     const item     = Utils.allMenuItems().find(i => i.id === itemId);
     if (!item) return;
     const existing = this.cart.find(c => c.id === itemId);
-
-    if (existing) {
-      existing.qty++;
-    } else {
-      this.cart.push({ ...item, qty: 1 });
-    }
+    if (existing) { existing.qty++; } else { this.cart.push({ ...item, qty: 1 }); }
     this.renderCart();
   },
 
-  /* ── Remove item from cart (or decrease qty) ── */
   removeItem(itemId) {
     const idx = this.cart.findIndex(c => c.id === itemId);
     if (idx === -1) return;
-    if (this.cart[idx].qty > 1) {
-      this.cart[idx].qty--;
-    } else {
-      this.cart.splice(idx, 1);
-    }
+    if (this.cart[idx].qty > 1) { this.cart[idx].qty--; } else { this.cart.splice(idx, 1); }
     this.renderCart();
   },
 
-  /* ── Re-draw the cart panel ── */
   renderCart() {
     const cartEl = document.getElementById('cartItems');
     const infoEl = document.getElementById('cartInfo');
@@ -188,7 +176,6 @@ const GetOrderView = {
       return;
     }
 
-    // Draw each cart item
     cartEl.innerHTML = this.cart.map(c => `
       <div class="cart-item">
         <span style="font-size:16px">${c.emoji}</span>
@@ -206,7 +193,6 @@ const GetOrderView = {
     this._updateTotals(this.cart.reduce((s, c) => s + c.price * c.qty, 0));
   },
 
-  /* ── Update total/tax/service figures ── */
   _updateTotals(subtotal) {
     const tax     = subtotal * 0.085;
     const service = subtotal * 0.10;
@@ -223,33 +209,65 @@ const GetOrderView = {
     this.renderCart();
   },
 
-  /* ── Submit order → goes to DB.orders ── */
-  placeOrder() {
-    if (!this.cart.length) { Toast.show('Add at least one item', 'warning'); return; }
-    const table    = document.getElementById('posTable')?.value || this.tableNum;
+  /* ────────────────────────────────────────────
+     placeOrder() — AJAX দিয়ে order submit করে
+     তারপর orders.js এ redirect করে দেখায়
+  ──────────────────────────────────────────── */
+  async placeOrder() {
+    // Validation
+    if (!this.cart.length) {
+      Toast.show('Add at least one item', 'warning');
+      return;
+    }
+    const table    = document.getElementById('posTable')?.value    || this.tableNum;
     const customer = document.getElementById('posCustomer')?.value || this.customerName || 'Guest';
-    if (!table)    { Toast.show('Please enter a table number', 'warning'); return; }
+    if (!table) {
+      Toast.show('Please enter a table number', 'warning');
+      return;
+    }
 
+    // Order data তৈরি
     const subtotal = this.cart.reduce((s, c) => s + c.price * c.qty, 0);
-    const id       = `#${String(Math.floor(Math.random() * 900) + 100)}`;
-
-    // Push new order to the shared data store
-    DB.orders.unshift({
-      id,
+    const newOrder = {
+      id:       `#${String(Math.floor(Math.random() * 900) + 100)}`,
       table:    parseInt(table),
       customer,
       items:    this.cart.map(c => `${c.name}${c.qty > 1 ? ' x' + c.qty : ''}`),
       status:   'pending',
-      total:    Math.round(subtotal * 1.185),
+      total:    Math.round(subtotal * 1.185),  // tax + service included
       created:  new Date(),
-    });
+    };
 
-    // Reset form
-    this.cart         = [];
-    this.tableNum     = '';
-    this.customerName = '';
+    // Button loading state
+    const btn = document.getElementById('placeOrderBtn');
+    if (btn) {
+      btn.disabled  = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing…';
+    }
 
-    Toast.show(`Order ${id} placed for Table ${table}!`, 'success');
-    Router.go('orders');
+    try {
+      // ── AJAX POST ──
+      await API.createOrder(newOrder);
+
+      // Reset form state
+      this.cart         = [];
+      this.tableNum     = '';
+      this.customerName = '';
+
+      Toast.show(`Order ${newOrder.id} placed for Table ${table}!`, 'success');
+
+      // Orders view এ যাও — নতুন order সেখানে দেখাবে
+      Router.go('orders');
+
+    } catch (err) {
+      console.error('Place order error:', err);
+      Toast.show('Failed to place order. Try again.', 'error');
+
+      // Button reset
+      if (btn) {
+        btn.disabled  = false;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Place Order';
+      }
+    }
   },
 };

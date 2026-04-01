@@ -18,7 +18,7 @@ const Utils = {
     return new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
   },
   today:      () => new Date().toISOString().split('T')[0],
-todayMinus: (days) => { const d = new Date(); d.setDate(d.getDate()-days); return d.toISOString().split('T')[0]; },
+  todayMinus: (days) => { const d = new Date(); d.setDate(d.getDate()-days); return d.toISOString().split('T')[0]; },
   starsHTML(rating, max=5) {
     let html = '<div class="stars">';
     for (let i = 1; i <= max; i++) {
@@ -27,6 +27,15 @@ todayMinus: (days) => { const d = new Date(); d.setDate(d.getDate()-days); retur
     html += '</div>';
     return html;
   },
+  sanitize(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+},
 };
 
 const Toast = {

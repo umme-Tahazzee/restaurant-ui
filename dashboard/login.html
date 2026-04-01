@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Management System - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f3f4f6; }
+    ::-webkit-scrollbar-thumb { background: #c0392b; border-radius: 10px; }
+
+    * { font-family: 'Jost', sans-serif; }
+
+    .glass-card {
+      background: linear-gradient(160deg, #1f1410 0%, #1a1210 60%, #150f0c 100%);
+      border: 1px solid rgba(255,255,255,.07);
+      box-shadow: 0 32px 80px rgba(26,18,16,.3);
+    }
+
+    .field-input {
+      width: 100%;
+      border-radius: 14px;
+      padding: 14px 44px 14px 16px;
+      font-size: 13px;
+      color: #fff;
+      background: rgba(255,255,255,.05);
+      border: 1.5px solid rgba(255,255,255,.09);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .field-input::placeholder { color: rgba(255,255,255,.22); }
+    .field-input:focus {
+      border-color: rgba(192,57,43,.6);
+      box-shadow: 0 0 0 3px rgba(192,57,43,.1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #c0392b, #96281b);
+      box-shadow: 0 6px 24px rgba(192,57,43,.35);
+      transition: all .2s;
+    }
+    .btn-primary:hover:not(:disabled) {
+      opacity: .92;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 32px rgba(192,57,43,.45);
+    }
+    .btn-primary:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .role-card {
+      padding: 20px;
+      border-radius: 14px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all .3s;
+      background: rgba(255,255,255,.05);
+      text-align: center;
+    }
+    .role-card:hover {
+      background: rgba(192,57,43,.1);
+      border-color: #c0392b;
+    }
+    .role-card.selected {
+      background: rgba(192,57,43,.2);
+      border-color: #c0392b;
+      box-shadow: 0 0 20px rgba(192,57,43,.25);
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px; right: 20px;
+      z-index: 9999;
+      padding: 14px 18px;
+      border-radius: 14px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      transform: translateX(120%);
+      transition: transform .35s;
+    }
+    .toast.show { transform: translateX(0); }
+    .toast-success {
+      background: #0d3320;
+      border: 1px solid rgba(46,204,113,.25);
+      color: #2ecc71;
+    }
+    .toast-error {
+      background: #3b0f0a;
+      border: 1px solid rgba(231,76,60,.25);
+      color: #e74c3c;
+    }
+
+    .error-msg {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 6px;
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+    .error-msg.show { display: flex; }
+
+    .demo-credentials {
+      background: rgba(192,57,43,.1);
+      border: 1px solid rgba(192,57,43,.25);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 20px;
+      font-size: 12px;
+      color: rgba(255,255,255,.8);
+    }
+    .demo-credentials h4 {
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .demo-cred-item {
+      margin: 8px 0;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .demo-cred-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body style="background: linear-gradient(160deg, #f5ede4 0%, #f0e4d8 40%, #e8d8cc 100%);">
+
+  <div id="toastEl" class="toast">
+    <i id="toastIcon" class="fa-solid fa-circle-check"></i>
+    <span id="toastMsg"></span>
+  </div>
+
+  <div class="min-h-screen flex items-center justify-center px-4 py-10">
+    <div class="w-full max-w-[500px]">
+      
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <div class="w-[70px] h-[70px] mx-auto mb-5 rounded-[20px] btn-primary flex items-center justify-center">
+          <i class="fa-solid fa-utensils text-white text-2xl"></i>
+        </div>
+        <h1 class="font-playfair text-3xl font-black text-gray-800 mb-2">
+          Savoria
+        </h1>
+        <p class="text-gray-600 italic">Restaurant Management System</p>
+      </div>
+
+      <!-- Login Form -->
+      <div class="glass-card rounded-3xl p-8 mb-6">
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          
+          <!-- Global Error Message -->
+          <div id="globalErr" class="error-msg show mb-4 bg-red-900/20  p-3 rounded-lg">
+            <i class="fa-solid fa-exclamation-circle"></i>
+            <span id="globalErrMsg"></span>
+          </div>
+
+          <!-- Role Selection -->
+          <div class="mb-6">
+            <label class="block text-sm font-bold text-white/70 mb-3 uppercase tracking-wide">
+              <i class="fa-solid fa-user-tie mr-2"></i>Login As
+            </label>
+            <div class="grid grid-cols-3 gap-3">
+              <!-- Admin Role -->
+              <div class="role-card selected" data-role="admin" onclick="selectRole('admin')">
+                <i class="fa-solid fa-crown text-2xl text-red-500 mb-2"></i>
+                <div class="text-sm font-bold text-white">Admin</div>
+                <div class="text-xs text-white/50 mt-1">Full Control</div>
+              </div>
+              
+              <!-- Manager Role -->
+              <div class="role-card" data-role="manager" onclick="selectRole('manager')">
+                <i class="fa-solid fa-chart-pie text-2xl text-orange-500 mb-2"></i>
+                <div class="text-sm font-bold text-white">Manager</div>
+                <div class="text-xs text-white/50 mt-1">Branch Ops</div>
+              </div>
+              
+              <!-- Staff Role -->
+              <div class="role-card" data-role="staff" onclick="selectRole('staff')">
+                <i class="fa-solid fa-user-check text-2xl text-blue-500 mb-2"></i>
+                <div class="text-sm font-bold text-white">Staff</div>
+                <div class="text-xs text-white/50 mt-1">Operations</div>
+              </div>
+            </div>
+            <input type="hidden" id="selectedRole" value="admin">
+          </div>
+
+          <!-- Email Input -->
+          <div class="mb-4">
+            <label class="block text-xs font-bold text-white/60 mb-2 uppercase">Email Address</label>
+            <div class="relative">
+              <input 
+                type="email" 
+                id="loginEmail" 
+                class="field-input" 
+                placeholder="Enter your email" 
+                required
+                autocomplete="email"
+              >
+              <i class="fa-regular fa-envelope absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none"></i>
+            </div>
+            <div id="emailErr" class="error-msg">
+              <i class="fa-solid fa-info-circle"></i>
+              <span>Please enter a valid email</span>
+            </div>
+          </div>
+
+          <!-- Password Input -->
+          <div class="mb-6">
+            <label class="block text-xs font-bold text-white/60 mb-2 uppercase">Password</label>
+            <div class="relative">
+              <input 
+                type="password" 
+                id="loginPass" 
+                class="field-input" 
+                placeholder="Enter your password" 
+                required
+                autocomplete="current-password"
+              >
+              <i 
+                class="fa-regular fa-eye absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 cursor-pointer hover:text-white/50 transition" 
+                onclick="togglePass('loginPass')"
+                title="Toggle password visibility"
+              ></i>
+            </div>
+            <div id="passErr" class="error-msg">
+              <i class="fa-solid fa-info-circle"></i>
+              <span>Password is required</span>
+            </div>
+          </div>
+
+          <!-- Remember Me & Forgot Password -->
+          <div class="flex items-center justify-between mb-6">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input 
+                type="checkbox" 
+                id="rememberMe" 
+                class="w-4 h-4 rounded"
+              >
+              <span class="text-sm text-white/60">Remember me</span>
+            </label>
+            <a href="#" class="text-sm text-blue-400 hover:text-blue-300 transition">
+              Forgot Password?
+            </a>
+          </div>
+
+          <!-- Login Button -->
+          <button 
+            type="submit" 
+            id="loginBtn" 
+            class="w-full btn-primary text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition"
+          >
+            <span id="loginBtnText">
+              <i class="fa-solid fa-right-to-bracket mr-2"></i>Sign In
+            </span>
+            <span id="loginBtnLoad" class="hidden">
+              <i class="fa-solid fa-spinner animate-spin"></i>
+            </span>
+          </button>
+        </form>
+
+        <!-- Demo Credentials Info -->
+        <div class="demo-credentials">
+          <h4><i class="fa-solid fa-flask-vial mr-2"></i>Demo Credentials</h4>
+          
+          <div class="demo-cred-item">
+            <strong>Admin:</strong><br>
+            📧 admin@restaurant.com | 🔑 admin123
+          </div>
+          
+          <div class="demo-cred-item">
+            <strong>Manager:</strong><br>
+            📧 manager@restaurant.com | 🔑 manager123
+          </div>
+          
+          <div class="demo-cred-item">
+            <strong>Staff:</strong><br>
+            📧 staff@restaurant.com | 🔑 staff123
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <p class="text-center text-gray-600 text-xs">
+        © 2024 Savoria Restaurant Management. All rights reserved.
+      </p>
+    </div>
+  </div>
+
+  <script src="shared/auth.js"></script>
+  <script>
+    // ════════════════════════════════════════
+    // USER DATABASE (Demo - Replace with API in production)
+    // ════════════════════════════════════════
+
+    const Users = {
+      ADMINS: [
+        { 
+          id: 'admin1',
+          email: 'admin@restaurant.com', 
+          password: 'admin123', 
+          name: 'Admin User', 
+          role: 'admin',
+          permissions: ['all']
+        }
+      ],
+      MANAGERS: [
+        { 
+          id: 'manager1',
+          email: 'manager@restaurant.com', 
+          password: 'manager123', 
+          name: 'Manager User', 
+          role: 'manager',
+          branch: 'Downtown Branch',
+          permissions: ['manage-branch', 'view-reports']
+        }
+      ],
+      STAFF: [
+        { 
+          id: 'staff1',
+          email: 'staff@restaurant.com', 
+          password: 'staff123', 
+          name: 'Staff User', 
+          role: 'staff',
+          position: 'Waiter',
+          permissions: ['view-orders', 'manage-tables']
+        }
+      ]
+    };
+
+    let selectedRole = 'admin';
+
+    // ════════════════════════════════════════
+    // UTILITY FUNCTIONS
+    // ════════════════════════════════════════
+
+    /**
+     * Show toast notification
+     */
+    function showToast(msg, type = 'success') {
+      const el = document.getElementById('toastEl');
+      el.className = `toast toast-${type}`;
+      document.getElementById('toastMsg').textContent = msg;
+      document.getElementById('toastIcon').className = type === 'success' 
+        ? 'fa-solid fa-circle-check' 
+        : 'fa-solid fa-circle-exclamation';
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    /**
+     * Toggle password visibility
+     */
+    function togglePass(id) {
+      const el = document.getElementById(id);
+      el.type = el.type === 'password' ? 'text' : 'password';
+    }
+
+    /**
+     * Validate email format
+     */
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    /**
+     * Select role
+     */
+    function selectRole(role) {
+      selectedRole = role;
+      document.querySelectorAll('.role-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      document.querySelector(`[data-role="${role}"]`).classList.add('selected');
+      document.getElementById('selectedRole').value = role;
+      document.getElementById('globalErr').classList.add('hidden');
+    }
+
+    /**
+     * Show error message
+     */
+    function showError(message) {
+      const el = document.getElementById('globalErr');
+      document.getElementById('globalErrMsg').textContent = message;
+      el.classList.remove('hidden');
+    }
+
+    /**
+     * Hide error message
+     */
+    function hideError() {
+      document.getElementById('globalErr').classList.add('hidden');
+    }
+
+    // ════════════════════════════════════════
+    // LOGIN HANDLER
+    // ════════════════════════════════════════
+
+    function handleLogin(e) {
+      e.preventDefault();
+      hideError();
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPass').value;
+      const role = document.getElementById('selectedRole').value;
+
+      // Validation
+      let isValid = true;
+
+      if (!isValidEmail(email)) {
+        document.getElementById('emailErr').classList.add('show');
+        isValid = false;
+      } else {
+        document.getElementById('emailErr').classList.remove('show');
+      }
+
+      if (!password) {
+        document.getElementById('passErr').classList.add('show');
+        isValid = false;
+      } else {
+        document.getElementById('passErr').classList.remove('show');
+      }
+
+      if (!isValid) return;
+
+      // Show loading state
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = true;
+      document.getElementById('loginBtnText').classList.add('hidden');
+      document.getElementById('loginBtnLoad').classList.remove('hidden');
+
+      // Simulate API call (replace with actual API call)
+      setTimeout(() => {
+        let userList = [];
+        if (role === 'admin') userList = Users.ADMINS;
+        else if (role === 'manager') userList = Users.MANAGERS;
+        else if (role === 'staff') userList = Users.STAFF;
+
+        const user = userList.find(u => u.email === email && u.password === password);
+
+        if (user) {
+          // Remove password before storing
+          const { password: _, ...userToStore } = user;
+          userToStore.loginTime = Date.now();
+          
+          localStorage.setItem('currentUser', JSON.stringify(userToStore));
+          
+          showToast(`Welcome ${user.name}! 🎉`, 'success');
+
+          setTimeout(() => {
+            // Redirect to appropriate dashboard
+            location.href = `/dashboard/${role}/index.html`;
+          }, 800);
+        } else {
+          showError(`Invalid email or password for ${role} role`);
+          btn.disabled = false;
+          document.getElementById('loginBtnText').classList.remove('hidden');
+          document.getElementById('loginBtnLoad').classList.add('hidden');
+        }
+      }, 1200);
+    }
+
+    // ════════════════════════════════════════
+    // PAGE INITIALIZATION
+    // ════════════════════════════════════════
+
+    window.addEventListener('load', () => {
+      // If already logged in, redirect to dashboard
+      if (Auth.isLoggedIn()) {
+        const user = Auth.getCurrentUser();
+        const dashboardUrl = Auth.getDashboardUrl(user.role);
+        location.href = dashboardUrl;
+      }
+
+      // Pre-fill email if "Remember Me" was checked
+      const rememberedEmail = localStorage.getItem('rememberEmail');
+      if (rememberedEmail) {
+        document.getElementById('loginEmail').value = rememberedEmail;
+      }
+
+      // Update remember me checkbox
+      document.getElementById('rememberMe').addEventListener('change', (e) => {
+        if (e.target.checked) {
+          localStorage.setItem('rememberEmail', document.getElementById('loginEmail').value);
+        } else {
+          localStorage.removeItem('rememberEmail');
+        }
+      });
+    });
+
+    // Clear global error when user starts typing
+    document.getElementById('loginEmail').addEventListener('input', hideError);
+    document.getElementById('loginPass').addEventListener('input', hideError);
+  </script>
+</body>
+</html>

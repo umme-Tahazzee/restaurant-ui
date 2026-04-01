@@ -335,7 +335,7 @@ const ProductView = {
       <div class="modal-title">Edit Product</div>
       <div class="form-group" style="margin-bottom:14px">
         <label class="form-label">Product Name</label>
-        <input id="editProdName" class="form-control" value="${p.name}"/>
+        <input id="editProdName" class="form-control" value="${Utils.sanitize(p.name)}"/>
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -349,7 +349,7 @@ const ProductView = {
       </div>
       <div class="form-group" style="margin-bottom:14px">
         <label class="form-label">Description</label>
-        <textarea id="editProdDesc" class="form-control" rows="2">${p.description}</textarea>
+        <textarea id="editProdDesc" class="form-control" rows="2">${Utils.sanitize(p.description)}</textarea>
       </div>
       ${this._imageUploadHTML(p.image)}
       <div class="form-row">
@@ -385,21 +385,22 @@ const ProductView = {
     if (!name)      { Toast.show('Please enter a product name', 'warning'); return; }
     if (price <= 0) { Toast.show('Please enter a valid price', 'warning'); return; }
 
-    p.name        = name;
+    p.name        = Utils.sanitize(name);
     p.price       = price;
     p.category    = document.getElementById('editProdCat').value;
-    p.description = document.getElementById('editProdDesc').value.trim();
+    p.description = Utils.sanitize(document.getElementById('editProdDesc').value.trim());
     p.status      = document.getElementById('editProdStatus').value;
     p.emoji       = document.getElementById('editProdEmoji').value;
     if (this._uploadedImage) p.image = this._uploadedImage;
     this._uploadedImage = null;
 
-    this._persist();
-    this.renderContent();
-    this._updateSummary();
-    Modal.close('productModal');
-    Toast.show(`"${p.name}" updated successfully!`, 'success');
-    Notif.add('product', `Product "${p.name}" was updated`);
+    Service.saveProducts().then(() => {
+      this.renderContent();
+      this._updateSummary();
+      Modal.close('productModal');
+      Toast.show(`"${p.name}" updated successfully!`, 'success');
+      Notif.add('product', `Product "${p.name}" was updated`);
+    });
   },
 
   deleteProduct(id) {
