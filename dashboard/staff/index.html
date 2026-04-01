@@ -13,10 +13,120 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <!-- Our styles -->
   <link rel="stylesheet" href="theme.css"/>
+
+  <style>
+    /* ══════════════════════════════════════════
+       RESPONSIVE LAYOUT OVERRIDES
+       (Supplements theme.css for mobile/tablet)
+    ══════════════════════════════════════════ */
+
+    /* ── Mobile sidebar backdrop overlay ── */
+    #sidebarBackdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 149;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      animation: fadeIn .2s ease;
+    }
+    #sidebarBackdrop.show { display: block; }
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+
+    /* ── Mobile hamburger in topbar ── */
+    #mobileMenuBtn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: transparent;
+      color: var(--text-2);
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 16px;
+      flex-shrink: 0;
+      transition: background .15s;
+    }
+    #mobileMenuBtn:hover { background: var(--bg-input); }
+
+    /* ── Topbar search hide on small screens ── */
+    @media (max-width: 640px) {
+      #mobileMenuBtn { display: flex; }
+
+      /* Sidebar slides in as overlay */
+      #sidebar {
+        position: fixed !important;
+        left: -260px !important;
+        top: 0;
+        height: 100vh;
+        z-index: 150;
+        transition: left .25s cubic-bezier(.4,0,.2,1) !important;
+        box-shadow: none;
+      }
+      #sidebar.mobile-open {
+        left: 0 !important;
+        box-shadow: 4px 0 32px rgba(0,0,0,.18);
+      }
+      /* Collapsed state ignored on mobile — always full width when open */
+      #sidebar.collapsed { width: 220px !important; }
+      #sidebar.collapsed .nav-lbl,
+      #sidebar.collapsed .sidebar-logo-sub,
+      #sidebar.collapsed .sidebar-footer-text,
+      #sidebar.collapsed .nav-section-title { display: block !important; opacity: 1 !important; }
+      #sidebar.collapsed .badge-dot { display: flex !important; }
+
+      /* Main content takes full width */
+      #mainContent { margin-left: 0 !important; width: 100% !important; }
+
+      /* Topbar compact */
+      .topbar-search { display: none; }
+      #topClock { display: none; }
+      .live-badge { display: none; }
+
+      /* Topbar right compacted */
+      .topbar-right { gap: 4px; }
+
+      /* pageArea padding */
+      #pageArea { padding: 12px !important; }
+    }
+
+    /* ── Tablet: collapsed sidebar, tighter layout ── */
+    @media (min-width: 641px) and (max-width: 1024px) {
+      #sidebar { width: 64px !important; }
+      #sidebar .nav-lbl,
+      #sidebar .sidebar-logo-sub,
+      #sidebar .sidebar-footer-text,
+      #sidebar .nav-section-title { display: none !important; opacity: 0 !important; }
+      #sidebar .badge-dot { right: 4px; top: 4px; }
+      #sidebar .sidebar-footer { padding: 10px 6px; justify-content: center; }
+      #sidebar .sidebar-logout-btn { display: none; }
+      #sidebar .sidebar-avatar { margin: 0 auto; }
+      #sidebar .logo-text { display: none; }
+      #sidebar .sidebar-toggle-btn { margin: 0 auto; }
+      #mainContent { margin-left: 64px !important; }
+
+      /* Topbar search smaller */
+      .topbar-search { max-width: 180px; }
+      #topClock { display: none; }
+      #pageArea { padding: 16px !important; }
+    }
+
+    /* ── Topbar: stack search + right on very small ── */
+    @media (max-width: 420px) {
+      #topbar { padding: 0 10px; gap: 6px; }
+      .topbar-right { gap: 2px; }
+      .topbar-avatar { width: 30px; height: 30px; font-size: 10px; }
+    }
+  </style>
 </head>
 
 <body>
 
+<!-- Mobile sidebar backdrop -->
+<div id="sidebarBackdrop" onclick="closeMobileSidebar()"></div>
 
 <div id="sidebar">
 
@@ -27,7 +137,7 @@
         <span class="sidebar-logo-brand">Sav<em>o</em>ria</span>
         <span class="sidebar-logo-sub">Management</span>
       </div>
-      <button class="sidebar-toggle-btn" onclick="Sidebar.toggle()" title="Collapse sidebar">
+      <button class="sidebar-toggle-btn" onclick="handleSidebarToggle()" title="Collapse sidebar">
         <i class="fa-solid fa-bars-staggered"></i>
       </button>
     </div>
@@ -40,53 +150,51 @@
 
     <div class="nav-section-title">Overview</div>
 
-    <button class="nav-item active" data-view="dashboard" onclick="Router.go('dashboard',this)">
+    <button class="nav-item active" data-view="dashboard" onclick="navGo('dashboard',this)">
       <i class="fa-solid fa-chart-line"></i>
       <span class="nav-lbl">Dashboard</span>
     </button>
 
     <div class="nav-section-title">Orders</div>
 
-    <!-- Orders — shows badge with pending count -->
-    <button class="nav-item" data-view="orders" onclick="Router.go('orders',this)">
+    <button class="nav-item" data-view="orders" onclick="navGo('orders',this)">
       <i class="fa-solid fa-receipt"></i>
       <span class="nav-lbl">Orders</span>
       <span class="badge-dot" id="pendingBadge">3</span>
     </button>
 
-    <!-- Get Order (POS / take order screen) -->
-    <button class="nav-item" data-view="getorder" onclick="Router.go('getorder',this)">
+    <button class="nav-item" data-view="getorder" onclick="navGo('getorder',this)">
       <i class="fa-solid fa-plus-circle"></i>
       <span class="nav-lbl">Get Order</span>
     </button>
 
     <div class="nav-section-title">Reports</div>
 
-    <button class="nav-item" data-view="salesreport" onclick="Router.go('salesreport',this)">
+    <button class="nav-item" data-view="salesreport" onclick="navGo('salesreport',this)">
       <i class="fa-solid fa-chart-line"></i>
       <span class="nav-lbl">Sales Report</span>
     </button>
 
-    <button class="nav-item" data-view="expensereport" onclick="Router.go('expensereport',this)">
+    <button class="nav-item" data-view="expensereport" onclick="navGo('expensereport',this)">
       <i class="fa-solid fa-file-invoice-dollar"></i>
       <span class="nav-lbl">Expense Report</span>
     </button>
 
     <div class="nav-section-title">Management</div>
 
-    <button class="nav-item" data-view="customers" onclick="Router.go('customers',this)">
+    <button class="nav-item" data-view="customers" onclick="navGo('customers',this)">
       <i class="fa-solid fa-users"></i>
       <span class="nav-lbl">Customers</span>
     </button>
 
-    <button class="nav-item" data-view="transactions" onclick="Router.go('transactions',this)">
+    <button class="nav-item" data-view="transactions" onclick="navGo('transactions',this)">
       <i class="fa-solid fa-money-bill-transfer"></i>
       <span class="nav-lbl">Transactions</span>
     </button>
 
     <div class="nav-section-title">System</div>
 
-    <button class="nav-item" data-view="settings" onclick="Router.go('settings',this)">
+    <button class="nav-item" data-view="settings" onclick="navGo('settings',this)">
       <i class="fa-solid fa-gear"></i>
       <span class="nav-lbl">Settings</span>
     </button>
@@ -116,6 +224,11 @@
   <!-- ── TOP BAR ── -->
   <div id="topbar">
 
+    <!-- Mobile hamburger (only visible on mobile via CSS) -->
+    <button id="mobileMenuBtn" onclick="openMobileSidebar()" aria-label="Open menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
     <!-- Search -->
     <div class="topbar-search">
       <i class="fa-solid fa-magnifying-glass" style="color:var(--text-3);font-size:12px;flex-shrink:0"></i>
@@ -132,10 +245,9 @@
       </div>
 
       <!-- Date & time clock -->
-      <div id="topClock" style="font-size:11px;color:var(--text-3);font-family:'Cormorant Garamond',
-      serif;font-style:italic;white-space:nowrap"></div>
+      <div id="topClock" style="font-size:11px;color:var(--text-3);font-family:'Cormorant Garamond',serif;font-style:italic;white-space:nowrap"></div>
 
-      <!-- Theme toggle (light ↔ dark) -->
+      <!-- Theme toggle -->
       <button class="topbar-icon-btn" onclick="Theme.toggle()" title="Toggle theme">
         <i id="themeIcon" class="fa-solid fa-moon"></i>
       </button>
@@ -147,7 +259,6 @@
           <span style="position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--red)"></span>
         </button>
 
-        <!-- Notification dropdown -->
         <div id="notifDrop">
           <div class="notif-header">
             <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:14px">Notifications</span>
@@ -172,10 +283,10 @@
             </div>
           </div>
         </div>
-      </div><!-- /notif wrapper -->
+      </div>
 
       <!-- User avatar -->
-      <div class="topbar-avatar" title="Marco Ferretti">UT</div>
+      <div class="topbar-avatar" title="Umme Tahazzee">UT</div>
     </div>
   </div><!-- /topbar -->
 
@@ -186,10 +297,9 @@
 
 
 <!-- ════════════════════════════════════════
-     MODALS (shared across views)
+     MODALS
 ════════════════════════════════════════ -->
 
-<!-- Order detail modal -->
 <div class="modal-overlay" id="orderModal">
   <div class="modal">
     <button class="modal-close" onclick="Modal.close('orderModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -197,7 +307,6 @@
   </div>
 </div>
 
-<!-- Customer detail / add modal -->
 <div class="modal-overlay" id="customerModal">
   <div class="modal">
     <button class="modal-close" onclick="Modal.close('customerModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -205,7 +314,6 @@
   </div>
 </div>
 
-<!-- Expense add modal -->
 <div class="modal-overlay" id="expenseModal">
   <div class="modal">
     <button class="modal-close" onclick="Modal.close('expenseModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -213,28 +321,76 @@
   </div>
 </div>
 
-
-<!-- ════════════════════════════════════════
-     TOAST CONTAINER
-     Toast.show() appends items here
-════════════════════════════════════════ -->
+<!-- Toast container -->
 <div id="toastContainer"></div>
 
 
 <!-- ════════════════════════════════════════
-     SCRIPTS — load order matters!
-     1. Data first (all views read from DB)
-     2. App core (Router, Theme, Utils, etc.)
-     3. Views (each view is one file)
+     MOBILE SIDEBAR HELPERS
 ════════════════════════════════════════ -->
+<script>
+  function isMobile() { return window.innerWidth <= 640; }
 
-<!-- 1. Data -->
+  function openMobileSidebar() {
+    document.getElementById('sidebar').classList.add('mobile-open');
+    document.getElementById('sidebarBackdrop').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileSidebar() {
+    document.getElementById('sidebar').classList.remove('mobile-open');
+    document.getElementById('sidebarBackdrop').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  function handleSidebarToggle() {
+    if (isMobile()) {
+      closeMobileSidebar();
+    } else {
+      Sidebar.toggle();
+    }
+  }
+
+  /* Auto-close sidebar on mobile when a nav item is tapped */
+  function navGo(view, el) {
+    if (isMobile()) closeMobileSidebar();
+    Router.go(view, el);
+  }
+
+  /* Close notification dropdown & mobile sidebar on outside click */
+  document.addEventListener('click', e => {
+    const drop = document.getElementById('notifDrop');
+    if (drop && !e.target.closest('#notifDrop') && !e.target.closest('#notifBtn')) {
+      drop.style.display = 'none';
+    }
+  });
+
+  /* Swipe-left to close sidebar on mobile */
+  let _swipeStartX = 0;
+  document.addEventListener('touchstart', e => { _swipeStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (!isMobile()) return;
+    const dx = _swipeStartX - e.changedTouches[0].clientX;
+    if (dx > 60 && document.getElementById('sidebar').classList.contains('mobile-open')) {
+      closeMobileSidebar();
+    }
+  }, { passive: true });
+
+  /* Resize: clean up mobile state when going back to desktop */
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      closeMobileSidebar();
+      document.body.style.overflow = '';
+    }
+  });
+</script>
+
+
+<!-- ════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════ -->
 <script src="data.js"></script>
-
-<!-- 2. App core -->
 <script src="app.js"></script>
-
-<!-- 3. Views (each file = one page) -->
 <script src="dashboard.js"></script>
 <script src="orders.js"></script>
 <script src="getorder.js"></script>

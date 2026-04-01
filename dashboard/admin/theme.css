@@ -126,11 +126,18 @@ input, select, textarea { font-family: inherit; }
   border-right: 1px solid var(--sidebar-border);
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   position: relative;
   z-index: 100;
   transition: width .3s ease, min-width .3s ease, background .3s, border-color .3s;
   overflow: hidden;
+  flex-shrink: 0;
+}
+.sidebar-nav {
+  flex: 1;              
+  overflow-y: auto;     
+}
+.sidebar-footer {
   flex-shrink: 0;
 }
 #sidebar.collapsed { width: 64px; min-width: 64px; }
