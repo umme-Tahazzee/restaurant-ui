@@ -1,19 +1,274 @@
-
+/* ================================================
+   SAVORIA — DASHBOARD VIEW  (dashboard.js)
+   Fully responsive: mobile / tablet / desktop
+================================================ */
 
 const DashboardView = {
 
-  /* ── Chart instance (so we can destroy before re-draw) ── */
   _chart: null,
-
-  /* ── Auto-refresh timer ID ── */
   _timer: null,
 
   /* ────────────────────────────────────────────
-     render() — full page HTML
+     render()
   ──────────────────────────────────────────── */
   render() {
     return `
-      <div id="dashRoot">
+      <!-- ══ RESPONSIVE STYLES (dashboard-scoped) ══ -->
+      <style>
+        /* ── KPI row ── */
+        .db-kpi-row {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 20px;
+        }
+        @media (max-width: 1024px) {
+          .db-kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        }
+        @media (max-width: 480px) {
+          .db-kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        }
+
+        /* ── Hero ── */
+        .db-hero {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 20px;
+          flex-wrap: wrap;
+          margin-bottom: 24px;
+        }
+        .db-hero-left  { flex: 1; min-width: 220px; }
+        .db-hero-right { flex-shrink: 0; }
+        @media (max-width: 640px) {
+          .db-hero { flex-direction: column; gap: 16px; margin-bottom: 16px; }
+          .db-hero-right { width: 100%; }
+          .db-hero-revenue-val { font-size: 28px !important; }
+          .db-hero-badges { flex-wrap: wrap; gap: 6px; }
+        }
+
+        /* ── Section label ── */
+        .db-section-label {
+          font-size: 11px;
+          font-weight: 700;
+          color: var(--text-3);
+          text-transform: uppercase;
+          letter-spacing: .08em;
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          margin: 20px 0 10px;
+        }
+
+        /* ── Pipeline ── */
+        .db-pipeline {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 12px;
+          margin-bottom: 20px;
+          position: relative;
+        }
+        @media (max-width: 900px) {
+          .db-pipeline {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+          .db-pipe-arrow { display: none !important; }
+        }
+        @media (max-width: 480px) {
+          .db-pipeline {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            gap: 10px;
+            padding-bottom: 8px;
+            margin-left: -2px;
+            margin-right: -2px;
+          }
+          .db-pipe-col {
+            scroll-snap-align: start;
+            flex: 0 0 82vw;
+            max-width: 280px;
+          }
+          .db-pipe-arrow { display: none !important; }
+        }
+
+        /* ── Mid grid (chart + table map) ── */
+        .db-mid-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          margin-bottom: 20px;
+        }
+        @media (max-width: 900px) {
+          .db-mid-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── Bottom grid (4 cards) ── */
+        .db-bottom-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 20px;
+        }
+        @media (max-width: 1100px) {
+          .db-bottom-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        }
+        @media (max-width: 540px) {
+          .db-bottom-grid { grid-template-columns: 1fr; gap: 10px; }
+        }
+
+        /* ── Table grid ── */
+        .db-table-grid {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 6px;
+        }
+        @media (max-width: 480px) {
+          .db-table-grid { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        }
+
+        /* ── Pipeline scroll indicator on mobile ── */
+        .db-pipe-scroll-hint {
+          display: none;
+          font-size: 10px;
+          color: var(--text-3);
+          text-align: right;
+          margin-bottom: 6px;
+        }
+        @media (max-width: 480px) {
+          .db-pipe-scroll-hint { display: block; }
+        }
+
+        /* ── Spark row ── */
+        .db-spark-row {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          margin-bottom: 12px;
+          flex-wrap: wrap;
+        }
+        .db-spark-stat { text-align: left; }
+        .db-spark-val  { font-size: 16px; font-weight: 700; color: var(--text); }
+        .db-spark-lbl  { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: .05em; }
+        .db-spark-divider { width: 1px; height: 28px; background: var(--border-1); flex-shrink: 0; }
+
+        /* ── KPI card internals ── */
+        .db-kpi-card {
+          background: var(--bg-card);
+          border: 1px solid var(--border-1);
+          border-radius: 14px;
+          padding: 16px;
+          position: relative;
+          overflow: hidden;
+          border-top: 3px solid var(--accent, var(--gold));
+          transition: box-shadow .2s;
+        }
+        .db-kpi-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.08); }
+        .db-kpi-top   { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+        .db-kpi-label { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 4px; }
+        .db-kpi-value { font-size: 24px; font-weight: 700; color: var(--text); font-family: 'Playfair Display', serif; line-height: 1.1; }
+        .db-kpi-sub   { font-size: 10px; margin-top: 3px; }
+        .db-kpi-icon  { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+
+        @media (max-width: 480px) {
+          .db-kpi-value { font-size: 20px; }
+          .db-kpi-card  { padding: 12px; }
+          .db-kpi-icon  { width: 30px; height: 30px; font-size: 12px; }
+        }
+
+        /* ── Pipeline card ── */
+        .db-pipe-col { position: relative; }
+        .db-pipe-head {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 8px 12px; border-radius: 10px 10px 0 0; border: 1px solid var(--border-1);
+          border-bottom: none;
+        }
+        .db-pipe-body {
+          border: 1px solid var(--border-1); border-top: none; border-radius: 0 0 10px 10px;
+          padding: 8px; display: flex; flex-direction: column; gap: 7px;
+          min-height: 80px; background: var(--bg-card);
+        }
+        .db-pipe-badge {
+          min-width: 20px; height: 20px; border-radius: 10px; display: flex;
+          align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; padding: 0 6px;
+        }
+        .db-pipe-card {
+          background: var(--bg-input); border-radius: 8px; padding: 10px; cursor: pointer;
+          transition: transform .15s, box-shadow .15s; border: 1px solid var(--border-1);
+        }
+        .db-pipe-card:hover { transform: translateY(-1px); box-shadow: 0 3px 12px rgba(0,0,0,.1); }
+        .db-pipe-empty { text-align: center; font-size: 11px; color: var(--text-3); padding: 20px 0; }
+        .db-pipe-arrow {
+          position: absolute; right: -8px; top: 50%; transform: translateY(-50%);
+          z-index: 2; color: var(--text-3); font-size: 11px;
+        }
+
+        /* ── Table cell ── */
+        .db-table-cell {
+          aspect-ratio: 1; border-radius: 8px; border: 2px solid transparent;
+          display: flex; flex-direction: column; align-items: center; justify-content: center;
+          cursor: default; transition: opacity .2s;
+        }
+        .db-table-num    { font-size: 13px; font-weight: 700; line-height: 1; }
+        .db-table-guests { font-size: 9px; line-height: 1.2; }
+        .db-table-time   { font-size: 8px; line-height: 1.2; text-align: center; }
+        @media (max-width: 480px) {
+          .db-table-num { font-size: 11px; }
+          .db-table-time, .db-table-guests { display: none; }
+        }
+
+        /* ── Reservation / alert / staff / item rows ── */
+        .db-resv-row  { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border-1); }
+        .db-resv-row:last-child { border-bottom: none; }
+        .db-resv-time { font-size: 11px; font-weight: 700; color: var(--gold); min-width: 52px; }
+        .db-alert-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; }
+        .db-staff-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border-1); }
+        .db-staff-row:last-child { border-bottom: none; }
+        .db-staff-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+        .db-status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+        .db-item-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border-1); }
+        .db-item-row:last-child { border-bottom: none; }
+
+        /* ── Card shared ── */
+        .db-card-head {
+          display: flex; align-items: center; justify-content: space-between;
+          margin-bottom: 14px; gap: 8px; flex-wrap: wrap;
+        }
+        .db-card-title { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; color: var(--text); }
+        .db-micro-btn {
+          font-size: 10px; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--border-1);
+          background: transparent; color: var(--text-3); cursor: pointer; transition: all .15s; font-family: 'Jost', sans-serif;
+        }
+        .db-micro-btn.active,
+        .db-micro-btn:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
+        .db-count-badge {
+          font-size: 10px; padding: 2px 8px; border-radius: 10px; background: var(--bg-input);
+          color: var(--text-3); font-weight: 600;
+        }
+        .db-count-badge.red { background: var(--red); color: #fff; }
+        .db-live-pill {
+          font-size: 9px; font-weight: 700; color: var(--green); background: var(--green-pale);
+          padding: 2px 7px; border-radius: 10px; letter-spacing: .06em; margin-left: 4px;
+        }
+        .db-table-legend {
+          display: flex; align-items: center; gap: 8px; font-size: 10px; color: var(--text-3); flex-wrap: wrap;
+        }
+        .db-leg-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 2px; }
+
+        /* ── Hero specific ── */
+        .db-hero-greeting { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .db-hero-date     { font-size: 12px; color: var(--text-3); margin-bottom: 10px; }
+        .db-hero-badges   { display: flex; gap: 8px; align-items: center; }
+        .db-hero-badge    { font-size: 11px; padding: 4px 10px; border-radius: 20px; background: var(--bg-input); color: var(--text-3); display: flex; align-items: center; gap: 5px; border: 1px solid var(--border-1); }
+        .db-hero-badge.green { background: var(--green-pale); color: var(--green); border-color: transparent; }
+        .db-hero-badge.gold  { background: var(--gold-pale);  color: var(--gold);  border-color: transparent; }
+        .db-hero-revenue-label { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 4px; }
+        .db-hero-revenue-val   { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: var(--text); line-height: 1; }
+        .db-hero-revenue-sub   { font-size: 11px; color: var(--green); margin-top: 4px; font-weight: 600; }
+      </style>
+
+      <div id="dashRoot" style="padding: 4px 0">
 
         <!-- ══ 1. HERO HEADER ══ -->
         ${this._heroHTML()}
@@ -27,12 +282,12 @@ const DashboardView = {
           Live Order Pipeline
           <span class="db-live-pill">● LIVE</span>
         </div>
+        <div class="db-pipe-scroll-hint">← swipe to see all stages →</div>
         <div id="pipelineRow" class="db-pipeline"></div>
 
-        <!-- ══ 4. MIDDLE GRID: Chart + Table Map ══ -->
+        <!-- ══ 4. MID GRID: Chart + Table Map ══ -->
         <div class="db-mid-grid">
 
-          <!-- Revenue chart -->
           <div class="card">
             <div class="db-card-head">
               <span class="db-card-title">Today's Revenue</span>
@@ -41,12 +296,10 @@ const DashboardView = {
                 <button class="db-micro-btn" onclick="DashboardView.setRevPeriod('daily',this)">7-Day</button>
               </div>
             </div>
-            <!-- Sparkline summary -->
             <div class="db-spark-row" id="sparkSummary"></div>
             <div style="position:relative;height:200px"><canvas id="dashRevChart"></canvas></div>
           </div>
 
-          <!-- Table map -->
           <div class="card">
             <div class="db-card-head">
               <span class="db-card-title">Table Status</span>
@@ -58,16 +311,14 @@ const DashboardView = {
               </div>
             </div>
             <div id="tableGrid" class="db-table-grid"></div>
-            <!-- Occupancy bar -->
             <div id="occupancyBar" style="margin-top:12px"></div>
           </div>
 
-        </div><!-- /mid-grid -->
+        </div>
 
         <!-- ══ 5. BOTTOM GRID ══ -->
         <div class="db-bottom-grid">
 
-          <!-- Upcoming Reservations -->
           <div class="card" id="reservationsCard">
             <div class="db-card-head">
               <span class="db-card-title">Tonight's Reservations</span>
@@ -76,7 +327,6 @@ const DashboardView = {
             <div id="reservationsList"></div>
           </div>
 
-          <!-- Alerts -->
           <div class="card" id="alertsCard">
             <div class="db-card-head">
               <span class="db-card-title">Active Alerts</span>
@@ -85,7 +335,6 @@ const DashboardView = {
             <div id="alertsList"></div>
           </div>
 
-          <!-- Staff on duty -->
           <div class="card" id="staffCard">
             <div class="db-card-head">
               <span class="db-card-title">Staff on Duty</span>
@@ -94,7 +343,6 @@ const DashboardView = {
             <div id="staffList"></div>
           </div>
 
-          <!-- Top items today -->
           <div class="card" id="topItemsCard">
             <div class="db-card-head">
               <span class="db-card-title">Top Items Today</span>
@@ -102,13 +350,13 @@ const DashboardView = {
             <div id="topItemsList"></div>
           </div>
 
-        </div><!-- /bottom-grid -->
+        </div>
 
-      </div><!-- /dashRoot -->`;
+      </div>`;
   },
 
   /* ────────────────────────────────────────────
-     init() — runs after render() injects HTML
+     init()
   ──────────────────────────────────────────── */
   init() {
     this._revPeriod = 'hourly';
@@ -122,7 +370,6 @@ const DashboardView = {
     this._renderStaff();
     this._renderTopItems();
 
-    // Auto-refresh pipeline & KPIs every 30s
     this._timer = setInterval(() => {
       if (document.getElementById('dashRoot')) {
         this._renderKPIs();
@@ -135,17 +382,18 @@ const DashboardView = {
   },
 
   /* ──────────────────────────────────────────
-     1. HERO HEADER
+     1. HERO
   ────────────────────────────────────────── */
   _heroHTML() {
-    const h    = new Date().getHours();
+    const h        = new Date().getHours();
     const greeting = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
     const icon     = h < 12 ? '☀️' : h < 17 ? '🌤️' : '🌙';
     const shift    = h < 14 ? 'Morning Shift' : h < 20 ? 'Evening Shift' : 'Night Shift';
 
-    // Count active (non-delivered/cancelled) orders
     const activeOrders = DB.orders.filter(o => !['delivered','cancelled'].includes(o.status)).length;
-    const todayRevenue = DB.transactions.filter(t => t.status === 'completed' && t.date === '2025-03-16').reduce((s, t) => s + t.amount, 0);
+    const todayRevenue = DB.transactions
+      .filter(t => t.status === 'completed' && t.date === '2025-03-16')
+      .reduce((s, t) => s + t.amount, 0);
     const occupiedTbls = DB.tables.filter(t => t.status === 'occupied').length;
 
     return `
@@ -156,14 +404,14 @@ const DashboardView = {
           <div class="db-hero-badges">
             <span class="db-hero-badge"><i class="fa-solid fa-clock"></i> ${shift}</span>
             <span class="db-hero-badge green"><i class="fa-solid fa-circle-check"></i> ${activeOrders} Active Orders</span>
-            <span class="db-hero-badge gold"><i class="fa-solid fa-chair"></i> ${occupiedTbls}/${DB.tables.length} Tables Occupied</span>
+            <span class="db-hero-badge gold"><i class="fa-solid fa-chair"></i> ${occupiedTbls}/${DB.tables.length} Tables</span>
           </div>
         </div>
         <div class="db-hero-right">
           <div class="db-hero-revenue-label">Today's Revenue</div>
           <div class="db-hero-revenue-val">$${todayRevenue.toLocaleString()}</div>
           <div class="db-hero-revenue-sub">+12% vs yesterday</div>
-          <div style="display:flex;gap:8px;margin-top:14px">
+          <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
             <button class="btn btn-primary btn-sm" onclick="Router.go('getorder')">
               <i class="fa-solid fa-plus"></i> New Order
             </button>
@@ -182,38 +430,44 @@ const DashboardView = {
     const el = document.getElementById('kpiRow');
     if (!el) return;
 
-    const todayTxns    = DB.transactions.filter(t => t.date === '2025-03-16');
-    const revenue      = todayTxns.filter(t => t.status === 'completed').reduce((s, t) => s + t.amount, 0);
-    const activeOrders = DB.orders.filter(o => !['delivered','cancelled'].includes(o.status)).length;
-    const pendingOrders= DB.orders.filter(o => o.status === 'pending').length;
-    const readyOrders  = DB.orders.filter(o => o.status === 'ready').length;
-    const totalGuests  = DB.tables.filter(t => t.status === 'occupied').reduce((s, t) => s + t.guests, 0);
-    const totalExpenses= DB.expenses.reduce((s, e) => s + e.amount, 0);
-    const profit       = revenue - (totalExpenses * 0.08); // rough daily ratio
+    const todayTxns     = DB.transactions.filter(t => t.date === '2025-03-16');
+    const revenue       = todayTxns.filter(t => t.status === 'completed').reduce((s, t) => s + t.amount, 0);
+    const activeOrders  = DB.orders.filter(o => !['delivered','cancelled'].includes(o.status)).length;
+    const pendingOrders = DB.orders.filter(o => o.status === 'pending').length;
+    const readyOrders   = DB.orders.filter(o => o.status === 'ready').length;
+    const totalGuests   = DB.tables.filter(t => t.status === 'occupied').reduce((s, t) => s + t.guests, 0);
+    const totalExpenses = DB.expenses.reduce((s, e) => s + e.amount, 0);
+    const profit        = revenue - (totalExpenses * 0.08);
+    const occupancyPct  = Math.round(DB.tables.filter(t => t.status === 'occupied').length / DB.tables.length * 100);
 
     const cards = [
       {
         label: "Today's Revenue", value: `$${revenue.toLocaleString()}`,
         sub: '+12% vs yesterday', subColor: 'var(--green)',
         icon: 'fa-dollar-sign', iconBg: 'var(--green-pale)', iconClr: 'var(--green)',
-        accent: 'var(--green)', spark: [320,410,280,390,480,520,revenue],
+        accent: 'var(--green)',
       },
       {
         label: 'Active Orders', value: activeOrders,
         sub: `${pendingOrders} pending action`, subColor: pendingOrders > 0 ? 'var(--orange)' : 'var(--text-3)',
         icon: 'fa-fire-flame-curved', iconBg: 'var(--red-pale)', iconClr: 'var(--red)',
-        accent: 'var(--red)', bar: { pending: pendingOrders, preparing: DB.orders.filter(o=>o.status==='preparing').length, ready: readyOrders },
+        accent: 'var(--red)',
+        bar: {
+          pending:   pendingOrders,
+          preparing: DB.orders.filter(o => o.status === 'preparing').length,
+          ready:     readyOrders,
+        },
       },
       {
         label: 'Guests Seated', value: totalGuests,
         sub: `${DB.tables.filter(t=>t.status==='occupied').length} of ${DB.tables.length} tables`,
         subColor: 'var(--text-3)',
         icon: 'fa-users', iconBg: 'var(--blue-pale)', iconClr: 'var(--blue)',
-        accent: 'var(--blue)', pct: Math.round(DB.tables.filter(t=>t.status==='occupied').length / DB.tables.length * 100),
+        accent: 'var(--blue)', pct: occupancyPct,
       },
       {
-        label: "Est. Today's Profit", value: `$${Math.max(0,Math.round(profit)).toLocaleString()}`,
-        sub: `After ${Math.round(totalExpenses * 0.08 / revenue * 100)}% expense ratio`,
+        label: "Est. Profit", value: `$${Math.max(0, Math.round(profit)).toLocaleString()}`,
+        sub: `~${Math.round(totalExpenses * 0.08 / (revenue || 1) * 100)}% expense ratio`,
         subColor: 'var(--text-3)',
         icon: 'fa-chart-line', iconBg: 'var(--gold-pale)', iconClr: 'var(--gold)',
         accent: 'var(--gold)',
@@ -234,11 +488,11 @@ const DashboardView = {
         </div>
         ${c.bar ? `
           <div style="display:flex;gap:3px;margin-top:12px">
-            <div title="Pending"   style="flex:${c.bar.pending};height:4px;background:var(--orange);border-radius:2px;min-width:${c.bar.pending?'4px':'0'}"></div>
-            <div title="Preparing" style="flex:${c.bar.preparing};height:4px;background:var(--blue);border-radius:2px;min-width:${c.bar.preparing?'4px':'0'}"></div>
-            <div title="Ready"     style="flex:${c.bar.ready};height:4px;background:var(--gold);border-radius:2px;min-width:${c.bar.ready?'4px':'0'}"></div>
+            <div style="flex:${c.bar.pending};height:4px;background:var(--orange);border-radius:2px;min-width:${c.bar.pending?'4px':'0'}"></div>
+            <div style="flex:${c.bar.preparing};height:4px;background:var(--blue);border-radius:2px;min-width:${c.bar.preparing?'4px':'0'}"></div>
+            <div style="flex:${c.bar.ready};height:4px;background:var(--gold);border-radius:2px;min-width:${c.bar.ready?'4px':'0'}"></div>
           </div>
-          <div style="display:flex;gap:10px;margin-top:5px">
+          <div style="display:flex;gap:10px;margin-top:5px;flex-wrap:wrap">
             <span style="font-size:9px;color:var(--orange)">● ${c.bar.pending} Pending</span>
             <span style="font-size:9px;color:var(--blue)">● ${c.bar.preparing} Prep</span>
             <span style="font-size:9px;color:var(--gold)">● ${c.bar.ready} Ready</span>
@@ -260,7 +514,6 @@ const DashboardView = {
     const el = document.getElementById('pipelineRow');
     if (!el) return;
 
-    // Show only active statuses (skip delivered/cancelled in pipeline)
     const stages = ['pending','preparing','ready','confirmed'];
     const stageConfig = {
       pending:   { label:'Pending',   icon:'fa-clock',        color:'var(--orange)', bg:'var(--orange-pale)' },
@@ -274,7 +527,6 @@ const DashboardView = {
       const cfg    = stageConfig[stage];
       return `
         <div class="db-pipe-col">
-          <!-- Column header -->
           <div class="db-pipe-head" style="background:${cfg.bg}">
             <div style="display:flex;align-items:center;gap:7px">
               <i class="fa-solid ${cfg.icon}" style="color:${cfg.color};font-size:13px"></i>
@@ -282,25 +534,22 @@ const DashboardView = {
             </div>
             <span class="db-pipe-badge" style="background:${cfg.color}">${orders.length}</span>
           </div>
-          <!-- Order cards -->
           <div class="db-pipe-body">
             ${orders.length === 0
               ? `<div class="db-pipe-empty">No orders</div>`
               : orders.map(o => this._pipelineCardHTML(o, cfg)).join('')}
           </div>
-          <!-- Arrow between columns -->
           ${si < stages.length - 1 ? '<div class="db-pipe-arrow"><i class="fa-solid fa-chevron-right"></i></div>' : ''}
         </div>`;
     }).join('');
   },
 
-  /* Single order card inside pipeline column */
   _pipelineCardHTML(o, cfg) {
-    const mins = Math.floor((new Date() - o.created) / 60000);
+    const mins    = Math.floor((new Date() - o.created) / 60000);
     const urgency = mins > 30 ? 'var(--red)' : mins > 15 ? 'var(--orange)' : 'var(--green)';
 
     return `
-      <div class="db-pipe-card" onclick="Router.go('orders')" title="Click to go to Orders">
+      <div class="db-pipe-card" onclick="Router.go('orders')" title="Go to Orders">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
           <span style="font-weight:700;font-size:12px;font-family:'Playfair Display',serif">${o.id}</span>
           <span style="font-size:10px;font-weight:700;color:${urgency}">
@@ -316,7 +565,6 @@ const DashboardView = {
           </span>
           <span style="font-size:11px;font-weight:700;color:var(--green)">${Utils.money(o.total)}</span>
         </div>
-        <!-- Urgency bar at bottom -->
         <div style="height:3px;background:var(--bg-input);border-radius:2px;margin-top:8px;overflow:hidden">
           <div style="height:100%;width:${Math.min(100, mins/40*100)}%;background:${urgency};border-radius:2px;transition:width .5s"></div>
         </div>
@@ -404,8 +652,14 @@ const DashboardView = {
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: { grid: { color: gridC }, ticks: { color: tickC, font: { size: 10 } } },
-          y: { grid: { color: gridC }, ticks: { color: tickC, font: { size: 10 }, callback: v => '$' + v } },
+          x: {
+            grid: { color: gridC },
+            ticks: { color: tickC, font: { size: 10 }, maxTicksLimit: 8 },
+          },
+          y: {
+            grid: { color: gridC },
+            ticks: { color: tickC, font: { size: 10 }, callback: v => '$' + v },
+          },
         },
         interaction: { intersect: false, mode: 'index' },
       },
@@ -421,10 +675,10 @@ const DashboardView = {
     if (!grid) return;
 
     const statusStyle = {
-      occupied: { bg: 'var(--red)',    txt: '#fff',          border: 'var(--red-deep)' },
-      empty:    { bg: 'var(--green)',  txt: '#fff',          border: 'var(--green)' },
-      reserved: { bg: 'var(--gold)',   txt: '#fff',          border: 'var(--gold-light)' },
-      cleaning: { bg: 'var(--text-3)', txt: 'var(--bg-page)',border: 'var(--border-2)' },
+      occupied: { bg: 'var(--red)',    txt: '#fff',           border: 'var(--red-deep)' },
+      empty:    { bg: 'var(--green)',  txt: '#fff',           border: 'var(--green)' },
+      reserved: { bg: 'var(--gold)',   txt: '#fff',           border: 'var(--gold-light)' },
+      cleaning: { bg: 'var(--text-3)', txt: 'var(--bg-page)', border: 'var(--border-2)' },
     };
 
     grid.innerHTML = DB.tables.map(t => {
@@ -436,19 +690,18 @@ const DashboardView = {
           ${t.status === 'occupied' ? `<div class="db-table-guests" style="color:${s.txt}">${t.guests}p</div>` : ''}
           ${t.status === 'occupied' ? `<div class="db-table-time" style="color:${s.txt};opacity:.8">${t.seated}</div>` : ''}
           ${t.status === 'reserved' ? `<div class="db-table-time" style="color:${s.txt};opacity:.9">${t.seated}</div>` : ''}
-          ${t.status === 'cleaning' ? `<div style="font-size:12px;margin-top:2px">🧹</div>` : ''}
+          ${t.status === 'cleaning' ? `<div style="font-size:11px;margin-top:2px">🧹</div>` : ''}
         </div>`;
     }).join('');
 
-    // Occupancy bar
     if (oBar) {
-      const occ     = DB.tables.filter(t => t.status === 'occupied').length;
-      const rsv     = DB.tables.filter(t => t.status === 'reserved').length;
-      const cln     = DB.tables.filter(t => t.status === 'cleaning').length;
-      const total   = DB.tables.length;
-      const occPct  = occ / total * 100;
-      const rsvPct  = rsv / total * 100;
-      const clnPct  = cln / total * 100;
+      const occ    = DB.tables.filter(t => t.status === 'occupied').length;
+      const rsv    = DB.tables.filter(t => t.status === 'reserved').length;
+      const cln    = DB.tables.filter(t => t.status === 'cleaning').length;
+      const total  = DB.tables.length;
+      const occPct = occ / total * 100;
+      const rsvPct = rsv / total * 100;
+      const clnPct = cln / total * 100;
 
       oBar.innerHTML = `
         <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;gap:2px">
@@ -457,7 +710,7 @@ const DashboardView = {
           <div style="width:${clnPct}%;background:var(--text-3)" title="${cln} cleaning"></div>
           <div style="flex:1;background:var(--green);border-radius:0 4px 4px 0" title="${total-occ-rsv-cln} empty"></div>
         </div>
-        <div style="display:flex;gap:12px;margin-top:6px;font-size:10px;color:var(--text-3)">
+        <div style="display:flex;gap:12px;margin-top:6px;font-size:10px;color:var(--text-3);flex-wrap:wrap">
           <span><span style="color:var(--red)">■</span> ${occ} Occupied</span>
           <span><span style="color:var(--green)">■</span> ${total-occ-rsv-cln} Empty</span>
           <span><span style="color:var(--gold)">■</span> ${rsv} Reserved</span>
@@ -505,7 +758,6 @@ const DashboardView = {
 
     const alerts = [];
 
-    // Low/critical stock alerts
     DB.inventory.filter(i => i.status !== 'ok').forEach(i => {
       alerts.push({
         type:  i.status === 'critical' ? 'critical' : 'warning',
@@ -517,7 +769,6 @@ const DashboardView = {
       });
     });
 
-    // Long-waiting pending orders
     DB.orders.filter(o => o.status === 'pending').forEach(o => {
       const mins = Math.floor((new Date() - o.created) / 60000);
       if (mins > 5) {
@@ -529,7 +780,6 @@ const DashboardView = {
       }
     });
 
-    // Ready but not confirmed orders
     DB.orders.filter(o => o.status === 'ready').forEach(o => {
       alerts.push({
         type: 'warning', icon: 'fa-bell', color: 'var(--gold)', bg: 'var(--gold-pale)',
@@ -541,6 +791,7 @@ const DashboardView = {
     if (badge) {
       badge.textContent = alerts.length;
       badge.style.background = alerts.some(a => a.type === 'critical') ? 'var(--red)' : 'var(--orange)';
+      if (!alerts.length) badge.style.background = 'var(--green)';
     }
 
     if (!alerts.length) {
@@ -563,7 +814,7 @@ const DashboardView = {
   },
 
   /* ──────────────────────────────────────────
-     5c. STAFF ON DUTY
+     5c. STAFF
   ────────────────────────────────────────── */
   _renderStaff() {
     const el    = document.getElementById('staffList');
@@ -571,27 +822,27 @@ const DashboardView = {
     if (!el) return;
 
     const onDuty = DB.staff.filter(s => s.status === 'on' || s.status === 'break');
-    if (badge) badge.textContent = `${onDuty.filter(s=>s.status==='on').length} active`;
+    if (badge) badge.textContent = `${onDuty.filter(s => s.status === 'on').length} active`;
 
     el.innerHTML = DB.staff.map(s => `
       <div class="db-staff-row">
         <div class="db-staff-avatar" style="background:${s.color}">${s.avatar}</div>
         <div style="flex:1;min-width:0">
           <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
-          <div style="font-size:10px;color:var(--text-3)">${s.role} · ${s.shift}</div>
+          <div style="font-size:10px;color:var(--text-3)">${s.role}</div>
         </div>
         <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-          ${s.orders > 0 ? `<span style="font-size:10px;color:var(--text-3)">${s.orders} orders</span>` : ''}
+          ${s.orders > 0 ? `<span style="font-size:10px;color:var(--text-3)">${s.orders}x</span>` : ''}
           <span class="db-status-dot" style="background:${s.status === 'on' ? 'var(--green)' : 'var(--orange)'}"></span>
           <span style="font-size:10px;font-weight:600;color:${s.status === 'on' ? 'var(--green)' : 'var(--orange)'}">
-            ${s.status === 'on' ? 'On Duty' : 'Break'}
+            ${s.status === 'on' ? 'On' : 'Break'}
           </span>
         </div>
       </div>`).join('');
   },
 
   /* ──────────────────────────────────────────
-     5d. TOP ITEMS TODAY
+     5d. TOP ITEMS
   ────────────────────────────────────────── */
   _renderTopItems() {
     const el = document.getElementById('topItemsList');
