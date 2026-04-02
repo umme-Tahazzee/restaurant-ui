@@ -322,9 +322,12 @@ input, select, textarea { font-family: inherit; }
 .modal-overlay.show { display: flex; }
 .modal {
   background: var(--bg-surface);
-  border-radius: 16px; padding: 24px;
-  width: 90%; max-width: 520px;
-  max-height: 85vh; overflow-y: auto;
+  border-radius: 16px;
+  padding: 24px;
+  width: 90%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
   position: relative;
   animation: modalIn .2s ease;
 }
