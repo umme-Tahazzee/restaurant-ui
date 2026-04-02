@@ -194,6 +194,10 @@
     </button>
 
     <div class="nav-section-title">System</div>
+    
+    <div class="nav-item" data-view="profile" onclick="Router.go('profile',this)">
+       <i class="fa-solid fa-user"></i> <span>My Profile</span>
+    </div>    
 
     <button class="nav-item" data-view="settings" onclick="navGo('settings',this)">
       <i class="fa-solid fa-gear"></i>
@@ -229,7 +233,7 @@
     <button class="topbar-icon-btn" 
     id="mobileMenuBtn" onclick="openMobileSidebar()">
     <i class="fa-solid fa-bars"></i>
-  </button>
+   </button>
 
     <!-- Search -->
     <div class=" topbar-search flex items-center gap-3 md:gap-3 px-5 md:px-5 px-3 h-8">
@@ -409,7 +413,7 @@
 <script src="salesreport.js"></script>
 <script src="expensereport.js"></script>
 <script src="customers.js"></script>
-<script src="transactions-settings.js"></script>
+<script src="settings.js"></script>
 
 </body>
 </html>

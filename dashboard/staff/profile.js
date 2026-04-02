@@ -1,0 +1,567 @@
+/* ================================================
+   PROFILE VIEW  (views/profile.js)
+   — Fully dynamic: synced with sidebar footer,
+     real order/revenue counts from DB
+================================================ */
+
+const ProfileView = {
+
+  /* ── Current logged-in staff (DB.staff[0] or fallback) ── */
+  _me() {
+    if (!DB.staff || !DB.staff.length) {
+     DB.staff = [{
+  id: 'STF001',
+  name: 'Umme Tahazzee',
+  role: 'Executive Chef',
+  shift: 'Morning',
+  status: 'active',
+  pin: '1234',
+  joined: '2023-01-15',
+  phone: '+880 171 000 0001',
+  email: '',
+  emergency: '',
+  address: '',
+  avatarColor: '#c62828' // ✅ NEW
+}];
+    }
+    return DB.staff[0];
+  },
+
+  /* ── Live stats computed from DB ── */
+  _stats() {
+    const orders = DB.orders || [];
+    const today  = new Date();
+
+    const todayOrders = orders.filter(o => {
+      const d = new Date(o.created);
+      return d.getFullYear() === today.getFullYear()
+          && d.getMonth()    === today.getMonth()
+          && d.getDate()     === today.getDate();
+    });
+
+    const delivered = orders.filter(o => o.status === 'delivered');
+    const pending   = orders.filter(o => o.status === 'pending');
+    const cancelled = orders.filter(o => o.status === 'cancelled');
+    const revenue   = delivered.reduce((s, o) => s + (o.total || 0), 0);
+    const avgVal    = delivered.length ? Math.round(revenue / delivered.length) : 0;
+    const me        = this._me();
+
+    return {
+      totalOrders: orders.length,
+      todayOrders: todayOrders.length,
+      delivered:   delivered.length,
+      pending:     pending.length,
+      cancelled:   cancelled.length,
+      revenue,
+      avgVal,
+      joinedDays: Math.floor((Date.now() - new Date(me.joined)) / 86400000),
+    };
+  },
+
+  _syncUI() {
+  const me = this._me();
+
+  // name + avatar + sidebar
+  this._livePreviewName(me.name);
+
+   const av = document.getElementById('profileAvatar');
+   if (av && me.avatarColor) {
+  av.style.background = me.avatarColor;
+  }
+
+  // phone
+  const pd = document.getElementById('prof-phone-display');
+  if (pd) pd.textContent = me.phone;
+
+  // role + shift
+  const rd = document.getElementById('prof-display-role');
+  if (rd) rd.textContent = `${me.role} · ${me.shift} Shift`;
+  },
+  
+  /* ────────────────────────────────────────────
+     render()
+  ──────────────────────────────────────────── */
+  render() {
+    const me       = this._me();
+    const st       = this._stats();
+    const initials = me.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+    const statusTag = { active:'tag-delivered', 'on-leave':'tag-pending', inactive:'tag-cancelled' };
+
+    return `
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">My Profile</h1>
+          <p class="page-subtitle">Manage your information and track your activity</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="ProfileView.saveProfile()">
+          <i class="fa-solid fa-save"></i> Save Changes
+        </button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start">
+
+        <!-- ══════════ LEFT COLUMN ══════════ -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+
+          <!-- Avatar card -->
+          <div class="card" style="text-align:center;padding:28px 20px">
+            <div style="position:relative;display:inline-block;margin-bottom:16px">
+              <div id="profileAvatar"
+                style="width:80px;
+                       height:80px;
+                       border-radius:50%;
+                       background:var(--red);
+                       display:flex;
+                       align-items:center;
+                       justify-content:center;
+                       font-size:28px;
+                       font-weight:700;
+                       color:#fff;
+                       margin:0 auto;
+                       font-family:'Playfair Display',serif;border:3px solid var(--border);
+                       transition:background .3s">
+              ${initials}
+              </div>
+              <button onclick="ProfileView.changeAvatar()"
+                style="position:absolute;
+                       bottom:0;
+                       right:0;
+                       width:26px;
+                       height:26px;
+                       border-radius:50%;
+                       background:${me.avatarColor || 'var(--red)'};
+                       color:#fff;
+                       border:2px solid var(--bg);
+                       cursor:pointer;
+                       font-size:11px;
+                       display:flex;
+                       align-items:center;
+                       justify-content:center">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+            </div>
+
+            <div id="prof-display-name"
+              style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:4px">
+              ${me.name}
+            </div>
+            <div id="prof-display-role" style="color:var(--text-3);font-size:13px;margin-bottom:10px">
+              ${me.role} &middot; ${me.shift} Shift
+            </div>
+            <span class="tag ${statusTag[me.status] || 'tag-pending'}">${me.status}</span>
+
+            <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:14px;text-align:left">
+              ${[
+                { icon:'fa-id-badge',       pre:'ID:',     val: me.id                                  },
+                { icon:'fa-phone',          pre:'',        val: `<span id="prof-phone-display">${me.phone}</span>` },
+                { icon:'fa-calendar',       pre:'Since:',  val: me.joined                              },
+                { icon:'fa-hourglass-half', pre:'Active:',
+                  val: `<span style="color:var(--green);font-weight:700">${st.joinedDays} days</span>` },
+              ].map(r => `
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px">
+                  <i class="fa-solid ${r.icon}" style="color:var(--text-3);width:16px"></i>
+                  ${r.pre ? `<span style="color:var(--text-3)">${r.pre}</span>` : ''}
+                  <span style="font-weight:600">${r.val}</span>
+                </div>`).join('')}
+            </div>
+          </div>
+
+          <!-- Dynamic Activity Stats -->
+          <div class="card" style="padding:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin:0">
+                Activity Stats
+              </p>
+              <button onclick="ProfileView._refreshStats()"
+                style="border:none;background:none;cursor:pointer;color:var(--text-3);font-size:13px"
+                title="Refresh stats">
+                <i class="fa-solid fa-rotate"></i>
+              </button>
+            </div>
+            <div id="profileStatsBlock">${this._statsHTML(st)}</div>
+          </div>
+
+          <!-- Order breakdown bars -->
+          <div class="card" style="padding:16px">
+            <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:12px">
+              Order Breakdown
+            </p>
+            <div id="profileBreakdown">${this._breakdownHTML(st)}</div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="card" style="padding:16px">
+            <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:12px">
+              Quick Actions
+            </p>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              ${[
+                { icon:'fa-plus',       color:'var(--red)',    label:'New Order',    view:'getorder'   },
+                { icon:'fa-list',       color:'var(--blue)',   label:'View Orders',  view:'orders'     },
+                { icon:'fa-chart-line', color:'var(--green)',  label:'Sales Report', view:'salesreport'},
+                { icon:'fa-gear',       color:'var(--text-3)', label:'Settings',     view:'settings'   },
+              ].map(a => `
+                <button class="btn btn-outline btn-sm"
+                  style="justify-content:flex-start;gap:8px"
+                  onclick="Router.go('${a.view}')">
+                  <i class="fa-solid ${a.icon}" style="color:${a.color}"></i> ${a.label}
+                </button>`).join('')}
+            </div>
+          </div>
+
+        </div><!-- /LEFT -->
+
+        <!-- ══════════ RIGHT COLUMN ══════════ -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+
+          <!-- Personal Information -->
+          <div class="settings-section">
+            <div class="settings-section-header">
+              <i class="fa-solid fa-user" style="color:var(--blue)"></i> Personal Information
+            </div>
+            <div style="padding:20px">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Full Name</label>
+                  <input class="form-control" id="pf-name" value="${me.name}"
+                    oninput="ProfileView._livePreviewName(this.value)"/>
+                  <div style="font-size:11px;color:var(--text-3);margin-top:3px">
+                    Updates sidebar &amp; card instantly
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number</label>
+                  <input class="form-control" id="pf-phone" value="${me.phone}"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Email Address</label>
+                  <input class="form-control" id="pf-email" type="email"
+                    value="${me.email || ''}" placeholder="you@savoria.com"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Emergency Contact</label>
+                  <input class="form-control" id="pf-emergency"
+                    value="${me.emergency || ''}" placeholder="+880 1XX XXX XXXX"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Home Address</label>
+                <input class="form-control" id="pf-address"
+                  value="${me.address || ''}" placeholder="House, Road, Area, City"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Work Information -->
+          <div class="settings-section">
+            <div class="settings-section-header">
+              <i class="fa-solid fa-briefcase" style="color:var(--orange)"></i> Work Information
+            </div>
+            <div style="padding:20px">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Role</label>
+                  <input class="form-control" value="${me.role}" disabled
+                    style="opacity:.6;cursor:not-allowed"/>
+                  <div style="font-size:11px;color:var(--text-3);margin-top:3px">Contact manager to change</div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Shift Preference</label>
+                  <select class="form-control" id="pf-shift">
+                    ${['Morning','Evening','Night'].map(sh =>
+                      `<option ${me.shift === sh ? 'selected' : ''}>${sh}</option>`
+                    ).join('')}
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Employee ID</label>
+                  <input class="form-control" value="${me.id}" disabled style="opacity:.6;cursor:not-allowed"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Joining Date</label>
+                  <input class="form-control" value="${me.joined}" disabled style="opacity:.6;cursor:not-allowed"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security & PIN -->
+          <div class="settings-section">
+            <div class="settings-section-header">
+              <i class="fa-solid fa-shield-halved" style="color:var(--green)"></i> Security &amp; PIN
+            </div>
+            <div style="padding:20px">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Current PIN</label>
+                  <input class="form-control" id="pf-oldpin" type="password" maxlength="4" placeholder="••••"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">New PIN</label>
+                  <input class="form-control" id="pf-newpin" type="password" maxlength="4" placeholder="••••"
+                    oninput="ProfileView._pinStrength(this.value)"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Confirm PIN</label>
+                  <input class="form-control" id="pf-confirmpin" type="password" maxlength="4" placeholder="••••"/>
+                </div>
+              </div>
+
+              <!-- PIN strength bar -->
+              <div style="height:4px;border-radius:2px;background:var(--border);margin-bottom:12px;overflow:hidden">
+                <div id="pinStrengthBar"
+                  style="height:100%;width:0%;border-radius:2px;background:var(--red);transition:all .3s"></div>
+              </div>
+
+              <button class="btn btn-outline btn-sm" onclick="ProfileView.changePin()">
+                <i class="fa-solid fa-key"></i> Update PIN
+              </button>
+
+              <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:14px">
+                <div style="font-size:13px;font-weight:600;margin-bottom:4px">Session Info</div>
+                <div style="font-size:13px;color:var(--text-3)">
+                  ${new Date().toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- My Preferences -->
+          <div class="settings-section">
+            <div class="settings-section-header">
+              <i class="fa-solid fa-sliders" style="color:var(--purple)"></i> My Preferences
+            </div>
+            <div style="padding:4px 0">
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-label">Dark Mode</div>
+                  <div class="settings-row-desc">Personal display preference</div>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" ${Theme._dark ? 'checked' : ''}
+                    onchange="Theme.toggle(); this.checked = Theme._dark"/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-label">Sound Notifications</div>
+                  <div class="settings-row-desc">Play alert when a new order arrives</div>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" ${DB.settings?.soundAlerts ? 'checked' : ''}
+                    onchange="DB.settings.soundAlerts = this.checked"/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-label">Default View on Login</div>
+                  <div class="settings-row-desc">Page to open after signing in</div>
+                </div>
+                <select class="form-control" style="width:130px">
+                  <option>Dashboard</option><option>Orders</option><option>Get Order</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /RIGHT -->
+      </div>`;
+  },
+
+  changeAvatar() {
+  const colors = ['#c62828','#1565c0','#2e7d32','#e65100','#6a1b9a','#00838f','#ad1457'];
+
+  const el = document.getElementById('profileAvatar');
+  if (!el) return;
+
+  const me = this._me();
+
+  const current = me.avatarColor || colors[0];
+  const idx = colors.indexOf(current);
+
+  const nextColor = colors[(idx + 1) % colors.length];
+
+  // ✅ DB update
+  me.avatarColor = nextColor;
+
+  // ✅ UI update
+  el.style.background = nextColor;
+
+  // ✅ SAVE to localStorage
+  localStorage.setItem('DB', JSON.stringify(DB));
+
+  Toast.show('Avatar color updated', 'info');
+  },
+
+  /* ── Stats rows HTML ── */
+  _statsHTML(st) {
+    return [
+      { label:'Total Orders',     value: st.totalOrders,         icon:'fa-receipt',      color:'var(--blue)'   },
+      { label:"Today's Orders",   value: st.todayOrders,         icon:'fa-fire',         color:'var(--orange)' },
+      { label:'Delivered',        value: st.delivered,           icon:'fa-circle-check', color:'var(--green)'  },
+      { label:'Pending',          value: st.pending,             icon:'fa-clock',        color:'var(--gold)'   },
+      { label:'Total Revenue',    value: Utils.money(st.revenue),icon:'fa-dollar-sign',  color:'var(--green)'  },
+      { label:'Avg Order Value',  value: Utils.money(st.avgVal), icon:'fa-chart-bar',    color:'var(--purple)' },
+    ].map(s => `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--bg-surface);
+                    border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <i class="fa-solid ${s.icon}" style="color:${s.color};font-size:12px"></i>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--text-3)">${s.label}</div>
+          <div style="font-weight:700;font-size:14px">${s.value}</div>
+        </div>
+      </div>`).join('');
+  },
+
+  /* ── Breakdown progress bars ── */
+  _breakdownHTML(st) {
+    const total = st.totalOrders || 1;
+    return [
+      { label:'Delivered', count: st.delivered, color:'var(--green)'  },
+      { label:'Pending',   count: st.pending,   color:'var(--gold)'   },
+      { label:'Cancelled', count: st.cancelled, color:'var(--red)'    },
+    ].map(b => {
+      const pct = Math.round((b.count / total) * 100);
+      return `
+        <div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span style="color:var(--text-3)">${b.label}</span>
+            <span style="font-weight:700">${b.count}
+              <span style="color:var(--text-3);font-weight:400">(${pct}%)</span>
+            </span>
+          </div>
+          <div style="height:6px;border-radius:3px;background:var(--border);overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${b.color};border-radius:3px;transition:width .5s ease"></div>
+          </div>
+        </div>`;
+    }).join('');
+  },
+
+  /* ── Refresh stats block only (no full re-render) ── */
+  _refreshStats() {
+    const st = this._stats();
+    const sb = document.getElementById('profileStatsBlock');
+    const bb = document.getElementById('profileBreakdown');
+    if (sb) sb.innerHTML = this._statsHTML(st);
+    if (bb) bb.innerHTML = this._breakdownHTML(st);
+    Toast.show('Stats refreshed', 'info');
+  },
+
+  /* ── Live name preview → sidebar + card ── */
+  _livePreviewName(val) {
+    const name     = val.trim() || this._me().name;
+    const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+
+    const el = document.getElementById('prof-display-name');
+    if (el) el.textContent = name;
+
+    const av = document.getElementById('profileAvatar');
+    if (av) av.textContent = initials;
+
+    this._updateSidebar(name, this._me().role);
+  },
+
+  /* ── Push name/role into sidebar + topbar DOM ── */
+  _updateSidebar(name, role) {
+    const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+
+    const sName   = document.querySelector('.sidebar-footer-name');
+    const sRole   = document.querySelector('.sidebar-footer-role');
+    const sAvatar = document.querySelector('.sidebar-avatar');
+    const tAvatar = document.querySelector('.topbar-avatar');
+
+    if (sName)   sName.textContent   = name;
+    if (sRole)   sRole.textContent   = role;
+    if (sAvatar) sAvatar.textContent = initials;
+    if (tAvatar) { tAvatar.textContent = initials; tAvatar.title = name; }
+  },
+
+  /* ── PIN strength bar ── */
+  _pinStrength(val) {
+    const bar = document.getElementById('pinStrengthBar');
+    if (!bar) return;
+    const map = { 0:'0%', 1:'25%', 2:'50%', 3:'75%', 4:'100%' };
+    const clr = { 0:'var(--border)', 1:'var(--red)', 2:'var(--red)', 3:'var(--gold)', 4:'var(--green)' };
+    bar.style.width      = map[val.length] || '0%';
+    bar.style.background = clr[val.length] || 'var(--border)';
+  },
+
+  /* ────────────────────────────────────────────
+     init() — runs after render()
+  ──────────────────────────────────────────── */
+  init() {
+    // Sync sidebar with current staff data
+    const me = this._me();
+    this._updateSidebar(me.name, me.role);
+    this._syncUI();
+
+  },
+
+
+  /* ────────────────────────────────────────────
+     saveProfile()
+  ──────────────────────────────────────────── */
+   saveProfile() {
+  const me  = this._me();
+  const get = id => document.getElementById(id)?.value?.trim();
+
+  me.name      = get('pf-name')      || me.name;
+  me.phone     = get('pf-phone')     || me.phone;
+  me.email     = get('pf-email')     || me.email;
+  me.emergency = get('pf-emergency') || me.emergency;
+  me.address   = get('pf-address')   || me.address;
+  me.shift     = get('pf-shift')     || me.shift;
+
+  this._syncUI();
+  this._refreshStats();
+
+  // ✅ MUST
+  localStorage.setItem('DB', JSON.stringify(DB));
+
+  Toast.show('Profile saved!', 'success');
+},
+
+  /* ────────────────────────────────────────────
+     changePin()
+  ──────────────────────────────────────────── */
+  changePin() {
+    const me      = this._me();
+    const oldPin  = document.getElementById('pf-oldpin')?.value;
+    const newPin  = document.getElementById('pf-newpin')?.value;
+    const confirm = document.getElementById('pf-confirmpin')?.value;
+
+    if (oldPin !== me.pin)                              { Toast.show('Current PIN is incorrect', 'error'); return; }
+    if (!newPin || newPin.length !== 4 || isNaN(newPin)){ Toast.show('PIN must be 4 digits', 'error');     return; }
+    if (newPin !== confirm)                             { Toast.show('PINs do not match', 'error');        return; }
+
+    me.pin = newPin;
+    ['pf-oldpin','pf-newpin','pf-confirmpin'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    this._pinStrength('');
+    Toast.show('PIN updated successfully!', 'success');
+  },
+
+  
+
+};
+
+/* ════════════════════════════════════════
+   BOOT HOOK — sidebar sync on page load
+   data.js load হওয়ার পরে sidebar update করো
+════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    if (typeof DB !== 'undefined' && DB.staff && DB.staff.length) {
+      ProfileView._syncUI();
+    }
+  }, 150);
+});

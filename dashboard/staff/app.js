@@ -111,6 +111,7 @@ const Router = {
     expensereport: () => ExpenseReportView,
     customers:     () => CustomersView,
     transactions:  () => TransactionsView,
+    profile:       () => ProfileView,
     settings:      () => SettingsView,
   },
   go(name, navEl) {
