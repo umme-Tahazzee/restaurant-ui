@@ -8,21 +8,89 @@
 const SalesReportView = {
 
   /* ── STATE ── */
-  period:    'hourly',
-  chartInst: null,   // We keep a reference so we can destroy before re-creating
+  period:     'hourly',
+  chartInst:  null,
+  chartInst2: null,
 
   /* ────────────────────────────────────────────
      render() — page HTML
   ──────────────────────────────────────────── */
   render() {
     return `
-      <div class="page-header">
+      <style>
+        /* Period switcher wraps on small screens */
+        .sr-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+        .sr-period-bar {
+          display: flex;
+          gap: 4px;
+          background: var(--bg-input);
+          border-radius: 8px;
+          padding: 3px;
+          flex-wrap: wrap;
+        }
+
+        /* KPI grid: 4 → 2 → 1 */
+        .sr-kpi-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 14px;
+          margin-bottom: 16px;
+        }
+        @media (max-width: 900px) {
+          .sr-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+          .sr-kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        }
+
+        /* Charts row: 2 col → 1 col */
+        .sr-charts-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          margin-bottom: 16px;
+        }
+        @media (max-width: 768px) {
+          .sr-charts-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Chart height shrinks on mobile */
+        .sr-chart-wrap {
+          position: relative;
+          height: 260px;
+        }
+        @media (max-width: 480px) {
+          .sr-chart-wrap { height: 200px; }
+        }
+
+        /* Top items table: hide % bar on very small screens */
+        @media (max-width: 480px) {
+          .sr-bar-col { display: none; }
+          .data-table th:nth-child(1),
+          .data-table td:nth-child(1) { display: none; }
+        }
+
+        /* Scrollable table wrapper */
+        .sr-table-wrap {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+      </style>
+
+      <!-- Header + period switcher -->
+      <div class="sr-header anim-1">
         <div>
-          <h1 class="page-title">Sales Report</h1>
-          <p class="page-subtitle">Revenue analytics and performance metrics</p>
+          <div class="page-subtitle">Reports</div>
+          <h1 class="page-title">Sales <em style="color:var(--red);font-style:italic">Report</em></h1>
         </div>
-        <!-- Period switcher -->
-        <div style="display:flex;gap:4px;background:var(--bg-input);border-radius:8px;padding:3px" id="periodBar">
+        <div class="sr-period-bar" id="periodBar">
           <button class="tab-btn active" onclick="SalesReportView.setPeriod('hourly',this)">Hourly</button>
           <button class="tab-btn" onclick="SalesReportView.setPeriod('daily',this)">Daily</button>
           <button class="tab-btn" onclick="SalesReportView.setPeriod('weekly',this)">Weekly</button>
@@ -31,65 +99,97 @@ const SalesReportView = {
       </div>
 
       <!-- KPI summary cards -->
-      <div class="grid-4" style="margin-bottom:16px">
+      <div class="sr-kpi-grid anim-1">
         <div class="stat-card">
           <div class="stat-row">
-            <div><div class="stat-label">Total Revenue</div><div class="stat-value" id="kpiRevenue">—</div><div class="stat-sub" id="kpiRevSub"></div></div>
-            <div class="stat-icon" style="background:var(--green-pale);color:var(--green)"><i class="fa-solid fa-dollar-sign"></i></div>
+            <div>
+              <div class="stat-label">Total Revenue</div>
+              <div class="stat-value" id="kpiRevenue">—</div>
+              <div class="stat-sub" id="kpiRevSub"></div>
+            </div>
+            <div class="stat-icon" style="background:var(--green-pale);color:var(--green)">
+              <i class="fa-solid fa-dollar-sign"></i>
+            </div>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-row">
-            <div><div class="stat-label">Total Orders</div><div class="stat-value" id="kpiOrders">—</div><div class="stat-sub" id="kpiOrdSub"></div></div>
-            <div class="stat-icon" style="background:var(--blue-pale);color:var(--blue)"><i class="fa-solid fa-receipt"></i></div>
+            <div>
+              <div class="stat-label">Total Orders</div>
+              <div class="stat-value" id="kpiOrders">—</div>
+              <div class="stat-sub" id="kpiOrdSub"></div>
+            </div>
+            <div class="stat-icon" style="background:var(--blue-pale);color:var(--blue)">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-row">
-            <div><div class="stat-label">Avg Order Value</div><div class="stat-value" id="kpiAvg">—</div><div class="stat-sub">Per order</div></div>
-            <div class="stat-icon" style="background:var(--gold-pale);color:var(--gold)"><i class="fa-solid fa-chart-simple"></i></div>
+            <div>
+              <div class="stat-label">Avg Order Value</div>
+              <div class="stat-value" id="kpiAvg">—</div>
+              <div class="stat-sub">Per order</div>
+            </div>
+            <div class="stat-icon" style="background:var(--gold-pale);color:var(--gold)">
+              <i class="fa-solid fa-chart-simple"></i>
+            </div>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-row">
-            <div><div class="stat-label">Peak Period</div><div class="stat-value" id="kpiPeak" style="font-size:15px">—</div><div class="stat-sub" id="kpiPeakSub"></div></div>
-            <div class="stat-icon" style="background:var(--red-pale);color:var(--red)"><i class="fa-solid fa-trophy"></i></div>
+            <div>
+              <div class="stat-label">Peak Period</div>
+              <div class="stat-value" id="kpiPeak" style="font-size:15px">—</div>
+              <div class="stat-sub" id="kpiPeakSub"></div>
+            </div>
+            <div class="stat-icon" style="background:var(--red-pale);color:var(--red)">
+              <i class="fa-solid fa-trophy"></i>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Charts row -->
-      <div class="grid-2" style="margin-bottom:16px">
+      <div class="sr-charts-grid anim-2">
         <div class="card">
-          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:15px;margin-bottom:16px" id="chartTitle">
-            Hourly Revenue Today
-          </div>
-          <div class="chart-container"><canvas id="salesChart"></canvas></div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:15px;margin-bottom:16px"
+               id="chartTitle">Hourly Revenue Today</div>
+          <div class="sr-chart-wrap"><canvas id="salesChart"></canvas></div>
         </div>
         <div class="card">
           <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:15px;margin-bottom:16px">
             Revenue Breakdown
           </div>
-          <div class="chart-container"><canvas id="breakdownChart"></canvas></div>
+          <div class="sr-chart-wrap"><canvas id="breakdownChart"></canvas></div>
         </div>
       </div>
 
       <!-- Top selling items -->
-      <div class="card">
+      <div class="card anim-3">
         <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:15px;margin-bottom:16px">
           Top Selling Items
         </div>
-        <table class="data-table">
-          <thead>
-            <tr><th>#</th><th>Item</th><th>Orders</th><th>Revenue</th><th>% of Total</th></tr>
-          </thead>
-          <tbody id="topItemsBody"></tbody>
-        </table>
-      </div>`;
+        <div class="sr-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Item</th>
+                <th>Orders</th>
+                <th>Revenue</th>
+                <th class="sr-bar-col">% of Total</th>
+              </tr>
+            </thead>
+            <tbody id="topItemsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    `;
   },
 
   /* ────────────────────────────────────────────
-     init() — draw charts and fill KPIs
+     init()
   ──────────────────────────────────────────── */
   init() {
     this.period = 'hourly';
@@ -99,7 +199,7 @@ const SalesReportView = {
     this.renderTopItems();
   },
 
-  /* ── Switch period and refresh ── */
+  /* ── Switch period ── */
   setPeriod(p, btn) {
     this.period = p;
     document.querySelectorAll('#periodBar .tab-btn').forEach(b => b.classList.remove('active'));
@@ -108,7 +208,7 @@ const SalesReportView = {
     this.renderSalesChart();
   },
 
-  /* ── Mock data per period ── */
+  /* ── Mock data ── */
   _getData() {
     return {
       hourly: {
@@ -134,21 +234,25 @@ const SalesReportView = {
     }[this.period];
   },
 
-  /* ── Fill KPI cards ── */
+  /* ── KPI cards ── */
   updateKPIs() {
-    const d        = this._getData();
-    const total    = d.data.reduce((a, b) => a + b, 0);
-    const orders   = d.orders.reduce((a, b) => a + b, 0);
-    const peakIdx  = d.data.indexOf(Math.max(...d.data));
-    const subLabel = { hourly:'Today', daily:'This week', weekly:'This month', monthly:'This year' }[this.period];
+    const d       = this._getData();
+    const total   = d.data.reduce((a, b) => a + b, 0);
+    const orders  = d.orders.reduce((a, b) => a + b, 0);
+    const peakIdx = d.data.indexOf(Math.max(...d.data));
+    const subLabel = {
+      hourly: 'Today', daily: 'This week',
+      weekly: 'This month', monthly: 'This year',
+    }[this.period];
 
-    document.getElementById('kpiRevenue').textContent = `$${(total / 1000).toFixed(1)}k`;
-    document.getElementById('kpiRevSub').textContent  = subLabel;
-    document.getElementById('kpiOrders').textContent  = orders;
-    document.getElementById('kpiOrdSub').textContent  = subLabel;
-    document.getElementById('kpiAvg').textContent     = `$${Math.round(total / orders)}`;
-    document.getElementById('kpiPeak').textContent    = d.labels[peakIdx];
-    document.getElementById('kpiPeakSub').textContent = `$${Math.max(...d.data).toLocaleString()}`;
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set('kpiRevenue', `$${(total / 1000).toFixed(1)}k`);
+    set('kpiRevSub',  subLabel);
+    set('kpiOrders',  orders);
+    set('kpiOrdSub',  subLabel);
+    set('kpiAvg',     `$${Math.round(total / orders)}`);
+    set('kpiPeak',    d.labels[peakIdx]);
+    set('kpiPeakSub', `$${Math.max(...d.data).toLocaleString()}`);
 
     const titleMap = {
       hourly:  'Hourly Revenue Today',
@@ -156,22 +260,22 @@ const SalesReportView = {
       weekly:  'Weekly Revenue This Month',
       monthly: 'Monthly Revenue 2025',
     };
-    const t = document.getElementById('chartTitle');
-    if (t) t.textContent = titleMap[this.period];
+    set('chartTitle', titleMap[this.period]);
   },
 
-  /* ── Bar + Line chart (revenue + orders) ── */
+  /* ── Bar + Line chart ── */
   renderSalesChart() {
     const ctx = document.getElementById('salesChart');
     if (!ctx) return;
-
-    // Destroy old chart before making a new one (prevents memory leaks)
     if (this.chartInst) this.chartInst.destroy();
 
-    const d      = this._getData();
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const d       = this._getData();
+    const isDark  = document.documentElement.getAttribute('data-theme') === 'dark';
     const gridClr = isDark ? 'rgba(255,255,255,.05)' : 'rgba(0,0,0,.05)';
     const tickClr = isDark ? 'rgba(255,255,255,.4)'  : 'rgba(0,0,0,.4)';
+
+    /* On small screens show fewer x-axis labels */
+    const isMobile = window.innerWidth < 600;
 
     this.chartInst = new Chart(ctx, {
       data: {
@@ -193,7 +297,7 @@ const SalesReportView = {
             borderColor: 'rgba(184,150,62,.9)',
             backgroundColor: 'rgba(184,150,62,.1)',
             borderWidth: 2,
-            pointRadius: 3,
+            pointRadius: isMobile ? 2 : 3,
             tension: .4,
             fill: true,
             yAxisID: 'y2',
@@ -203,29 +307,62 @@ const SalesReportView = {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: tickClr, font: { size: 11 } } } },
+        plugins: {
+          legend: {
+            labels: {
+              color: tickClr,
+              font: { size: isMobile ? 10 : 11 },
+              boxWidth: isMobile ? 10 : 14,
+            },
+          },
+        },
         scales: {
-          x:  { grid: { color: gridClr }, ticks: { color: tickClr, font: { size: 10 } } },
-          y:  { grid: { color: gridClr }, ticks: { color: tickClr, font: { size: 10 }, callback: v => '$' + v.toLocaleString() } },
-          y2: { position: 'right', grid: { display: false }, ticks: { color: tickClr, font: { size: 10 } } },
+          x: {
+            grid: { color: gridClr },
+            ticks: {
+              color: tickClr,
+              font: { size: isMobile ? 8 : 10 },
+              maxRotation: isMobile ? 45 : 0,
+              maxTicksLimit: isMobile ? 6 : 20,
+            },
+          },
+          y: {
+            grid: { color: gridClr },
+            ticks: {
+              color: tickClr,
+              font: { size: isMobile ? 8 : 10 },
+              callback: v => '$' + (v >= 1000 ? (v/1000).toFixed(1)+'k' : v),
+            },
+          },
+          y2: {
+            position: 'right',
+            grid: { display: false },
+            ticks: { color: tickClr, font: { size: isMobile ? 8 : 10 } },
+          },
         },
       },
     });
   },
 
-  /* ── Doughnut chart (type breakdown) ── */
+  /* ── Doughnut chart ── */
   renderBreakdownChart() {
     const ctx = document.getElementById('breakdownChart');
     if (!ctx) return;
-    new Chart(ctx, {
+    if (this.chartInst2) this.chartInst2.destroy();
+
+    const isMobile = window.innerWidth < 600;
+
+    this.chartInst2 = new Chart(ctx, {
       type: 'doughnut',
       data: {
         labels: ['Dine-in', 'Takeaway', 'Delivery', 'Bar'],
         datasets: [{
           data: [58, 22, 15, 5],
           backgroundColor: [
-            'rgba(192,57,43,.8)', 'rgba(184,150,62,.8)',
-            'rgba(26,82,118,.8)', 'rgba(109,59,142,.8)',
+            'rgba(192,57,43,.8)',
+            'rgba(184,150,62,.8)',
+            'rgba(26,82,118,.8)',
+            'rgba(109,59,142,.8)',
           ],
           borderWidth: 2,
           borderColor: 'transparent',
@@ -234,7 +371,16 @@ const SalesReportView = {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12 } } },
+        plugins: {
+          legend: {
+            position: isMobile ? 'right' : 'bottom',
+            labels: {
+              font: { size: isMobile ? 10 : 11 },
+              padding: isMobile ? 8 : 12,
+              boxWidth: isMobile ? 10 : 14,
+            },
+          },
+        },
       },
     });
   },
@@ -260,9 +406,9 @@ const SalesReportView = {
           <td style="font-weight:600">${item.name}</td>
           <td>${item.orders}</td>
           <td style="font-weight:700;color:var(--green)">${Utils.money(item.revenue)}</td>
-          <td>
+          <td class="sr-bar-col">
             <div style="display:flex;align-items:center;gap:8px">
-              <div style="flex:1;height:6px;background:var(--bg-input);border-radius:3px;overflow:hidden">
+              <div style="flex:1;height:6px;background:var(--bg-input);border-radius:3px;overflow:hidden;min-width:60px">
                 <div style="height:100%;width:${pct}%;background:var(--red);border-radius:3px"></div>
               </div>
               <span style="font-size:11px;color:var(--text-3);min-width:28px">${pct}%</span>
