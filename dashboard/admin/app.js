@@ -46,7 +46,8 @@ const Toast = {
     el.className = `toast ${type}`;
     el.innerHTML = `<i class="fa-solid ${this.icons[type]} toast-icon"></i><span>${message}</span>`;
     container.appendChild(el);
-    setTimeout(() => { el.style.animation = 'toastIn .3s ease reverse'; setTimeout(() => el.remove(), 300); }, 3000);
+    setTimeout(() => { el.style.animation = 'toastIn .3s ease reverse'; 
+      setTimeout(() => el.remove(), 300); }, 3000);
   },
 };
 

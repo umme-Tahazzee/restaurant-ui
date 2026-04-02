@@ -113,17 +113,17 @@ const CustomersView = {
       <tr>
         <td>
           <div style="display:flex;align-items:center;gap:10px">
-            <div class="customer-avatar" style="background:${c.color}">${Utils.sanitize(c.name.charAt(0))}</div>
+            <div class="customer-avatar" style="background:${c.color}">${c.name.charAt(0)}</div>
             <div>
-              <div style="font-weight:600;color:var(--text)">${Utils.sanitize(c.name)}</div>
+              <div style="font-weight:600;color:var(--text)">${c.name}</div>
               ${c.note ? `<div style="font-size:10px;color:var(--text-3);
-                max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${Utils.sanitize(c.note)}</div>` : ""}
+                max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.note}</div>` : ""}
             </div>
           </div>
         </td>
         <td>
-          <div style="font-size:11px">${Utils.sanitize(c.email)}</div>
-          <div style="font-size:10px;color:var(--text-3)">${Utils.sanitize(c.phone)}</div>
+          <div style="font-size:11px">${c.email}</div>
+          <div style="font-size:10px;color:var(--text-3)">${c.phone}</div>
         </td>
         <td style="font-weight:700">${c.visits}</td>
         <td style="font-weight:700;font-family:'Playfair Display',serif">${Utils.money(c.spent)}</td>
@@ -147,22 +147,22 @@ const CustomersView = {
     document.getElementById("customerModalContent").innerHTML = `
       <div class="modal-title">Customer Details</div>
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
-        <div class="customer-avatar" style="width:56px;height:56px;font-size:22px;background:${c.color}">${Utils.sanitize(c.name.charAt(0))}</div>
+        <div class="customer-avatar" style="width:56px;height:56px;font-size:22px;background:${c.color}">${c.name.charAt(0)}</div>
         <div>
-          <div style="font-size:18px;font-weight:700;font-family:'Playfair Display',serif">${Utils.sanitize(c.name)}</div>
+          <div style="font-size:18px;font-weight:700;font-family:'Playfair Display',serif">${c.name}</div>
           <span class="tag tag-${c.status}">${c.status}</span>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
-        <div class="form-group"><div class="form-label">Email</div><div style="font-size:12px">${Utils.sanitize(c.email)}</div></div>
-        <div class="form-group"><div class="form-label">Phone</div><div style="font-size:12px">${Utils.sanitize(c.phone)}</div></div>
+        <div class="form-group"><div class="form-label">Email</div><div style="font-size:12px">${c.email}</div></div>
+        <div class="form-group"><div class="form-label">Phone</div><div style="font-size:12px">${c.phone}</div></div>
         <div class="form-group"><div class="form-label">Total Visits</div><div style="font-size:16px;font-weight:700;font-family:'Playfair Display',serif">${c.visits}</div></div>
         <div class="form-group"><div class="form-label">Total Spent</div><div style="font-size:16px;
         font-weight:700;font-family:'Playfair Display',serif;color:var(--green)">${Utils.money(c.spent)}</div></div>
         <div class="form-group"><div class="form-label">Last Visit</div><div style="font-size:12px">${Utils.formatDate(c.lastVisit)}</div></div>
         <div class="form-group"><div class="form-label">Avg per Visit</div><div style="font-size:12px;font-weight:700">${Utils.money(Math.round(c.spent / c.visits))}</div></div>
       </div>
-      ${c.note ? `<div style="background:var(--bg-surface2);border-radius:8px;padding:12px;font-size:12px;color:var(--text-2)"><i class="fa-solid fa-note-sticky" style="color:var(--gold);margin-right:6px"></i>${Utils.sanitize(c.note)}</div>` : ""}
+      ${c.note ? `<div style="background:var(--bg-surface2);border-radius:8px;padding:12px;font-size:12px;color:var(--text-2)"><i class="fa-solid fa-note-sticky" style="color:var(--gold);margin-right:6px"></i>${c.note}</div>` : ""}
     `;
     Modal.open("customerModal");
   },
@@ -319,11 +319,11 @@ const CustomersView = {
     }
 
     // শুধু editable fields update — visits, spent, color অপরিবর্তিত
-    c.name   = Utils.sanitize(name);
-    c.email  = Utils.sanitize(email);
-    c.phone  = Utils.sanitize(document.getElementById("editPhone").value.trim() || c.phone);
+    c.name = name;
+    c.email = email;
+    c.phone = document.getElementById("editPhone").value.trim() || c.phone;
     c.status = document.getElementById("editStatus").value;
-    c.note   = Utils.sanitize(document.getElementById("editNote").value.trim());
+    c.note = document.getElementById("editNote").value.trim();
 
     this.renderTable();
     this._updateSummary();
@@ -333,6 +333,6 @@ const CustomersView = {
     Notif.add('customer', `Customer "${name}" updated`);
   },
   _persist() {
-    Store.saveCustomers(); // Service layer এ delegate
+  localStorage.setItem("db_customers", JSON.stringify(DB.customers));
   },
 };

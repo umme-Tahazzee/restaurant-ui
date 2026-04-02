@@ -3,14 +3,38 @@
 ================================================ */
 
 const Utils = {
-  money(n) { return `$${Number(n).toFixed(2)}`; },
+   money(n) { return `$${Number(n).toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0})}`; },
+  moneyFull(n) { return `$${Number(n).toFixed(2)}`; },
   timeAgo(date) {
     if (!date) return '—';
-    const diff = Math.floor((new Date() - date) / 60000);
-    if (diff < 1)  return 'just now';
+    const diff = Math.floor((new Date() - new Date(date)) / 60000);
+    if (diff < 1) return 'just now';
     if (diff < 60) return `${diff}m ago`;
-    return `${Math.floor(diff / 60)}h ${diff % 60}m ago`;
+    if (diff < 1440) return `${Math.floor(diff/60)}h ago`;
+    return `${Math.floor(diff/1440)}d ago`;
   },
+  formatDate(d) {
+    return new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  },
+  today:      () => new Date().toISOString().split('T')[0],
+  todayMinus: (days) => { const d = new Date(); d.setDate(d.getDate()-days); return d.toISOString().split('T')[0]; },
+  starsHTML(rating, max=5) {
+    let html = '<div class="stars">';
+    for (let i = 1; i <= max; i++) {
+      html += `<i class="fa-solid fa-star ${i <= rating ? 'filled' : 'empty'}"></i>`;
+    }
+    html += '</div>';
+    return html;
+  },
+  sanitize(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+},
   allMenuItems() { return DB.menu.flatMap(cat => cat.items); },
 };
 
