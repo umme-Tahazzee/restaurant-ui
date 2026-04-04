@@ -34,6 +34,7 @@
         </button>
       </div>
     </div>
+    
     <div class="gold-line"></div>
     <nav class="sidebar-nav">
       <div class="nav-section-title">Overview</div>
@@ -95,6 +96,8 @@
     </div>
   </div>
 
+  
+
   <div id="mainContent">
     <div id="topbar">
       <button class="topbar-icon-btn" id="mobileMenuBtn" onclick="openMobileSidebar()">
@@ -108,7 +111,11 @@
         <div class="live-badge hidden md:flex">
           <span class="live-dot"></span>
           <span
-            style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em">Live</span>
+            style="font-size:10px;
+            font-weight:700;
+            color:var(--green);
+            text-transform:uppercase;
+            letter-spacing:.1em">Live</span>
         </div>
         <div id="topClock" class="hidden md:block" style="font-size:11px;color:var(--text-3);white-space:nowrap"></div>
         <div class="mgr-badge hidden md:flex">
@@ -356,8 +363,15 @@
 
   <script>
     function isMobile() { return window.innerWidth <= 640 }
-    function openMobileSidebar() { document.getElementById('sidebar').classList.add('mobile-open'); document.getElementById('sidebarBackdrop').classList.add('show'); document.body.style.overflow = 'hidden' }
-    function closeMobileSidebar() { document.getElementById('sidebar').classList.remove('mobile-open'); document.getElementById('sidebarBackdrop').classList.remove('show'); document.body.style.overflow = '' }
+  function openMobileSidebar() {
+  document.getElementById('sidebar').classList.add('mobile-open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileSidebar() {
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.body.style.overflow = '';
+}
     function handleSidebarToggle() { if (isMobile()) closeMobileSidebar(); else Sidebar.toggle() }
     function navGo(view, el) { if (isMobile()) closeMobileSidebar(); Router.go(view, el) }
     document.addEventListener('click', e => { const d = document.getElementById('notifDrop'); if (d && !e.target.closest('#notifDrop') && !e.target.closest('#notifBtn')) d.style.display = 'none' });
