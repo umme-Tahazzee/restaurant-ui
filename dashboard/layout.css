@@ -575,7 +575,7 @@
     left: calc(-1 * var(--sidebar-w));
     top: 0;
     height: 100dvh;
-    overflow-y: auto;        /* sidebar নিজে scroll করতে পারবে */
+    overflow-y: auto;      
     z-index: 200;
     transition: left .3s ease, background var(--transition);
     box-shadow: none;
@@ -587,6 +587,20 @@
     box-shadow: var(--shadow-lg);
   }
 
+  /* এইটা যোগ করো — sidebar footer যেন সবসময় দেখা যায় */
+  #sidebar .sidebar-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--sidebar-bg);
+    z-index: 1;
+  }
+
+  #sidebar.mobile-open {
+    left: 0;
+    box-shadow: var(--shadow-lg);
+  }
+
+ 
   /* ✅ Page content এর নিচে padding */
   #pageArea {
     padding-bottom: 80px;
