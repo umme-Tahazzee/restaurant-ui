@@ -247,10 +247,10 @@
       </button>
     </nav>
     <div class="sidebar-footer">
-      <div class="sidebar-avatar" style="background:var(--gold);color:#fff">AR</div>
+      <div id="sidebarAvatar" class="sidebar-avatar" style="background:var(--gold);color:#fff">AR</div>
       <div class="sidebar-footer-text">
-        <p class="sidebar-footer-name">Ahmed Rahman</p>
-        <p class="sidebar-footer-role">Restaurant Manager</p>
+        <p id="sidebarName" class="sidebar-footer-name">Ahmed Rahman</p>
+        <p id="sidebarRole" class="sidebar-footer-role">Restaurant Manager</p>
       </div>
       <button class="sidebar-logout-btn" onclick="Toast.show('Logged out','info')" title="Log out">
         <i class="fa-solid fa-right-from-bracket"></i>
@@ -306,7 +306,7 @@
             </div>
           </div>
         </div>
-        <div class="topbar-avatar" style="background:var(--gold)" title="Ahmed Rahman">AR</div>
+        <div id="topbarAvatar" class="topbar-avatar" style="background:var(--gold)" title="Ahmed Rahman">AR</div>
       </div>
     </div>
     <div id="pageArea"></div>
@@ -325,6 +325,25 @@
       <div id="customerModalContent"></div>
     </div>
   </div>
+
+  <div class="modal-overlay custom-modal" id="addStaffModal">
+    <div class="modal modal-content" style="max-width:500px; padding:0; overflow:hidden; border:none; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5)">
+      <div style="background:linear-gradient(135deg, var(--red) 0%, var(--red-deep) 100%); padding:28px 32px; color:#fff; position:relative">
+        <div style="font-family:'Playfair Display',serif; font-size:24px; font-weight:900; display:flex; align-items:center; gap:14px; text-shadow:0 2px 4px rgba(0,0,0,0.2)">
+          <i class="fa-solid fa-user-plus" style="font-size:28px"></i> Staff Registration
+        </div>
+        <div style="font-size:13px; opacity:0.85; margin-top:6px; letter-spacing:0.02em; font-weight:500">Onboard new personnel and manage roles</div>
+        <button class="modal-close" onclick="Modal.close('addStaffModal')" style="background:rgba(255,255,255,0.15); color:#fff; border:none; top:24px; right:24px; backdrop-filter:blur(4px); transition:all 0.2s">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div id="addStaffModalContent" style="padding:32px; background:var(--bg-surface)">
+        <!-- Dynamic content injected by JS -->
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="staffModal">
     <div class="modal"><button class="modal-close" onclick="Modal.close('staffModal')"><i
           class="fa-solid fa-xmark"></i></button>

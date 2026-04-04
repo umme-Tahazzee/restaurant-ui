@@ -1,8 +1,3 @@
-/* ================================================
-   SAVORIA — MANAGER STAFF VIEW  (mgr-staff.js)
-   Full staff management: schedules, performance, roles
-================================================ */
-
 const MgrStaffView = {
 
   _filter: 'all',
@@ -45,8 +40,7 @@ const MgrStaffView = {
           <div class="page-subtitle">Manage shifts, performance and payroll</div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-         
-          <button class="btn btn-primary btn-sm" onclick="MgrStaffView._addStaff()">
+          <button class="btn btn-primary btn-sm" onclick="MgrStaffView._openStaffModal()">
             <i class="fa-solid fa-plus"></i> Add Staff
           </button>
         </div>
@@ -58,7 +52,7 @@ const MgrStaffView = {
         ${this._summaryCard(DB.staff.filter(s=>s.status==='on').length,'On Duty','fa-circle-dot','green')}
         ${this._summaryCard(DB.staff.filter(s=>s.status==='off').length,'Off Duty','fa-moon','orange')}
         ${this._summaryCard(
-          (DB.staff.reduce((s,x)=>s+(x.rating||0),0)/DB.staff.length).toFixed(1),
+          DB.staff.length ? (DB.staff.reduce((s,x)=>s+(x.rating||0),0)/DB.staff.length).toFixed(1) : '0.0',
           'Avg Rating','fa-star','gold'
         )}
       </div>
@@ -106,6 +100,14 @@ const MgrStaffView = {
               <span style="width:6px;height:6px;border-radius:50%;background:${statusColor}"></span>${statusLabel}
             </span>
           </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+             <button class="btn btn-outline btn-sm btn-icon" style="width:28px;height:28px" onclick="MgrStaffView._openStaffModal('${s.id}')" title="Edit Staff">
+               <i class="fa-solid fa-pen-to-square" style="font-size:10px"></i>
+             </button>
+             <button class="btn btn-outline btn-sm btn-icon" style="width:28px;height:28px;color:var(--red)" onclick="MgrStaffView._deleteStaff('${s.id}')" title="Delete Staff">
+               <i class="fa-solid fa-trash-can" style="font-size:10px"></i>
+             </button>
+          </div>
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
@@ -127,9 +129,6 @@ const MgrStaffView = {
         <div class="ms-action-bar">
           <button class="btn btn-outline btn-sm" style="flex:1" onclick="MgrStaffView._viewStaff('${s.id}')">
             <i class="fa-solid fa-eye"></i> Profile
-          </button>
-          <button class="btn btn-outline btn-sm" style="flex:1" onclick="MgrStaffView._editShift('${s.id}')">
-            <i class="fa-solid fa-clock"></i> Shift
           </button>
           <button class="btn ${s.status==='on'?'btn-danger':'btn-green'} btn-sm btn-icon" onclick="MgrStaffView._toggleStatus('${s.id}')"
             title="${s.status==='on'?'Mark Off':'Mark On'}">
@@ -169,22 +168,126 @@ const MgrStaffView = {
     Modal.open('staffModal');
   },
 
-  _editShift(id) {
-    const s = DB.staff.find(x=>x.id===id);
-    Toast.show(`Editing shift for ${s?.name || 'staff'}…`, 'info');
-  },
-
   _toggleStatus(id) {
     const s = DB.staff.find(x=>x.id===id);
     if (!s) return;
     s.status = s.status === 'on' ? 'off' : 'on';
     Toast.show(`${s.name} marked ${s.status === 'on' ? 'On Duty' : 'Off Duty'}`, s.status==='on'?'success':'info');
+    StaffStorage.save();
     document.getElementById('pageArea').innerHTML = this.render();
     if (this.init) this.init();
   },
 
-  _addStaff() {
-    Toast.show('Add staff form coming soon', 'info');
+  _openStaffModal(id = null) {
+    const s = id ? DB.staff.find(x=>x.id===id) : null;
+    const isEdit = !!s;
+
+    document.getElementById('addStaffModalContent').innerHTML = `
+      <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:20px">
+        <input type="hidden" id="staffId" value="${isEdit ? s.id : ''}">
+        <div class="form-group" style="grid-column:1 / -1">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="staffName" class="form-control" placeholder="e.g. Jean Dupont" value="${isEdit ? s.name : ''}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Role</label>
+          <select id="staffRole" class="form-control" style="appearance:auto">
+            <option value="Executive Chef" ${isEdit && s.role==='Executive Chef'?'selected':''}>Executive Chef</option>
+            <option value="Sous Chef" ${isEdit && s.role==='Sous Chef'?'selected':''}>Sous Chef</option>
+            <option value="Line Cook" ${isEdit && s.role==='Line Cook'?'selected':''}>Line Cook</option>
+            <option value="Pastry Chef" ${isEdit && s.role==='Pastry Chef'?'selected':''}>Pastry Chef</option>
+            <option value="Sommelier" ${isEdit && s.role==='Sommelier'?'selected':''}>Sommelier</option>
+            <option value="Hostess" ${isEdit && s.role==='Hostess'?'selected':''}>Hostess</option>
+            <option value="Waiter" ${isEdit && s.role==='Waiter'?'selected':''}>Waiter</option>
+            <option value="Waitress" ${isEdit && s.role==='Waitress'?'selected':''}>Waitress</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Shift</label>
+          <input type="text" id="staffShift" class="form-control" placeholder="e.g. 09:00–17:00" value="${isEdit ? s.shift : ''}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Initial Rating</label>
+          <input type="number" id="staffRating" class="form-control" placeholder="5.0" min="1" max="5" step="0.1" value="${isEdit ? s.rating : '5.0'}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Initial Status</label>
+          <select id="staffStatus" class="form-control" style="appearance:auto">
+            <option value="on" ${isEdit && s.status==='on'?'selected':''}>On Duty</option>
+            <option value="off" ${isEdit && s.status==='off'?'selected':''}>Off Duty</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:30px">
+        <button class="btn btn-outline" onclick="Modal.close('addStaffModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="MgrStaffView._saveStaff()" style="background:var(--red)">
+          ${isEdit ? 'Update Staff Member' : 'Register Member'}
+        </button>
+      </div>
+    `;
+    Modal.open('addStaffModal');
+  },
+
+  _saveStaff() {
+    const id = document.getElementById('staffId').value;
+    const name = document.getElementById('staffName').value.trim();
+    const role = document.getElementById('staffRole').value;
+    const shift = document.getElementById('staffShift').value.trim();
+    const rating = parseFloat(document.getElementById('staffRating').value) || 5.0;
+    const status = document.getElementById('staffStatus').value;
+
+    if (!name || !shift) {
+      Toast.show('Please fill in all required fields', 'error');
+      return;
+    }
+
+    if (id) {
+      // Edit
+      const s = DB.staff.find(x=>x.id===id);
+      if (s) {
+        s.name = name;
+        s.role = role;
+        s.shift = shift;
+        s.rating = rating;
+        s.status = status;
+        s.avatar = name.charAt(0).toUpperCase();
+      }
+    } else {
+      // Add
+      const colors = ['#c0392b','#b8963e','#1a5276','#2d7a47','#96281b','#c47a1a','#6d3b8e','#4a3830'];
+      const newStaff = {
+        id: 's' + Date.now(),
+        name,
+        role,
+        shift,
+        rating,
+        status,
+        avatar: name.charAt(0).toUpperCase(),
+        color: colors[DB.staff.length % colors.length],
+        orders: 0
+      };
+      DB.staff.push(newStaff);
+    }
+
+    StaffStorage.save();
+    Modal.close('addStaffModal');
+    Toast.show(id ? 'Staff updated' : 'Staff registered successfully', 'success');
+    
+    document.getElementById('pageArea').innerHTML = this.render();
+    if (this.init) this.init();
+  },
+
+  _deleteStaff(id) {
+    const s = DB.staff.find(x=>x.id===id);
+    if (!s) return;
+    if (!confirm(`Are you sure you want to remove ${s.name} from staff?`)) return;
+
+    DB.staff = DB.staff.filter(x=>x.id!==id);
+    StaffStorage.save();
+    Toast.show('Staff member removed', 'info');
+    
+    document.getElementById('pageArea').innerHTML = this.render();
+    if (this.init) this.init();
   },
 
   init() {},

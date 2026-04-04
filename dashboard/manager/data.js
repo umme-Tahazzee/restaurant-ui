@@ -11,7 +11,10 @@ window.DB = {
   /* ── ORDERS — localStorage থেকে আসবে ── */
   orders: [],
 
-  /* ── CUSTOMERS — AJAX থেকে আসবে ── */
+  /* ── PROFILE — localStorage থেকে আসবে ── */
+  profile: {},
+
+  /* ── CUSTOMERS — AJAX থেকে আসে ── */
   customers: [],
 
   /* ── MENU (static) ── */
@@ -78,16 +81,7 @@ window.DB = {
   tables: [],
 
   /* ── STAFF (static) ── */
-  staff: [
-    { id:'s1', name:'Marco Ferretti', role:'Executive Chef',  status:'on',    avatar:'M', color:'#c0392b', shift:'06:00–14:00', orders:12, rating:5.0 },
-    { id:'s2', name:'Sophia Laurent', role:'Pastry Chef',     status:'on',    avatar:'S', color:'#b8963e', shift:'10:00–18:00', orders:8,  rating:4.9 },
-    { id:'s3', name:'Kenji Nakamura', role:'Sommelier',       status:'on',    avatar:'K', color:'#1a5276', shift:'16:00–24:00', orders:0,  rating:4.9 },
-    { id:'s4', name:'Amara Osei',     role:"Maître d'Hôtel",  status:'on',    avatar:'A', color:'#2d7a47', shift:'14:00–22:00', orders:0,  rating:5.0 },
-    { id:'s5', name:'Luca Bianchi',   role:'Sous Chef',       status:'on',    avatar:'L', color:'#96281b', shift:'12:00–20:00', orders:9,  rating:4.8 },
-    { id:'s6', name:'Sofia Rossi',    role:'Waitress',        status:'on',    avatar:'S', color:'#c47a1a', shift:'16:00–24:00', orders:5,  rating:4.7 },
-    { id:'s7', name:'Tariq Hassan',   role:'Line Cook',       status:'off',   avatar:'T', color:'#666666', shift:'14:00–22:00', orders:5,  rating:4.6 },
-    { id:'s8', name:'Elena Moretti',  role:'Hostess',         status:'on',    avatar:'E', color:'#6d3b8e', shift:'16:00–24:00', orders:0,  rating:4.9 },
-  ],
+  staff: [],
 
   /* ── INVENTORY (static) ── */
   inventory: [],
@@ -298,6 +292,127 @@ const OrderStorage = {
   clear() {
     localStorage.removeItem(this.KEY);
     DB.orders = [];
+  },
+};
+
+
+/* ================================================
+   STAFF STORAGE
+   localStorage এ staff save/load করার সব logic
+================================================ */
+
+const StaffStorage = {
+
+  KEY: 'savoria_staff',
+
+  /* ── Default staff (যখন localStorage ফাঁকা) ── */
+  defaults: [
+    { id:'s1', name:'Marco Ferretti', role:'Executive Chef',  status:'on',    avatar:'M', color:'#c0392b', shift:'06:00–14:00', orders:12, rating:5.0 },
+    { id:'s2', name:'Sophia Laurent', role:'Pastry Chef',     status:'on',    avatar:'S', color:'#b8963e', shift:'10:00–18:00', orders:8,  rating:4.9 },
+    { id:'s3', name:'Kenji Nakamura', role:'Sommelier',       status:'on',    avatar:'K', color:'#1a5276', shift:'16:00–24:00', orders:0,  rating:4.9 },
+    { id:'s4', name:'Amara Osei',     role:"Maître d'Hôtel",  status:'on',    avatar:'A', color:'#2d7a47', shift:'14:00–22:00', orders:0,  rating:5.0 },
+    { id:'s5', name:'Luca Bianchi',   role:'Sous Chef',       status:'on',    avatar:'L', color:'#96281b', shift:'12:00–20:00', orders:9,  rating:4.8 },
+    { id:'s6', name:'Sofia Rossi',    role:'Waitress',        status:'on',    avatar:'S', color:'#c47a1a', shift:'16:00–24:00', orders:5,  rating:4.7 },
+    { id:'s7', name:'Tariq Hassan',   role:'Line Cook',       status:'off',   avatar:'T', color:'#666666', shift:'14:00–22:00', orders:5,  rating:4.6 },
+    { id:'s8', name:'Elena Moretti',  role:'Hostess',         status:'on',    avatar:'E', color:'#6d3b8e', shift:'16:00–24:00', orders:0,  rating:4.9 },
+  ],
+
+  /* ── localStorage থেকে staff load করো ── */
+  load() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      if (!raw) {
+        const data = this.defaults;
+        this.saveData(data);
+        return data;
+      }
+      return JSON.parse(raw);
+    } catch (err) {
+      console.warn('StaffStorage.load failed:', err);
+      return this.defaults;
+    }
+  },
+
+  /* ── DB.staff পুরোটা localStorage এ save করো ── */
+  save() {
+    try {
+      localStorage.setItem(this.KEY, JSON.stringify(DB.staff));
+    } catch (err) {
+      console.warn('StaffStorage.save failed:', err);
+    }
+  },
+
+  /* ── সরাসরি data save করার helper ── */
+  saveData(data) {
+    try {
+      localStorage.setItem(this.KEY, JSON.stringify(data));
+    } catch (err) {
+      console.warn('StaffStorage.saveData failed:', err);
+    }
+  },
+
+  /* ── সব মুছে defaults এ ফেরাও ── */
+  reset() {
+    localStorage.removeItem(this.KEY);
+    DB.staff = [...this.defaults];
+    this.save();
+  },
+};
+
+
+/* ================================================
+   PROFILE STORAGE
+   localStorage এ manager profile save/load করার সব logic
+================================================ */
+
+const ProfileStorage = {
+
+  KEY: 'savoria_profile',
+
+  /* ── Default profile (যখন localStorage ফাঁকা) ── */
+  defaults: {
+    id:        'MGR001',
+    name:      'Ahmed Rahman',
+    role:      'Restaurant Manager',
+    email:     'ahmed.rahman@savoria.com',
+    phone:     '+880 171 000 0010',
+    joined:    '2021-06-01',
+    shift:     'Full Day (10:00–22:00)',
+    avatarColor: '#b8963e',
+    permissions: ['Staff Management','Inventory','Finance','Reports','Settings'],
+  },
+
+  /* ── localStorage থেকে profile load করো ── */
+  load() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      if (!raw) {
+        this.saveData(this.defaults);
+        return { ...this.defaults };
+      }
+      return JSON.parse(raw);
+    } catch (err) {
+      console.warn('ProfileStorage.load failed:', err);
+      return { ...this.defaults };
+    }
+  },
+
+  /* ── DB.profile পুরোটা localStorage এ save করো ── */
+  save() {
+    try {
+      localStorage.setItem(this.KEY, JSON.stringify(DB.profile));
+    } catch (err) {
+      console.warn('ProfileStorage.save failed:', err);
+    }
+  },
+
+  /* ── সরাসরি data save করার helper ── */
+  saveData(data) {
+    try {
+      localStorage.setItem(this.KEY, JSON.stringify(data));
+    } catch (err) {
+      console.warn('ProfileStorage.saveData failed:', err);
+    }
   },
 };
 

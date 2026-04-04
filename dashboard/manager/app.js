@@ -182,15 +182,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   DB.inventory = InventoryStorage.load();
   console.log(`✅ ${DB.inventory.length} inventory items loaded from storage`);
 
+  /* ── ১.৩. localStorage থেকে staff restore করো ── */
+  DB.staff = StaffStorage.load();
+  console.log(`✅ ${DB.staff.length} staff members loaded from storage`);
+
+  /* ── ১.৪. localStorage থেকে manager profile restore করো ── */
+  DB.profile = ProfileStorage.load();
+  updateUIProfile();
+  console.log(`✅ Manager profile loaded: ${DB.profile.name}`);
+
   /* ── ২. AJAX দিয়ে customers আনো ── */
   try {
     await API.getCustomers();
+    console.log(`✅ ${DB.customers.length} customers fetched via API`);
   } catch (err) {
-    console.warn('Customer fetch failed:', err);
-    Toast.show('Could not load customer data.', 'warning');
+    console.warn('❌ Failed to fetch customers:', err);
   }
 
-  /* ── ৩. Sidebar pending badge set করো ── */
+  // Initial render
+  Router.init();
   _updatePendingBadge();
 
   /* ── ৪. Toast — কতটা order ছিল জানাও ── */
@@ -202,3 +212,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   Router.go('mgr-dashboard');
 });
+
+/**
+ * Global function to sync profile data with sidebar/topbar
+ */
+function updateUIProfile() {
+  const p = DB.profile;
+  if (!p || !p.name) return;
+  
+  const initials = p.name.split(' ').map(n=>n[0]).join('').toUpperCase().substring(0,2);
+  
+  const elements = {
+    sidebarAvatar: document.getElementById('sidebarAvatar'),
+    sidebarName:   document.getElementById('sidebarName'),
+    sidebarRole:   document.getElementById('sidebarRole'),
+    topbarAvatar:  document.getElementById('topbarAvatar')
+  };
+
+  if (elements.sidebarAvatar) elements.sidebarAvatar.textContent = initials;
+  if (elements.sidebarName)   elements.sidebarName.textContent   = p.name;
+  if (elements.sidebarRole)   elements.sidebarRole.textContent   = p.role;
+  if (elements.topbarAvatar) {
+    elements.topbarAvatar.textContent = initials;
+    elements.topbarAvatar.title       = p.name;
+  }
+}

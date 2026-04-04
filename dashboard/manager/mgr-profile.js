@@ -7,29 +7,30 @@ const MgrProfileView = {
   _editing: false,
 
   _me() {
-    return {
-      id:        'MGR001',
-      name:      'Ahmed Rahman',
-      role:      'Restaurant Manager',
-      email:     'ahmed.rahman@savoria.com',
-      phone:     '+880 171 000 0010',
-      joined:    '2021-06-01',
-      shift:     'Full Day (10:00–22:00)',
-      avatarColor: '#b8963e',
-      permissions: ['Staff Management','Inventory','Finance','Reports','Settings'],
-    };
+    return DB.profile;
   },
 
   render() {
     const me = this._me();
+    if (!me || !me.joined) return '<div class="card">Loading profile...</div>';
+    
     const daysSince = Math.floor((Date.now() - new Date(me.joined)) / 86_400_000);
     const yrs = Math.floor(daysSince / 365);
     const mos = Math.floor((daysSince % 365) / 30);
+    const initials = me.name ? me.name.split(' ').map(n=>n[0]).join('').toUpperCase().substring(0,2) : '--';
 
     return `
       <style>
-        .mp-grid{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
-        @media(max-width:800px){.mp-grid{grid-template-columns:1fr}}
+        .mp-grid
+        {display:grid;
+        grid-template-columns:300px 1fr;
+        gap:16px;
+        align-items:start
+        }
+        @media(max-width:800px){
+        .mp-grid{
+        grid-template-columns:1fr
+        }}
         .mp-perm-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;background:var(--gold-pale);color:var(--gold);border:1px solid rgba(184,150,62,.2);margin:3px}
         .mp-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
         @media(max-width:500px){.mp-stat-row{grid-template-columns:1fr 1fr}}
@@ -50,7 +51,7 @@ const MgrProfileView = {
         <!-- Left: Avatar Card -->
         <div>
           <div class="card" style="text-align:center;padding:28px 20px">
-            <div style="width:80px;height:80px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#fff;margin:0 auto 14px;box-shadow:0 0 0 4px var(--gold-pale)">AR</div>
+            <div style="width:80px;height:80px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#fff;margin:0 auto 14px;box-shadow:0 0 0 4px var(--gold-pale)">${initials}</div>
             <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700">${me.name}</div>
             <div style="font-size:12px;color:var(--text-3);margin-top:2px">${me.role}</div>
             <div style="margin:10px 0">
@@ -147,20 +148,39 @@ const MgrProfileView = {
   },
 
   _toggleEdit() {
-    this._editing = !this._editing;
-    document.getElementById('pageArea').innerHTML = this.render();
-    if (this.init) this.init();
-  },
-
-  _cancelEdit() {
-    this._editing = false;
+    if (this._editing) {
+      this._save();
+      return;
+    }
+    this._editing = true;
     document.getElementById('pageArea').innerHTML = this.render();
     if (this.init) this.init();
   },
 
   _save() {
+    const name  = document.getElementById('mgr_name').value.trim();
+    const email = document.getElementById('mgr_email').value.trim();
+    const phone = document.getElementById('mgr_phone').value.trim();
+
+    if (!name || !email) {
+      Toast.show('Name and Email are required', 'error');
+      return;
+    }
+
+    // Update global state
+    DB.profile.name  = name;
+    DB.profile.email = email;
+    DB.profile.phone = phone;
+
+    // Persist
+    if (window.ProfileStorage) ProfileStorage.save();
+
+    // Sync shell UI (sidebar/topbar)
+    if (window.updateUIProfile) updateUIProfile();
+
     this._editing = false;
     Toast.show('Profile updated successfully', 'success');
+    
     document.getElementById('pageArea').innerHTML = this.render();
     if (this.init) this.init();
   },
