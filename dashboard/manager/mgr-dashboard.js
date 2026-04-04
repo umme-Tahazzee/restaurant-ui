@@ -75,7 +75,7 @@ const MgrDashboardView = {
             MANAGER OVERVIEW · ${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}
           </div>
           <h1 style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--text);line-height:1.15">
-            Good ${this._greeting()}, <em style="color:var(--gold)">Ahmed</em>
+            Good ${this._greeting()}, <em style="color:var(--red)">Manger</em>
           </h1>
           <p style="font-size:13px;color:var(--text-3);margin-top:4px">${this._summary()}</p>
           <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
