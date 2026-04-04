@@ -172,8 +172,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const savedOrders = OrderStorage.load();
   if (savedOrders.length) {
     DB.orders = savedOrders;
-    console.log(`✅ ${savedOrders.length} orders loaded from localStorage`);
   }
+
+  /* ── ১.১. localStorage থেকে tables restore করো ── */
+  DB.tables = TableStorage.load();
+  console.log(`✅ ${DB.tables.length} tables loaded from storage`);
 
   /* ── ২. AJAX দিয়ে customers আনো ── */
   try {

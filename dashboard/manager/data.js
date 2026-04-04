@@ -75,23 +75,7 @@ window.DB = {
   ],
 
   /* ── TABLES (static) ── */
-  tables: [
-    { num:1,  status:'occupied', guests:2, seated:'52 min', waiter:'Amara', bill:48  },
-    { num:2,  status:'occupied', guests:4, seated:'9 min',  waiter:'Luca',  bill:100 },
-    { num:3,  status:'occupied', guests:2, seated:'2 min',  waiter:'Amara', bill:46  },
-    { num:4,  status:'empty',    guests:0, seated:'',       waiter:'',      bill:0   },
-    { num:5,  status:'occupied', guests:3, seated:'38 min', waiter:'Luca',  bill:60  },
-    { num:6,  status:'cleaning', guests:0, seated:'',       waiter:'',      bill:0   },
-    { num:7,  status:'occupied', guests:4, seated:'14 min', waiter:'Sofia', bill:197 },
-    { num:8,  status:'empty',    guests:0, seated:'',       waiter:'',      bill:0   },
-    { num:9,  status:'occupied', guests:6, seated:'22 min', waiter:'Kenji', bill:70  },
-    { num:10, status:'reserved', guests:4, seated:'8:00pm', waiter:'',      bill:0   },
-    { num:11, status:'occupied', guests:2, seated:'1 min',  waiter:'Sofia', bill:197 },
-    { num:12, status:'empty',    guests:0, seated:'',       waiter:'',      bill:0   },
-    { num:13, status:'reserved', guests:6, seated:'8:30pm', waiter:'',      bill:0   },
-    { num:14, status:'empty',    guests:0, seated:'',       waiter:'',      bill:0   },
-    { num:15, status:'cleaning', guests:0, seated:'',       waiter:'',      bill:0   },
-  ],
+  tables: [],
 
   /* ── STAFF (static) ── */
   staff: [
@@ -142,6 +126,78 @@ window.DB = {
     smsNotif:       false,
     darkMode:       false,
     language:       'English',
+  },
+};
+
+
+/* ================================================
+   TABLE STORAGE
+   localStorage এ tables save/load করার সব logic
+================================================ */
+
+const TableStorage = {
+
+  KEY: 'savoria_tables',
+
+  /* ── Default tables (যখন localStorage ফাঁকা) ── */
+  defaults: [
+    { num:1,  status:'occupied', guests:2, seated:'52 min', waiter:'Amara', bill:48  },
+    { num:2,  status:'occupied', guests:4, seated:'9 min',  waiter:'Luca',  bill:100 },
+    { num:3,  status:'occupied', guests:2, seated:'2 min',  waiter:'Amara', bill:46  },
+    { num:4,  status:'empty',    guests:0, seated:'',       waiter:'',      bill:0   },
+    { num:5,  status:'occupied', guests:3, seated:'38 min', waiter:'Luca',  bill:60  },
+    { num:6,  status:'cleaning', guests:0, seated:'',       waiter:'',      bill:0   },
+    { num:7,  status:'occupied', guests:4, seated:'14 min', waiter:'Sofia', bill:197 },
+    { num:8,  status:'empty',    guests:0, seated:'',       waiter:'',      bill:0   },
+    { num:9,  status:'occupied', guests:6, seated:'22 min', waiter:'Kenji', bill:70  },
+    { num:10, status:'reserved', guests:4, seated:'8:00pm', waiter:'',      bill:0   },
+    { num:11, status:'occupied', guests:2, seated:'1 min',  waiter:'Sofia', bill:197 },
+    { num:12, status:'empty',    guests:0, seated:'',       waiter:'',      bill:0   },
+    { num:13, status:'reserved', guests:6, seated:'8:30pm', waiter:'',      bill:0   },
+    { num:14, status:'empty',    guests:0, seated:'',       waiter:'',      bill:0   },
+    { num:15, status:'cleaning', guests:0, seated:'',       waiter:'',      bill:0   },
+  ],
+
+  /* ── localStorage থেকে tables load করো ── */
+  load() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      if (!raw) {
+        // প্রথম বার defaults save করো
+        const data = this.defaults;
+        this.saveData(data);
+        return data;
+      }
+      return JSON.parse(raw);
+    } catch (err) {
+      console.warn('TableStorage.load failed:', err);
+      return this.defaults;
+    }
+  },
+
+  /* ── DB.tables পুরোটা localStorage এ save করো ── */
+  save() {
+    try {
+      localStorage.setItem(this.KEY, JSON.stringify(DB.tables));
+    } catch (err) {
+      console.warn('TableStorage.save failed:', err);
+    }
+  },
+
+  /* ── সরাসরি data save করার helper ── */
+  saveData(data) {
+    try {
+      localStorage.setItem(this.KEY, JSON.stringify(data));
+    } catch (err) {
+      console.warn('TableStorage.saveData failed:', err);
+    }
+  },
+
+  /* ── সব tables মুছে defaults এ ফেরাও ── */
+  reset() {
+    localStorage.removeItem(this.KEY);
+    DB.tables = [...this.defaults];
+    this.save();
   },
 };
 

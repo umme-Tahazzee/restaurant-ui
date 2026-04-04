@@ -11,14 +11,7 @@ const MgrInventoryView = {
     { id:'i2',  name:'Truffle Oil',        cat:'Pantry',    qty:3,   unit:'btl',  minQty:5,   cost:42,  status:'low'    },
     { id:'i3',  name:'Chianti Classico',   cat:'Beverages', qty:3,   unit:'btl',  minQty:12,  cost:18,  status:'low'    },
     { id:'i4',  name:'Fresh Lobster',      cat:'Seafood',   qty:12,  unit:'pcs',  minQty:8,   cost:38,  status:'ok'     },
-    { id:'i5',  name:'Arborio Rice',       cat:'Pantry',    qty:15,  unit:'kg',   minQty:5,   cost:4,   status:'ok'     },
-    { id:'i6',  name:'Heavy Cream',        cat:'Dairy',     qty:6,   unit:'L',    minQty:4,   cost:3,   status:'ok'     },
-    { id:'i7',  name:'Saffron',            cat:'Spices',    qty:0,   unit:'g',    minQty:10,  cost:12,  status:'out'    },
-    { id:'i8',  name:'Prosecco',           cat:'Beverages', qty:24,  unit:'btl',  minQty:12,  cost:14,  status:'ok'     },
-    { id:'i9',  name:'Lamb Rack',          cat:'Meat',      qty:6,   unit:'pcs',  minQty:8,   cost:28,  status:'low'    },
-    { id:'i10', name:'Panna Cotta Mix',    cat:'Desserts',  qty:20,  unit:'pcs',  minQty:10,  cost:2,   status:'ok'     },
-    { id:'i11', name:'Aperol',             cat:'Beverages', qty:8,   unit:'btl',  minQty:6,   cost:16,  status:'ok'     },
-    { id:'i12', name:'Black Truffle',      cat:'Pantry',    qty:2,   unit:'pcs',  minQty:4,   cost:95,  status:'low'    },
+    
   ],
 
   render() {
@@ -51,9 +44,6 @@ const MgrInventoryView = {
           <div class="page-subtitle">Track stock levels and place orders</div>
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-outline btn-sm" onclick="Toast.show('Inventory report exported','info')">
-            <i class="fa-solid fa-file-export"></i> Export
-          </button>
           <button class="btn btn-primary btn-sm" onclick="Toast.show('Purchase order created','success')">
             <i class="fa-solid fa-cart-plus"></i> Order Supplies
           </button>

@@ -9,7 +9,7 @@ const MgrTablesView = {
     const counts = {
       occupied: tables.filter(t=>t.status==='occupied').length,
       empty:    tables.filter(t=>t.status==='empty').length,
-      reserved: tables.filter(t=>t.status==='reserved').length,
+      reserved: tables.filter(t=>t.status ==='reserved').length,
       cleaning: tables.filter(t=>t.status==='cleaning').length,
     };
 
@@ -43,6 +43,10 @@ const MgrTablesView = {
         .mt-badge.reserved{background:var(--blue)}
         .mt-list-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
         .mt-list-item:last-child{border-bottom:none}
+        
+        .mt-del-btn{position:absolute;top:-6px;left:-6px;width:20px;height:20px;border-radius:50%;background:var(--bg-white);border:1px solid var(--border);color:var(--red);display:none;align-items:center;justify-content:center;font-size:10px;box-shadow:var(--shadow-sm);transition:all .15s}
+        .mt-card:hover .mt-del-btn{display:flex}
+        .mt-del-btn:hover{background:var(--red);color:#fff;transform:scale(1.1)}
       </style>
 
       <div class="mt-header">
@@ -55,7 +59,7 @@ const MgrTablesView = {
             <i class="fa-solid fa-print"></i> Print Floor Plan
           </button>
           <button class="btn btn-primary btn-sm" onclick="MgrTablesView._addReservation()">
-            <i class="fa-solid fa-calendar-plus"></i> Add Reservation
+            <i class="fa-solid fa-plus"></i> Add Table
           </button>
         </div>
       </div>
@@ -91,8 +95,11 @@ const MgrTablesView = {
           <i class="fa-solid fa-map" style="color:var(--gold);margin-right:6px"></i>Floor Map
         </div>
         <div class="mt-grid">
-          ${tables.map(t => `
+          ${tables.sort((a,b)=>a.num - b.num).map(t => `
             <div class="mt-card ${t.status}" onclick="MgrTablesView._tableDetail(${t.num})" title="Table ${t.num}">
+              <button class="mt-del-btn" title="Delete Table" onclick="event.stopPropagation(); MgrTablesView._deleteTable(${t.num})">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
               ${t.status==='occupied'?`<div class="mt-badge occupied">${t.guests}</div>`:''}
               ${t.status==='reserved'?`<div class="mt-badge reserved"><i class="fa-solid fa-lock" style="font-size:7px"></i></div>`:''}
               <div class="mt-card-num">${t.num}</div>
@@ -151,12 +158,67 @@ const MgrTablesView = {
     const t = DB.tables.find(x=>x.num===num);
     if (t) { t.status = 'cleaning'; t.guests = 0; t.waiter = ''; t.bill = 0; }
     Toast.show(`Table ${num} marked for cleaning`, 'success');
+    TableStorage.save();
     document.getElementById('pageArea').innerHTML = this.render();
     if (this.init) this.init();
   },
 
   _addReservation() {
-    Toast.show('Reservation form coming soon', 'info');
+    document.getElementById('newTableNum').value = '';
+    document.getElementById('tableError').style.display = 'none';
+    Modal.open('tableModal');
+  },
+
+  _saveNewTable() {
+    const numInput = document.getElementById('newTableNum');
+    const errEl = document.getElementById('tableError');
+    const num = parseInt(numInput.value);
+
+    if (isNaN(num) || num <= 0) {
+      errEl.textContent = 'Please enter a valid table number.';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    // Duplicate check
+    if (DB.tables.some(t => t.num === num)) {
+      errEl.textContent = `Table ${num} already exists!`;
+      errEl.style.display = 'block';
+      return;
+    }
+
+    const newTable = {
+      num: num,
+      status: 'empty',
+      guests: 0,
+      seated: '',
+      waiter: '',
+      bill: 0
+    };
+
+    DB.tables.push(newTable);
+    TableStorage.save();
+    
+    Modal.close('tableModal');
+    Toast.show(`Table ${num} added successfully`, 'success');
+    
+    // Re-render
+    document.getElementById('pageArea').innerHTML = this.render();
+    if (this.init) this.init();
+  },
+
+  _deleteTable(num) {
+    if (!confirm(`Are you sure you want to delete Table ${num}?`)) return;
+
+    const idx = DB.tables.findIndex(t => t.num === num);
+    if (idx > -1) {
+      DB.tables.splice(idx, 1);
+      TableStorage.save();
+      Toast.show(`Table ${num} deleted`, 'info');
+      
+      document.getElementById('pageArea').innerHTML = this.render();
+      if (this.init) this.init();
+    }
   },
 
   init() {},
