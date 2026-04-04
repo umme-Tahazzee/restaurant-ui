@@ -31,8 +31,20 @@ const MgrProfileView = {
         .mp-grid{
         grid-template-columns:1fr
         }}
-        .mp-perm-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;background:var(--gold-pale);color:var(--gold);border:1px solid rgba(184,150,62,.2);margin:3px}
-        .mp-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+        .mp-perm-badge{
+        display:inline-flex;
+        align-items:center;
+        gap:5px;
+        padding:5px 12px;
+        border-radius:20px;
+        font-size:11px;
+        font-weight:600;
+        background:var(--gold-pale);
+        color:var(--gold);
+        border:1px solid rgba(184,150,62,.2);
+        margin:3px}
+        .mp-stat-row{
+        display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
         @media(max-width:500px){.mp-stat-row{grid-template-columns:1fr 1fr}}
         .mp-field{margin-bottom:14px}
         .mp-field label{display:block;font-size:11px;color:var(--text-3);margin-bottom:5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
@@ -42,7 +54,7 @@ const MgrProfileView = {
       </style>
 
       <div style="margin-bottom:20px">
-        <div class="page-title"><i class="fa-solid fa-user-tie" style="color:var(--gold);margin-right:8px"></i>My Profile</div>
+        <div class="page-title"><i class="fa-solid fa-user-tie" style="color:var(--red);margin-right:8px"></i>My Profile</div>
         <div class="page-subtitle">Manage your manager account details</div>
       </div>
 
@@ -51,8 +63,26 @@ const MgrProfileView = {
         <!-- Left: Avatar Card -->
         <div>
           <div class="card" style="text-align:center;padding:28px 20px">
-            <div style="width:80px;height:80px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#fff;margin:0 auto 14px;box-shadow:0 0 0 4px var(--gold-pale)">${initials}</div>
-            <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700">${me.name}</div>
+            <div style="
+            width:80px;
+            height:80px;
+            border-radius:50%;
+            background:var(--red-deep);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-family:'Playfair Display',serif;
+            font-size:32px;
+            font-weight:700;
+            color:#fff;
+            margin:0 auto 14px;box-shadow:0 0 0 4px var(--gold-pale)">
+            ${initials}
+            </div>
+            <div 
+            style="font-family:'Playfair Display',
+            serif;font-size:18px;
+            font-weight:700">${me.name}
+            </div>
             <div style="font-size:12px;color:var(--text-3);margin-top:2px">${me.role}</div>
             <div style="margin:10px 0">
               <span class="tag" style="background:var(--gold-pale);color:var(--gold);border:1px solid rgba(184,150,62,.25)">
@@ -76,7 +106,8 @@ const MgrProfileView = {
           <!-- Permissions -->
           <div class="card" style="margin-top:12px">
             <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;margin-bottom:10px">
-              <i class="fa-solid fa-key" style="color:var(--gold);margin-right:6px"></i>Permissions
+              <i class="fa-solid fa-key" style="color:var(--red);
+              margin-right:6px"></i>Permissions
             </div>
             <div>${me.permissions.map(p=>`<span class="mp-perm-badge"><i class="fa-solid fa-check" style="font-size:9px"></i>${p}</span>`).join('')}</div>
           </div>

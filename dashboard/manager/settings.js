@@ -294,24 +294,6 @@ const SettingsView = {
             </div>`).join('')}
         </div>
       </div>
-
-      <!-- Font Size -->
-      <div class="settings-row">
-        <div>
-          <div class="settings-row-label">Font Size</div>
-          <div class="settings-row-desc">Adjust text size across the dashboard</div>
-        </div>
-        <select class="form-control" id="s-fontsize" style="width:110px"
-          onchange="SettingsView._applyFontSize(this.value);SettingsView._markDirty()">
-          ${['Small','Medium','Large'].map(f =>
-            `<option ${(s.fontSize||'Medium')===f?'selected':''}>${f}</option>`
-          ).join('')}
-        </select>
-      </div>
-
-
-
-     
     `);
   },
 
@@ -338,8 +320,7 @@ const SettingsView = {
     const s = DB.settings || {};
     return this._section('Notifications', 'fa-bell', 'var(--purple)', `
 
-      ${this._toggle('soundAlerts',   'Sound Alerts',
-        'Play audio when new orders arrive', s.soundAlerts || false)}
+    
 
       ${this._toggle('browserPush',   'Browser Notifications',
         'Show desktop pop-ups for new orders', s.browserPush || false)}
@@ -349,25 +330,7 @@ const SettingsView = {
 
       ${this._toggle('orderAlerts',   'Order Status Alerts',
         'Get notified when your order status changes', s.orderAlerts !== false)}
-
-      <div class="settings-row">
-        <div>
-          <div class="settings-row-label">Alert Sound</div>
-          <div class="settings-row-desc">Choose sound for new order notifications</div>
-        </div>
-        <select class="form-control" id="s-sound" style="width:130px"
-          onchange="SettingsView._markDirty()">
-          ${['Chime','Bell','Ping','None'].map(v =>
-            `<option ${(s.alertSound||'Chime')===v?'selected':''}>${v}</option>`
-          ).join('')}
-        </select>
-      </div>
-
-      <div style="margin-top:8px">
-        <button class="btn btn-outline btn-sm">
-          <i class="fa-solid fa-volume-high"></i> Preview Sound
-        </button>
-      </div>
+      
     `);
   },
 

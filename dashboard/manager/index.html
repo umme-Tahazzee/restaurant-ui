@@ -247,13 +247,15 @@
       </button>
     </nav>
     <div class="sidebar-footer">
-      <div id="sidebarAvatar" class="sidebar-avatar" style="background:var(--gold);color:#fff">AR</div>
+      <div id="sidebarAvatar" class="sidebar-avatar" 
+      style="background:var(--red-deep);color:#fff">AR</div>
       <div class="sidebar-footer-text">
-        <p id="sidebarName" class="sidebar-footer-name">Ahmed Rahman</p>
+        <p id="sidebarName" class="sidebar-footer-name">Manager</p>
         <p id="sidebarRole" class="sidebar-footer-role">Restaurant Manager</p>
       </div>
-      <button class="sidebar-logout-btn" onclick="Toast.show('Logged out','info')" title="Log out">
-        <i class="fa-solid fa-right-from-bracket"></i>
+      <button class="sidebar-logout-btn" onclick="Toast.show('Logged out','info')"
+       title="Log out">
+       <a href="../login.html"> <i class="fa-solid fa-right-from-bracket"></i></a>
       </button>
     </div>
   </div>
@@ -301,12 +303,14 @@
             </div>
             <div id="notifList"></div>
             <div class="notif-footer">
-              <i class="fa-solid fa-shield-halved" style="font-size:9px;color:var(--text-3)"></i>
+              <i class="fa-solid fa-shield-halved"
+               style="font-size:9px;color:var(--text-3)"></i>
               <span>Savoria Manager Portal — local notifications only</span>
             </div>
           </div>
         </div>
-        <div id="topbarAvatar" class="topbar-avatar" style="background:var(--gold)" title="Ahmed Rahman">AR</div>
+        <div id="topbarAvatar" class="topbar-avatar" style="background:var(--gold)" title="
+        Manager">M</div>
       </div>
     </div>
     <div id="pageArea"></div>

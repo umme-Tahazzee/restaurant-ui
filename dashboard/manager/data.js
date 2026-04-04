@@ -372,13 +372,13 @@ const ProfileStorage = {
   /* ── Default profile (যখন localStorage ফাঁকা) ── */
   defaults: {
     id:        'MGR001',
-    name:      'Ahmed Rahman',
+    name:      'Manerger',
     role:      'Restaurant Manager',
-    email:     'ahmed.rahman@savoria.com',
+    email:     'maneger@savoria.com',
     phone:     '+880 171 000 0010',
     joined:    '2021-06-01',
     shift:     'Full Day (10:00–22:00)',
-    avatarColor: '#b8963e',
+    avatarColor: '#96281b',
     permissions: ['Staff Management','Inventory','Finance','Reports','Settings'],
   },
 
