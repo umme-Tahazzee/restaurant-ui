@@ -2,7 +2,6 @@
    SETTINGS VIEW  (views/settings.js)
    Staff-only settings page — fully responsive
 ================================================ */
-
 const SettingsView = {
 
   _activeTab: 'appearance',
@@ -310,26 +309,9 @@ const SettingsView = {
         </select>
       </div>
 
-      <!-- Sidebar Position -->
-      <div class="settings-row">
-        <div>
-          <div class="settings-row-label">Sidebar Position</div>
-          <div class="settings-row-desc">Choose where the navigation appears</div>
-        </div>
-        <select class="form-control" id="s-sidebar" style="width:110px"
-          onchange="SettingsView._markDirty()">
-          ${['Left','Right'].map(p =>
-            `<option ${(s.sidebarPos||'Left')===p?'selected':''}>${p}</option>`
-          ).join('')}
-        </select>
-      </div>
 
-      ${this._toggle(
-        'compactMode',
-        'Compact Mode',
-        'Reduce padding and spacing for more content on screen',
-        s.compactMode || false,
-      )}
+
+     
     `);
   },
 
@@ -382,28 +364,13 @@ const SettingsView = {
       </div>
 
       <div style="margin-top:8px">
-        <button class="btn btn-outline btn-sm" onclick="SettingsView._previewSound()">
+        <button class="btn btn-outline btn-sm">
           <i class="fa-solid fa-volume-high"></i> Preview Sound
         </button>
       </div>
     `);
   },
 
-  _previewSound() {
-    try {
-      const ctx  = new (window.AudioContext || window.webkitAudioContext)();
-      const osc  = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, ctx.currentTime);
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-      osc.start(); osc.stop(ctx.currentTime + 0.4);
-    } catch (_) {
-      Toast.show('Sound preview not supported', 'warning');
-    }
-  },
 
   /* ─────────────────────────────────────────────
      TAB: Account
@@ -601,7 +568,6 @@ const SettingsView = {
     const get = id => document.getElementById(id)?.value ?? null;
 
     const fontSize    = get('s-fontsize');
-    const sidebarPos  = get('s-sidebar');
     const alertSound  = get('s-sound');
     const defaultView = get('s-defaultview');
     const language    = get('s-lang');
@@ -609,7 +575,6 @@ const SettingsView = {
     const prefShift   = get('s-prefshift');
 
     if (fontSize)    { s.fontSize   = fontSize;    this._applyFontSize(fontSize); }
-    if (sidebarPos)  s.sidebarPos   = sidebarPos;
     if (alertSound)  s.alertSound   = alertSound;
     if (defaultView) s.defaultView  = defaultView;
     if (language)    s.language     = language;
