@@ -55,9 +55,7 @@ const MgrTablesView = {
           <div class="page-subtitle">Real-time floor management & seating</div>
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-outline btn-sm" onclick="Toast.show('Floor plan exported','info')">
-            <i class="fa-solid fa-print"></i> Print Floor Plan
-          </button>
+         
           <button class="btn btn-primary btn-sm" onclick="MgrTablesView._addReservation()">
             <i class="fa-solid fa-plus"></i> Add Table
           </button>

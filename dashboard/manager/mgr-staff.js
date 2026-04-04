@@ -45,9 +45,7 @@ const MgrStaffView = {
           <div class="page-subtitle">Manage shifts, performance and payroll</div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-outline btn-sm" onclick="Toast.show('Schedule exported','info')">
-            <i class="fa-solid fa-calendar-days"></i> Schedule
-          </button>
+         
           <button class="btn btn-primary btn-sm" onclick="MgrStaffView._addStaff()">
             <i class="fa-solid fa-plus"></i> Add Staff
           </button>

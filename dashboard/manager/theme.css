@@ -391,6 +391,17 @@ input, select, textarea { font-family: inherit; }
   font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0;
 }
 
+.custom-modal {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+}
+
+.custom-modal .modal-content {
+  border-radius: 12px;
+  padding: 20px;
+}
+
 .settings-section {
   background: var(--bg-surface);
   border: 1px solid var(--border);

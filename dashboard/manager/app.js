@@ -178,6 +178,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   DB.tables = TableStorage.load();
   console.log(`✅ ${DB.tables.length} tables loaded from storage`);
 
+  /* ── ১.২. localStorage থেকে inventory restore করো ── */
+  DB.inventory = InventoryStorage.load();
+  console.log(`✅ ${DB.inventory.length} inventory items loaded from storage`);
+
   /* ── ২. AJAX দিয়ে customers আনো ── */
   try {
     await API.getCustomers();

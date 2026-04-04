@@ -51,11 +51,7 @@ const MgrOrdersView = {
           <div class="page-title"><i class="fa-solid fa-receipt" style="color:var(--gold);margin-right:8px"></i>All Orders</div>
           <div class="page-subtitle">Complete order oversight and management</div>
         </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-outline btn-sm" onclick="Toast.show('Orders exported to CSV','info')">
-            <i class="fa-solid fa-file-csv"></i> Export
-          </button>
-        </div>
+        
       </div>
 
       <!-- KPI -->

@@ -90,16 +90,7 @@ window.DB = {
   ],
 
   /* ── INVENTORY (static) ── */
-  inventory: [
-    { name:'Wagyu A5 (Japan)',      unit:'kg',  stock:2,   min:5,   status:'critical', color:'#c0392b' },
-    { name:'Black Truffle',         unit:'g',   stock:180, min:200, status:'low',      color:'#c47a1a' },
-    { name:'Burrata (Fresh)',        unit:'pcs', stock:8,   min:10,  status:'low',      color:'#c47a1a' },
-    { name:'Prosecco',              unit:'btl', stock:4,   min:10,  status:'critical', color:'#c0392b' },
-    { name:'Tagliatelle',           unit:'ptn', stock:34,  min:20,  status:'ok',       color:'#2d7a47' },
-    { name:'Bistecca T-bone',       unit:'kg',  stock:12,  min:6,   status:'ok',       color:'#2d7a47' },
-    { name:'Chianti Classico 2018', unit:'btl', stock:24,  min:12,  status:'ok',       color:'#2d7a47' },
-    { name:'Parmigiano Reggiano',   unit:'kg',  stock:3.5, min:2,   status:'ok',       color:'#2d7a47' },
-  ],
+  inventory: [],
 
   /* ── RESERVATIONS (static) ── */
   reservations: [
@@ -197,6 +188,70 @@ const TableStorage = {
   reset() {
     localStorage.removeItem(this.KEY);
     DB.tables = [...this.defaults];
+    this.save();
+  },
+};
+
+
+/* ================================================
+   INVENTORY STORAGE
+   localStorage এ inventory save/load করার সব logic
+================================================ */
+
+const InventoryStorage = {
+
+  KEY: 'savoria_inventory',
+
+  /* ── Default items (যখন localStorage ফাঁকা) ── */
+  defaults: [
+    { id:'i1', name:'Wagyu A5 (Japan)',  cat:'Meat',      qty:2,   unit:'kg',  minQty:5,   cost:165, status:'low' },
+    { id:'i2', name:'Black Truffle',     cat:'Pantry',    qty:180, unit:'g',   minQty:200, cost:42,  status:'low' },
+    { id:'i3', name:'Burrata (Fresh)',   cat:'Pantry',    qty:8,   unit:'pcs', minQty:10,  cost:18,  status:'low' },
+    { id:'i4', name:'Prosecco',          cat:'Beverages', qty:4,   unit:'btl', minQty:10,  cost:12,  status:'low' },
+    { id:'i5', name:'Tagliatelle',       cat:'Pasta',     qty:34,  unit:'ptn', minQty:20,  cost:28,  status:'ok'  },
+    { id:'i6', name:'Bistecca T-bone',   cat:'Meat',      qty:12,  unit:'kg',  minQty:6,   cost:48,  status:'ok'  },
+    { id:'i7', name:'Chianti Classico',  cat:'Beverages', qty:24,  unit:'btl', minQty:12,  cost:16,  status:'ok'  },
+    { id:'i8', name:'Fresh Lobster',     cat:'Seafood',   qty:12,  unit:'pcs', minQty:8,   cost:38,  status:'ok'  },
+  ],
+
+  /* ── localStorage থেকে inventory load করো ── */
+  load() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      if (!raw) {
+        const data = this.defaults;
+        this.saveData(data);
+        return data;
+      }
+      return JSON.parse(raw);
+    } catch (err) {
+      console.warn('InventoryStorage.load failed:', err);
+      return this.defaults;
+    }
+  },
+
+  /* ── DB.inventory পুরোটা localStorage এ save করো ── */
+  save() {
+    try {
+      localStorage.setItem(this.KEY, JSON.stringify(DB.inventory));
+    } catch (err) {
+      console.warn('InventoryStorage.save failed:', err);
+    }
+  },
+
+  /* ── সরাসরি data save করার helper ── */
+  saveData(data) {
+    try {
+      localStorage.setItem(this.KEY, JSON.stringify(data));
+    } catch (err) {
+      console.warn('InventoryStorage.saveData failed:', err);
+    }
+  },
+
+  /* ── সব মুছে defaults এ ফেরাও ── */
+  reset() {
+    localStorage.removeItem(this.KEY);
+    DB.inventory = [...this.defaults];
     this.save();
   },
 };
