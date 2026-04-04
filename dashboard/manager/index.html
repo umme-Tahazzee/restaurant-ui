@@ -12,191 +12,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <link rel="stylesheet" href="../layout.css">
   <link rel="stylesheet" href="theme.css" />
-  <style>
-    #sidebarBackdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .45);
-      z-index: 149;
-      backdrop-filter: blur(2px);
-      animation: fadeIn .2s ease;
-    }
 
-    #sidebarBackdrop.show {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0
-      }
-
-      to {
-        opacity: 1
-      }
-    }
-
-    #mobileMenuBtn {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border: none;
-      background: transparent;
-      color: var(--text-2);
-      cursor: pointer;
-      border-radius: 8px;
-      font-size: 16px;
-      flex-shrink: 0;
-      transition: background .15s;
-    }
-
-    #mobileMenuBtn:hover {
-      background: var(--bg-input);
-    }
-
-    @media(max-width:640px) {
-      #mobileMenuBtn {
-        display: flex
-      }
-
-      #sidebar {
-        position: fixed !important;
-        left: -260px !important;
-        top: 0;
-        height: 100vh;
-        z-index: 150;
-        transition: left .25s cubic-bezier(.4, 0, .2, 1) !important;
-        box-shadow: none
-      }
-
-      #sidebar.mobile-open {
-        left: 0 !important;
-        box-shadow: 4px 0 32px rgba(0, 0, 0, .18)
-      }
-
-      #sidebar.collapsed {
-        width: 220px !important
-      }
-
-      #sidebar.collapsed .nav-lbl,
-      #sidebar.collapsed .sidebar-logo-sub,
-      #sidebar.collapsed .sidebar-footer-text,
-      #sidebar.collapsed .nav-section-title {
-        display: block !important;
-        opacity: 1 !important
-      }
-
-      #mainContent {
-        margin-left: 0 !important;
-        width: 100% !important
-      }
-
-      .topbar-search,
-      .live-badge,
-      #topClock {
-        display: none
-      }
-
-      .topbar-right {
-        gap: 4px
-      }
-
-      #pageArea {
-        padding: 12px !important
-      }
-    }
-
-    @media(min-width:641px) and (max-width:1024px) {
-      #sidebar {
-        width: 64px !important
-      }
-
-      #sidebar .nav-lbl,
-      #sidebar .sidebar-logo-sub,
-      #sidebar .sidebar-footer-text,
-      #sidebar .nav-section-title {
-        display: none !important;
-        opacity: 0 !important
-      }
-
-      #sidebar .badge-dot {
-        right: 4px;
-        top: 4px
-      }
-
-      #sidebar .sidebar-footer {
-        padding: 10px 6px;
-        justify-content: center
-      }
-
-      #sidebar .sidebar-logout-btn,
-      #sidebar .logo-text {
-        display: none
-      }
-
-      #sidebar .sidebar-avatar,
-      #sidebar .sidebar-toggle-btn {
-        margin: 0 auto
-      }
-
-      #mainContent {
-        margin-left: 64px !important
-      }
-
-      .topbar-search {
-        max-width: 180px
-      }
-
-      #topClock {
-        display: none
-      }
-
-      #pageArea {
-        padding: 16px !important
-      }
-    }
-
-    @media(max-width:420px) {
-      #topbar {
-        padding: 0 10px;
-        gap: 6px
-      }
-
-      .topbar-right {
-        gap: 2px
-      }
-
-      .topbar-avatar {
-        width: 30px;
-        height: 30px;
-        font-size: 10px
-      }
-    }
-
-    .mgr-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: var(--gold-pale);
-      border: 1px solid rgba(184, 150, 62, .25);
-      border-radius: 20px;
-      padding: 3px 10px
-    }
-  </style>
 </head>
 
 <body>
 
-  <div id="sidebarBackdrop" onclick="closeMobileSidebar()"></div>
+<!-- ════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════ -->
 
   <div id="sidebar">
+      <!-- Logo  -->
     <div class="sidebar-logo">
       <div class="logo-wrapper">
         <div class="logo-text">
-          <span class="sidebar-logo-brand">Sav<em>o</em>ria</span>
+          <a href="../../index.html"><span class="sidebar-logo-brand">Sav<em>o</em>ria</span></a>
           <span class="sidebar-logo-sub">Manager Portal</span>
         </div>
         <button class="sidebar-toggle-btn" onclick="handleSidebarToggle()" title="Collapse sidebar">
@@ -538,6 +368,7 @@
   </script>
 
   <script src="data.js"></script>
+  <script src="api.js"></script>
   <script src="mgr-dashboard.js"></script>
   <script src="Notify.js"></script>
   <script src="mgr-staff.js"></script>

@@ -157,9 +157,10 @@ function showLoadingScreen() {
 /* ════════════════════════════════════════
    BOOT
    ১. Theme + Clock
-   ২. localStorage থেকে orders load
+   ২. Api.init() → localStorage থেকে সব data load
    ৩. AJAX দিয়ে customers আনো
-   ৪. Dashboard দেখাও
+   ৪. Notif.init() → notifications restore
+   ৫. Dashboard দেখাও
 ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', async () => {
 
@@ -168,44 +169,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   setInterval(updateClock, 30000);
   showLoadingScreen();
 
-  /* ── ১. localStorage থেকে orders restore করো ── */
-  const savedOrders = OrderStorage.load();
-  if (savedOrders.length) {
-    DB.orders = savedOrders;
-  }
+  /* ── ১. localStorage থেকে সব data restore করো ── */
+  Api.init();
 
-  /* ── ১.১. localStorage থেকে tables restore করো ── */
-  DB.tables = TableStorage.load();
-  console.log(`✅ ${DB.tables.length} tables loaded from storage`);
-
-  /* ── ১.২. localStorage থেকে inventory restore করো ── */
-  DB.inventory = InventoryStorage.load();
-  console.log(`✅ ${DB.inventory.length} inventory items loaded from storage`);
-
-  /* ── ১.৩. localStorage থেকে staff restore করো ── */
-  DB.staff = StaffStorage.load();
-  console.log(`✅ ${DB.staff.length} staff members loaded from storage`);
-
-  /* ── ১.৪. localStorage থেকে manager profile restore করো ── */
-  DB.profile = ProfileStorage.load();
+  /* ── ২. Profile UI sync ── */
   updateUIProfile();
-  console.log(`✅ Manager profile loaded: ${DB.profile.name}`);
 
-  /* ── ২. AJAX দিয়ে customers আনো ── */
+  /* ── ৩. AJAX দিয়ে customers আনো ── */
   try {
-    await API.getCustomers();
-    console.log(`✅ ${DB.customers.length} customers fetched via API`);
+    await Api.getCustomers();
+    console.log(`✅ ${DB.customers.length} customers loaded`);
   } catch (err) {
     console.warn('❌ Failed to fetch customers:', err);
   }
 
-  // Initial render
-  Router.init();
+  /* ── ৪. Notifications restore ── */
+  Notif.init();
+
+  /* ── ৫. Initial render ── */
   _updatePendingBadge();
 
-  /* ── ৪. Toast — কতটা order ছিল জানাও ── */
-  if (savedOrders.length) {
-    Toast.show(`${savedOrders.length} order(s) restored from last session.`, 'info');
+  if (DB.orders.length) {
+    Toast.show(`${DB.orders.length} order(s) restored from last session.`, 'info');
   } else {
     Toast.show('Ready! Add orders from Get Order.', 'success');
   }
@@ -222,18 +207,15 @@ function updateUIProfile() {
   
   const initials = p.name.split(' ').map(n=>n[0]).join('').toUpperCase().substring(0,2);
   
-  const elements = {
-    sidebarAvatar: document.getElementById('sidebarAvatar'),
-    sidebarName:   document.getElementById('sidebarName'),
-    sidebarRole:   document.getElementById('sidebarRole'),
-    topbarAvatar:  document.getElementById('topbarAvatar')
+  const el = {
+    sA: document.getElementById('sidebarAvatar'),
+    sN: document.getElementById('sidebarName'),
+    sR: document.getElementById('sidebarRole'),
+    tA: document.getElementById('topbarAvatar'),
   };
 
-  if (elements.sidebarAvatar) elements.sidebarAvatar.textContent = initials;
-  if (elements.sidebarName)   elements.sidebarName.textContent   = p.name;
-  if (elements.sidebarRole)   elements.sidebarRole.textContent   = p.role;
-  if (elements.topbarAvatar) {
-    elements.topbarAvatar.textContent = initials;
-    elements.topbarAvatar.title       = p.name;
-  }
+  if (el.sA) el.sA.textContent = initials;
+  if (el.sN) el.sN.textContent = p.name;
+  if (el.sR) el.sR.textContent = p.role;
+  if (el.tA) { el.tA.textContent = initials; el.tA.title = p.name; }
 }
