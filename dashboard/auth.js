@@ -130,38 +130,21 @@ const Auth = {
      */
     logout(message = null) {
         localStorage.removeItem('currentUser');
-        
+        localStorage.removeItem('sv_user');
+
         if (message) {
-            alert(message);
+            console.info('Auth:', message);
         }
 
-        // Redirect to login (adjust path as needed)
-        const currentPath = window.location.pathname;
-        if (currentPath.includes('/admin/')) {
-            location.href = '../../login.html';
-        } else if (currentPath.includes('/manager/')) {
-            location.href = '../../login.html';
-        } else if (currentPath.includes('/staff/')) {
-            location.href = '../../login.html';
-        } else {
-            location.href = '../../login.html';
-        }
+        // All dashboard pages are one level inside dashboard/
+        location.href = '../login.html';
     },
 
     /**
      * Redirect to login page
      */
     redirectToLogin() {
-        const currentPath = window.location.pathname;
-        if (currentPath.includes('/admin/')) {
-            location.href = '../../login.html';
-        } else if (currentPath.includes('/manager/')) {
-            location.href = '../../login.html';
-        } else if (currentPath.includes('/staff/')) {
-            location.href = '../../login.html';
-        } else {
-            location.href = '../../login.html';
-        }
+        location.href = '../login.html';
     },
 
     /**
