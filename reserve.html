@@ -154,9 +154,32 @@
 </section>
 
 <!-- ═══════════ BOOKING WIZARD ═══════════ -->
-<section class="py-10 lg:py-20 px-4 sm:px-8 lg:px-14 bg-white">
+<section class="py-10 lg:py-20 px-4 sm:px-8 lg:px-14 bg-white pb-28 md:pb-10 lg:pb-20">
   <div class="max-w-7xl mx-auto">
-    <div class="grid lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_320px] gap-8 lg:gap-14 items-start">
+    <!-- Mobile booking summary strip (above form on mobile) -->
+    <div class="lg:hidden mb-5 bg-cream rounded-2xl border border-borderSoft p-4 flex items-center gap-3 flex-wrap" id="mobileSummaryStrip">
+      <div class="flex items-center gap-2 text-xs">
+        <i class="fa-regular fa-calendar text-redPrimary text-[11px]"></i>
+        <span class="font-semibold text-textDark" id="mobSumDate">No date</span>
+      </div>
+      <span class="text-borderSoft/60">·</span>
+      <div class="flex items-center gap-2 text-xs">
+        <i class="fa-regular fa-clock text-redPrimary text-[11px]"></i>
+        <span class="font-semibold text-textDark" id="mobSumTime">No time</span>
+      </div>
+      <span class="text-borderSoft/60">·</span>
+      <div class="flex items-center gap-2 text-xs">
+        <i class="fa-solid fa-user-group text-redPrimary text-[11px]"></i>
+        <span class="font-semibold text-textDark" id="mobSumGuests">2 Guests</span>
+      </div>
+      <span class="text-borderSoft/60">·</span>
+      <div class="flex items-center gap-2 text-xs">
+        <i class="fa-solid fa-chair text-redPrimary text-[11px]"></i>
+        <span class="font-semibold text-textDark" id="mobSumArea">Main Dining</span>
+      </div>
+    </div>
+
+        <div class="grid lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_320px] gap-8 lg:gap-14 items-start">
 
       <!-- MAIN FORM -->
       <div>
@@ -164,7 +187,7 @@
         <div class="flex items-center mb-8 opacity-0 translate-y-4 transition-all duration-500" id="stepBar" data-reveal>
           <!-- Step 1 -->
           <div class="flex flex-col items-center gap-1.5 relative z-[1]">
-            <div id="sc1" class="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 flex-shrink-0 transition-all duration-300 bg-redPrimary border-redPrimary text-white" style="box-shadow:0 0 0 6px rgba(192,57,43,.12)">
+            <div id="sc1" class="w-8 h-8 sm:w-[38px] sm:h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 flex-shrink-0 transition-all duration-300 bg-redPrimary border-redPrimary text-white" style="box-shadow:0 0 0 6px rgba(192,57,43,.12)">
               <i class="fa-solid fa-calendar-day text-[10px]"></i>
             </div>
             <span id="sl1" class="text-[9px] font-bold tracking-[.12em] uppercase text-redPrimary whitespace-nowrap hidden sm:block">Date &amp; Time</span>
@@ -172,7 +195,7 @@
           <div id="con1" class="flex-1 h-0.5 bg-borderSoft mx-1 mb-0 sm:mb-[22px] min-w-[12px] sm:min-w-[20px] transition-all duration-300"></div>
           <!-- Step 2 -->
           <div class="flex flex-col items-center gap-1.5 relative z-[1]">
-            <div id="sc2" class="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 border-borderSoft bg-white text-textMid flex-shrink-0 transition-all duration-300">
+            <div id="sc2" class="w-8 h-8 sm:w-[38px] sm:h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 border-borderSoft bg-white text-textMid flex-shrink-0 transition-all duration-300">
               <i class="fa-solid fa-user-group text-[10px]"></i>
             </div>
             <span id="sl2" class="text-[9px] font-bold tracking-[.12em] uppercase text-textMid/40 whitespace-nowrap hidden sm:block">Guests</span>
@@ -180,7 +203,7 @@
           <div id="con2" class="flex-1 h-0.5 bg-borderSoft mx-1 mb-0 sm:mb-[22px] min-w-[12px] sm:min-w-[20px] transition-all duration-300"></div>
           <!-- Step 3 -->
           <div class="flex flex-col items-center gap-1.5 relative z-[1]">
-            <div id="sc3" class="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 border-borderSoft bg-white text-textMid flex-shrink-0 transition-all duration-300">
+            <div id="sc3" class="w-8 h-8 sm:w-[38px] sm:h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 border-borderSoft bg-white text-textMid flex-shrink-0 transition-all duration-300">
               <i class="fa-solid fa-chair text-[10px]"></i>
             </div>
             <span id="sl3" class="text-[9px] font-bold tracking-[.12em] uppercase text-textMid/40 whitespace-nowrap hidden sm:block">Dining Area</span>
@@ -188,7 +211,7 @@
           <div id="con3" class="flex-1 h-0.5 bg-borderSoft mx-1 mb-0 sm:mb-[22px] min-w-[12px] sm:min-w-[20px] transition-all duration-300"></div>
           <!-- Step 4 -->
           <div class="flex flex-col items-center gap-1.5 relative z-[1]">
-            <div id="sc4" class="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 border-borderSoft bg-white text-textMid flex-shrink-0 transition-all duration-300">
+            <div id="sc4" class="w-8 h-8 sm:w-[38px] sm:h-[38px] rounded-full flex items-center justify-center text-[11px] font-bold border-2 border-borderSoft bg-white text-textMid flex-shrink-0 transition-all duration-300">
               <i class="fa-solid fa-circle-user text-[10px]"></i>
             </div>
             <span id="sl4" class="text-[9px] font-bold tracking-[.12em] uppercase text-textMid/40 whitespace-nowrap hidden sm:block">Your Details</span>
@@ -218,7 +241,7 @@
           <!-- time slots -->
           <div class="mb-2">
             <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-textMid/50 mb-2">Select Time Slot</label>
-            <div id="timeSlots" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2"></div>
+            <div id="timeSlots" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2"></div>
           </div>
           <p class="hidden text-[11px] text-[#e74c3c] mt-1.5" id="errTime">Please select a time slot.</p>
 
@@ -526,24 +549,6 @@
 
       <!-- ── SUMMARY SIDEBAR ── -->
       <div id="summaryCol" class="lg:order-last">
-        <!-- Mobile summary strip -->
-        <div class="lg:hidden mb-5 bg-cream rounded-2xl border border-borderSoft p-4 flex items-center gap-3 flex-wrap" id="mobileSummaryStrip">
-          <div class="flex items-center gap-2 text-xs">
-            <i class="fa-regular fa-calendar text-redPrimary text-[11px]"></i>
-            <span class="font-semibold text-textDark" id="mobSumDate">No date</span>
-          </div>
-          <span class="text-borderSoft">·</span>
-          <div class="flex items-center gap-2 text-xs">
-            <i class="fa-regular fa-clock text-redPrimary text-[11px]"></i>
-            <span class="font-semibold text-textDark" id="mobSumTime">No time</span>
-          </div>
-          <span class="text-borderSoft">·</span>
-          <div class="flex items-center gap-2 text-xs">
-            <i class="fa-solid fa-user-group text-redPrimary text-[11px]"></i>
-            <span class="font-semibold text-textDark" id="mobSumGuests">2 Guests</span>
-          </div>
-        </div>
-
         <!-- Desktop summary card -->
         <div class="hidden lg:block bg-white border border-borderSoft rounded-[18px] p-[22px] sticky top-[88px] opacity-0 translate-y-4 transition-all duration-500" id="summaryCard" data-reveal>
           <p class="text-[10px] font-bold uppercase tracking-[.25em] mb-5 text-textMid/40">Your Reservation</p>
@@ -611,76 +616,11 @@
   </div>
 </section>
 
-<!-- ═══════════ FOOTER ═══════════ -->
-<footer style="background:linear-gradient(160deg,#1a1210,#2d1b16)">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-12 lg:py-16">
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 lg:gap-10 mb-10 lg:mb-12">
-      <div class="col-span-2 sm:col-span-1">
-        <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-        <p class="font-cormorant italic text-xs tracking-[.3em] uppercase mt-0.5 mb-4 text-gold/60">Fine Dining</p>
-        <p class="text-sm leading-relaxed text-white/40">Where every dish tells a story of passion, craft, and the finest ingredients.</p>
-        <div class="flex gap-3 mt-5">
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs text-white/40 hover:border-gold hover:text-gold transition"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs text-white/40 hover:border-gold hover:text-gold transition"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs text-white/40 hover:border-gold hover:text-gold transition"><i class="fa-brands fa-x-twitter"></i></a>
-        </div>
-      </div>
-      <div>
-        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5 text-white/70">Navigation</p>
-        <ul class="space-y-3">
-          <li><a href="index.html" class="text-sm text-white/40 hover:text-gold transition">Home</a></li>
-          <li><a href="category.html" class="text-sm text-white/40 hover:text-gold transition">Menu</a></li>
-          <li><a href="reserve.html" class="text-sm text-gold">Reserve</a></li>
-          <li><a href="contact.html" class="text-sm text-white/40 hover:text-gold transition">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5 text-white/70">Hours</p>
-        <ul class="space-y-2">
-          <li class="text-sm text-white/40">Mon–Fri · 12pm–10pm</li>
-          <li class="text-sm text-white/40">Sat–Sun · 11am–11pm</li>
-          <li class="text-sm mt-3 text-white/40">Happy Hour · 4–6pm</li>
-        </ul>
-      </div>
-      <div>
-        <p class="text-[10px] uppercase tracking-[.25em] font-semibold mb-4 sm:mb-5 text-white/70">Contact</p>
-        <ul class="space-y-3">
-          <li class="text-sm text-white/40">📍 42 West 58th St, New York</li>
-          <li class="text-sm text-white/40">📞 +1 (555) 920-4200</li>
-          <li class="text-sm text-white/40">✉️ hello@savoria.com</li>
-        </ul>
-      </div>
-    </div>
-    <div class="h-px mb-6 opacity-20" style="background:linear-gradient(90deg,transparent,#b8963e 30%,#d4af6a 60%,transparent)"></div>
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
-      <p class="text-xs text-white/30">© 2025 Savoria Fine Dining. All rights reserved.</p>
-      <p class="font-cormorant italic text-sm text-gold/40">Where every dish tells a story</p>
-    </div>
-  </div>
-</footer>
+<!-- Footer injected by savoria-app.js -->
 
 </main>
 
-<!-- MOBILE BOTTOM NAV -->
-<nav class="fixed bottom-0 left-0 right-0 z-[900] bg-white border-t border-borderSoft flex items-center justify-around py-2.5 shadow-[0_-4px_20px_rgba(26,18,16,.08)] md:hidden" style="padding-bottom:max(10px, env(safe-area-inset-bottom))">
-  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold tracking-[.06em] uppercase text-textMid/45 cursor-pointer transition px-1.5 hover:text-textMid" onclick="location.href='index.html'">
-    <i class="fa-solid fa-house text-[18px]"></i><span>Home</span>
-  </div>
-  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold tracking-[.06em] uppercase text-textMid/45 cursor-pointer transition px-1.5 hover:text-textMid" onclick="location.href='category.html'">
-    <i class="fa-solid fa-utensils text-[18px]"></i><span>Menu</span>
-  </div>
-  <div>
-    <div class="w-[52px] h-[52px] rounded-[18px] flex items-center justify-center text-white cursor-pointer transition hover:scale-105 -mt-3.5" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 16px rgba(192,57,43,.45)" onclick="window.scrollTo({top:400,behavior:'smooth'})">
-      <i class="fa-regular fa-calendar-check text-[20px]"></i>
-    </div>
-  </div>
-  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold tracking-[.06em] uppercase text-textMid/45 cursor-pointer transition px-1.5 hover:text-textMid" onclick="location.href='contact.html'">
-    <i class="fa-solid fa-paper-plane text-[18px]"></i><span>Contact</span>
-  </div>
-  <div class="flex flex-col items-center gap-1 text-[9px] font-semibold tracking-[.06em] uppercase text-textMid/45 cursor-pointer transition px-1.5 hover:text-textMid" onclick="location.href='profile.html'">
-    <i class="fa-regular fa-circle-user text-[18px]"></i><span>Profile</span>
-  </div>
-</nav>
+<!-- Mobile bottom nav injected by savoria-app.js -->
 
 <script>
 /* ═══════════ STATE ═══════════ */
@@ -859,6 +799,7 @@ function updateSummary() {
   if (document.getElementById('mobSumDate')) document.getElementById('mobSumDate').textContent = selectedDate ? selectedDate.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'No date';
   if (document.getElementById('mobSumTime')) document.getElementById('mobSumTime').textContent = selectedTime || 'No time';
   if (document.getElementById('mobSumGuests')) document.getElementById('mobSumGuests').textContent = guestCount + ' Guest' + (guestCount > 1 ? 's' : '');
+  if (document.getElementById('mobSumArea')) document.getElementById('mobSumArea').textContent = AREA_LABELS[selectedArea] || 'Main Dining';
 }
 
 /* ═══════════ STEP NAV ═══════════ */
