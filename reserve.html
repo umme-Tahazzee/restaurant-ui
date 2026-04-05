@@ -50,6 +50,7 @@
       },
     };
   </script>
+  <link rel="stylesheet" href="static/css/savoria.css">
 </head>
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
 
@@ -68,14 +69,14 @@
     </div>
     <div class="h-px w-full mb-8" style="background:linear-gradient(90deg,transparent,#b8963e 30%,#d4af6a 60%,transparent)"></div>
     <ul class="flex flex-col gap-1 flex-1">
-      <li><a href="/" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+      <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
       <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-      <li><a href="/about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-      <li><a href="/reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-      <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+      <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+      <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+      <li><a href="contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
     </ul>
     <div class="mt-auto space-y-3">
-      <a href="/reserve.html" onclick="toggleMenu()" class="flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
+      <a href="reserve.html" onclick="toggleMenu()" class="flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
         <i class="fa-regular fa-calendar-check"></i> Book a Table
       </a>
       <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
@@ -1031,31 +1032,8 @@ function newBooking() {
   goStep(1);
 }
 
-/* ═══════════ MENU TOGGLE ═══════════ */
-function toggleMenu() {
-  const m = document.getElementById('mobileMenu');
-  const o = document.getElementById('overlay');
-  const isOpen = m.style.transform === 'translateX(0%)';
-  if (isOpen) {
-    m.style.transform = 'translateX(100%)';
-    o.classList.remove('opacity-100','pointer-events-auto');
-    o.classList.add('opacity-0','pointer-events-none');
-  } else {
-    m.style.display = 'flex';
-    m.style.flexDirection = 'column';
-    requestAnimationFrame(() => { m.style.transform = 'translateX(0%)'; });
-    o.classList.add('opacity-100','pointer-events-auto');
-    o.classList.remove('opacity-0','pointer-events-none');
-  }
-}
-
-function closeAll() {
-  const m = document.getElementById('mobileMenu');
-  const o = document.getElementById('overlay');
-  m.style.transform = 'translateX(100%)';
-  o.classList.remove('opacity-100','pointer-events-auto');
-  o.classList.add('opacity-0','pointer-events-none');
-}
+/* toggleMenu / closeAll provided by savoria-app.js */
 </script>
+<script src="static/js/savoria-app.js"></script>
 </body>
 </html>

@@ -58,6 +58,7 @@
         },
       };
     </script>
+    <link rel="stylesheet" href="static/css/savoria.css">
     <style>
       /* ── Custom scrollbar ── */
       ::-webkit-scrollbar { width: 5px; }
@@ -605,7 +606,7 @@
          TOAST
       ════════════════════════════════════════ */
       let _toastTimer = null;
-      function showToast(msg, type = 'success') {
+      function loginToast(msg, type = 'success') {
         const el   = document.getElementById('toastEl');
         const icon = document.getElementById('toastIcon');
         const txt  = document.getElementById('toastMsg');
@@ -745,7 +746,7 @@
         setTimeout(() => {
           const result = Auth.login(email, pass);
           if (result.ok) {
-            showToast(`Welcome back, ${result.user.name.split(' ')[0]}! 🍽️`, 'success');
+            loginToast(`Welcome back, ${result.user.name.split(' ')[0]}! 🍽️`, 'success');
             setTimeout(() => { location.href = '/dashboard/customer/profile_index.html'; }, 800);
           } else {
             document.getElementById('loginGlobalErrMsg').textContent = result.message;
@@ -805,7 +806,7 @@
           if (result.ok) {
             // Auto-login after registration
             Auth.login(email, pass);
-            showToast(`Account created! Welcome, ${first}! 🎉`, 'success');
+            loginToast(`Account created! Welcome, ${first}! 🎉`, 'success');
             setTimeout(() => { location.href = '/dashboard/customer/profile_index.html'; }, 900);
           } else {
             // FIX: reset button state on error
@@ -843,21 +844,21 @@
         }
         showErr('forgotEmailErr', false);
         document.getElementById('forgotSuccess').classList.remove('hidden');
-        showToast('Reset link sent to your email!', 'success');
+        loginToast('Reset link sent to your email!', 'success');
       }
 
       /* ════════════════════════════════════════
          SOCIAL LOGIN (demo)
       ════════════════════════════════════════ */
       function socialLogin(provider) {
-        showToast(`${provider} login coming soon!`, 'warning');
+        loginToast(`${provider} login coming soon!`, 'warning');
       }
 
       /* ════════════════════════════════════════
          TERMS INFO (demo)
       ════════════════════════════════════════ */
       function showTermsInfo() {
-        showToast('Terms & Privacy Policy — Coming soon!', 'warning');
+        loginToast('Terms & Privacy Policy — Coming soon!', 'warning');
       }
 
       /* ════════════════════════════════════════
@@ -888,5 +889,6 @@
         });
       });
     </script>
+    <script src="static/js/savoria-app.js"></script>
   </body>
 </html>

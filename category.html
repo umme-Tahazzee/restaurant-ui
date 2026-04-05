@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="static/css/savoria.css">
   <script>
     tailwind.config = {
       theme: {
@@ -72,7 +73,7 @@
     .cat-hero::before {
       content: "";
       position: absolute; inset: 0;
-      background: url("./assests/thai.png") center/cover no-repeat;
+      background: url("./assets/thai.png") center/cover no-repeat;
       opacity: 0.25;
     }
     .cat-hero-overlay {
@@ -261,11 +262,11 @@
   </div>
   <div class="gold-line h-[1px] w-full mb-8"></div>
   <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="/" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+    <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
     <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="/about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-    <li><a href="/reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+    <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+    <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+    <li><a href="contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
   </ul>
 </div>
 
@@ -302,7 +303,7 @@
     </div>
     <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 md:pb-5 flex-shrink-0">
       <div class="space-y-2 mb-4" id="cartTotalsBlock"></div>
-      <button id="cartConfirmBtn" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled>
+      <button id="cartConfirmBtn" onclick="placeOrder()" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled>
         <i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order
       </button>
       <button onclick="toggleCart()" class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">Continue Browsing</button>
@@ -313,18 +314,18 @@
 <!-- ═══════════ NAVBAR ═══════════ -->
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300" style="background:rgba(255,255,255,0)">
   <div id="navInner" class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
-    <a href="/" class="flex flex-col leading-none group flex-shrink-0">
+    <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
       <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
         Sav<span class="italic font-light text-redPrimary">o</span>ria
       </span>
       <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
     </a>
     <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
-      <li><a href="/" class="nav-link transition">Home</a></li>
+      <li><a href="index.html" class="nav-link transition">Home</a></li>
       <li><a href="menu.html" class="nav-link active transition">Menu</a></li>
-      <li><a href="/about.html" class="nav-link transition">About</a></li>
-      <li><a href="/reserve.html" class="nav-link transition">Reserve</a></li>
-      <li><a href="/contact.html" class="nav-link transition">Contact</a></li>
+      <li><a href="about.html" class="nav-link transition">About</a></li>
+      <li><a href="reserve.html" class="nav-link transition">Reserve</a></li>
+      <li><a href="contact.html" class="nav-link transition">Contact</a></li>
     </ul>
     <div class="flex items-center gap-2 sm:gap-3">
       <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full text-textMid hover:text-redPrimary transition p-2">
@@ -333,9 +334,9 @@
       </button>
       <button class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
         <i class="fa-regular fa-circle-user"></i>
-        <a href="/login.html">Login</a>
+        <a href="login.html">Login</a>
       </button>
-      <a href="/reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
+      <a href="reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
         <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
       </a>
       <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
@@ -356,7 +357,7 @@
     <div class="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 pb-10 md:pb-14 pt-16">
       <!-- Breadcrumb -->
       <nav class="flex items-center gap-2 text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-6 fade-up">
-        <a href="/" class="hover:text-gold transition">Home</a>
+        <a href="index.html" class="hover:text-gold transition">Home</a>
         <i class="fa-solid fa-chevron-right text-[8px]"></i>
         <a href="menu.html" class="hover:text-gold transition">Menu</a>
         <i class="fa-solid fa-chevron-right text-[8px]"></i>
@@ -449,7 +450,7 @@
     <div class="featured-wide mb-10 fade-up delay-1">
       <div class="flex flex-col md:flex-row">
         <div class="relative md:w-[45%] h-[220px] md:h-auto overflow-hidden">
-          <img src="./assests/thai.png" alt="Tom Yum" class="w-full h-full object-cover opacity-80"/>
+          <img src="./assets/thai.png" alt="Tom Yum" class="w-full h-full object-cover opacity-80"/>
           <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#1a0f0d] hidden md:block"></div>
           <div class="absolute inset-0 bg-gradient-to-t from-[#1a0f0d] via-transparent to-transparent md:hidden"></div>
         </div>
@@ -497,9 +498,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6" id="dishGrid">
 
       <!-- Card 1 -->
-      <a href="/dish.html" class="dish-card fade-up delay-1">
+      <a href="dish.html" class="dish-card fade-up delay-1">
         <div class="img-wrap h-[200px]">
-          <img src="./assests/thai.png" alt="Pad Thai" class="w-full h-full object-cover"/>
+          <img src="./assets/thai.png" alt="Pad Thai" class="w-full h-full object-cover"/>
           <div class="absolute top-3 left-3 flex gap-1.5">
             <span class="tag tag-gold">Popular</span>
           </div>
@@ -537,9 +538,9 @@
       </a>
 
       <!-- Card 2 -->
-      <a href="/dish.html" class="dish-card fade-up delay-2">
+      <a href="dish.html" class="dish-card fade-up delay-2">
         <div class="img-wrap h-[200px]">
-          <img src="./assests/thai.png" alt="Green Curry" class="w-full h-full object-cover"/>
+          <img src="./assets/thai.png" alt="Green Curry" class="w-full h-full object-cover"/>
           <div class="absolute top-3 left-3 flex gap-1.5">
             <span class="tag tag-red">Spicy 🌶</span>
           </div>
@@ -577,9 +578,9 @@
       </a>
 
       <!-- Card 3 -->
-      <a href="/dish.html" class="dish-card fade-up delay-3">
+      <a href="dish.html" class="dish-card fade-up delay-3">
         <div class="img-wrap h-[200px]">
-          <img src="./assests/thai.png" alt="Mango Sticky Rice" class="w-full h-full object-cover"/>
+          <img src="./assets/thai.png" alt="Mango Sticky Rice" class="w-full h-full object-cover"/>
           <div class="absolute top-3 left-3 flex gap-1.5">
             <span class="tag tag-green">🌱 Veg</span>
             <span class="tag tag-gold">New</span>
@@ -618,9 +619,9 @@
       </a>
 
       <!-- Card 4 -->
-      <a href="/dish.html" class="dish-card fade-up delay-1">
+      <a href="dish.html" class="dish-card fade-up delay-1">
         <div class="img-wrap h-[200px]">
-          <img src="./assests/thai.png" alt="Massaman Curry" class="w-full h-full object-cover"/>
+          <img src="./assets/thai.png" alt="Massaman Curry" class="w-full h-full object-cover"/>
           <div class="absolute top-3 left-3 flex gap-1.5">
             <span class="tag tag-gold">Popular</span>
           </div>
@@ -659,9 +660,9 @@
 
       <!-- Card 5 -->
       
-      <a href="/dish.html" class="dish-card fade-up delay-2">
+      <a href="dish.html" class="dish-card fade-up delay-2">
         <div class="img-wrap h-[200px]">
-          <img src="./assests/thai.png" alt="Som Tum" class="w-full h-full object-cover"/>
+          <img src="./assets/thai.png" alt="Som Tum" class="w-full h-full object-cover"/>
           <div class="absolute top-3 left-3 flex gap-1.5">
             <span class="tag tag-green">🌱 Veg</span>
           </div>
@@ -699,9 +700,9 @@
       </a>
 
       <!-- Card 6 -->
-      <a href="/dish.html" class="dish-card fade-up delay-3">
+      <a href="dish.html" class="dish-card fade-up delay-3">
         <div class="img-wrap h-[200px]">
-          <img src="./assests/thai.png" alt="Basil Fried Rice" class="w-full h-full object-cover"/>
+          <img src="./assets/thai.png" alt="Basil Fried Rice" class="w-full h-full object-cover"/>
           <div class="absolute top-3 left-3 flex gap-1.5">
             <span class="tag tag-red">New</span>
           </div>
@@ -758,7 +759,7 @@
         <p class="font-cormorant italic text-textMid/50 text-lg">Open Monday to Sunday · 12:00pm – 11:00pm</p>
       </div>
       <div class="flex flex-col gap-3 flex-shrink-0 w-full md:w-auto">
-        <a href="/reserve.html" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center">
+        <a href="reserve.html" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center">
           <i class="fa-regular fa-calendar-check"></i> Book Online
         </a>
         <a href="tel:+15559204200" class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center">
@@ -785,10 +786,10 @@
         <div>
           <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Navigation</p>
           <ul class="space-y-3">
-            <li><a href="/" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
+            <li><a href="index.html" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
             <li><a href="menu.html" class="text-white/40 text-sm hover:text-gold transition">Menu</a></li>
-            <li><a href="/about.html" class="text-white/40 text-sm hover:text-gold transition">About</a></li>
-            <li><a href="/reserve.html" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
+            <li><a href="about.html" class="text-white/40 text-sm hover:text-gold transition">About</a></li>
+            <li><a href="reserve.html" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
           </ul>
         </div>
         <div>
@@ -820,7 +821,7 @@
 
 <!-- ══════════ MOBILE BOTTOM NAV ══════════ -->
 <nav class="mobile-bottom-nav md:hidden">
-  <div class="nav-item" onclick="location.href='/'">
+  <div class="nav-item" onclick="location.href='index.html'">
     <i class="fa-solid fa-house"></i><span>Home</span>
   </div>
   <div class="nav-item active">
@@ -832,11 +833,11 @@
       <div class="badge" id="mobileBadge" style="display:none; position:absolute; top:-4px; right:-4px; background:#c0392b; color:#fff; width:18px; height:18px; border-radius:50%; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center;">0</div>
     </div>
   </div>
-  <div class="nav-item" onclick="location.href='/reserve.html'">
+  <div class="nav-item" onclick="location.href='reserve.html'">
     <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
   </div>
   <div class="nav-item">
-    <i class="fa-regular fa-circle-user"></i><span><a href="/login.html">Profile</a></span>
+    <i class="fa-regular fa-circle-user"></i><span><a href="login.html">Profile</a></span>
   </div>
 </nav>
 
@@ -847,134 +848,8 @@
     navbar.classList.toggle('scrolled', window.scrollY > 20);
   });
 
-  // ── Cart state ──
-  let cart = [];
+  /* Cart state, addToCart, renderCart, toggleCart, toggleMenu provided by savoria-app.js */
 
-  function addToCart(name, price) {
-    const existing = cart.find(i => i.name === name);
-    if (existing) { existing.qty++; }
-    else { cart.push({ name, price, qty: 1 }); }
-    renderCart();
-    if (!document.getElementById('cartPanel').classList.contains('open')) {
-      showCartToast(name);
-    }
-  }
-
-  function renderCart() {
-    const count = cart.reduce((s, i) => s + i.qty, 0);
-    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const badge = document.getElementById('cartBadge');
-    badge.textContent = count;
-    badge.classList.toggle('hidden', count === 0);
-    badge.classList.toggle('flex', count > 0);
-
-    const container = document.getElementById('cartItemsContainer');
-    const empty = document.getElementById('cartEmpty');
-    const totals = document.getElementById('cartTotalsBlock');
-    const confirmBtn = document.getElementById('cartConfirmBtn');
-
-    empty.style.display = cart.length === 0 ? 'block' : 'none';
-
-    container.innerHTML = cart.map(item => `
-      <div class="flex items-center gap-3 px-6 py-3 border-b border-borderSoft/50 last:border-0">
-        <div class="w-12 h-12 rounded-xl bg-cream flex-shrink-0 overflow-hidden">
-          <img src="./assests/thai.png" alt="${item.name}" class="w-full h-full object-cover"/>
-        </div>
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-semibold text-textDark truncate">${item.name}</p>
-          <p class="text-[12px] text-textMid/50">$${item.price} each</p>
-        </div>
-        <div class="flex items-center gap-2 flex-shrink-0">
-          <button onclick="changeQty('${item.name}', -1)" class="w-7 h-7 rounded-full border border-borderSoft text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition text-sm flex items-center justify-center">−</button>
-          <span class="text-sm font-bold text-textDark w-4 text-center">${item.qty}</span>
-          <button onclick="changeQty('${item.name}', 1)" class="w-7 h-7 rounded-full border border-borderSoft text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition text-sm flex items-center justify-center">+</button>
-        </div>
-        <p class="text-sm font-bold text-textDark w-12 text-right flex-shrink-0">$${(item.price * item.qty)}</p>
-      </div>
-    `).join('');
-
-    if (cart.length > 0) {
-      const tax = total * 0.08;
-      totals.innerHTML = `
-        <div class="flex justify-between text-sm text-textMid/60"><span>Subtotal</span><span>$${total.toFixed(2)}</span></div>
-        <div class="flex justify-between text-sm text-textMid/60"><span>Tax (8%)</span><span>$${tax.toFixed(2)}</span></div>
-        <div class="flex justify-between font-playfair text-lg font-black text-textDark border-t border-borderSoft pt-2 mt-1"><span>Total</span><span>$${(total + tax).toFixed(2)}</span></div>
-      `;
-      confirmBtn.disabled = false;
-      confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-    } else {
-      totals.innerHTML = '';
-      confirmBtn.disabled = true;
-      confirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
-    }
-  }
-
-  function changeQty(name, delta) {
-    const idx = cart.findIndex(i => i.name === name);
-    if (idx === -1) return;
-    cart[idx].qty += delta;
-    if (cart[idx].qty <= 0) cart.splice(idx, 1);
-    renderCart();
-  }
-
-  // ── Cart toast ──
-  function showCartToast(name) {
-    const t = document.createElement('div');
-    t.innerHTML = `<div style="position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1210;color:#fff;padding:10px 20px;border-radius:50px;font-size:12px;font-weight:600;z-index:9999;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.2);display:flex;align-items:center;gap:8px;">
-      <span style="color:#b8963e;">✓</span> ${name} added to cart
-    </div>`;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2200);
-  }
-
-  // ── Toggle cart ──
-  function toggleCart() {
-    const panel = document.getElementById('cartPanel');
-    const backdrop = document.getElementById('cartBackdrop');
-    const modal = document.getElementById('cartModal');
-    const overlay = document.getElementById('overlay');
-    const isOpen = panel.classList.contains('open');
-
-    if (isOpen) {
-      panel.classList.remove('open');
-      backdrop.classList.remove('opacity-100');
-      backdrop.classList.add('opacity-0');
-      setTimeout(() => { backdrop.classList.add('hidden'); modal.style.pointerEvents = 'none'; }, 400);
-      overlay.classList.remove('show');
-    } else {
-      modal.style.pointerEvents = 'all';
-      backdrop.classList.remove('hidden');
-      setTimeout(() => { backdrop.classList.add('opacity-100'); backdrop.classList.remove('opacity-0'); }, 10);
-      setTimeout(() => panel.classList.add('open'), 10);
-      overlay.classList.add('show');
-    }
-  }
-
-  // ── Toggle mobile menu ──
-  function toggleMenu() {
-    const m = document.getElementById('mobileMenu');
-    const overlay = document.getElementById('overlay');
-    const isOpen = m.classList.contains('open');
-    if (isOpen) {
-      m.classList.remove('open');
-      overlay.classList.remove('show');
-    } else {
-      m.style.display = 'flex';
-      setTimeout(() => m.classList.add('open'), 10);
-      overlay.classList.add('show');
-    }
-  }
-
-  function closeAll() {
-    const panel = document.getElementById('cartPanel');
-    const menu = document.getElementById('mobileMenu');
-    const overlay = document.getElementById('overlay');
-    if (panel.classList.contains('open')) toggleCart();
-    if (menu.classList.contains('open')) toggleMenu();
-    overlay.classList.remove('show');
-  }
-
-  // ── Category tabs ──
   const categoryData = {
     thai: { title: 'Thai Cuisine', desc: 'Vibrant flavors from Southeast Asia — aromatic herbs, bold spices & silky broths', count: '12 Dishes' },
     italian: { title: 'Italian Cuisine', desc: 'Handmade pasta, aged cheeses and the finest Italian wines — la dolce vita', count: '18 Dishes' },
@@ -1002,6 +877,7 @@
     btn.classList.add('active');
   }
 </script>
+<script src="static/js/savoria-app.js"></script>
 
 </body>
 </html>

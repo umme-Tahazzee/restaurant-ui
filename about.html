@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="static/css/savoria.css">
   <script>
     tailwind.config = {
       theme: {
@@ -140,7 +141,7 @@
     <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 md:pb-5 flex-shrink-0 shadow-[0_-4px_20px_rgba(0,0,0,.04)]">
       <div class="space-y-2 mb-4" id="cartTotalsBlock"></div>
       <div id="cartPayment" class="hidden items-center gap-2 mb-4 p-3 bg-cream/60 rounded-xl border border-borderSoft"><i class="fa-regular fa-credit-card text-textMid/40 text-sm"></i><span class="text-[12px] text-textMid/60 flex-1">Visa •••• 4242</span><button class="text-[10px] font-bold text-gold uppercase tracking-wider">Change</button></div>
-      <button id="cartConfirmBtn" class="w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" style="background:linear-gradient(135deg,#c0392b,#96281b)" disabled><i class="fa-solid fa-lock text-[10px]"></i> Confirm &amp; Place Order</button>
+      <button id="cartConfirmBtn" onclick="placeOrder()" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled><i class="fa-solid fa-lock text-[10px]"></i> Confirm &amp; Place Order</button>
       <button onclick="toggleCart()" class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">Continue Browsing</button>
     </div>
   </div>
@@ -169,9 +170,9 @@
       </button>
       <button class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
         <i class="fa-regular fa-circle-user"></i>
-        <a href="/login.html">Login</a>
+        <a href="login.html">Login</a>
       </button>
-      <a href="/reserve.html" class="hidden md:inline-flex items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1 transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
+      <a href="reserve.html" class="hidden md:inline-flex items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1 transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)">
         <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
       </a>
       <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
@@ -222,13 +223,13 @@
         <div class="animate-anim-2 relative">
           <div class="grid grid-cols-2 gap-3">
             <div class="rounded-2xl overflow-hidden aspect-[3/4] bg-cream row-span-2 shadow-xl">
-              <img src="./assests/thai.png" alt="Chef Marco" class="w-full h-full object-cover"/>
+              <img src="./assets/thai.png" alt="Chef Marco" class="w-full h-full object-cover"/>
             </div>
             <div class="rounded-2xl overflow-hidden aspect-square bg-cream shadow-md">
-              <img src="./assests/thai.png" alt="Restaurant" class="w-full h-full object-cover"/>
+              <img src="./assets/thai.png" alt="Restaurant" class="w-full h-full object-cover"/>
             </div>
             <div class="rounded-2xl overflow-hidden aspect-square bg-cream shadow-md">
-              <img src="./assests/thai.png" alt="Dish" class="w-full h-full object-cover"/>
+              <img src="./assets/thai.png" alt="Dish" class="w-full h-full object-cover"/>
             </div>
           </div>
           <!-- Floating award badge -->
@@ -258,7 +259,7 @@
           </p>
         </div>
         <div class="animate-anim-2 rounded-2xl overflow-hidden h-[240px] bg-cream mb-6 shadow-lg">
-          <img src="./assests/thai.png" alt="Savoria" class="w-full h-full object-cover"/>
+          <img src="./assets/thai.png" alt="Savoria" class="w-full h-full object-cover"/>
         </div>
         <div class="animate-anim-3 flex gap-5 flex-wrap">
           <div class="flex-1 min-w-[80px] bg-white rounded-2xl border border-borderSoft p-4 text-center shadow-sm">
@@ -320,7 +321,7 @@
       <!-- Image side -->
       <div class="relative">
         <div class="rounded-2xl overflow-hidden aspect-[4/5] bg-cream shadow-2xl">
-          <img src="./assests/thai.png" alt="Chef Marco" class="w-full h-full object-cover"/>
+          <img src="./assets/thai.png" alt="Chef Marco" class="w-full h-full object-cover"/>
         </div>
         <!-- Floating card -->
         <div class="absolute -bottom-5 -right-4 md:-right-6 bg-white rounded-2xl shadow-xl p-5 border border-borderSoft max-w-[200px]">
@@ -433,7 +434,7 @@
         </h2>
         <p class="text-sm text-textMid/60 leading-relaxed mb-8">Fifteen years of milestones, awards, and unforgettable evenings — a brief look at how Savoria became what it is today.</p>
         <div class="rounded-2xl overflow-hidden h-[280px] bg-cream shadow-lg">
-          <img src="./assests/thai.png" alt="Restaurant history" class="w-full h-full object-cover"/>
+          <img src="./assets/thai.png" alt="Restaurant history" class="w-full h-full object-cover"/>
         </div>
       </div>
       <!-- Right: timeline -->
@@ -497,7 +498,7 @@
         <!-- Team cards -->
         <div class="bg-white rounded-[20px] border border-[#efe8e2] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,.09)]">
           <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream group">
-            <img src="./assests/thai.png" alt="Marco" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+            <img src="./assets/thai.png" alt="Marco" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-4">
               <span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-redPale text-redPrimary mb-1.5">Founder</span>
@@ -514,7 +515,7 @@
         </div>
         <div class="bg-white rounded-[20px] border border-[#efe8e2] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,.09)]">
           <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream group">
-            <img src="./assests/thai.png" alt="Sophia" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+            <img src="./assets/thai.png" alt="Sophia" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-4"><span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-gold/[.1] text-gold mb-1.5">Pastry</span></div>
           </div>
@@ -529,7 +530,7 @@
         </div>
         <div class="bg-white rounded-[20px] border border-[#efe8e2] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,.09)]">
           <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream group">
-            <img src="./assests/thai.png" alt="Kenji" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+            <img src="./assets/thai.png" alt="Kenji" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-4"><span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-white/[.12] text-white/80 mb-1.5">Sommelier</span></div>
           </div>
@@ -544,7 +545,7 @@
         </div>
         <div class="bg-white rounded-[20px] border border-[#efe8e2] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,.09)]">
           <div class="relative overflow-hidden h-[180px] md:h-[220px] bg-cream group">
-            <img src="./assests/thai.png" alt="Amara" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+            <img src="./assets/thai.png" alt="Amara" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-4"><span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[.12em] bg-gold/[.1] text-gold mb-1.5">Service</span></div>
           </div>
@@ -658,7 +659,7 @@
         <p class="font-cormorant italic text-textMid/60 text-lg">Open Monday to Sunday · 12:00pm – 11:00pm<br/>+1 (555) 920-4200</p>
       </div>
       <div class="flex flex-col gap-3 flex-shrink-0">
-        <a href="/reserve.html" class="text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)"><i class="fa-regular fa-calendar-check"></i> Book Online</a>
+        <a href="reserve.html" class="text-white px-10 py-4 rounded text-[11px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 justify-center transition hover:-translate-y-px" style="background:linear-gradient(135deg,#c0392b,#96281b);box-shadow:0 4px 15px rgba(192,57,43,.35)"><i class="fa-regular fa-calendar-check"></i> Book Online</a>
         <a href="tel:+15559204200" class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[0.2em] uppercase hover:border-gold hover:text-gold transition text-center"><i class="fa-solid fa-phone text-[10px] mr-1"></i> Call Us</a>
       </div>
     </div>
@@ -751,32 +752,9 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 revealEls.forEach(el => io.observe(el));
 
-/* ─── Menu toggle ─── */
-function toggleMenu() {
-  const m = document.getElementById('mobileMenu');
-  const o = document.getElementById('overlay');
-  const isOpen = m.style.transform === 'translateX(0%)';
-  m.style.display = 'flex';
-  m.style.flexDirection = 'column';
-  requestAnimationFrame(() => { m.style.transform = isOpen ? 'translateX(100%)' : 'translateX(0%)'; });
-  o.style.opacity = isOpen ? '0' : '1';
-  o.style.pointerEvents = isOpen ? 'none' : 'auto';
-}
-function closeAll() { toggleMenu(); }
-
-/* ─── Cart toggle ─── */
-function toggleCart() {
-  const panel = document.getElementById('cartPanel');
-  const backdrop = document.getElementById('cartBackdrop');
-  const modal = document.getElementById('cartModal');
-  const isOpen = panel.style.transform === 'translateY(0%)' || panel.style.transform === 'translateX(0%)';
-  modal.style.pointerEvents = isOpen ? 'none' : 'auto';
-  backdrop.style.opacity = isOpen ? '0' : '1';
-  const isMobile = window.innerWidth < 768;
-  panel.style.transform = isOpen ? (isMobile ? 'translateY(100%)' : 'translateX(100%)') : (isMobile ? 'translateY(0%)' : 'translateX(0%)');
-}
+/* toggleMenu / toggleCart / closeAll provided by savoria-app.js */
 </script>
 
-<script src="static/js/main.js"></script>
+<script src="static/js/savoria-app.js"></script>
 </body>
 </html>

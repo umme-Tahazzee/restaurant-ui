@@ -11,8 +11,9 @@
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="static/css/style.css">
+  
   <link rel="stylesheet" href="static/css/menu.css">
+  <link rel="stylesheet" href="static/css/savoria.css">
   <script>
     tailwind.config = {
       theme: {
@@ -99,8 +100,8 @@
       <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 flex-shrink-0" id="cartFooter"
         style="box-shadow:0 -4px 20px rgba(0,0,0,0.04)">
         <div class="space-y-2 mb-4" id="cartTotals"></div>
-        <button
-          class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2">
+        <button id="cartConfirmBtn" onclick="placeOrder()"
+          class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled>
           <i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order
         </button>
         <button onclick="toggleCart()"
@@ -327,7 +328,7 @@
           <div class="menu-card" data-price="18" data-rating="4.7"
             data-search="burrata heirloom tomatoes fresh basil oil vegetarian dairy" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Burrata" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Burrata" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-veg">Vegetarian</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
@@ -358,7 +359,7 @@
           <div class="menu-card" data-price="24" data-rating="4.8"
             data-search="tuna tartare yellowfin sesame avocado ponzu fish" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Tartare" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Tartare" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
@@ -383,7 +384,7 @@
           <div class="menu-card" data-price="16" data-rating="4.6"
             data-search="tom yum soup lemongrass galangal tiger prawns spicy shellfish" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Soup" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Soup" class="w-full h-full object-cover" />
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.6</div>
               </div>
@@ -419,7 +420,7 @@
           <div class="menu-card" data-price="28" data-rating="4.8"
             data-search="tagliatelle ragu pasta beef parmigiano italian gluten dairy" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Tagliatelle" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Tagliatelle" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
@@ -442,7 +443,7 @@
           <div class="menu-card" data-price="32" data-rating="4.9"
             data-search="black truffle risotto carnaroli rice parmigiano vegetarian dairy" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Truffle Risotto" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Truffle Risotto" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
@@ -465,7 +466,7 @@
           <div class="menu-card" data-price="26" data-rating="4.7"
             data-search="spaghetti carbonara guanciale egg yolk pecorino black pepper gluten" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Carbonara" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Carbonara" class="w-full h-full object-cover" />
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
               </div>
@@ -499,7 +500,7 @@
             data-search="bistecca fiorentina t-bone steak rosemary butter garlic beef italian"
             onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Bistecca" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Bistecca" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-red">Signature</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
@@ -525,7 +526,7 @@
           <div class="menu-card" data-price="38" data-rating="4.8"
             data-search="confit duck leg cherry jus celeriac puree poultry french" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Duck" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Duck" class="w-full h-full object-cover" />
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
               </div>
@@ -546,7 +547,7 @@
           <div class="menu-card" data-price="42" data-rating="4.7"
             data-search="rack lamb provencal herb crusted ratatouille jus gluten" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Lamb" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Lamb" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-gold">New</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
@@ -580,7 +581,7 @@
             data-search="butter poached lobster maine beurre blanc tarragon asparagus crustacean dairy"
             onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Lobster" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Lobster" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-red">Premium</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
@@ -603,7 +604,7 @@
           <div class="menu-card" data-price="36" data-rating="4.8"
             data-search="pan seared sea bass chilean lemon beurre blanc fennel fish dairy" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Sea Bass" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Sea Bass" class="w-full h-full object-cover" />
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
               </div>
@@ -625,7 +626,7 @@
           <div class="menu-card" data-price="22" data-rating="4.6"
             data-search="seared scallops diver cauliflower capers molluscs seafood" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Scallops" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Scallops" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.6</div>
@@ -657,7 +658,7 @@
           <div class="menu-card" data-price="14" data-rating="4.7"
             data-search="panna cotta vanilla bean wild berry coulis mint dairy vegetarian" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Panna Cotta" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Panna Cotta" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-gold">New</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
@@ -679,7 +680,7 @@
           <div class="menu-card" data-price="16" data-rating="4.9"
             data-search="chocolate souffle valrhona dark creme anglaise dairy eggs gluten" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Soufflé" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Soufflé" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
@@ -702,7 +703,7 @@
           <div class="menu-card" data-price="12" data-rating="4.6"
             data-search="tiramisu savoiardi espresso mascarpone cocoa dairy eggs italian" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assests/thai.png" alt="Tiramisu" class="w-full h-full object-cover" />
+              <img src="./assets/thai.png" alt="Tiramisu" class="w-full h-full object-cover" />
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.6</div>
               </div>
@@ -888,6 +889,7 @@
     </div>
   </nav>
 
+  <script src="static/js/savoria-app.js"></script>
   <script src="static/js/menu.js"></script>
 </body>
 

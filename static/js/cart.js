@@ -158,7 +158,7 @@ function buildCartItemHTML(item, index) {
 
       <!-- Item thumbnail -->
       <div class="w-16 h-16 rounded-xl bg-cream border border-borderSoft flex-shrink-0 overflow-hidden">
-        <img src="./assests/thai.png" alt="${item.name}" class="w-full h-full object-cover"/>
+        <img src="./assets/thai.png" alt="${item.name}" class="w-full h-full object-cover"/>
       </div>
 
       <!-- Item details -->

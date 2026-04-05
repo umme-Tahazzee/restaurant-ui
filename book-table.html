@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="stylesheet" href="static/css/savoria.css">
   <script>
     tailwind.config = {
       theme: {
@@ -58,14 +58,14 @@
   </div>
   <div class="gold-line h-[1px] w-full mb-8"></div>
   <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="/" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+    <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
     <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="/about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-    <li><a href="/reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+    <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+    <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+    <li><a href="contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
   </ul>
   <div class="mt-auto space-y-3">
-    <a href="/reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
+    <a href="reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
       <i class="fa-regular fa-calendar-check"></i> Book a Table
     </a>
     <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
@@ -211,7 +211,7 @@
         <span class="text-[12px] text-textMid/60 flex-1">Visa •••• 4242</span>
         <button class="text-[10px] font-bold text-gold uppercase tracking-wider">Change</button>
       </div>
-      <button id="cartConfirmBtn" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled>
+      <button id="cartConfirmBtn" onclick="placeOrder()" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled>
         <i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order
       </button>
       <button onclick="toggleCart()" class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">
@@ -237,9 +237,9 @@
       <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
         <li><a href="#" class="nav-link transition">Home</a></li>
         <li><a href="menu.html" class="nav-link transition">Menu</a></li>
-        <li><a href="/about.html" class="nav-link transition">About</a></li>
-        <li><a href="/reserve.html" class="nav-link transition">Reserve</a></li>
-        <li><a href="/contact.html" class="nav-link transition">Contact</a></li>
+        <li><a href="about.html" class="nav-link transition">About</a></li>
+        <li><a href="reserve.html" class="nav-link transition">Reserve</a></li>
+        <li><a href="contact.html" class="nav-link transition">Contact</a></li>
       </ul>
       <div class="flex items-center gap-2 sm:gap-3">
         <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
@@ -250,7 +250,7 @@
          font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold
           transition pl-3 border-l border-borderSoft ml-1">
           <i class="fa-regular fa-circle-user"></i> 
-          <a href="/login.html" >Login</a>
+          <a href="login.html" >Login</a>
         </button>
         <a href="#reservation" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
           <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
@@ -287,13 +287,13 @@
   </div>
   <div class="nav-item" onclick="setActive(this)">
     <i class="fa-regular fa-circle-user"></i><span>
-       <a href="/login.html" >Profile</a>
+       <a href="login.html" >Profile</a>
     </span>
   </div>
 </nav> 
 
 
 
-    <script src="static/js/main.js"></script>
+    <script src="static/js/savoria-app.js"></script>
 </body>
 </html>

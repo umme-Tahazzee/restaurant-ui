@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="static/css/savoria.css">
   <script>
     tailwind.config = {
       theme: {
@@ -166,13 +167,13 @@
   </div>
   <div class="gold-line h-px w-full mb-8"></div>
   <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="/" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
+    <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
     <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="/about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-    <li><a href="/reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="/contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
+    <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
+    <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
+    <li><a href="contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
   </ul>
-  <a href="/reserve.html" class="book-btn text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 mt-6">
+  <a href="reserve.html" class="book-btn text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 mt-6">
     <i class="fa-regular fa-calendar-check"></i> Book a Table
   </a>
 </div>
@@ -184,7 +185,7 @@
   <div class="h-[68px] sm:h-[72px] flex items-center justify-between px-4 sm:px-6 lg:px-14">
 
     <!-- Logo -->
-    <a href="/" class="flex flex-col leading-none group flex-shrink-0">
+    <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
       <span class="font-playfair text-[22px] sm:text-[26px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition">
         Sav<span class="italic font-light text-redPrimary">o</span>ria
       </span>
@@ -193,11 +194,11 @@
 
     <!-- Desktop nav links -->
     <ul class="hidden lg:flex items-center gap-6 xl:gap-9 text-[11px] font-medium uppercase tracking-[0.15em] text-textMid">
-      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="index.html" class="nav-link">Home</a></li>
       <li><a href="menu.html" class="nav-link active">Menu</a></li>
-      <li><a href="/about.html" class="nav-link">About</a></li>
-      <li><a href="/reserve.html" class="nav-link">Reserve</a></li>
-      <li><a href="/contact.html" class="nav-link">Contact</a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="reserve.html" class="nav-link">Reserve</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li>
     </ul>
 
     <!-- Right actions -->
@@ -205,10 +206,10 @@
       <button class="relative w-9 h-9 flex items-center justify-center rounded-full text-textMid hover:text-redPrimary transition">
         <i class="fa-solid fa-cart-shopping text-[17px]"></i>
       </button>
-      <a href="/login.html" class="hidden sm:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.1em] text-textMid hover:text-gold transition pl-2 border-l border-borderSoft ml-1">
+      <a href="login.html" class="hidden sm:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.1em] text-textMid hover:text-gold transition pl-2 border-l border-borderSoft ml-1">
         <i class="fa-regular fa-circle-user text-sm"></i> <span class="hidden md:inline">Login</span>
       </a>
-      <a href="/reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-4 py-2.5 rounded text-[10px] font-semibold tracking-[0.18em] uppercase ml-1 whitespace-nowrap">
+      <a href="reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-4 py-2.5 rounded text-[10px] font-semibold tracking-[0.18em] uppercase ml-1 whitespace-nowrap">
         <i class="fa-regular fa-calendar-check"></i> Book a Table
       </a>
       <!-- Hamburger -->
@@ -233,7 +234,7 @@
     <div class="absolute inset-0 lg:mx-8 xl:mx-14 lg:mt-6 lg:rounded-2xl overflow-hidden"
          style="border-radius:0 0 24px 24px;"
          id="heroWrap">
-      <img src="./assests/thai.png" alt="Dish" id="heroImg"
+      <img src="./assets/thai.png" alt="Dish" id="heroImg"
            class="w-full h-full object-cover transition-transform duration-[8000ms] hover:scale-105"/>
       <div class="absolute inset-0 bg-gradient-to-t from-[#1a1210]/80 via-[#1a1210]/15 to-transparent"></div>
 
@@ -275,7 +276,7 @@
 
     <!-- Breadcrumb -->
     <nav class="hidden sm:flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-textMid/40 mb-4">
-      <a href="/" class="hover:text-gold transition">Home</a>
+      <a href="index.html" class="hover:text-gold transition">Home</a>
       <i class="fa-solid fa-chevron-right text-[8px]"></i>
       <a href="menu.html" class="hover:text-gold transition">Menu</a>
       <i class="fa-solid fa-chevron-right text-[8px]"></i>
@@ -457,7 +458,7 @@
               <span class="opacity-50">·</span>
               <span id="btnTotalDesk">$48</span>
             </button>
-            <a href="/reserve.html" class="mt-3 flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-[0.13em] text-textMid/50 hover:text-gold transition py-1.5">
+            <a href="reserve.html" class="mt-3 flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-[0.13em] text-textMid/50 hover:text-gold transition py-1.5">
               <i class="fa-regular fa-calendar-check text-[9px]"></i> Reserve a Table Instead
             </a>
           </div>
@@ -477,11 +478,11 @@
           <div class="bg-white rounded-2xl border border-borderSoft p-5">
             <p class="section-label mb-4">Browse Categories</p>
             <div class="space-y-1">
-              <a href="category.html?cat=thai" class="cat-item"><div class="cat-icon"><img src="./assests/thai.png" alt="Thai"/></div><div class="flex-1"><p class="text-sm font-bold text-textDark">Thai</p><p class="text-[11px] font-cormorant italic text-textMid/50">12 dishes</p></div><i class="fa-solid fa-chevron-right text-[9px] text-textMid/30"></i></a>
-              <a href="category.html?cat=italian" class="cat-item" id="catItalian"><div class="cat-icon"><img src="./assests/thai.png" alt="Italian"/></div><div class="flex-1"><p class="text-sm font-bold text-textDark">Italian</p><p class="text-[11px] font-cormorant italic text-textMid/50">18 dishes</p></div><i class="fa-solid fa-chevron-right text-[9px] text-textMid/30"></i></a>
-              <a href="category.html?cat=french" class="cat-item"><div class="cat-icon"><img src="./assests/thai.png" alt="French"/></div><div class="flex-1"><p class="text-sm font-bold text-textDark">French</p><p class="text-[11px] font-cormorant italic text-textMid/50">9 dishes</p></div><i class="fa-solid fa-chevron-right text-[9px] text-textMid/30"></i></a>
-              <a href="category.html?cat=japanese" class="cat-item"><div class="cat-icon"><img src="./assests/thai.png" alt="Japanese"/></div><div class="flex-1"><p class="text-sm font-bold text-textDark">Japanese</p><p class="text-[11px] font-cormorant italic text-textMid/50">14 dishes</p></div><i class="fa-solid fa-chevron-right text-[9px] text-textMid/30"></i></a>
-              <a href="category.html?cat=dessert" class="cat-item"><div class="cat-icon"><img src="./assests/thai.png" alt="Dessert"/></div><div class="flex-1"><p class="text-sm font-bold text-textDark">Desserts</p><p class="text-[11px] font-cormorant italic text-textMid/50">11 dishes</p></div><i class="fa-solid fa-chevron-right text-[9px] text-textMid/30"></i></a>
+              <a href="category.html?cat=thai" class="cat-item"><div class="cat-icon"><img src="./assets/thai.png" alt="Thai"/></div><div class="flex-1"><p class="text-sm font-bold text-textDark">Thai</p><p class="text-[11px] font-cormorant italic text-textMid/50">12 dishes</p></div><i class="fa-solid fa-chevron-right text-[9px] text-textMid/30"></i></a>
+              <a href="category.html?cat=italian" class="cat-item" id="catItalian"><div class="cat-icon"><img src="./assets/thai.png" alt="Italian"/></div><div class="flex-1"><p class="text-sm font-bold text-textDark">Italian</p><p class="text-[11px] font-cormorant italic text-textMid/50">18 dishes</p></div><i class="fa-solid fa-chevron-right text-[9px] text-textMid/30"></i></a>
+              <a href="category.html?cat=french" class="cat-item"><div class="cat-icon"><img src="./assets/thai.png" alt="French"/></div><div class="flex-1"><p class="text-sm font-bold text-textDark">French</p><p class="text-[11px] font-cormorant italic text-textMid/50">9 dishes</p></div><i class="fa-solid fa-chevron-right text-[9px] text-textMid/30"></i></a>
+              <a href="category.html?cat=japanese" class="cat-item"><div class="cat-icon"><img src="./assets/thai.png" alt="Japanese"/></div><div class="flex-1"><p class="text-sm font-bold text-textDark">Japanese</p><p class="text-[11px] font-cormorant italic text-textMid/50">14 dishes</p></div><i class="fa-solid fa-chevron-right text-[9px] text-textMid/30"></i></a>
+              <a href="category.html?cat=dessert" class="cat-item"><div class="cat-icon"><img src="./assets/thai.png" alt="Dessert"/></div><div class="flex-1"><p class="text-sm font-bold text-textDark">Desserts</p><p class="text-[11px] font-cormorant italic text-textMid/50">11 dishes</p></div><i class="fa-solid fa-chevron-right text-[9px] text-textMid/30"></i></a>
             </div>
           </div>
 
@@ -517,9 +518,9 @@
       <div>
         <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Navigation</p>
         <ul class="space-y-3">
-          <li><a href="/" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
+          <li><a href="index.html" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
           <li><a href="menu.html" class="text-white/40 text-sm hover:text-gold transition">Menu</a></li>
-          <li><a href="/reserve.html" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
+          <li><a href="reserve.html" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
         </ul>
       </div>
       <div>
@@ -565,15 +566,15 @@
 
 <!-- ══ MOBILE BOTTOM NAV ══ -->
 <nav class="mob-nav lg:hidden" style="bottom:76px;">
-  <div class="ni" onclick="location.href='/'"><i class="fa-solid fa-house"></i><span>Home</span></div>
+  <div class="ni" onclick="location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></div>
   <div class="ni active"><i class="fa-solid fa-utensils"></i><span>Menu</span></div>
   <div><div class="cart-fab"><i class="fa-solid fa-bag-shopping text-lg"></i></div></div>
-  <div class="ni" onclick="location.href='/reserve.html'"><i class="fa-regular fa-calendar-check"></i><span>Reserve</span></div>
-  <div class="ni"><i class="fa-regular fa-circle-user"></i><span><a href="/login.html">Profile</a></span></div>
+  <div class="ni" onclick="location.href='reserve.html'"><i class="fa-regular fa-calendar-check"></i><span>Reserve</span></div>
+  <div class="ni"><i class="fa-regular fa-circle-user"></i><span><a href="login.html">Profile</a></span></div>
 </nav>
 
 <!-- ══ SCRIPTS ══ -->
- <script src="/static/js/main.js"></script>
+ <script src="static/js/savoria-app.js"></script>
 <script>
 const DISHES = {
   'Bistecca Fiorentina':{
@@ -667,9 +668,9 @@ function loadDish(){
 
   const filtered=REC.filter(r=>r.name!==name);
 
-  const recScrollH=filtered.map(r=>`<div class="rec-card w-[155px] sm:w-[168px]" onclick="location.href='dish.html?dish=${encodeURIComponent(r.name)}'"><div class="relative">${r.emoji?`<div class="w-full h-[110px] flex items-center justify-center text-4xl bg-gradient-to-br from-[#7b1e2e] to-[#3d0e17]">${r.emoji}</div>`:`<img src="./assests/thai.png" alt="${r.name}"/>`}<div class="absolute top-2 left-2"><span class="tag ${r.tagStyle}" style="font-size:9px;padding:3px 7px">${r.tag}</span></div></div><div class="p-3"><p class="font-playfair text-sm font-bold text-textDark leading-tight">${r.name}</p><p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">${r.desc}</p><div class="flex items-center justify-between mt-2"><p class="font-playfair font-black text-textDark text-sm">$${r.price}</p><button onclick="event.stopPropagation();showToast('${r.name}')" class="w-7 h-7 rounded-full bg-redPrimary text-white flex items-center justify-center text-sm hover:bg-redDeep transition">+</button></div></div></div>`).join('');
+  const recScrollH=filtered.map(r=>`<div class="rec-card w-[155px] sm:w-[168px]" onclick="location.href='dish.html?dish=${encodeURIComponent(r.name)}'"><div class="relative">${r.emoji?`<div class="w-full h-[110px] flex items-center justify-center text-4xl bg-gradient-to-br from-[#7b1e2e] to-[#3d0e17]">${r.emoji}</div>`:`<img src="./assets/thai.png" alt="${r.name}"/>`}<div class="absolute top-2 left-2"><span class="tag ${r.tagStyle}" style="font-size:9px;padding:3px 7px">${r.tag}</span></div></div><div class="p-3"><p class="font-playfair text-sm font-bold text-textDark leading-tight">${r.name}</p><p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">${r.desc}</p><div class="flex items-center justify-between mt-2"><p class="font-playfair font-black text-textDark text-sm">$${r.price}</p><button onclick="event.stopPropagation();addToCart('${r.name}',${r.price},'./assets/thai.png')" class="w-7 h-7 rounded-full bg-redPrimary text-white flex items-center justify-center text-sm hover:bg-redDeep transition">+</button></div></div></div>`).join('');
 
-  const sideRecH=filtered.slice(0,3).map(r=>`<div class="flex items-center gap-3 cursor-pointer group" onclick="location.href='dish.html?dish=${encodeURIComponent(r.name)}'"><div class="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-cream">${r.emoji?`<div class="w-full h-full flex items-center justify-center text-2xl bg-gradient-to-br from-[#7b1e2e] to-[#3d0e17]">${r.emoji}</div>`:`<img src="./assests/thai.png" alt="${r.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform"/>`}</div><div class="flex-1 min-w-0"><p class="text-sm font-bold text-textDark truncate">${r.name}</p><p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">${r.desc}</p><div class="flex items-center gap-1.5 mt-1"><i class="fa-solid fa-star text-gold text-[8px]"></i><span class="text-[10px] font-bold text-textMid/60">${r.rating}</span><span class="tag ${r.tagStyle}" style="font-size:8px;padding:2px 6px">${r.tag}</span></div></div><div class="flex flex-col items-end gap-1.5 flex-shrink-0"><p class="font-playfair font-black text-textDark text-sm">$${r.price}</p><button onclick="event.stopPropagation();showToast('${r.name}')" class="w-7 h-7 rounded-full bg-redPrimary text-white flex items-center justify-center text-sm hover:bg-redDeep transition">+</button></div></div>`).join('');
+  const sideRecH=filtered.slice(0,3).map(r=>`<div class="flex items-center gap-3 cursor-pointer group" onclick="location.href='dish.html?dish=${encodeURIComponent(r.name)}'"><div class="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-cream">${r.emoji?`<div class="w-full h-full flex items-center justify-center text-2xl bg-gradient-to-br from-[#7b1e2e] to-[#3d0e17]">${r.emoji}</div>`:`<img src="./assets/thai.png" alt="${r.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform"/>`}</div><div class="flex-1 min-w-0"><p class="text-sm font-bold text-textDark truncate">${r.name}</p><p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">${r.desc}</p><div class="flex items-center gap-1.5 mt-1"><i class="fa-solid fa-star text-gold text-[8px]"></i><span class="text-[10px] font-bold text-textMid/60">${r.rating}</span><span class="tag ${r.tagStyle}" style="font-size:8px;padding:2px 6px">${r.tag}</span></div></div><div class="flex flex-col items-end gap-1.5 flex-shrink-0"><p class="font-playfair font-black text-textDark text-sm">$${r.price}</p><button onclick="event.stopPropagation();addToCart('${r.name}',${r.price},'./assets/thai.png')" class="w-7 h-7 rounded-full bg-redPrimary text-white flex items-center justify-center text-sm hover:bg-redDeep transition">+</button></div></div>`).join('');
 
   // Set text
   tx('heroRating',d.rating); tx('heroReviews',d.reviews+' reviews');
@@ -717,13 +718,15 @@ function updatePrice(){
 
 function addToOrder(){
   if(!dish) return;
+  /* Add to shared cart with localStorage persistence */
+  for(let i=0;i<qty;i++) addToCart(dish.name, dish.price, './assets/thai.png');
   const ok=`<i class="fa-solid fa-check text-[10px]"></i> Added to Order!`;
   const okBg='linear-gradient(135deg,#27ae60,#229954)';
   ['addBtnMob','addBtnDesk'].forEach(id=>{
     const b=$(id); if(!b) return;
     b.innerHTML=ok; b.style.background=okBg;
   });
-  showToast(dish.name);
+  showToast(dish.name + (qty > 1 ? ' ×'+qty : '') + ' added to order');
   setTimeout(()=>{
     const t='$'+(dish.price*qty);
     ['addBtnMob','addBtnDesk'].forEach(id=>{
@@ -754,33 +757,9 @@ function switchTab(tab){
   });
 }
 
-function showToast(name){
-  const ex=$('__toast'); if(ex) ex.remove();
-  const t=document.createElement('div');
-  t.id='__toast';
-  t.style.cssText='position:fixed;bottom:156px;left:50%;z-index:9999;background:#1a1210;color:#fff;padding:11px 18px;border-radius:100px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 8px 30px rgba(0,0,0,0.25);animation:fadeSlideUp 0.3s ease both;white-space:nowrap;transform:translateX(-50%);';
-  t.innerHTML=`<i class="fa-solid fa-check" style="color:#b8963e;font-size:10px"></i> ${name} added!`;
-  document.body.appendChild(t);
-  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300);},2200);
-}
+/* showToast is provided globally by savoria-app.js */
 
-function toggleMenu(){
-  const m=$('mobileMenu'),ov=$('overlay');
-  const open=m.classList.contains('open');
-  if(open){
-    m.classList.remove('open');
-    ov.style.opacity='0'; ov.style.pointerEvents='none';
-  } else {
-    m.classList.add('open');
-    ov.style.opacity='1'; ov.style.pointerEvents='all';
-  }
-}
-
-function closeAll(){
-  const m=$('mobileMenu'),ov=$('overlay');
-  m.classList.remove('open');
-  ov.style.opacity='0'; ov.style.pointerEvents='none';
-}
+/* toggleMenu / closeAll provided by savoria-app.js */
 
 window.addEventListener('scroll',()=>{
   $('navbar')?.classList.toggle('scrolled',window.scrollY>10);

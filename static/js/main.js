@@ -89,7 +89,7 @@ function renderCart() {
     <div class="px-6 py-4 border-b border-borderSoft/50">
       <div class="flex gap-4">
         <div class="w-[68px] h-[68px] rounded-2xl flex-shrink-0 bg-cream overflow-hidden border border-borderSoft">
-          <img src="./assests/thai.png" alt="${item.name}" class="w-full h-full object-cover"/>
+          <img src="./assets/thai.png" alt="${item.name}" class="w-full h-full object-cover"/>
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex justify-between items-start">

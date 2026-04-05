@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- shared stylesheet -->
-  <link rel="stylesheet" href="static/css/style.css"/>
+  <link rel="stylesheet" href="static/css/savoria.css">
   <script>
     tailwind.config = {
       theme: {
@@ -208,7 +208,7 @@
     <li><a href="contact.html"           onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-redPrimary">Contact</a></li>
   </ul>
   <div class="mt-auto">
-    <a href="/reserve.html" onclick="toggleMenu()"
+    <a href="reserve.html" onclick="toggleMenu()"
        class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[.2em] transition">
       <i class="fa-regular fa-calendar-check"></i> Book a Table
     </a>
@@ -241,7 +241,7 @@
       <a href="login.html" class="hidden md:flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.12em] text-textMid hover:text-gold transition border-l border-borderSoft pl-4">
         <i class="fa-regular fa-circle-user"></i> Login
       </a>
-      <a href="/reserve.html"
+      <a href="reserve.html"
          class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[.18em] uppercase transition">
         <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
       </a>
@@ -339,7 +339,7 @@
             </div>
           </div>
 
-          <a href="/reserve.html"
+          <a href="reserve.html"
              class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded-xl text-[11px] font-bold uppercase tracking-[.18em] transition">
             <i class="fa-regular fa-calendar-check text-[10px]"></i>Book a Table
           </a>
@@ -546,7 +546,7 @@
             <span class="font-medium text-textDark text-sm flex-1">hello@savoria.com</span>
             <i class="fa-solid fa-chevron-right text-[10px] text-textMid/20"></i>
           </a>
-          <a href="/reserve.html" class="q-action">
+          <a href="reserve.html" class="q-action">
             <div class="q-icon"><i class="fa-regular fa-calendar-check text-sm" style="color:var(--red)"></i></div>
             <span class="font-medium text-textDark text-sm flex-1">Book a Table Online</span>
             <i class="fa-solid fa-chevron-right text-[10px] text-textMid/20"></i>
@@ -658,7 +658,7 @@
   <div class="nav-item" onclick="location.href='profile.html'"><i class="fa-regular fa-circle-user"></i><span>Profile</span></div>
 </nav>
 
-<script src="static/js/main.js"></script>
+<script src="static/js/savoria-app.js"></script>
 <script>
 // ── DATA ─────────────────────────────────────────────────────────────────────
 const HOURS = [
@@ -827,20 +827,7 @@ function resetForm() {
   starVal = 0;
 }
 
-// ── MOBILE MENU FALLBACK (if main.js not loaded) ──────────────────────────────
-function toggleMenu() {
-  const m = document.getElementById('mobileMenu'), ov = document.getElementById('overlay');
-  const open = m.style.transform === 'translateX(0%)';
-  m.style.display = 'flex';
-  m.style.transform = open ? 'translateX(100%)' : 'translateX(0%)';
-  ov.style.opacity = open ? '0' : '1';
-  ov.style.pointerEvents = open ? 'none' : 'auto';
-}
-function closeAll() {
-  const m = document.getElementById('mobileMenu'), ov = document.getElementById('overlay');
-  if (m) m.style.transform = 'translateX(100%)';
-  if (ov) { ov.style.opacity = '0'; ov.style.pointerEvents = 'none'; }
-}
+/* toggleMenu / closeAll provided by savoria-app.js */
 </script>
 </body>
 </html>
