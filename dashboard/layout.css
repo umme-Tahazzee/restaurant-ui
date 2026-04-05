@@ -229,7 +229,7 @@
 }
 
 /* Nav */
-.sidebar-nav { flex: 1; overflow-y: auto; padding: 8px 0; }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 8px 0; min-height: 0; }
 .sidebar-nav::-webkit-scrollbar { width: 3px; }
 .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
 .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
@@ -566,6 +566,20 @@
    8. RESPONSIVE
    ============================================================ */
 
+/* ── Mobile overlay (backdrop) ── */
+#mobileOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 150;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: fadeInBg .2s ease;
+}
+#mobileOverlay.show { display: block; }
+@keyframes fadeInBg { from { opacity:0; } to { opacity:1; } }
+
 /* ── Mobile (≤768px) ── */
 @media (max-width: 768px) {
 
@@ -575,19 +589,17 @@
     left: calc(-1 * var(--sidebar-w));
     top: 0;
     height: 100dvh;
-    overflow-y: auto;      
     z-index: 200;
-    transition: left .3s ease, background var(--transition);
+    transition: left .28s cubic-bezier(.4,0,.2,1), background var(--transition);
     box-shadow: none;
+    overflow: hidden; /* flex column handles internal scroll via .sidebar-nav */
   }
-
-  /* ✅ Sidebar open হলে বাম থেকে slide in করবে */
   #sidebar.mobile-open {
     left: 0;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 4px 0 32px rgba(0,0,0,.22);
   }
 
-  /* এইটা যোগ করো — sidebar footer যেন সবসময় দেখা যায় */
+  /* Sidebar footer sticky at bottom so it never gets hidden */
   #sidebar .sidebar-footer {
     position: sticky;
     bottom: 0;
@@ -595,36 +607,40 @@
     z-index: 1;
   }
 
-  #sidebar.mobile-open {
-    left: 0;
-    box-shadow: var(--shadow-lg);
-  }
+  /* Page content bottom padding so content isn't hidden under any sticky bars */
+  #pageArea { padding: 16px; padding-bottom: 80px; }
 
- 
-  /* ✅ Page content এর নিচে padding */
-  #pageArea {
-    padding-bottom: 80px;
-  }
-
-  /* Mobile menu button দেখাবে */
+  /* Mobile menu button appears */
   #mobileMenuBtn,
   .topbar-menu-btn { display: flex; }
 
-  /* Desktop-only elements লুকাবে */
+  /* Desktop-only topbar elements hide */
   .topbar-search     { display: none; }
   .topbar-breadcrumb { display: none; }
   .live-badge        { display: none; }
+  #topClock          { display: none; }
+  .mgr-badge         { display: none; }
 
-  /* Notification dropdown full-width */
+  /* Topbar compact */
+  #topbar { padding: 0 12px; gap: 6px; }
+  .topbar-right { gap: 4px; }
+
+  /* Notification dropdown full-width on mobile */
   #notifDrop {
     width: 100vw;
-    right: -20px;
+    right: -12px;
     border-radius: 0 0 var(--radius) var(--radius);
   }
 }
 
+/* ── Very small screens (≤420px) ── */
+@media (max-width: 420px) {
+  #topbar { padding: 0 8px; gap: 4px; }
+  .topbar-avatar { width: 30px; height: 30px; font-size: 11px; }
+}
+
 /* ── Tablet (769px – 1024px): auto-collapse sidebar ── */
-@media (max-width: 1024px) and (min-width: 769px) {
+@media (min-width: 769px) and (max-width: 1024px) {
   #sidebar {
     width: var(--sidebar-w-collapsed);
     min-width: var(--sidebar-w-collapsed);
@@ -634,19 +650,10 @@
   #sidebar .sidebar-footer-text,
   #sidebar .badge-dot,
   #sidebar .logo-text { display: none; }
-  #sidebar .nav-item  { justify-content: center; padding: 10px 0; }
+  #sidebar .nav-item   { justify-content: center; padding: 10px 0; }
   #sidebar .nav-item i { margin: 0; }
   #sidebar .sidebar-footer { justify-content: center; padding: 14px 0; }
+  #sidebar .sidebar-avatar { margin: 0; }
+  .topbar-search { max-width: 200px; }
+  #pageArea { padding: 16px; }
 }
-
-/* ── Mobile overlay (backdrop) ── */
-#mobileOverlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .5);
-  z-index: 150;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-#mobileOverlay.show { display: block; }

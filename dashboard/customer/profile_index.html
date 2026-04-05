@@ -60,13 +60,13 @@ border-b border-border shadow-sm">
     </a>
 
     <ul class="hidden md:flex items-center gap-7 text-[11.5px] font-medium uppercase tracking-[.15em] text-ink-mid">
-      <li><a href="index.html"            class="hover:text-red transition">Home</a></li>
-      <li><a href="menu.html"             class="hover:text-red transition">Menu</a></li>
-      <li><a href="about.html"            class="hover:text-red transition">About</a></li>
-      <li><a href="index.html#reservation"class="hover:text-red transition">Reserve</a></li>
+      <li><a href="../../index.html"      class="hover:text-red transition">Home</a></li>
+      <li><a href="../../menu.html"       class="hover:text-red transition">Menu</a></li>
+      <li><a href="../../about.html"      class="hover:text-red transition">About</a></li>
+      <li><a href="../../index.html#reservation" class="hover:text-red transition">Reserve</a></li>
     </ul>
 
-    <a href="index.html#reservation"
+    <a href="../../index.html#reservation"
       class="hidden md:inline-flex items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[.18em] uppercase transition hover:opacity-88 hover:-translate-y-px"
       style="background:linear-gradient(135deg,#c0392b,#96281b)">
       <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
@@ -181,9 +181,8 @@ border-b border-border shadow-sm">
 
     <!-- ── SIDEBAR ── -->
     <aside class="lg:w-[240px] flex-shrink-0">
-      <div class="bg-white border border-border rounded-2xl overflow-hidden
-       shadow-sm sticky top-[88px]">
-        <div class="flex-col p-2 gap-1 overflow-x-auto scroll-hide">
+      <div class="bg-white border border-border rounded-2xl overflow-hidden shadow-sm lg:sticky lg:top-[88px]">
+        <div class="flex flex-row lg:flex-col p-2 gap-1 overflow-x-auto" style="scrollbar-width:none;-ms-overflow-style:none">
           <button id="tab-orders"       onclick="BASE.showTab('orders')"       class="prof-tab active flex-shrink-0">
             <i class="fa-solid fa-receipt tab-icon"></i>
             <span class="hidden sm:inline">Order History</span><span class="sm:hidden">Orders</span>
@@ -247,7 +246,7 @@ border-b border-border shadow-sm">
         <div id="wishlistEmpty" class="hidden text-center py-16">
           <i class="fa-regular fa-heart text-5xl text-border mb-4 block"></i>
           <p class="font-playfair text-xl text-ink-mid/40">No saved dishes yet</p>
-          <a href="menu.html" class="inline-block mt-4 text-[11px] font-bold text-gold uppercase tracking-widest hover:underline">Browse Menu →</a>
+          <a href="../../menu.html" class="inline-block mt-4 text-[11px] font-bold text-gold uppercase tracking-widest hover:underline">Browse Menu →</a>
         </div>
       </div>
 
@@ -261,7 +260,7 @@ border-b border-border shadow-sm">
             <p class="font-playfair text-lg font-black text-ink">Reserve a New Table</p>
             <p class="font-cormorant italic text-ink-mid/60 text-sm mt-0.5">Mon–Sun · 12:00 PM – 11:00 PM</p>
           </div>
-          <a href="index.html#reservation"
+          <a href="../../index.html#reservation"
             class="flex-shrink-0 flex items-center gap-2 text-white px-5 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[.15em] transition hover:opacity-88"
             style="background:linear-gradient(135deg,#c0392b,#96281b)">
             <i class="fa-regular fa-calendar-check"></i> Book Now
@@ -559,19 +558,27 @@ border-b border-border shadow-sm">
   <button onclick="location.href='../../index.html'"             class="mob-nav-btn">
     <i class="fa-solid fa-house text-base"></i><span>Home</span></button>
   <button onclick="location.href='../../menu.html'"              class="mob-nav-btn"><i class="fa-solid fa-utensils text-base"></i><span>Menu</span></button>
-  <button onclick="location.href='index.html#reservation'" class="flex flex-col items-center">
+  <button onclick="location.href='../../index.html#reservation'" class="flex flex-col items-center">
     <div class="w-[50px] h-[50px] rounded-[16px] flex items-center justify-center text-white -mt-4 shadow-[0_8px_24px_rgba(192,57,43,.4)] transition hover:scale-105 active:scale-95"
       style="background:linear-gradient(135deg,#c0392b,#96281b)">
       <i class="fa-regular fa-calendar-check text-lg"></i>
     </div>
   </button>
-  <button onclick="location.href='index.html#reservation'" class="mob-nav-btn"><i class="fa-regular fa-calendar-check text-base"></i><span>Reserve</span></button>
+  <button onclick="location.href='../../index.html#reservation'" class="mob-nav-btn"><i class="fa-regular fa-calendar-check text-base"></i><span>Reserve</span></button>
   <button class="mob-nav-btn text-red"><i class="fa-regular fa-circle-user text-base"></i><span>Profile</span></button>
 </nav>
 
 <!-- ═══════════════════════════
      SCRIPTS (order matters)
 ═══════════════════════════ -->
+<script>
+  /* Auth guard — redirect to login if not logged in */
+  (function() {
+    var u = null;
+    try { u = JSON.parse(localStorage.getItem('sv_user')); } catch(e) {}
+    if (!u) { location.href = '../../login.html'; }
+  })();
+</script>
 <script src="base.js"></script>
 <script src="orders.js"></script>
 <script src="wishlist.js"></script>

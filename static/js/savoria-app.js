@@ -1115,6 +1115,18 @@ function injectMobileBottomNav() {
 
   const nav = document.createElement('nav');
   nav.className = 'mobile-bottom-nav md:hidden';
+  /* Determine login/profile state */
+  const _svUser = (() => { try { return JSON.parse(localStorage.getItem('sv_user')); } catch(e) { return null; } })();
+  const _loginActive = isActive('login.html') || isActive('profile.html');
+  const _loginItem = _svUser
+    ? `<div class="nav-item${_loginActive ? ' active' : ''}" onclick="location.href='profile.html'" style="position:relative">
+        <span style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#b8963e,#e8c97a);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#1a1208;letter-spacing:0;line-height:1">${(_svUser.name||'U')[0].toUpperCase()}</span>
+        <span>Account</span>
+       </div>`
+    : `<div class="nav-item${_loginActive ? ' active' : ''}" onclick="location.href='login.html'">
+        <i class="fa-regular fa-circle-user"></i><span>Login</span>
+       </div>`;
+
   nav.innerHTML = `
     <div class="nav-item${isActive('index.html')  ? ' active' : ''}" onclick="location.href='index.html'">
       <i class="fa-solid fa-house"></i><span>Home</span>
@@ -1122,6 +1134,7 @@ function injectMobileBottomNav() {
     <div class="nav-item${isActive('menu.html')   ? ' active' : ''}" onclick="location.href='menu.html'">
       <i class="fa-solid fa-utensils"></i><span>Menu</span>
     </div>
+    ${_loginItem}
     <div onclick="toggleCart()">
       <div class="cart-fab">
         <i class="fa-solid fa-bag-shopping text-lg"></i>
@@ -1131,8 +1144,8 @@ function injectMobileBottomNav() {
     <div class="nav-item${isActive('reserve.html') ? ' active' : ''}" onclick="location.href='reserve.html'">
       <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
     </div>
-    <div class="nav-item${isActive('login.html')  ? ' active' : ''}" onclick="location.href='login.html'">
-      <i class="fa-regular fa-circle-user"></i><span>Profile</span>
+    <div class="nav-item${isActive('wishlist.html') ? ' active' : ''}" onclick="location.href='wishlist.html'">
+      <i class="fa-regular fa-heart"></i><span>Saved</span>
     </div>
   `;
   document.body.appendChild(nav);

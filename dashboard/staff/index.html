@@ -15,119 +15,13 @@
    <link rel="stylesheet" href="../layout.css">
   <link rel="stylesheet" href="theme.css"/>
 
-  <style>
-    /* ══════════════════════════════════════════
-       RESPONSIVE LAYOUT OVERRIDES
-       (Supplements theme.css for mobile/tablet)
-    ══════════════════════════════════════════ */
-
-    /* ── Mobile sidebar backdrop overlay ── */
-    #sidebarBackdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.45);
-      z-index: 149;
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
-      animation: fadeIn .2s ease;
-    }
-    #sidebarBackdrop.show { display: block; }
-    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
-
-    /* ── Mobile hamburger in topbar ── */
-    #mobileMenuBtn {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border: none;
-      background: transparent;
-      color: var(--text-2);
-      cursor: pointer;
-      border-radius: 8px;
-      font-size: 16px;
-      flex-shrink: 0;
-      transition: background .15s;
-    }
-    #mobileMenuBtn:hover { background: var(--bg-input); }
-
-    /* ── Topbar search hide on small screens ── */
-    @media (max-width: 640px) {
-      #mobileMenuBtn { display: flex; }
-
-      /* Sidebar slides in as overlay */
-      #sidebar {
-        position: fixed !important;
-        left: -260px !important;
-        top: 0;
-        height: 100vh;
-        z-index: 150;
-        transition: left .25s cubic-bezier(.4,0,.2,1) !important;
-        box-shadow: none;
-      }
-      #sidebar.mobile-open {
-        left: 0 !important;
-        box-shadow: 4px 0 32px rgba(0,0,0,.18);
-      }
-      /* Collapsed state ignored on mobile — always full width when open */
-      #sidebar.collapsed { width: 220px !important; }
-      #sidebar.collapsed .nav-lbl,
-      #sidebar.collapsed .sidebar-logo-sub,
-      #sidebar.collapsed .sidebar-footer-text,
-      #sidebar.collapsed .nav-section-title { display: block !important; opacity: 1 !important; }
-      #sidebar.collapsed .badge-dot { display: flex !important; }
-
-      /* Main content takes full width */
-      #mainContent { margin-left: 0 !important; width: 100% !important; }
-
-      /* Topbar compact */
-      .topbar-search { display: none; }
-      #topClock { display: none; }
-      .live-badge { display: none; }
-
-      /* Topbar right compacted */
-      .topbar-right { gap: 4px; }
-
-      /* pageArea padding */
-      #pageArea { padding: 12px !important; }
-    }
-
-    /* ── Tablet: collapsed sidebar, tighter layout ── */
-    @media (min-width: 641px) and (max-width: 1024px) {
-      #sidebar { width: 64px !important; }
-      #sidebar .nav-lbl,
-      #sidebar .sidebar-logo-sub,
-      #sidebar .sidebar-footer-text,
-      #sidebar .nav-section-title { display: none !important; opacity: 0 !important; }
-      #sidebar .badge-dot { right: 4px; top: 4px; }
-      #sidebar .sidebar-footer { padding: 10px 6px; justify-content: center; }
-      #sidebar .sidebar-logout-btn { display: none; }
-      #sidebar .sidebar-avatar { margin: 0 auto; }
-      #sidebar .logo-text { display: none; }
-      #sidebar .sidebar-toggle-btn { margin: 0 auto; }
-      #mainContent { margin-left: 64px !important; }
-
-      /* Topbar search smaller */
-      .topbar-search { max-width: 180px; }
-      #topClock { display: none; }
-      #pageArea { padding: 16px !important; }
-    }
-
-    /* ── Topbar: stack search + right on very small ── */
-    @media (max-width: 420px) {
-      #topbar { padding: 0 10px; gap: 6px; }
-      .topbar-right { gap: 2px; }
-      .topbar-avatar { width: 30px; height: 30px; font-size: 10px; }
-    }
-  </style>
+  <!-- Responsive handled by layout.css -->
 </head>
 
 <body>
 
-<!-- Mobile sidebar backdrop -->
-<div id="sidebarBackdrop" onclick="closeMobileSidebar()"></div>
+<!-- Mobile overlay -->
+<div id="mobileOverlay" onclick="closeMobileSidebar()"></div>
 
 <div id="sidebar">
 
@@ -229,79 +123,49 @@
 
   <!-- TOP BAR -->
   <div id="topbar">
-    <!-- Mobile menu button -->
-    <button class="topbar-icon-btn" 
-    id="mobileMenuBtn" onclick="openMobileSidebar()">
-    <i class="fa-solid fa-bars"></i>
-   </button>
+    <button class="topbar-icon-btn" id="mobileMenuBtn" onclick="openMobileSidebar()" title="Open menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
 
-    <!-- Search -->
-    <div class=" topbar-search flex items-center gap-3 md:gap-3 px-5 md:px-5 px-3 h-8">
-      <i class="fa-solid fa-magnifying-glass" style="
-        color:var(--text-3);font-size:12px;flex-shrink:0"></i>
+    <div class="topbar-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
       <input id="globalSearch" type="text" placeholder="Search anything…" autocomplete="off"/>
     </div>
 
-    <!-- Right side -->
     <div class="topbar-right">
-
-      <!-- Live indicator -->
-      <div class="live-badge hidden md:flex ">
+      <div class="live-badge">
         <span class="live-dot"></span>
         <span style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em">Live</span>
       </div>
-
-      <!-- Clock -->
-      <div id="topClock" class="hidden md:block" 
-      style="font-size:11px;color:var(--text-3);
-     white-space:nowrap"></div>
-
-      <!-- Theme toggle -->
+      <div id="topClock" style="font-size:11px;color:var(--text-3);white-space:nowrap"></div>
       <button class="topbar-icon-btn" onclick="Theme.toggle()" title="Toggle theme">
         <i id="themeIcon" class="fa-solid fa-moon"></i>
       </button>
-
-      <!-- Notification bell -->
-      <div style="position:relative">
-    
-       <!-- Notification bell — index.html এ এই পুরো block টা replace করো -->
-     <div style="position:relative">
-     <button class="topbar-icon-btn" id="notifBtn" onclick="toggleNotif()">
-      <i class="fa-regular fa-bell"></i>
-      <span id="notifBadge" class="notif-badge" style="display:none">0</span>
-  </button>
-
-  <div id="notifDrop">
-
-    <!-- Header -->
-    <div class="notif-header">
-      <div style="display:flex;align-items:center;gap:8px">
-        <i class="fa-solid fa-bell" style="font-size:12px;color:var(--gold)"></i>
-        <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:14px">Notifications</span>
-        <span class="tag tag-pending notif-count-badge">0 new</span>
+      <div class="notif-wrap">
+        <button class="topbar-icon-btn" id="notifBtn" onclick="toggleNotif()">
+          <i class="fa-regular fa-bell"></i>
+          <span id="notifBadge" class="notif-badge" style="display:none">0</span>
+        </button>
+        <div id="notifDrop">
+          <div class="notif-header">
+            <div style="display:flex;align-items:center;gap:8px">
+              <i class="fa-solid fa-bell" style="font-size:12px;color:var(--gold)"></i>
+              <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:14px">Notifications</span>
+              <span class="tag tag-pending notif-count-badge">0 new</span>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <button class="notif-action-btn" onclick="Notif.markAllRead()">Mark all read</button>
+              <button class="notif-action-btn" onclick="Notif.clear()" style="color:var(--red)">Clear</button>
+            </div>
+          </div>
+          <div id="notifList"></div>
+          <div class="notif-footer">
+            <i class="fa-solid fa-shield-halved" style="font-size:9px;color:var(--text-3)"></i>
+            <span>Savoria Staff — local notifications only</span>
+          </div>
+        </div>
       </div>
-      <div style="display:flex;gap:12px;align-items:center">
-        <button class="notif-action-btn" onclick="Notif.markAllRead()">Mark all read</button>
-        <button class="notif-action-btn" onclick="Notif.clear()"
-          style="color:var(--red)">Clear</button>
-      </div>
-    </div>
-
-    <!-- List -->
-    <div id="notifList"></div>
-
-    <!-- Footer -->
-    <div class="notif-footer">
-      <i class="fa-solid fa-shield-halved" style="font-size:9px;color:var(--text-3)"></i>
-      <span>Savoria Admin — local notifications only</span>
-    </div>
-
-  </div>
-    </div>
-      </div>
-
-      <!-- User avatar -->
-      <div class="topbar-avatar" title="Umme Tahazzee">UT</div>
+      <div class="topbar-avatar" id="topbarAvatar" title=""></div>
     </div>
   </div><!-- /topbar -->
 
@@ -344,66 +208,45 @@
      MOBILE SIDEBAR HELPERS
 ════════════════════════════════════════ -->
 <script>
-  function isMobile() { return window.innerWidth <= 640; }
+  function isMobile() { return window.innerWidth <= 768; }
 
   function openMobileSidebar() {
     document.getElementById('sidebar').classList.add('mobile-open');
-    document.getElementById('sidebarBackdrop').classList.add('show');
+    document.getElementById('mobileOverlay').classList.add('show');
     document.body.style.overflow = 'hidden';
   }
-
   function closeMobileSidebar() {
     document.getElementById('sidebar').classList.remove('mobile-open');
-    document.getElementById('sidebarBackdrop').classList.remove('show');
+    document.getElementById('mobileOverlay').classList.remove('show');
     document.body.style.overflow = '';
   }
-
   function handleSidebarToggle() {
-    if (isMobile()) {
-      closeMobileSidebar();
-    } else {
-      Sidebar.toggle();
-    }
+    if (isMobile()) closeMobileSidebar(); else Sidebar.toggle();
   }
-
-  /* Auto-close sidebar on mobile when a nav item is tapped */
   function navGo(view, el) {
     if (isMobile()) closeMobileSidebar();
     Router.go(view, el);
   }
 
-  /* Close notification dropdown & mobile sidebar on outside click */
   document.addEventListener('click', e => {
-    const drop = document.getElementById('notifDrop');
-    if (drop && !e.target.closest('#notifDrop') && !e.target.closest('#notifBtn')) {
-      drop.style.display = 'none';
-    }
+    const d = document.getElementById('notifDrop');
+    if (d && !e.target.closest('#notifDrop') && !e.target.closest('#notifBtn')) d.classList.remove('open');
   });
-
-  /* Swipe-left to close sidebar on mobile */
-  let _swipeStartX = 0;
-  document.addEventListener('touchstart', e => { _swipeStartX = e.touches[0].clientX; }, { passive: true });
+  let _swX = 0;
+  document.addEventListener('touchstart', e => { _swX = e.touches[0].clientX; }, { passive: true });
   document.addEventListener('touchend', e => {
     if (!isMobile()) return;
-    const dx = _swipeStartX - e.changedTouches[0].clientX;
-    if (dx > 60 && document.getElementById('sidebar').classList.contains('mobile-open')) {
+    if (_swX - e.changedTouches[0].clientX > 60 && document.getElementById('sidebar').classList.contains('mobile-open'))
       closeMobileSidebar();
-    }
   }, { passive: true });
-
-  /* Resize: clean up mobile state when going back to desktop */
-  window.addEventListener('resize', () => {
-    if (!isMobile()) {
-      closeMobileSidebar();
-      document.body.style.overflow = '';
-    }
-  });
+  window.addEventListener('resize', () => { if (!isMobile()) closeMobileSidebar(); });
 </script>
 
 
 <!-- ════════════════════════════════════════
      SCRIPTS
 ════════════════════════════════════════ -->
+<script src="../auth.js"></script>
 <script src="data.js"></script>
 <script src="Notify.js"></script>
 <script src="dashboard.js"></script>
@@ -415,7 +258,6 @@
 <script src="transactions.js"></script>
 <script src="profile.js"></script> 
 <script src="settings.js"></script>
-<script src="../auth.js"></script>
 <script src="app.js"></script>
 
 
@@ -476,6 +318,11 @@
       if (av) av.textContent = (u.name || 'U').charAt(0).toUpperCase();
       if (nm) nm.textContent = u.name || 'User';
       if (rl) rl.textContent = { admin:'Administrator', manager:'Manager', staff:'Staff Member' }[u.role] || u.role || 'Portal User';
+      var ta = document.getElementById('topbarAvatar');
+      if (ta) {
+        ta.textContent = (u.name||'U').split(' ').map(function(n){return n[0];}).join('').toUpperCase().slice(0,2);
+        ta.title = u.name || '';
+      }
     }
   });
 </script>

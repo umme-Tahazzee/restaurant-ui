@@ -10,12 +10,17 @@
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { fontFamily: { serif: ['Playfair Display','serif'], sans: ['Jost','sans-serif'] } } } }</script>
   <link rel="stylesheet" href="../layout.css">
   <link rel="stylesheet" href="theme.css" />
 
 </head>
 
 <body>
+
+<!-- Mobile overlay -->
+<div id="mobileOverlay" onclick="closeMobileSidebar()"></div>
 
 <!-- ════════════════════════════════════════
      SIDEBAR
@@ -78,13 +83,7 @@
       </button>
     </nav>
     <div class="sidebar-footer">
-      <div id="sidebarAvatar" class="sidebar-avatar" 
-      style="
-      background:var(--red-deep);
-      color:#fff;
-      position:sticky;
-      bottom:0;
-      ">M</div>
+      <div id="sidebarAvatar" class="sidebar-avatar" style="background:var(--red-deep)">M</div>
       <div class="sidebar-footer-text">
         <p id="sidebarName" class="sidebar-footer-name">Manager</p>
         <p id="sidebarRole" class="sidebar-footer-role">Restaurant Manager</p>
@@ -99,74 +98,62 @@
 
   <div id="mainContent">
     <div id="topbar">
-      <button class="topbar-icon-btn" id="mobileMenuBtn" onclick="openMobileSidebar()">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-      <div class="topbar-search flex items-center gap-3 px-5 h-8">
-        <i class="fa-solid fa-magnifying-glass" style="color:var(--text-3);font-size:12px;flex-shrink:0"></i>
-        <input id="globalSearch" type="text" placeholder="Search anything…" autocomplete="off" />
+    <button class="topbar-icon-btn" id="mobileMenuBtn" onclick="openMobileSidebar()" title="Open menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="topbar-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="globalSearch" type="text" placeholder="Search anything…" autocomplete="off"/>
+    </div>
+
+    <div class="topbar-right">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        <span style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em">Live</span>
       </div>
-      <div class="topbar-right">
-        <div class="live-badge hidden md:flex">
-          <span class="live-dot"></span>
-          <span
-            style="font-size:10px;
-            font-weight:700;
-            color:var(--green);
-            text-transform:uppercase;
-            letter-spacing:.1em">Live</span>
-        </div>
-        <div id="topClock" class="hidden md:block"
-         style="font-size:11px;
-         color:var(--text-3);
-         white-space:nowrap"
-         ></div>
-
-
-        <div class="mgr-badge hidden md:flex">
-          <i class="fa-solid fa-shield-halved" 
-          style="font-size:9px;
-          color:var(--gold)
-          "></i>
-          <span
-            style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.05em;text-transform:uppercase">Manager</span>
-        </div>
-        <button class="topbar-icon-btn" onclick="Theme.toggle()" title="Toggle theme">
-          <i id="themeIcon" class="fa-solid fa-moon"></i>
+      <div id="topClock" style="font-size:11px;color:var(--text-3);white-space:nowrap"></div>
+      <div class="mgr-badge" style="display:flex;align-items:center;gap:5px;background:var(--gold-pale);border:1px solid rgba(184,150,62,.25);border-radius:20px;padding:4px 10px">
+        <i class="fa-solid fa-shield-halved" style="font-size:9px;color:var(--gold)"></i>
+        <span style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.05em;text-transform:uppercase">Manager</span>
+      </div>
+      <button class="topbar-icon-btn" onclick="Theme.toggle()" title="Toggle theme">
+        <i id="themeIcon" class="fa-solid fa-moon"></i>
+      </button>
+      <div class="notif-wrap">
+        <button class="topbar-icon-btn" id="notifBtn" onclick="toggleNotif()">
+          <i class="fa-regular fa-bell"></i>
+          <span id="notifBadge" class="notif-badge" style="display:none">0</span>
         </button>
-        <div style="position:relative">
-          <button class="topbar-icon-btn" id="notifBtn" onclick="toggleNotif()">
-            <i class="fa-regular fa-bell"></i>
-            <span id="notifBadge" class="notif-badge" style="display:none">0</span>
-          </button>
-          <div id="notifDrop">
-            <div class="notif-header">
-              <div style="display:flex;align-items:center;gap:8px">
-                <i class="fa-solid fa-bell" style="font-size:12px;color:var(--gold)"></i>
-                <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:14px">Notifications</span>
-                <span class="tag tag-pending notif-count-badge">0 new</span>
-              </div>
-              <div style="display:flex;gap:12px;align-items:center">
-                <button class="notif-action-btn" onclick="Notif.markAllRead()">Mark all read</button>
-                <button class="notif-action-btn" onclick="Notif.clear()" style="color:var(--red)">Clear</button>
-              </div>
+        <div id="notifDrop">
+          <div class="notif-header">
+            <div style="display:flex;align-items:center;gap:8px">
+              <i class="fa-solid fa-bell" style="font-size:12px;color:var(--gold)"></i>
+              <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:14px">Notifications</span>
+              <span class="tag tag-pending notif-count-badge">0 new</span>
             </div>
-            <div id="notifList"></div>
-            <div class="notif-footer">
-              <i class="fa-solid fa-shield-halved"
-               style="font-size:9px;color:var(--text-3)"></i>
-              <span>Savoria Manager Portal — local notifications only</span>
+            <div style="display:flex;gap:12px;align-items:center">
+              <button class="notif-action-btn" onclick="Notif.markAllRead()">Mark all read</button>
+              <button class="notif-action-btn" onclick="Notif.clear()" style="color:var(--red)">Clear</button>
             </div>
           </div>
+          <div id="notifList"></div>
+          <div class="notif-footer">
+            <i class="fa-solid fa-shield-halved" style="font-size:9px;color:var(--text-3)"></i>
+            <span>Savoria Manager — local notifications only</span>
+          </div>
         </div>
-        <div id="topbarAvatar" class="topbar-avatar" style="background:var(--red)" title="
-        Manager">M</div>
       </div>
+      <div class="topbar-avatar" id="topbarAvatar" title=""></div>
     </div>
-    <div id="pageArea"></div>
-  </div>
+  </div><!-- /topbar -->
 
-  <!-- Modals -->
+  <!-- PAGE AREA — views render here -->
+  <div id="pageArea"></div>
+
+</div><!-- /mainContent -->
+
+<!-- Modals -->
   <div class="modal-overlay" id="orderModal">
     <div class="modal"><button class="modal-close" onclick="Modal.close('orderModal')"><i
           class="fa-solid fa-xmark"></i></button>
@@ -370,25 +357,34 @@
   <div id="toastContainer"></div>
 
   <script>
-    function isMobile() { return window.innerWidth <= 640 }
+  function isMobile() { return window.innerWidth <= 768; }
   function openMobileSidebar() {
-  document.getElementById('sidebar').classList.add('mobile-open');
-  document.body.style.overflow = 'hidden';
-}
+    document.getElementById('sidebar').classList.add('mobile-open');
+    document.getElementById('mobileOverlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileSidebar() {
+    document.getElementById('sidebar').classList.remove('mobile-open');
+    document.getElementById('mobileOverlay').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  function handleSidebarToggle() { if (isMobile()) closeMobileSidebar(); else Sidebar.toggle(); }
+  function navGo(view, el) { if (isMobile()) closeMobileSidebar(); Router.go(view, el); }
+  document.addEventListener('click', e => {
+    const d = document.getElementById('notifDrop');
+    if (d && !e.target.closest('#notifDrop') && !e.target.closest('#notifBtn')) d.classList.remove('open');
+  });
+  let _sx = 0;
+  document.addEventListener('touchstart', e => { _sx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (!isMobile()) return;
+    if (_sx - e.changedTouches[0].clientX > 60 && document.getElementById('sidebar').classList.contains('mobile-open'))
+      closeMobileSidebar();
+  }, { passive: true });
+  window.addEventListener('resize', () => { if (!isMobile()) closeMobileSidebar(); });
+</script>
 
-function closeMobileSidebar() {
-  document.getElementById('sidebar').classList.remove('mobile-open');
-  document.body.style.overflow = '';
-}
-    function handleSidebarToggle() { if (isMobile()) closeMobileSidebar(); else Sidebar.toggle() }
-    function navGo(view, el) { if (isMobile()) closeMobileSidebar(); Router.go(view, el) }
-    document.addEventListener('click', e => { const d = document.getElementById('notifDrop'); if (d && !e.target.closest('#notifDrop') && !e.target.closest('#notifBtn')) d.style.display = 'none' });
-    let _sx = 0;
-    document.addEventListener('touchstart', e => { _sx = e.touches[0].clientX }, { passive: true });
-    document.addEventListener('touchend', e => { if (!isMobile()) return; const dx = _sx - e.changedTouches[0].clientX; if (dx > 60 && document.getElementById('sidebar').classList.contains('mobile-open')) closeMobileSidebar() }, { passive: true });
-    window.addEventListener('resize', () => { if (!isMobile()) { closeMobileSidebar(); document.body.style.overflow = '' } });
-  </script>
-
+  <script src="../auth.js"></script>
   <script src="data.js"></script>
   <script src="api.js"></script>
   <script src="mgr-dashboard.js"></script>
@@ -403,7 +399,6 @@ function closeMobileSidebar() {
   <script src="transactions.js"></script>
   <script src="mgr-profile.js"></script>
   <script src="settings.js"></script>
-  <script src="../auth.js"></script>
 <script src="app.js"></script>
 
 
@@ -463,6 +458,11 @@ function closeMobileSidebar() {
       if (av) av.textContent = (u.name || 'U').charAt(0).toUpperCase();
       if (nm) nm.textContent = u.name || 'User';
       if (rl) rl.textContent = { admin:'Administrator', manager:'Manager', staff:'Staff Member' }[u.role] || u.role || 'Portal User';
+      var ta = document.getElementById('topbarAvatar');
+      if (ta) {
+        ta.textContent = (u.name||'U').split(' ').map(function(n){return n[0];}).join('').toUpperCase().slice(0,2);
+        ta.title = u.name || '';
+      }
     }
   });
 </script>
