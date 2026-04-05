@@ -1144,8 +1144,8 @@ function injectMobileBottomNav() {
     <div class="nav-item${isActive('reserve.html') ? ' active' : ''}" onclick="location.href='reserve.html'">
       <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
     </div>
-    <div class="nav-item${isActive('wishlist.html') ? ' active' : ''}" onclick="location.href='wishlist.html'">
-      <i class="fa-regular fa-heart"></i><span>Saved</span>
+    <div class="nav-item${isActive('contact.html') ? ' active' : ''}" onclick="location.href='contact.html'">
+      <i class="fa-regular fa-heart"></i><span>Contact</span>
     </div>
   `;
   document.body.appendChild(nav);
