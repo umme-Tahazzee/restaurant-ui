@@ -1,8 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Book a table at Savoria Fine Dining — fast, easy reservations online."/>
   <title>Savoria — Book a Table</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
@@ -13,287 +14,234 @@
       theme: {
         extend: {
           colors: {
-            redPrimary: "#c0392b", redDeep: "#96281b", redPale: "#fdf0ee",
-            cream: "#f5f0eb", textDark: "#1a1210", textMid: "#4a3830",
-            borderSoft: "#e8ddd8", gold: "#b8963e", goldLight: "#d4af6a",
+            redPrimary:"#c0392b",redDeep:"#96281b",redPale:"#fdf0ee",
+            cream:"#f5f0eb",textDark:"#1a1210",textMid:"#4a3830",
+            borderSoft:"#e8ddd8",gold:"#b8963e",goldLight:"#d4af6a",
           },
-          fontFamily: {
-            playfair: ["Playfair Display", "serif"],
-            jost: ["Jost", "sans-serif"],
-            cormorant: ["Cormorant Garamond", "serif"],
-          },
-          animation: {
-            fadeIn: "fadeIn 0.4s ease forwards",
-            slideLeft: "slideLeft 0.4s cubic-bezier(.4,0,.2,1) forwards",
-            slideRight: "slideRight 0.4s cubic-bezier(.4,0,.2,1) forwards",
-            slideUp: "slideUp 0.6s cubic-bezier(.4,0,.2,1) forwards",
-          },
-          keyframes: {
-            fadeIn: { "0%": { opacity: 0 }, "100%": { opacity: 1 } },
-            slideLeft: { "0%": { transform: "translateX(100%)" }, "100%": { transform: "translateX(0)" } },
-            slideRight: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(100%)" } },
-            slideUp: { "0%": { opacity: 0, transform: "translateY(20px)" }, "100%": { opacity: 1, transform: "translateY(0)" } },
+          fontFamily:{
+            playfair:["Playfair Display","serif"],
+            jost:["Jost","sans-serif"],
+            cormorant:["Cormorant Garamond","serif"],
           },
         },
       },
     };
   </script>
-
 </head>
-
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
 
-<!-- ═══════════ OVERLAY ═══════════ -->
-<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none
- backdrop-blur-[2px]" onclick="closeAll()"></div>
+<main class="pt-[76px] min-h-screen" style="background:linear-gradient(160deg,#fdf6f0 0%,#f5ede4 55%,#f0e4d8 100%)">
 
-<!-- ═══════════ MOBILE MENU ═══════════ -->
-<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex-col p-10 hidden" style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
-  <div class="flex justify-between items-center mb-10">
-    <div>
-      <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-      <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
-    </div>
-    <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
-  </div>
-  <div class="gold-line h-[1px] w-full mb-8"></div>
-  <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
-    <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-    <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
-  </ul>
-  <div class="mt-auto space-y-3">
-    <a href="reserve.html" onclick="toggleMenu()" class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[0.2em]">
-      <i class="fa-regular fa-calendar-check"></i> Book a Table
-    </a>
-    <div class="flex gap-3 text-xs text-white/30 justify-center pt-2">
-      <span>📞 +1 (555) 920-4200</span><span>·</span><span>Mon–Sun 12–11pm</span>
-    </div>
-  </div>
-</div>
+  <div class="fixed pointer-events-none" style="top:-120px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(192,57,43,.07) 0%,transparent 65%);z-index:0"></div>
+  <div class="fixed pointer-events-none" style="bottom:-80px;left:-60px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(184,150,62,.07) 0%,transparent 65%);z-index:0"></div>
 
-<!-- ═══════════ CART MODAL ═══════════ -->
-<div id="cartModal" class="fixed inset-0 z-[1200] pointer-events-none">
-  <div id="cartBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 transition-opacity duration-300 hidden md:block" onclick="toggleCart()"></div>
-  <div id="cartPanel"
-       class="absolute bg-white flex flex-col bottom-0 left-0 right-0 h-[95vh] rounded-t-[24px] md:top-0 md:right-0 md:left-auto md:bottom-auto md:h-full md:w-[460px] md:rounded-none"
-       style="transform:translateY(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); box-shadow: -8px 0 40px rgba(0,0,0,0.12);">
+  <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 lg:py-16">
 
-    <!-- Mobile drag handle -->
-    <div class="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
-      <div class="w-10 h-[4px] rounded-full bg-borderSoft"></div>
+    <div class="flex items-center gap-2 mb-8 reveal">
+      <a href="index.html" class="text-[10px] font-bold tracking-[.3em] uppercase text-gold/80 hover:text-redPrimary transition"><i class="fa-solid fa-house text-[9px] mr-1"></i>Home</a>
+      <i class="fa-solid fa-chevron-right text-borderSoft text-[8px]"></i>
+      <span class="text-[10px] font-bold tracking-[.3em] uppercase text-redPrimary">Book a Table</span>
     </div>
 
-    <!-- Header -->
-    <div class="flex items-center justify-between px-6 py-4 flex-shrink-0 border-b border-borderSoft">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-redPale flex items-center justify-center">
-          <i class="fa-solid fa-bag-shopping text-redPrimary text-sm"></i>
+    <div class="grid lg:grid-cols-[1fr_480px] gap-12 lg:gap-20 items-start">
+
+      <div class="reveal">
+        <div class="flex items-center gap-2.5 mb-4">
+          <span class="w-7 h-px flex-shrink-0" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+          <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">Reserve Your Seat</span>
+          <span class="w-7 h-px flex-shrink-0" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
         </div>
-        <div>
-          <h2 class="font-playfair text-lg font-bold text-textDark leading-tight">Your Order</h2>
-          <p class="text-[11px] text-textMid/50 mt-0.5" id="cartSubtitle">Table 7 · Dine In</p>
-        </div>
-      </div>
-      <button onclick="toggleCart()" class="w-9 h-9 rounded-full border border-borderSoft text-textMid/50 hover:border-redPrimary hover:text-redPrimary transition flex items-center justify-center text-sm">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-
-    <!-- Progress steps -->
-    <div class="px-6 py-4 flex-shrink-0 border-b border-borderSoft bg-white">
-      <div class="flex items-center gap-0">
-        <div class="flex flex-col items-center gap-1.5 flex-1">
-          <div class="w-7 h-7 rounded-full bg-redPrimary flex items-center justify-center"><i class="fa-solid fa-check text-white text-[10px]"></i></div>
-          <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-redPrimary">Cart</span>
-        </div>
-        <div class="flex-1 h-[2px] bg-borderSoft mb-4 mx-1"><div class="h-full bg-redPrimary w-1/2 rounded-full"></div></div>
-        <div class="flex flex-col items-center gap-1.5 flex-1">
-          <div class="w-7 h-7 rounded-full border-2 border-borderSoft flex items-center justify-center"><span class="text-[10px] font-bold text-textMid/40">2</span></div>
-          <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-textMid/40">Details</span>
-        </div>
-        <div class="flex-1 h-[2px] bg-borderSoft mb-4 mx-1"></div>
-        <div class="flex flex-col items-center gap-1.5 flex-1">
-          <div class="w-7 h-7 rounded-full border-2 border-borderSoft flex items-center justify-center"><span class="text-[10px] font-bold text-textMid/40">3</span></div>
-          <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-textMid/40">Confirm</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Scrollable body -->
-    <div class="flex-1 overflow-y-auto bg-white" id="cartScrollBody">
-
-      <!-- Dine in / Takeout toggle -->
-      <div class="px-6 pt-5 pb-4">
-        <div class="flex gap-2 p-1 bg-cream rounded-xl">
-          <button id="dineBtn" onclick="setOrderType('dine')" class="flex-1 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.12em] transition-all bg-white text-textDark shadow-sm">
-            <i class="fa-solid fa-utensils mr-1.5 text-[10px]"></i> Dine In
-          </button>
-          <button id="takeBtn" onclick="setOrderType('take')" class="flex-1 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.12em] transition-all text-textMid/50">
-            <i class="fa-solid fa-box mr-1.5 text-[10px]"></i> Takeout
-          </button>
-        </div>
-      </div>
-
-      <!-- Items label -->
-      <div class="px-6 pb-3 flex items-center justify-between">
-        <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-textMid/40">Order Items</p>
-        <span id="itemCountBadge" class="text-[10px] font-bold text-redPrimary bg-redPale px-2 py-0.5 rounded-full">0 items</span>
-      </div>
-
-      <!-- Cart items container -->
-      <div id="cartItemsContainer"></div>
-
-      <!-- Empty state -->
-      <div id="cartEmpty" class="px-6 py-12 text-center">
-        <div class="text-5xl mb-4">🛒</div>
-        <p class="font-playfair text-lg font-bold text-textDark mb-1">Your cart is empty</p>
-        <p class="font-cormorant italic text-textMid/50">Add dishes from the menu to get started</p>
-        <a href="menu.html" onclick="toggleCart()" class="mt-4 inline-block book-btn text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.15em]">Browse Menu</a>
-      </div>
-
-      <!-- Upsell (wine pairing) -->
-      <div id="cartUpsell" class="px-6 py-4 border-b border-borderSoft/50 hidden">
-        <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-gold mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i> Pair it with
+        <h1 class="font-playfair text-4xl sm:text-5xl lg:text-[62px] font-black text-textDark leading-[1.06] mb-5">
+          Your Perfect<br/>Evening <em class="italic" style="color:#c0392b">Awaits</em>
+        </h1>
+        <p class="font-cormorant italic text-lg lg:text-xl leading-relaxed text-textMid/55 mb-8 max-w-[480px]">
+          Reserve your table in minutes. Whether it's a quiet dinner for two or a grand celebration — we'll make every moment unforgettable.
         </p>
-        <div class="flex items-center justify-between gap-3 bg-cream/60 rounded-2xl p-3 border border-borderSoft">
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-xl bg-white border border-borderSoft flex items-center justify-center text-xl flex-shrink-0">🍷</div>
-            <div>
-              <p class="text-[13px] font-semibold text-textDark leading-tight">Chianti Classico</p>
-              <p class="text-[10px] text-textMid/50 font-cormorant italic">2018 · Tuscany · 750ml</p>
-              <div class="flex items-center gap-1 mt-1">
-                <i class="fa-solid fa-star text-gold text-[8px]"></i>
-                <span class="text-[9px] text-textMid/50">4.8 · 120 orders</span>
+        <div class="space-y-3 mb-10">
+          <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-white border border-borderSoft flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-bolt text-gold text-xs"></i></div><span class="text-sm text-textMid">Instant confirmation via email &amp; SMS</span></div>
+          <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-white border border-borderSoft flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-rotate-left text-gold text-xs"></i></div><span class="text-sm text-textMid">Free cancellation up to 2 hours before</span></div>
+          <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-white border border-borderSoft flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-star text-gold text-xs"></i></div><span class="text-sm text-textMid">Special occasions? We'll prepare a surprise</span></div>
+          <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-white border border-borderSoft flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-phone text-gold text-xs"></i></div><span class="text-sm text-textMid">Need help? <strong>+1 (555) 920-4200</strong></span></div>
+        </div>
+        <div class="bg-white border border-borderSoft rounded-2xl p-5 max-w-[380px]">
+          <p class="text-[10px] font-bold uppercase tracking-[.3em] text-gold mb-3">Opening Hours</p>
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-sm"><span class="text-textMid/60">Mon – Thu</span><span class="font-semibold text-textDark">12:00 PM – 10:30 PM</span></div>
+            <div class="flex justify-between text-sm"><span class="text-textMid/60">Fri – Sat</span><span class="font-semibold text-textDark">12:00 PM – 11:30 PM</span></div>
+            <div class="flex justify-between text-sm"><span class="text-textMid/60">Sunday</span><span class="font-semibold text-textDark">11:00 AM – 9:00 PM</span></div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-borderSoft flex items-center gap-2">
+            <i class="fa-solid fa-location-dot text-redPrimary text-sm"></i>
+            <span class="text-xs text-textMid/60">48 E 61st St, New York, NY 10065</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal anim-2">
+        <div id="bookingForm" class="bg-white rounded-3xl shadow-lg border border-borderSoft/60 overflow-hidden">
+          <div class="px-7 py-6 border-b border-borderSoft">
+            <p class="text-[10px] font-bold uppercase tracking-[.3em] text-gold mb-1">Quick Booking</p>
+            <h2 class="font-playfair text-2xl font-black text-textDark">Reserve a Table</h2>
+            <p class="text-xs text-textMid/50 mt-1 font-cormorant italic">Takes less than 60 seconds</p>
+          </div>
+          <form id="tableForm" onsubmit="submitBooking(event)" class="px-7 py-6 space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-[.15em] text-textMid/55 mb-2">Full Name</label>
+                <input type="text" id="bkName" required placeholder="e.g. Marco Rossi" class="w-full border border-borderSoft rounded-xl px-4 py-3 text-sm text-textDark placeholder-textMid/30 outline-none focus:border-redPrimary transition"/>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-[.15em] text-textMid/55 mb-2">Phone</label>
+                <input type="tel" id="bkPhone" required placeholder="+1 (555) 000-0000" class="w-full border border-borderSoft rounded-xl px-4 py-3 text-sm text-textDark placeholder-textMid/30 outline-none focus:border-redPrimary transition"/>
               </div>
             </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.15em] text-textMid/55 mb-2">Email Address</label>
+              <input type="email" id="bkEmail" required placeholder="you@example.com" class="w-full border border-borderSoft rounded-xl px-4 py-3 text-sm text-textDark placeholder-textMid/30 outline-none focus:border-redPrimary transition"/>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-[.15em] text-textMid/55 mb-2">Date</label>
+                <input type="date" id="bkDate" required class="w-full border border-borderSoft rounded-xl px-4 py-3 text-sm text-textDark outline-none focus:border-redPrimary transition"/>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-[.15em] text-textMid/55 mb-2">Time</label>
+                <select id="bkTime" required class="w-full border border-borderSoft rounded-xl px-4 py-3 text-sm text-textDark outline-none focus:border-redPrimary transition bg-white">
+                  <option value="">Select a time</option>
+                  <option>12:00 PM</option><option>12:30 PM</option><option>1:00 PM</option><option>1:30 PM</option>
+                  <option>2:00 PM</option><option>2:30 PM</option><option>6:00 PM</option><option>6:30 PM</option>
+                  <option>7:00 PM</option><option>7:30 PM</option><option>8:00 PM</option><option>8:30 PM</option>
+                  <option>9:00 PM</option><option>9:30 PM</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.15em] text-textMid/55 mb-2">Number of Guests</label>
+              <div class="flex gap-2 flex-wrap">
+                <button type="button" onclick="selectGuests(this,1)"  class="guest-btn px-4 py-2.5 rounded-xl border border-borderSoft text-sm font-semibold text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition">1</button>
+                <button type="button" onclick="selectGuests(this,2)"  class="guest-btn px-4 py-2.5 rounded-xl border border-borderSoft text-sm font-semibold text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition">2</button>
+                <button type="button" onclick="selectGuests(this,3)"  class="guest-btn px-4 py-2.5 rounded-xl border border-borderSoft text-sm font-semibold text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition">3</button>
+                <button type="button" onclick="selectGuests(this,4)"  class="guest-btn px-4 py-2.5 rounded-xl border border-borderSoft text-sm font-semibold text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition">4</button>
+                <button type="button" onclick="selectGuests(this,5)"  class="guest-btn px-4 py-2.5 rounded-xl border border-borderSoft text-sm font-semibold text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition">5</button>
+                <button type="button" onclick="selectGuests(this,6)"  class="guest-btn px-4 py-2.5 rounded-xl border border-borderSoft text-sm font-semibold text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition">6</button>
+                <button type="button" onclick="selectGuests(this,8)"  class="guest-btn px-4 py-2.5 rounded-xl border border-borderSoft text-sm font-semibold text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition">8</button>
+                <button type="button" onclick="selectGuests(this,10)" class="guest-btn px-4 py-2.5 rounded-xl border border-borderSoft text-sm font-semibold text-textMid/60 hover:border-redPrimary hover:text-redPrimary transition">10+</button>
+              </div>
+              <input type="hidden" id="bkGuests" value=""/>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.15em] text-textMid/55 mb-2">Special Occasion <span class="text-textMid/30 normal-case font-normal tracking-normal">(optional)</span></label>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="toggleOccasion(this)" class="occ-btn px-3 py-2 rounded-full border border-borderSoft text-xs font-semibold text-textMid/55 hover:border-gold hover:text-gold transition">Birthday</button>
+                <button type="button" onclick="toggleOccasion(this)" class="occ-btn px-3 py-2 rounded-full border border-borderSoft text-xs font-semibold text-textMid/55 hover:border-gold hover:text-gold transition">Anniversary</button>
+                <button type="button" onclick="toggleOccasion(this)" class="occ-btn px-3 py-2 rounded-full border border-borderSoft text-xs font-semibold text-textMid/55 hover:border-gold hover:text-gold transition">Celebration</button>
+                <button type="button" onclick="toggleOccasion(this)" class="occ-btn px-3 py-2 rounded-full border border-borderSoft text-xs font-semibold text-textMid/55 hover:border-gold hover:text-gold transition">Business</button>
+                <button type="button" onclick="toggleOccasion(this)" class="occ-btn px-3 py-2 rounded-full border border-borderSoft text-xs font-semibold text-textMid/55 hover:border-gold hover:text-gold transition">Date Night</button>
+              </div>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-[.15em] text-textMid/55 mb-2">Special Requests <span class="text-textMid/30 normal-case font-normal tracking-normal">(optional)</span></label>
+              <textarea id="bkNotes" rows="2" placeholder="Dietary needs, seating preference, allergens…" class="w-full border border-borderSoft rounded-xl px-4 py-3 text-sm text-textDark placeholder-textMid/30 outline-none focus:border-redPrimary transition resize-none"></textarea>
+            </div>
+            <button type="submit" id="bookSubmitBtn" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold uppercase tracking-[.2em] flex items-center justify-center gap-2 hover:-translate-y-px transition">
+              <i class="fa-regular fa-calendar-check text-[11px]"></i> Confirm Reservation
+            </button>
+            <p class="text-center text-[10px] text-textMid/35">By reserving you agree to our <a href="#" class="underline hover:text-gold transition">cancellation policy</a></p>
+          </form>
+        </div>
+
+        <div id="bookingConfirm" class="hidden bg-white rounded-3xl shadow-lg border border-borderSoft/60">
+          <div class="px-7 py-10 text-center">
+            <div class="w-16 h-16 rounded-full mx-auto mb-5 flex items-center justify-center" style="background:linear-gradient(135deg,#fdf6ee,#f5ede4);border:2px solid #b8963e">
+              <svg viewBox="0 0 52 52" fill="none" class="w-8 h-8">
+                <circle cx="26" cy="26" r="25" stroke="#b8963e" stroke-width="2"/>
+                <path d="M14 26l9 9 15-18" stroke="#b8963e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="60" stroke-dashoffset="60" id="confirmTick"/>
+              </svg>
+            </div>
+            <p class="text-[10px] font-bold uppercase tracking-[.3em] text-gold mb-2">Reservation Confirmed</p>
+            <h2 class="font-playfair text-2xl font-black text-textDark mb-3">We'll be ready for you!</h2>
+            <p class="font-cormorant italic text-textMid/55 text-lg mb-6" id="confirmMsg">Confirmation sent to your email.</p>
+            <div id="confirmDetails" class="bg-cream/60 rounded-2xl p-5 text-left border border-borderSoft mb-6 space-y-2"></div>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a href="menu.html" class="flex-1 book-btn text-white py-3.5 rounded-xl text-[11px] font-bold uppercase tracking-[.18em] flex items-center justify-center gap-2">
+                <i class="fa-solid fa-utensils text-[10px]"></i> Browse Menu
+              </a>
+              <button onclick="resetBooking()" class="flex-1 border border-borderSoft text-textMid py-3.5 rounded-xl text-[11px] font-bold uppercase tracking-[.18em] hover:border-redPrimary hover:text-redPrimary transition">
+                Make Another
+              </button>
+            </div>
           </div>
-          <button onclick="addToCart('Chianti Classico', 18)" class="flex-shrink-0 text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-2 rounded-full hover:bg-redPrimary hover:text-white hover:border-transparent transition whitespace-nowrap">
-            + $18
-          </button>
         </div>
       </div>
-
-      <!-- Kitchen note -->
-      <div id="cartNote" class="px-6 py-4 border-b border-borderSoft/50 hidden">
-        <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-textMid/40 mb-2.5">Special Instructions</p>
-        <div class="flex items-start gap-2.5 bg-white border border-borderSoft rounded-xl px-3 py-2.5 focus-within:border-gold transition">
-          <i class="fa-regular fa-note-sticky text-gold/60 mt-0.5 flex-shrink-0"></i>
-          <textarea rows="2" placeholder="Allergies, preferences, or notes for the kitchen…" class="bg-transparent flex-1 outline-none placeholder-textMid/35 text-[12px] text-textDark resize-none leading-relaxed"></textarea>
-        </div>
-      </div>
-
-      <!-- Est. time -->
-      <div id="cartMeta" class="px-6 py-4 hidden">
-        <div class="flex items-center justify-between gap-4">
-          <div class="flex items-center gap-3 flex-1 bg-white border border-borderSoft rounded-xl p-3">
-            <div class="w-8 h-8 rounded-lg bg-cream flex items-center justify-center flex-shrink-0"><i class="fa-regular fa-clock text-gold text-sm"></i></div>
-            <div><p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40">Est. Time</p><p class="text-sm font-bold text-textDark mt-0.5">25–35 min</p></div>
-          </div>
-          <div class="flex items-center gap-3 flex-1 bg-white border border-borderSoft rounded-xl p-3">
-            <div class="w-8 h-8 rounded-lg bg-cream flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-chair text-gold text-sm"></i></div>
-            <div><p class="text-[10px] uppercase tracking-[0.15em] font-bold text-textMid/40">Table</p><p class="text-sm font-bold text-textDark mt-0.5">No. 7 · 4 Seats</p></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Footer / Totals -->
-    <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 md:pb-5 flex-shrink-0" style="box-shadow: 0 -4px 20px rgba(0,0,0,0.04);">
-      <div class="space-y-2 mb-4" id="cartTotalsBlock"></div>
-      <!-- Payment method (shown when has items) -->
-      <div id="cartPayment" class="hidden flex items-center gap-2 mb-4 p-3 bg-cream/60 rounded-xl border border-borderSoft">
-        <i class="fa-regular fa-credit-card text-textMid/40 text-sm"></i>
-        <span class="text-[12px] text-textMid/60 flex-1">Visa •••• 4242</span>
-        <button class="text-[10px] font-bold text-gold uppercase tracking-wider">Change</button>
-      </div>
-      <button id="cartConfirmBtn" onclick="placeOrder()" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled>
-        <i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order
-      </button>
-      <button onclick="toggleCart()" class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">
-        Continue Browsing
-      </button>
-    </div>
-
-  </div>
-</div>
-
-<!-- ═══════════ NAVBAR ═══════════ -->
-<div id="pageContent">
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
-   style="background:rgba(255,255,255,0)">
- 
-    <div id="navInner" class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
-      <a href="#" class="flex flex-col leading-none group flex-shrink-0">
-        <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
-          Sav<span class="italic font-light text-redPrimary">o</span>ria
-        </span>
-        <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
-      </a>
-      <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
-        <li><a href="#" class="nav-link transition">Home</a></li>
-        <li><a href="menu.html" class="nav-link transition">Menu</a></li>
-        <li><a href="about.html" class="nav-link transition">About</a></li>
-        <li><a href="reserve.html" class="nav-link transition">Reserve</a></li>
-        <li><a href="contact.html" class="nav-link transition">Contact</a></li>
-      </ul>
-      <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-redPale text-textMid hover:text-redPrimary transition">
-       <i class="fa-solid fa-cart-shopping text-[20px] "></i>
-          <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
-        </button>
-        <button class="hidden md:flex items-center gap-1.5 text-[11px]
-         font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold
-          transition pl-3 border-l border-borderSoft ml-1">
-          <i class="fa-regular fa-circle-user"></i> 
-          <a href="login.html" >Login</a>
-        </button>
-        <a href="#reservation" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
-          <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
-        </a>
-        <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
-          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-          <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-          <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
-        </button>
-      </div>
-    </div>
-    <div class="h-px bg-borderSoft/80"></div>
-  </nav>
-</div>
-
-
-<!-- ══════════ MOBILE BOTTOM NAV ══════════ -->
- <nav class="mobile-bottom-nav md:hidden">
-  <div class="nav-item active" onclick="setActive(this)">
-    <i class="fa-solid fa-house"></i><span>Home</span>
-  </div>
-  <div class="nav-item" onclick="location.href='menu.html'">
-    <i class="fa-solid fa-utensils"></i><span>Menu</span>
-  </div>
-  
-  <div onclick="toggleCart()">
-    <div class="cart-fab">
-      <i class="fa-solid fa-bag-shopping text-lg"></i>
-      <div class="badge" id="mobileBadge" style="display:none">0</div>
     </div>
   </div>
-  <div class="nav-item" onclick="setActive(this)">
-    <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
-  </div>
-  <div class="nav-item" onclick="setActive(this)">
-    <i class="fa-regular fa-circle-user"></i><span>
-       <a href="login.html" >Profile</a>
-    </span>
-  </div>
-</nav> 
+</main>
 
+<script src="static/js/savoria-app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('bkDate').min = today;
+});
 
+function selectGuests(btn, n) {
+  document.querySelectorAll('.guest-btn').forEach(b => { b.style.cssText=''; });
+  btn.style.background='#c0392b'; btn.style.borderColor='#c0392b'; btn.style.color='#fff';
+  document.getElementById('bkGuests').value = String(n);
+}
 
-    <script src="static/js/savoria-app.js"></script>
+function toggleOccasion(btn) {
+  const active = btn.dataset.active === '1';
+  document.querySelectorAll('.occ-btn').forEach(b => { b.style.cssText=''; b.dataset.active=''; });
+  if (!active) { btn.style.background='#b8963e'; btn.style.borderColor='#b8963e'; btn.style.color='#fff'; btn.dataset.active='1'; }
+}
+
+function submitBooking(e) {
+  e.preventDefault();
+  const name   = document.getElementById('bkName').value.trim();
+  const email  = document.getElementById('bkEmail').value.trim();
+  const date   = document.getElementById('bkDate').value;
+  const time   = document.getElementById('bkTime').value;
+  const guests = document.getElementById('bkGuests').value;
+
+  if (!guests) { showToast('Please select number of guests'); return; }
+
+  const btn = document.getElementById('bookSubmitBtn');
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-[11px]"></i> Confirming…';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    document.getElementById('bookingForm').classList.add('hidden');
+    document.getElementById('bookingConfirm').classList.remove('hidden');
+
+    const tick = document.getElementById('confirmTick');
+    if (tick) tick.style.animation = 'tickDraw 0.6s 0.3s ease forwards';
+
+    const dateObj = new Date(date + 'T12:00:00');
+    const dateStr = dateObj.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+    const ref = 'SV-' + Math.floor(10000 + Math.random() * 90000);
+
+    document.getElementById('confirmMsg').innerHTML = `Confirmation sent to <strong>${email}</strong>.`;
+    document.getElementById('confirmDetails').innerHTML = `
+      <div class="flex justify-between text-sm"><span class="text-textMid/55">Guest</span><span class="font-semibold">${name}</span></div>
+      <div class="flex justify-between text-sm"><span class="text-textMid/55">Date</span><span class="font-semibold">${dateStr}</span></div>
+      <div class="flex justify-between text-sm"><span class="text-textMid/55">Time</span><span class="font-semibold">${time}</span></div>
+      <div class="flex justify-between text-sm"><span class="text-textMid/55">Guests</span><span class="font-semibold">${guests} person${Number(guests)>1?'s':''}</span></div>
+      <div class="flex justify-between text-sm border-t border-borderSoft pt-2 mt-1"><span class="text-textMid/55">Ref. No.</span><span class="font-bold text-gold">${ref}</span></div>
+    `;
+  }, 1200);
+}
+
+function resetBooking() {
+  document.getElementById('bookingForm').classList.remove('hidden');
+  document.getElementById('bookingConfirm').classList.add('hidden');
+  document.getElementById('tableForm').reset();
+  document.getElementById('bkGuests').value = '';
+  document.querySelectorAll('.guest-btn,.occ-btn').forEach(b => { b.style.cssText=''; b.dataset.active=''; });
+  const btn = document.getElementById('bookSubmitBtn');
+  btn.innerHTML = '<i class="fa-regular fa-calendar-check text-[11px]"></i> Confirm Reservation';
+  btn.disabled = false;
+}
+</script>
 </body>
 </html>

@@ -144,7 +144,7 @@ const Auth = {
         } else if (currentPath.includes('/staff/')) {
             location.href = '../../login.html';
         } else {
-            location.href = '/login.html';
+            location.href = '../../login.html';
         }
     },
 
@@ -160,7 +160,7 @@ const Auth = {
         } else if (currentPath.includes('/staff/')) {
             location.href = '../../login.html';
         } else {
-            location.href = '/login.html';
+            location.href = '../../login.html';
         }
     },
 
@@ -217,13 +217,13 @@ const Auth = {
     getDashboardUrl(role) {
         switch (role) {
             case 'admin':
-                return '/dashboard/admin/index.html';
+                return 'dashboard/admin/index.html';
             case 'manager':
-                return '/dashboard/manager/index.html';
+                return 'dashboard/manager/index.html';
             case 'staff':
-                return '/dashboard/staff/index.html';
+                return 'dashboard/staff/index.html';
             default:
-                return '/login.html';
+                return 'login.html';
         }
     },
 

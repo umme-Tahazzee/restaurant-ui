@@ -1,499 +1,630 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Restaurant Management System - Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Savoria — Management Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=Jost:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #f3f4f6; }
-    ::-webkit-scrollbar-thumb { background: #c0392b; border-radius: 10px; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-thumb{background:rgba(192,57,43,.35);border-radius:99px}
+    body{font-family:'Jost',sans-serif;overflow-x:hidden}
 
-    * { font-family: 'Jost', sans-serif; }
+    /* ── Split layout ── */
+    .split{display:flex;min-height:100vh}
 
-    .glass-card {
-      background: linear-gradient(160deg, #1f1410 0%, #1a1210 60%, #150f0c 100%);
-      border: 1px solid rgba(255,255,255,.07);
-      box-shadow: 0 32px 80px rgba(26,18,16,.3);
+    /* ── Left branding panel ── */
+    .lp{
+      width:480px;flex-shrink:0;display:flex;flex-direction:column;position:relative;overflow:hidden;
+      background:linear-gradient(160deg,#0f0b06 0%,#0a0804 50%,#060503 100%);
     }
+    @media(max-width:1023px){.lp{display:none}}
 
-    .field-input {
-      width: 100%;
-      border-radius: 14px;
-      padding: 14px 44px 14px 16px;
-      font-size: 13px;
-      color: #fff;
-      background: rgba(255,255,255,.05);
-      border: 1.5px solid rgba(255,255,255,.09);
-      outline: none;
-      transition: border-color .2s;
-    }
-    .field-input::placeholder { color: rgba(255,255,255,.22); }
-    .field-input:focus {
-      border-color: rgba(192,57,43,.6);
-      box-shadow: 0 0 0 3px rgba(192,57,43,.1);
+    /* ── Right form panel ── */
+    .rp{
+      flex:1;display:flex;flex-direction:column;position:relative;overflow-y:auto;
+      background:linear-gradient(160deg,#1a1008 0%,#130d06 50%,#0d0904 100%);
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #c0392b, #96281b);
-      box-shadow: 0 6px 24px rgba(192,57,43,.35);
-      transition: all .2s;
-    }
-    .btn-primary:hover:not(:disabled) {
-      opacity: .92;
-      transform: translateY(-1px);
-      box-shadow: 0 10px 32px rgba(192,57,43,.45);
-    }
-    .btn-primary:disabled {
-      opacity: .4;
-      cursor: not-allowed;
+    /* ── Separator ── */
+    .lp-sep{position:absolute;top:0;right:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(184,150,62,.2) 25%,rgba(184,150,62,.2) 75%,transparent)}
+
+    /* ── Blob ── */
+    .blob{position:absolute;border-radius:50%;pointer-events:none}
+    .grid-overlay{
+      position:absolute;inset:0;opacity:.015;
+      background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+      background-size:44px 44px;
     }
 
-    .role-card {
-      padding: 20px;
-      border-radius: 14px;
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: all .3s;
-      background: rgba(255,255,255,.05);
-      text-align: center;
-    }
-    .role-card:hover {
-      background: rgba(192,57,43,.1);
-      border-color: #c0392b;
-    }
-    .role-card.selected {
-      background: rgba(192,57,43,.2);
-      border-color: #c0392b;
-      box-shadow: 0 0 20px rgba(192,57,43,.25);
+    /* ── Navbar ── */
+    .topbar{
+      position:sticky;top:0;z-index:20;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 28px;height:60px;
+      background:rgba(10,8,4,.8);backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,255,255,.05);
     }
 
-    .toast {
-      position: fixed;
-      top: 20px; right: 20px;
-      z-index: 9999;
-      padding: 14px 18px;
-      border-radius: 14px;
-      display: flex; align-items: center; gap: 10px;
-      font-size: 12px;
-      font-weight: 600;
-      transform: translateX(120%);
-      transition: transform .35s;
+    /* ── Glass card ── */
+    .glass-card{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 24px 60px rgba(0,0,0,.35),0 1px 0 rgba(184,150,62,.1) inset;
     }
-    .toast.show { transform: translateX(0); }
-    .toast-success {
-      background: #0d3320;
-      border: 1px solid rgba(46,204,113,.25);
-      color: #2ecc71;
-    }
-    .toast-error {
-      background: #3b0f0a;
-      border: 1px solid rgba(231,76,60,.25);
-      color: #e74c3c;
+    .gold-line{
+      position:absolute;top:0;left:24px;right:24px;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(184,150,62,.4),transparent);
     }
 
-    .error-msg {
-      color: #e74c3c;
-      font-size: 12px;
-      margin-top: 6px;
-      display: none;
-      align-items: center;
-      gap: 6px;
+    /* ── Inputs ── */
+    .field-input{
+      width:100%;border-radius:12px;padding:13px 42px 13px 15px;
+      font-size:13px;font-family:'Jost',sans-serif;color:#fff;
+      background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);
+      outline:none;transition:border-color .2s,box-shadow .2s;
     }
-    .error-msg.show { display: flex; }
+    .field-input::placeholder{color:rgba(255,255,255,.2)}
+    .field-input:focus{border-color:rgba(192,57,43,.6);box-shadow:0 0 0 3px rgba(192,57,43,.1)}
+    .field-input.error{border-color:rgba(231,76,60,.6);box-shadow:0 0 0 3px rgba(231,76,60,.1)}
 
-    .demo-credentials {
-      background: rgba(192,57,43,.1);
-      border: 1px solid rgba(192,57,43,.25);
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 20px;
-      font-size: 12px;
-      color: rgba(255,255,255,.8);
+    input:-webkit-autofill,input:-webkit-autofill:focus{
+      -webkit-text-fill-color:#fff;
+      -webkit-box-shadow:0 0 0 1000px rgba(255,255,255,.05) inset;
     }
-    .demo-credentials h4 {
-      margin-bottom: 12px;
-      font-weight: 600;
-      color: #fff;
+
+    /* ── Role cards ── */
+    .role-card{
+      padding:14px 12px;border-radius:14px;cursor:pointer;text-align:center;
+      background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.07);
+      transition:all .25s;position:relative;overflow:hidden;
     }
-    .demo-cred-item {
-      margin: 8px 0;
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(255,255,255,.1);
+    .role-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18)}
+    .role-card.selected{background:rgba(192,57,43,.12);border-color:#c0392b;box-shadow:0 0 18px rgba(192,57,43,.2)}
+    .role-card-bar{position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .25s}
+    .role-card.selected .role-card-bar{opacity:1}
+
+    /* ── Button primary ── */
+    .btn-primary{
+      background:linear-gradient(135deg,#c0392b,#8b2218);
+      box-shadow:0 5px 20px rgba(192,57,43,.38);
+      transition:opacity .2s,transform .15s,box-shadow .2s;
     }
-    .demo-cred-item:last-child {
-      border-bottom: none;
+    .btn-primary:hover:not(:disabled){opacity:.88;transform:translateY(-1px);box-shadow:0 8px 28px rgba(192,57,43,.5)}
+    .btn-primary:active:not(:disabled){transform:translateY(0)}
+    .btn-primary:disabled{opacity:.4;cursor:not-allowed}
+
+    /* ── Checkbox ── */
+    .custom-check{
+      appearance:none;-webkit-appearance:none;width:16px;height:16px;
+      border-radius:4px;border:1.5px solid rgba(255,255,255,.2);
+      background:transparent;cursor:pointer;transition:all .2s;flex-shrink:0;
     }
+    .custom-check:checked{
+      background:#c0392b;border-color:#c0392b;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.3 4.3l-7 7-3.6-3.6 1.4-1.4 2.2 2.2 5.6-5.6 1.4 1.4z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:center;background-size:10px;
+    }
+
+    /* ── Toast ── */
+    .toast{
+      position:fixed;top:18px;right:18px;z-index:9999;
+      padding:13px 16px;border-radius:13px;display:flex;align-items:center;gap:9px;
+      font-size:12px;font-weight:600;min-width:250px;
+      transform:translateX(120%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+      box-shadow:0 8px 28px rgba(0,0,0,.4);
+    }
+    .toast.show{transform:translateX(0)}
+    .toast-success{background:linear-gradient(135deg,#0d3320,#0a2818);border:1px solid rgba(46,204,113,.25);color:#2ecc71}
+    .toast-error{background:linear-gradient(135deg,#3b0f0a,#2d0c08);border:1px solid rgba(231,76,60,.25);color:#e74c3c}
+    .toast-warning{background:linear-gradient(135deg,#2d1f05,#241804);border:1px solid rgba(241,196,15,.25);color:#f1c40f}
+
+    /* ── Credential cards ── */
+    .cred-card{
+      position:relative;overflow:hidden;padding:12px 13px 11px;border-radius:14px;
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+      transition:border-color .2s,background .2s;cursor:default;
+    }
+    .cred-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.13)}
+    .cred-topbar{position:absolute;top:0;left:0;right:0;height:2px}
+    .cred-use-btn{
+      display:flex;align-items:center;justify-content:center;gap:5px;
+      width:100%;padding:6px 0;border-radius:8px;margin-top:9px;
+      font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.13em;
+      cursor:pointer;transition:all .2s;border:1px solid transparent;
+      font-family:'Jost',sans-serif;
+    }
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes floatY{"0%,100%"{transform:translateY(0)}"50%"{transform:translateY(-8px)}}
+    @keyframes shimmerOp{"0%,100%"{opacity:.35}"50%"{opacity:.65}}
+    .anim-1{animation:fadeUp .5s .05s ease both}
+    .anim-2{animation:fadeUp .5s .15s ease both}
+    .anim-3{animation:fadeUp .5s .25s ease both}
+    .anim-4{animation:fadeUp .5s .35s ease both}
+    .anim-float{animation:floatY 5s ease-in-out infinite}
+    .anim-shim{animation:shimmerOp 4s ease infinite}
   </style>
 </head>
-<body style="background: linear-gradient(160deg, #f5ede4 0%, #f0e4d8 40%, #e8d8cc 100%);">
+<body>
 
+  <!-- Toast -->
   <div id="toastEl" class="toast">
     <i id="toastIcon" class="fa-solid fa-circle-check"></i>
     <span id="toastMsg"></span>
   </div>
 
-  <div class="min-h-screen flex items-center justify-center px-4 py-10">
-    <div class="w-full max-w-[500px]">
-      
-      <!-- Header -->
-      <div class="text-center mb-8">
-        <div class="w-[70px] h-[70px] mx-auto mb-5 rounded-[20px] btn-primary flex items-center justify-center">
-          <i class="fa-solid fa-utensils text-white text-2xl"></i>
-        </div>
-        <h1 class="font-playfair text-3xl font-black text-gray-800 mb-2">
-          Savoria
-        </h1>
-        <p class="text-gray-600 italic">Restaurant Management System</p>
+  <div class="split">
+
+    <!-- ═══════════════════════════════════════
+         LEFT BRAND PANEL
+    ═══════════════════════════════════════ -->
+    <aside class="lp">
+      <!-- blobs -->
+      <div class="blob anim-shim" style="top:-80px;right:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(192,57,43,.08) 0%,transparent 70%)"></div>
+      <div class="blob anim-shim" style="bottom:-60px;left:-40px;width:320px;height:320px;background:radial-gradient(circle,rgba(184,150,62,.07) 0%,transparent 70%);animation-delay:-2s"></div>
+      <div class="blob" style="top:38%;left:22%;width:240px;height:240px;background:radial-gradient(circle,rgba(184,150,62,.04) 0%,transparent 70%)"></div>
+      <div class="grid-overlay"></div>
+      <div class="lp-sep"></div>
+
+      <!-- Logo -->
+      <div style="position:relative;z-index:10;padding:32px 36px 0">
+        <a href="../index.html" style="display:inline-flex;flex-direction:column;line-height:1;text-decoration:none">
+          <span style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#fff;letter-spacing:-.5px">
+            Sav<em style="font-style:italic;font-weight:300;color:#b8963e">o</em>ria
+          </span>
+          <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:8px;letter-spacing:.42em;text-transform:uppercase;color:rgba(184,150,62,.42);margin-top:-2px">Management Portal</span>
+        </a>
       </div>
 
-      <!-- Login Form -->
-      <div class="glass-card rounded-3xl p-8 mb-6">
-        <form id="loginForm" onsubmit="handleLogin(event)">
-          
-          <!-- Global Error Message -->
-          <div id="globalErr" class="error-msg show mb-4 bg-red-900/20  p-3 rounded-lg">
-            <i class="fa-solid fa-exclamation-circle"></i>
-            <span id="globalErrMsg"></span>
+      <!-- Center -->
+      <div style="position:relative;z-index:10;flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 36px">
+        <!-- Rule -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:32px">
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,150,62,.4),transparent)"></div>
+          <i class="fa-solid fa-shield-halved" style="font-size:10px;color:rgba(184,150,62,.45)"></i>
+        </div>
+
+        <!-- Headline -->
+        <div style="margin-bottom:32px">
+          <p style="font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:#fff;line-height:1.14;margin-bottom:14px">
+            Manage with<br>
+            <em style="font-style:italic;font-weight:300;color:#b8963e">precision</em><br>
+            &amp; confidence.
+          </p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;line-height:1.6;color:rgba(255,255,255,.3)">
+            Secure access for administrators,<br>managers and operations staff.
+          </p>
+        </div>
+
+        <!-- Role Overview -->
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)">
+            <div style="width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(184,150,62,.12);border:1px solid rgba(184,150,62,.22)">
+              <i class="fa-solid fa-crown" style="color:#b8963e;font-size:13px"></i>
+            </div>
+            <div>
+              <p style="font-size:12px;font-weight:700;color:rgba(255,255,255,.68);margin-bottom:2px">Administrator</p>
+              <p style="font-size:11px;color:rgba(255,255,255,.25)">Full platform control, reports &amp; settings</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)">
+            <div style="width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.2)">
+              <i class="fa-solid fa-chart-pie" style="color:#27ae60;font-size:13px"></i>
+            </div>
+            <div>
+              <p style="font-size:12px;font-weight:700;color:rgba(255,255,255,.68);margin-bottom:2px">Manager</p>
+              <p style="font-size:11px;color:rgba(255,255,255,.25)">Branch operations, inventory &amp; team</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)">
+            <div style="width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(52,152,219,.1);border:1px solid rgba(52,152,219,.2)">
+              <i class="fa-solid fa-user-check" style="color:#3498db;font-size:13px"></i>
+            </div>
+            <div>
+              <p style="font-size:12px;font-weight:700;color:rgba(255,255,255,.68);margin-bottom:2px">Staff</p>
+              <p style="font-size:11px;color:rgba(255,255,255,.25)">Orders, tables &amp; daily operations</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom -->
+      <div style="position:relative;z-index:10;padding:0 36px 28px">
+        <div style="height:1px;background:linear-gradient(90deg,rgba(255,255,255,.05),transparent);margin-bottom:16px"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <p style="font-size:10px;color:rgba(255,255,255,.18)">
+            <i class="fa-solid fa-lock" style="font-size:9px;margin-right:5px;color:rgba(184,150,62,.4)"></i>
+            256-bit Encrypted Session
+          </p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:rgba(184,150,62,.35)">Savoria © 2025</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════
+         RIGHT FORM PANEL
+    ═══════════════════════════════════════ -->
+    <div class="rp">
+      <!-- blobs -->
+      <div class="blob" style="top:-60px;right:-40px;width:350px;height:350px;background:radial-gradient(circle,rgba(192,57,43,.06) 0%,transparent 70%)"></div>
+      <div class="blob" style="bottom:-40px;left:15%;width:300px;height:300px;background:radial-gradient(circle,rgba(184,150,62,.05) 0%,transparent 70%)"></div>
+      <div class="grid-overlay"></div>
+
+      <!-- Top bar -->
+      <nav class="topbar">
+        <!-- Mobile logo -->
+        <a href="../index.html" class="lg-hidden" style="text-decoration:none">
+          <span style="font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#fff">
+            Sav<em style="font-style:italic;font-weight:300;color:#b8963e">o</em>ria
+          </span>
+        </a>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite"></div>
+            <span style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:rgba(255,255,255,.28)">Secure</span>
+          </div>
+          <a href="../index.html" style="display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.35);padding:7px 12px;border-radius:9px;transition:all .2s;text-decoration:none;border:1px solid transparent" onmouseover="this.style.background='rgba(255,255,255,.06)';this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.65)'" onmouseout="this.style.background='transparent';this.style.borderColor='transparent';this.style.color='rgba(255,255,255,.35)'">
+            <i class="fa-solid fa-store" style="font-size:9px"></i> Customer Site
+          </a>
+        </div>
+      </nav>
+
+      <!-- Main -->
+      <main style="flex:1;display:flex;align-items:center;justify-content:center;padding:28px 20px;position:relative;z-index:10">
+        <div style="width:100%;max-width:440px">
+
+          <!-- Heading -->
+          <div class="anim-1" style="text-align:center;margin-bottom:22px">
+            <div style="position:relative;width:54px;height:54px;margin:0 auto 16px">
+              <div style="position:absolute;inset:0;border-radius:15px;background:rgba(192,57,43,.15);animation:pulse 2.5s ease-out infinite"></div>
+              <div class="btn-primary" style="position:relative;width:54px;height:54px;border-radius:15px;display:flex;align-items:center;justify-content:center;border:none">
+                <i class="fa-solid fa-building" style="color:#fff;font-size:18px"></i>
+              </div>
+            </div>
+            <h1 style="font-family:'Playfair Display',serif;font-size:27px;font-weight:900;color:#fff;margin-bottom:4px;letter-spacing:-.3px">Management Portal</h1>
+            <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:rgba(255,255,255,.35)">Authorised personnel access only</p>
           </div>
 
-          <!-- Role Selection -->
-          <div class="mb-6">
-            <label class="block text-sm font-bold text-white/70 mb-3 uppercase tracking-wide">
-              <i class="fa-solid fa-user-tie mr-2"></i>Login As
-            </label>
-            <div class="grid grid-cols-3 gap-3">
-              <!-- Admin Role -->
+          <!-- Role selector -->
+          <div class="anim-2" style="margin-bottom:20px">
+            <p style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.3);margin-bottom:10px">
+              <i class="fa-solid fa-user-tie" style="margin-right:6px;color:rgba(184,150,62,.5)"></i>Select Your Role
+            </p>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <!-- Admin -->
               <div class="role-card selected" data-role="admin" onclick="selectRole('admin')">
-                <i class="fa-solid fa-crown text-2xl text-red-500 mb-2"></i>
-                <div class="text-sm font-bold text-white">Admin</div>
-                <div class="text-xs text-white/50 mt-1">Full Control</div>
+                <div class="role-card-bar" style="background:linear-gradient(90deg,#b8963e,transparent)"></div>
+                <i class="fa-solid fa-crown" style="font-size:20px;color:#b8963e;display:block;margin-bottom:7px"></i>
+                <p style="font-size:11px;font-weight:700;color:#fff;margin-bottom:2px">Admin</p>
+                <p style="font-size:9.5px;color:rgba(255,255,255,.35)">Full Control</p>
               </div>
-              
-              <!-- Manager Role -->
+              <!-- Manager -->
               <div class="role-card" data-role="manager" onclick="selectRole('manager')">
-                <i class="fa-solid fa-chart-pie text-2xl text-orange-500 mb-2"></i>
-                <div class="text-sm font-bold text-white">Manager</div>
-                <div class="text-xs text-white/50 mt-1">Branch Ops</div>
+                <div class="role-card-bar" style="background:linear-gradient(90deg,#27ae60,transparent)"></div>
+                <i class="fa-solid fa-chart-pie" style="font-size:20px;color:#27ae60;display:block;margin-bottom:7px"></i>
+                <p style="font-size:11px;font-weight:700;color:#fff;margin-bottom:2px">Manager</p>
+                <p style="font-size:9.5px;color:rgba(255,255,255,.35)">Branch Ops</p>
               </div>
-              
-              <!-- Staff Role -->
+              <!-- Staff -->
               <div class="role-card" data-role="staff" onclick="selectRole('staff')">
-                <i class="fa-solid fa-user-check text-2xl text-blue-500 mb-2"></i>
-                <div class="text-sm font-bold text-white">Staff</div>
-                <div class="text-xs text-white/50 mt-1">Operations</div>
+                <div class="role-card-bar" style="background:linear-gradient(90deg,#3498db,transparent)"></div>
+                <i class="fa-solid fa-user-check" style="font-size:20px;color:#3498db;display:block;margin-bottom:7px"></i>
+                <p style="font-size:11px;font-weight:700;color:#fff;margin-bottom:2px">Staff</p>
+                <p style="font-size:9.5px;color:rgba(255,255,255,.35)">Operations</p>
               </div>
             </div>
-            <input type="hidden" id="selectedRole" value="admin">
+            <input type="hidden" id="selectedRole" value="admin"/>
           </div>
 
-          <!-- Email Input -->
-          <div class="mb-4">
-            <label class="block text-xs font-bold text-white/60 mb-2 uppercase">Email Address</label>
-            <div class="relative">
-              <input 
-                type="email" 
-                id="loginEmail" 
-                class="field-input" 
-                placeholder="Enter your email" 
-                required
-                autocomplete="email"
-              >
-              <i class="fa-regular fa-envelope absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none"></i>
-            </div>
-            <div id="emailErr" class="error-msg">
-              <i class="fa-solid fa-info-circle"></i>
-              <span>Please enter a valid email</span>
+          <!-- ── GLASS CARD ── -->
+          <div class="glass-card anim-3" style="position:relative;border-radius:22px;padding:24px">
+            <div class="gold-line"></div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
+
+              <!-- Global error -->
+              <div id="globalErr" class="hidden" style="margin-bottom:14px;padding:11px 13px;border-radius:10px;border:1px solid rgba(231,76,60,.22);display:flex;align-items:flex-start;gap:9px;font-size:12px;color:rgba(248,113,113,.9);background:rgba(127,29,29,.2)">
+                <i class="fa-solid fa-circle-exclamation" style="flex-shrink:0;margin-top:1px"></i>
+                <span id="globalErrMsg"></span>
+              </div>
+
+              <!-- Email -->
+              <div style="margin-bottom:14px">
+                <label style="display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.28);margin-bottom:7px">Email Address</label>
+                <div style="position:relative">
+                  <input type="email" id="loginEmail" class="field-input" placeholder="Enter your email" autocomplete="email"/>
+                  <i class="fa-regular fa-envelope" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.17);pointer-events:none"></i>
+                </div>
+                <div id="emailErr" style="display:none;align-items:center;gap:6px;margin-top:5px;font-size:10.5px;color:#f87171">
+                  <i class="fa-solid fa-circle-exclamation" style="font-size:9px"></i>
+                  <span>Please enter a valid email address.</span>
+                </div>
+              </div>
+
+              <!-- Password -->
+              <div style="margin-bottom:18px">
+                <label style="display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.28);margin-bottom:7px">Password</label>
+                <div style="position:relative">
+                  <input type="password" id="loginPass" class="field-input" placeholder="Enter your password" autocomplete="current-password"/>
+                  <i id="togglePassIcon" class="fa-regular fa-eye" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.17);cursor:pointer;transition:color .2s" onclick="togglePass('loginPass','togglePassIcon')" onmouseover="this.style.color='rgba(255,255,255,.45)'" onmouseout="this.style.color='rgba(255,255,255,.17)'"></i>
+                </div>
+                <div id="passErr" style="display:none;align-items:center;gap:6px;margin-top:5px;font-size:10.5px;color:#f87171">
+                  <i class="fa-solid fa-circle-exclamation" style="font-size:9px"></i>
+                  <span>Password is required.</span>
+                </div>
+              </div>
+
+              <!-- Remember / Actions -->
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                  <input type="checkbox" id="rememberMe" class="custom-check"/>
+                  <span style="font-size:12px;color:rgba(255,255,255,.28)">Remember me</span>
+                </label>
+              </div>
+
+              <!-- Submit -->
+              <button type="submit" id="loginBtn" class="btn-primary" style="width:100%;padding:13px 0;border-radius:12px;color:#fff;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;font-family:'Jost',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px">
+                <span id="loginBtnText" style="display:flex;align-items:center;gap:8px">
+                  <i class="fa-solid fa-right-to-bracket" style="font-size:12px"></i>Sign In to Dashboard
+                </span>
+                <span id="loginBtnLoad" style="display:none;align-items:center;gap:8px">
+                  <i class="fa-solid fa-spinner fa-spin" style="font-size:12px"></i>Authenticating…
+                </span>
+              </button>
+            </form>
+          </div><!-- /glass-card -->
+
+          <!-- ── DEMO CREDENTIALS ── -->
+          <div class="anim-4" style="margin-top:16px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)">
+            <div style="padding:16px 16px 14px">
+              <!-- Header -->
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:13px">
+                <div style="flex:1;height:1px;background:rgba(184,150,62,.14)"></div>
+                <span style="font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3em;color:rgba(184,150,62,.48)">
+                  <i class="fa-solid fa-flask" style="font-size:8px;margin-right:4px"></i>Demo Credentials
+                </span>
+                <div style="flex:1;height:1px;background:rgba(184,150,62,.14)"></div>
+              </div>
+              <!-- Grid -->
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+
+                <!-- Admin cred -->
+                <div class="cred-card">
+                  <div class="cred-topbar" style="background:linear-gradient(90deg,#b8963e,transparent)"></div>
+                  <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px">
+                    <div style="width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(184,150,62,.15);border:1px solid rgba(184,150,62,.28)">
+                      <i class="fa-solid fa-crown" style="color:#b8963e;font-size:9px"></i>
+                    </div>
+                    <span style="font-size:10.5px;font-weight:700;color:rgba(255,255,255,.65)">Admin</span>
+                  </div>
+                  <div style="margin-bottom:8px">
+                    <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">
+                      <i class="fa-regular fa-envelope" style="font-size:7.5px;color:rgba(255,255,255,.22);width:10px;text-align:center"></i>
+                      <p style="font-size:8px;color:rgba(255,255,255,.28);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">admin@savoria.com</p>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:4px">
+                      <i class="fa-solid fa-key" style="font-size:7.5px;color:#b8963e;opacity:.75;width:10px;text-align:center"></i>
+                      <p style="font-size:10px;font-weight:700;font-family:monospace;letter-spacing:.05em;color:#b8963e">admin123</p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="quickFillDash('admin@savoria.com','admin123','admin')" class="cred-use-btn" style="background:rgba(184,150,62,.15);color:#b8963e;border-color:rgba(184,150,62,.28)" onmouseover="this.style.background='rgba(184,150,62,.28)';this.style.borderColor='rgba(184,150,62,.5)'" onmouseout="this.style.background='rgba(184,150,62,.15)';this.style.borderColor='rgba(184,150,62,.28)'">
+                    Use <i class="fa-solid fa-arrow-right" style="font-size:6px"></i>
+                  </button>
+                </div>
+
+                <!-- Manager cred -->
+                <div class="cred-card">
+                  <div class="cred-topbar" style="background:linear-gradient(90deg,#27ae60,transparent)"></div>
+                  <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px">
+                    <div style="width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(39,174,96,.14);border:1px solid rgba(39,174,96,.25)">
+                      <i class="fa-solid fa-chart-pie" style="color:#27ae60;font-size:9px"></i>
+                    </div>
+                    <span style="font-size:10.5px;font-weight:700;color:rgba(255,255,255,.65)">Manager</span>
+                  </div>
+                  <div style="margin-bottom:8px">
+                    <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">
+                      <i class="fa-regular fa-envelope" style="font-size:7.5px;color:rgba(255,255,255,.22);width:10px;text-align:center"></i>
+                      <p style="font-size:8px;color:rgba(255,255,255,.28);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">manager@savoria.com</p>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:4px">
+                      <i class="fa-solid fa-key" style="font-size:7.5px;color:#27ae60;opacity:.75;width:10px;text-align:center"></i>
+                      <p style="font-size:10px;font-weight:700;font-family:monospace;letter-spacing:.05em;color:#27ae60">manager123</p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="quickFillDash('manager@savoria.com','manager123','manager')" class="cred-use-btn" style="background:rgba(39,174,96,.14);color:#27ae60;border-color:rgba(39,174,96,.25)" onmouseover="this.style.background='rgba(39,174,96,.28)';this.style.borderColor='rgba(39,174,96,.45)'" onmouseout="this.style.background='rgba(39,174,96,.14)';this.style.borderColor='rgba(39,174,96,.25)'">
+                    Use <i class="fa-solid fa-arrow-right" style="font-size:6px"></i>
+                  </button>
+                </div>
+
+                <!-- Staff cred -->
+                <div class="cred-card">
+                  <div class="cred-topbar" style="background:linear-gradient(90deg,#3498db,transparent)"></div>
+                  <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px">
+                    <div style="width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(52,152,219,.14);border:1px solid rgba(52,152,219,.25)">
+                      <i class="fa-solid fa-user-check" style="color:#3498db;font-size:9px"></i>
+                    </div>
+                    <span style="font-size:10.5px;font-weight:700;color:rgba(255,255,255,.65)">Staff</span>
+                  </div>
+                  <div style="margin-bottom:8px">
+                    <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">
+                      <i class="fa-regular fa-envelope" style="font-size:7.5px;color:rgba(255,255,255,.22);width:10px;text-align:center"></i>
+                      <p style="font-size:8px;color:rgba(255,255,255,.28);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">staff@savoria.com</p>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:4px">
+                      <i class="fa-solid fa-key" style="font-size:7.5px;color:#3498db;opacity:.75;width:10px;text-align:center"></i>
+                      <p style="font-size:10px;font-weight:700;font-family:monospace;letter-spacing:.05em;color:#3498db">staff123</p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="quickFillDash('staff@savoria.com','staff123','staff')" class="cred-use-btn" style="background:rgba(52,152,219,.14);color:#3498db;border-color:rgba(52,152,219,.25)" onmouseover="this.style.background='rgba(52,152,219,.28)';this.style.borderColor='rgba(52,152,219,.45)'" onmouseout="this.style.background='rgba(52,152,219,.14)';this.style.borderColor='rgba(52,152,219,.25)'">
+                    Use <i class="fa-solid fa-arrow-right" style="font-size:6px"></i>
+                  </button>
+                </div>
+
+              </div>
+              <p style="font-size:9px;text-align:center;color:rgba(255,255,255,.14);margin-top:11px">For testing purposes only · Not real accounts</p>
             </div>
           </div>
 
-          <!-- Password Input -->
-          <div class="mb-6">
-            <label class="block text-xs font-bold text-white/60 mb-2 uppercase">Password</label>
-            <div class="relative">
-              <input 
-                type="password" 
-                id="loginPass" 
-                class="field-input" 
-                placeholder="Enter your password" 
-                required
-                autocomplete="current-password"
-              >
-              <i 
-                class="fa-regular fa-eye absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 cursor-pointer hover:text-white/50 transition" 
-                onclick="togglePass('loginPass')"
-                title="Toggle password visibility"
-              ></i>
+          <!-- ── CUSTOMER SITE LINK ── -->
+          <div class="anim-4" style="margin-top:14px;padding:13px 15px;border-radius:13px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:32px;height:32px;border-radius:9px;background:rgba(184,150,62,.1);border:1px solid rgba(184,150,62,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <i class="fa-solid fa-store" style="font-size:12px;color:#b8963e"></i>
+              </div>
+              <div>
+                <p style="font-size:11px;font-weight:700;color:rgba(255,255,255,.55);margin-bottom:1px">Customer Login</p>
+                <p style="font-size:10px;color:rgba(255,255,255,.25)">Dine-in &amp; reservation portal</p>
+              </div>
             </div>
-            <div id="passErr" class="error-msg">
-              <i class="fa-solid fa-info-circle"></i>
-              <span>Password is required</span>
-            </div>
-          </div>
-
-          <!-- Remember Me & Forgot Password -->
-          <div class="flex items-center justify-between mb-6">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input 
-                type="checkbox" 
-                id="rememberMe" 
-                class="w-4 h-4 rounded"
-              >
-              <span class="text-sm text-white/60">Remember me</span>
-            </label>
-            <a href="#" class="text-sm text-blue-400 hover:text-blue-300 transition">
-              Forgot Password?
+            <a href="../login.html" style="display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:rgba(184,150,62,.8);background:rgba(184,150,62,.1);border:1px solid rgba(184,150,62,.2);text-decoration:none;white-space:nowrap;transition:all .2s" onmouseover="this.style.background='rgba(184,150,62,.2)';this.style.borderColor='rgba(184,150,62,.4)'" onmouseout="this.style.background='rgba(184,150,62,.1)';this.style.borderColor='rgba(184,150,62,.2)'">
+              Go <i class="fa-solid fa-arrow-right" style="font-size:8px"></i>
             </a>
           </div>
 
-          <!-- Login Button -->
-          <button 
-            type="submit" 
-            id="loginBtn" 
-            class="w-full btn-primary text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition"
-          >
-            <span id="loginBtnText">
-              <i class="fa-solid fa-right-to-bracket mr-2"></i>Sign In
-            </span>
-            <span id="loginBtnLoad" class="hidden">
-              <i class="fa-solid fa-spinner animate-spin"></i>
-            </span>
-          </button>
-        </form>
+          <!-- Footer note -->
+          <p style="text-align:center;font-size:9.5px;color:rgba(255,255,255,.14);margin-top:16px;padding-bottom:4px">
+            <i class="fa-solid fa-lock" style="font-size:8px;margin-right:4px;color:rgba(184,150,62,.3)"></i>
+            Savoria Management System · Authorised use only
+          </p>
 
-        <!-- Demo Credentials Info -->
-        <div class="demo-credentials">
-          <h4><i class="fa-solid fa-flask-vial mr-2"></i>Demo Credentials</h4>
-          
-          <div class="demo-cred-item">
-            <strong>Admin:</strong><br>
-            📧 admin@restaurant.com | 🔑 admin123
-          </div>
-          
-          <div class="demo-cred-item">
-            <strong>Manager:</strong><br>
-            📧 manager@restaurant.com | 🔑 manager123
-          </div>
-          
-          <div class="demo-cred-item">
-            <strong>Staff:</strong><br>
-            📧 staff@restaurant.com | 🔑 staff123
-          </div>
-        </div>
-      </div>
+        </div><!-- /max-w -->
+      </main>
+    </div><!-- /right panel -->
+  </div><!-- /split -->
 
-      <!-- Footer -->
-      <p class="text-center text-gray-600 text-xs">
-        © 2024 Savoria Restaurant Management. All rights reserved.
-      </p>
-    </div>
-  </div>
-
-  <script src="shared/auth.js"></script>
+  <script src="auth.js"></script>
   <script>
-    // ════════════════════════════════════════
-    // USER DATABASE (Demo - Replace with API in production)
-    // ════════════════════════════════════════
-
+    /* ════════════════════════════════════════
+       USER DATABASE
+    ════════════════════════════════════════ */
     const Users = {
-      ADMINS: [
-        { 
-          id: 'admin1',
-          email: 'admin@restaurant.com', 
-          password: 'admin123', 
-          name: 'Admin User', 
-          role: 'admin',
-          permissions: ['all']
-        }
-      ],
-      MANAGERS: [
-        { 
-          id: 'manager1',
-          email: 'manager@restaurant.com', 
-          password: 'manager123', 
-          name: 'Manager User', 
-          role: 'manager',
-          branch: 'Downtown Branch',
-          permissions: ['manage-branch', 'view-reports']
-        }
-      ],
-      STAFF: [
-        { 
-          id: 'staff1',
-          email: 'staff@restaurant.com', 
-          password: 'staff123', 
-          name: 'Staff User', 
-          role: 'staff',
-          position: 'Waiter',
-          permissions: ['view-orders', 'manage-tables']
-        }
-      ]
+      ADMINS:   [{ id:'admin1',   email:'admin@savoria.com',   password:'admin123',   name:'Alexandra Cole', role:'admin',   permissions:['all'] }],
+      MANAGERS: [{ id:'manager1', email:'manager@savoria.com', password:'manager123', name:'Marco Bianchi',  role:'manager', branch:'Downtown Branch', permissions:['manage-branch','view-reports'] }],
+      STAFF:    [{ id:'staff1',   email:'staff@savoria.com',   password:'staff123',   name:'Sophia Chen',    role:'staff',   position:'Waiter', permissions:['view-orders','manage-tables'] }],
     };
 
     let selectedRole = 'admin';
 
-    // ════════════════════════════════════════
-    // UTILITY FUNCTIONS
-    // ════════════════════════════════════════
-
-    /**
-     * Show toast notification
-     */
+    /* ════════════════════════════════════════
+       TOAST
+    ════════════════════════════════════════ */
     function showToast(msg, type = 'success') {
       const el = document.getElementById('toastEl');
       el.className = `toast toast-${type}`;
       document.getElementById('toastMsg').textContent = msg;
-      document.getElementById('toastIcon').className = type === 'success' 
-        ? 'fa-solid fa-circle-check' 
-        : 'fa-solid fa-circle-exclamation';
+      document.getElementById('toastIcon').className = type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
       el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 3000);
+      setTimeout(() => el.classList.remove('show'), 3200);
     }
 
-    /**
-     * Toggle password visibility
-     */
-    function togglePass(id) {
+    /* ════════════════════════════════════════
+       HELPERS
+    ════════════════════════════════════════ */
+    function togglePass(inputId, iconId) {
+      const el = document.getElementById(inputId), icon = document.getElementById(iconId);
+      const isPass = el.type === 'password';
+      el.type = isPass ? 'text' : 'password';
+      icon.classList.toggle('fa-eye', !isPass);
+      icon.classList.toggle('fa-eye-slash', isPass);
+    }
+    const isValidEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+    function showError(msg) {
+      document.getElementById('globalErrMsg').textContent = msg;
+      document.getElementById('globalErr').classList.remove('hidden');
+    }
+    function hideError() { document.getElementById('globalErr').classList.add('hidden'); }
+    function setErr(id, show) {
       const el = document.getElementById(id);
-      el.type = el.type === 'password' ? 'text' : 'password';
+      if (el) el.style.display = show ? 'flex' : 'none';
     }
 
-    /**
-     * Validate email format
-     */
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-    /**
-     * Select role
-     */
+    /* ════════════════════════════════════════
+       ROLE SELECT
+    ════════════════════════════════════════ */
     function selectRole(role) {
       selectedRole = role;
-      document.querySelectorAll('.role-card').forEach(card => {
-        card.classList.remove('selected');
-      });
+      document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
       document.querySelector(`[data-role="${role}"]`).classList.add('selected');
       document.getElementById('selectedRole').value = role;
-      document.getElementById('globalErr').classList.add('hidden');
+      hideError();
     }
 
-    /**
-     * Show error message
-     */
-    function showError(message) {
-      const el = document.getElementById('globalErr');
-      document.getElementById('globalErrMsg').textContent = message;
-      el.classList.remove('hidden');
+    /* ════════════════════════════════════════
+       QUICK FILL
+    ════════════════════════════════════════ */
+    function quickFillDash(email, pass, role) {
+      document.getElementById('loginEmail').value = email;
+      document.getElementById('loginPass').value  = pass;
+      selectRole(role);
+      hideError();
+      setErr('emailErr', false); setErr('passErr', false);
+      showToast(`${role.charAt(0).toUpperCase()+role.slice(1)} credentials filled — click Sign In`, 'success');
     }
 
-    /**
-     * Hide error message
-     */
-    function hideError() {
-      document.getElementById('globalErr').classList.add('hidden');
-    }
-
-    // ════════════════════════════════════════
-    // LOGIN HANDLER
-    // ════════════════════════════════════════
-
+    /* ════════════════════════════════════════
+       LOGIN
+    ════════════════════════════════════════ */
     function handleLogin(e) {
       e.preventDefault();
       hideError();
-
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPass').value;
       const role = document.getElementById('selectedRole').value;
-
-      // Validation
       let isValid = true;
 
-      if (!isValidEmail(email)) {
-        document.getElementById('emailErr').classList.add('show');
-        isValid = false;
-      } else {
-        document.getElementById('emailErr').classList.remove('show');
-      }
-
-      if (!password) {
-        document.getElementById('passErr').classList.add('show');
-        isValid = false;
-      } else {
-        document.getElementById('passErr').classList.remove('show');
-      }
-
+      if (!isValidEmail(email)) { setErr('emailErr', true); isValid = false; }
+      else { setErr('emailErr', false); }
+      if (!password) { setErr('passErr', true); isValid = false; }
+      else { setErr('passErr', false); }
       if (!isValid) return;
 
-      // Show loading state
       const btn = document.getElementById('loginBtn');
       btn.disabled = true;
-      document.getElementById('loginBtnText').classList.add('hidden');
-      document.getElementById('loginBtnLoad').classList.remove('hidden');
+      document.getElementById('loginBtnText').style.display = 'none';
+      document.getElementById('loginBtnLoad').style.display = 'flex';
 
-      // Simulate API call (replace with actual API call)
       setTimeout(() => {
-        let userList = [];
-        if (role === 'admin') userList = Users.ADMINS;
-        else if (role === 'manager') userList = Users.MANAGERS;
-        else if (role === 'staff') userList = Users.STAFF;
-
+        let userList = role === 'admin' ? Users.ADMINS : role === 'manager' ? Users.MANAGERS : Users.STAFF;
         const user = userList.find(u => u.email === email && u.password === password);
 
         if (user) {
-          // Remove password before storing
           const { password: _, ...userToStore } = user;
           userToStore.loginTime = Date.now();
-          
           localStorage.setItem('currentUser', JSON.stringify(userToStore));
-          
-          showToast(`Welcome ${user.name}! 🎉`, 'success');
-
-          setTimeout(() => {
-            // Redirect to appropriate dashboard
-            location.href = `/dashboard/${role}/index.html`;
-          }, 800);
+          showToast(`Welcome, ${user.name.split(' ')[0]}!`, 'success');
+          setTimeout(() => { location.href = `${role}/index.html`; }, 800);
         } else {
-          showError(`Invalid email or password for ${role} role`);
+          showError(`Invalid email or password for the ${role} role.`);
           btn.disabled = false;
-          document.getElementById('loginBtnText').classList.remove('hidden');
-          document.getElementById('loginBtnLoad').classList.add('hidden');
+          document.getElementById('loginBtnText').style.display = 'flex';
+          document.getElementById('loginBtnLoad').style.display = 'none';
         }
-      }, 1200);
+      }, 1300);
     }
 
-    // ════════════════════════════════════════
-    // PAGE INITIALIZATION
-    // ════════════════════════════════════════
-
+    /* ════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════ */
     window.addEventListener('load', () => {
-      // If already logged in, redirect to dashboard
-      if (Auth.isLoggedIn()) {
+      if (typeof Auth !== 'undefined' && Auth.isLoggedIn && Auth.isLoggedIn()) {
         const user = Auth.getCurrentUser();
-        const dashboardUrl = Auth.getDashboardUrl(user.role);
-        location.href = dashboardUrl;
-      }
-
-      // Pre-fill email if "Remember Me" was checked
-      const rememberedEmail = localStorage.getItem('rememberEmail');
-      if (rememberedEmail) {
-        document.getElementById('loginEmail').value = rememberedEmail;
-      }
-
-      // Update remember me checkbox
-      document.getElementById('rememberMe').addEventListener('change', (e) => {
-        if (e.target.checked) {
-          localStorage.setItem('rememberEmail', document.getElementById('loginEmail').value);
-        } else {
-          localStorage.removeItem('rememberEmail');
+        if (user && user.role && user.role !== 'customer') {
+          location.href = `${user.role}/index.html`;
         }
+      }
+      const remembered = localStorage.getItem('rememberEmail');
+      if (remembered) document.getElementById('loginEmail').value = remembered;
+
+      document.getElementById('rememberMe').addEventListener('change', e => {
+        const emailVal = document.getElementById('loginEmail').value;
+        e.target.checked ? localStorage.setItem('rememberEmail', emailVal) : localStorage.removeItem('rememberEmail');
       });
     });
 
-    // Clear global error when user starts typing
     document.getElementById('loginEmail').addEventListener('input', hideError);
     document.getElementById('loginPass').addEventListener('input', hideError);
   </script>

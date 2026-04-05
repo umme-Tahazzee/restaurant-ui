@@ -187,74 +187,6 @@
 </head>
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
 
-<!-- ═══════════ OVERLAY ═══════════ -->
-<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]" onclick="closeAll()"></div>
-
-<!-- ═══════════ MOBILE MENU ═══════════ -->
-<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex-col p-10 hidden"
-     style="transform:translateX(100%);transition:transform .5s cubic-bezier(.4,0,.2,1);">
-  <div class="flex justify-between items-center mb-10">
-    <div>
-      <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-      <p class="font-cormorant italic text-gold/70 text-xs tracking-[.3em] uppercase mt-0.5">Fine Dining</p>
-    </div>
-    <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition flex items-center justify-center">✕</button>
-  </div>
-  <div class="gold-line h-px mb-8 opacity-40"></div>
-  <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="index.html"             onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
-    <li><a href="menu.html"          onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="contact.html"           onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-redPrimary">Contact</a></li>
-  </ul>
-  <div class="mt-auto">
-    <a href="reserve.html" onclick="toggleMenu()"
-       class="book-btn flex items-center justify-center gap-2 text-white py-3.5 rounded text-xs font-bold uppercase tracking-[.2em] transition">
-      <i class="fa-regular fa-calendar-check"></i> Book a Table
-    </a>
-  </div>
-</div>
-
-<!-- ═══════════ NAVBAR ═══════════ -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-[10px] transition-all duration-300">
-  <div class="h-[72px] flex items-center justify-between px-5 sm:px-8 lg:px-14">
-    <!-- logo -->
-    <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
-      <span class="font-playfair text-[26px] font-black text-textDark group-hover:text-redPrimary transition tracking-tight">
-        Sav<span class="italic font-light text-redPrimary">o</span>ria
-      </span>
-      <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
-    </a>
-
-    <!-- desktop links -->
-    <ul class="hidden md:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[.15em] text-textMid">
-      <li><a href="index.html"             class="nav-link transition">Home</a></li>
-      
-      <li><a href="menu.html"          class="nav-link transition">Menu</a></li>
-      <li><a href="about.html"             class="nav-link transition">About</a></li>
-      <li><a href="reserve.html" class="nav-link transition">Reserve</a></li>
-      <li><a href="contact.html"           class="nav-link active-link">Contact</a></li>
-    </ul>
-
-    <!-- CTA -->
-    <div class="flex items-center gap-3">
-      <a href="login.html" class="hidden md:flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.12em] text-textMid hover:text-gold transition border-l border-borderSoft pl-4">
-        <i class="fa-regular fa-circle-user"></i> Login
-      </a>
-      <a href="reserve.html"
-         class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[.18em] uppercase transition">
-        <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
-      </a>
-      <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
-        <span class="w-[18px] h-[1.5px] bg-textDark rounded-full block"></span>
-        <span class="w-[18px] h-[1.5px] bg-textDark rounded-full block"></span>
-        <span class="w-[12px] h-[1.5px] bg-textDark rounded-full block self-start ml-[3px]"></span>
-      </button>
-    </div>
-  </div>
-  <div class="h-px bg-borderSoft/70"></div>
-</nav>
-
 <main>
 
 <!-- ═══════════ HERO ═══════════ -->
@@ -648,16 +580,6 @@
 </main>
 
 <!-- MOBILE BOTTOM NAV -->
-<nav class="mobile-bottom-nav md:hidden">
-  <div class="nav-item" onclick="location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></div>
-  <div class="nav-item" onclick="location.href='category.html'"><i class="fa-solid fa-utensils"></i><span>Menu</span></div>
-  <div onclick="location.href='index.html#reservation'">
-    <div class="cart-fab"><i class="fa-regular fa-calendar-check" style="font-size:20px"></i></div>
-  </div>
-  <div class="nav-item active"><i class="fa-solid fa-paper-plane"></i><span>Contact</span></div>
-  <div class="nav-item" onclick="location.href='profile.html'"><i class="fa-regular fa-circle-user"></i><span>Profile</span></div>
-</nav>
-
 <script src="static/js/savoria-app.js"></script>
 <script>
 // ── DATA ─────────────────────────────────────────────────────────────────────

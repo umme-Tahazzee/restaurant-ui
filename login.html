@@ -1,894 +1,813 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Savoria — Sign In</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              redPrimary: "#c0392b",
-              redDeep:    "#96281b",
-              redPale:    "#fdf0ee",
-              cream:      "#f5f0eb",
-              textDark:   "#1a1210",
-              textMid:    "#4a3830",
-              borderSoft: "#e8ddd8",
-              gold:       "#b8963e",
-              goldLight:  "#d4af6a",
-            },
-            fontFamily: {
-              playfair:   ["Playfair Display", "serif"],
-              jost:       ["Jost", "sans-serif"],
-              cormorant:  ["Cormorant Garamond", "serif"],
-            },
-            keyframes: {
-              fadeSlideUp: {
-                from: { opacity: "0", transform: "translateY(24px)" },
-                to:   { opacity: "1", transform: "translateY(0)" },
-              },
-              shimmer: {
-                "0%,100%": { opacity: "0.4" },
-                "50%":     { opacity: "1"   },
-              },
-              floatY: {
-                "0%,100%": { transform: "translateY(0px)" },
-                "50%":     { transform: "translateY(-8px)" },
-              },
-              rotateSlow: {
-                from: { transform: "rotate(0deg)"   },
-                to:   { transform: "rotate(360deg)" },
-              },
-            },
-            animation: {
-              a1:         "fadeSlideUp .6s .05s ease both",
-              a2:         "fadeSlideUp .6s .18s ease both",
-              a3:         "fadeSlideUp .6s .32s ease both",
-              a4:         "fadeSlideUp .6s .46s ease both",
-              shimmer:    "shimmer 3s ease infinite",
-              float:      "floatY 4s ease-in-out infinite",
-              rotateSlow: "rotateSlow 20s linear infinite",
-            },
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Savoria — Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            redPrimary: "#c0392b", redDeep: "#96281b", cream: "#f5f0eb",
+            textDark: "#1a1210", textMid: "#4a3830", borderSoft: "#e8ddd8",
+            gold: "#b8963e", goldLight: "#d4af6a",
+          },
+          fontFamily: {
+            playfair: ["Playfair Display","serif"],
+            jost:     ["Jost","sans-serif"],
+            cormorant:["Cormorant Garamond","serif"],
+          },
+          keyframes: {
+            fadeUp: { from:{opacity:"0",transform:"translateY(20px)"}, to:{opacity:"1",transform:"translateY(0)"} },
+            floatY: { "0%,100%":{transform:"translateY(0)"}, "50%":{transform:"translateY(-10px)"} },
+            shimmer:{ "0%,100%":{opacity:"0.3"}, "50%":{opacity:"0.7"} },
+            pulseRing:{ "0%":{transform:"scale(1)",opacity:"0.6"}, "100%":{transform:"scale(1.6)",opacity:"0"} },
+          },
+          animation: {
+            a1:"fadeUp .55s .05s ease both", a2:"fadeUp .55s .15s ease both",
+            a3:"fadeUp .55s .25s ease both", a4:"fadeUp .55s .35s ease both",
+            float:"floatY 5s ease-in-out infinite",
+            shimmer:"shimmer 3s ease infinite",
           },
         },
-      };
-    </script>
-    <link rel="stylesheet" href="static/css/savoria.css">
-    <style>
-      /* ── Custom scrollbar ── */
-      ::-webkit-scrollbar { width: 5px; }
-      ::-webkit-scrollbar-track { background: transparent; }
-      ::-webkit-scrollbar-thumb { background: rgba(192,57,43,.3); border-radius: 99px; }
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="static/css/savoria.css">
+  <style>
+    *,*::before,*::after{box-sizing:border-box}
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-thumb{background:rgba(192,57,43,.3);border-radius:99px}
 
-      /* ── Input autofill fix ── */
-      input:-webkit-autofill,
-      input:-webkit-autofill:hover,
-      input:-webkit-autofill:focus {
-        -webkit-text-fill-color: #fff;
-        -webkit-box-shadow: 0 0 0px 1000px rgba(255,255,255,0.05) inset;
-        transition: background-color 5000s ease-in-out 0s;
-      }
+    input:-webkit-autofill,input:-webkit-autofill:focus{
+      -webkit-text-fill-color:#fff;
+      -webkit-box-shadow:0 0 0 1000px rgba(255,255,255,.05) inset;
+      transition:background-color 5000s;
+    }
 
-      /* ── Glass card ── */
-      .glass-card {
-        background: linear-gradient(160deg, #1f1410 0%, #1a1210 60%, #150f0c 100%);
-        border: 1px solid rgba(255,255,255,.07);
-        box-shadow:
-          0 32px 80px rgba(26,18,16,.3),
-          0 0 0 1px rgba(184,150,62,.04) inset,
-          0 1px 0 rgba(184,150,62,.12) inset;
-      }
+    /* ── Layout ── */
+    body{margin:0;overflow-x:hidden}
+    .split-wrap{display:flex;min-height:100vh}
 
-      /* ── Input base ── */
-      .field-input {
-        width: 100%;
-        border-radius: 14px;
-        padding: 14px 44px 14px 16px;
-        font-family: 'Jost', sans-serif;
-        font-size: 13px;
-        color: #fff;
-        background: rgba(255,255,255,.05);
-        border: 1.5px solid rgba(255,255,255,.09);
-        outline: none;
-        transition: border-color .2s, box-shadow .2s;
-      }
-      .field-input::placeholder { color: rgba(255,255,255,.22); }
-      .field-input:focus {
-        border-color: rgba(192,57,43,.6);
-        box-shadow: 0 0 0 3px rgba(192,57,43,.1);
-      }
-      .field-input.error {
-        border-color: rgba(231,76,60,.6);
-        box-shadow: 0 0 0 3px rgba(231,76,60,.1);
-      }
+    /* ── Left Panel ── */
+    .lp{
+      width:520px;flex-shrink:0;display:flex;flex-direction:column;position:relative;overflow:hidden;
+      background:linear-gradient(160deg,#1c1007 0%,#130d06 45%,#0c0904 100%);
+    }
+    @media(max-width:1023px){.lp{display:none}}
+    .lp-blob{position:absolute;border-radius:50%;pointer-events:none}
+    .lp-grid{
+      position:absolute;inset:0;opacity:.018;
+      background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);
+      background-size:48px 48px;
+    }
+    .lp-sep{
+      position:absolute;top:0;right:0;bottom:0;width:1px;
+      background:linear-gradient(to bottom,transparent,rgba(184,150,62,.18) 30%,rgba(184,150,62,.18) 70%,transparent);
+    }
+    .lp-feature{
+      display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-radius:16px;
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+    }
+    .lp-feat-icon{
+      width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+      background:rgba(184,150,62,.1);border:1px solid rgba(184,150,62,.2);
+    }
+    .lp-star-row{display:flex;align-items:center;gap:3px}
 
-      /* ── Checkbox custom ── */
-      .custom-check {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 18px; height: 18px;
-        border-radius: 5px;
-        border: 1.5px solid rgba(255,255,255,.2);
-        background: transparent;
-        cursor: pointer;
-        flex-shrink: 0;
-        transition: all .2s;
-        position: relative;
-      }
-      .custom-check:checked {
-        background: #c0392b;
-        border-color: #c0392b;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.3 4.3l-7 7-3.6-3.6 1.4-1.4 2.2 2.2 5.6-5.6 1.4 1.4z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 11px 11px;
-      }
-      .custom-check:focus { box-shadow: 0 0 0 3px rgba(192,57,43,.2); }
+    /* ── Right Panel ── */
+    .rp{
+      flex:1;display:flex;flex-direction:column;position:relative;overflow-y:auto;
+      background:linear-gradient(160deg,#faf5f0 0%,#f4ece3 55%,#ede3d8 100%);
+    }
+    .rp-blob{position:fixed;border-radius:50%;pointer-events:none}
 
-      /* ── Success/Error toast ── */
-      .toast {
-        position: fixed;
-        top: 20px; right: 20px;
-        z-index: 9999;
-        padding: 14px 18px;
-        border-radius: 14px;
-        display: flex; align-items: center; gap: 10px;
-        font-family: 'Jost', sans-serif;
-        font-size: 12px; font-weight: 600;
-        transform: translateX(120%);
-        transition: transform .35s cubic-bezier(.34,1.56,.64,1);
-        min-width: 260px;
-        box-shadow: 0 8px 32px rgba(0,0,0,.3);
-      }
-      .toast.show { transform: translateX(0); }
-      .toast-success {
-        background: linear-gradient(135deg, #0d3320, #0a2818);
-        border: 1px solid rgba(46,204,113,.25);
-        color: #2ecc71;
-      }
-      .toast-error {
-        background: linear-gradient(135deg, #3b0f0a, #2d0c08);
-        border: 1px solid rgba(231,76,60,.25);
-        color: #e74c3c;
-      }
-      .toast-warning {
-        background: linear-gradient(135deg, #2d1f05, #241804);
-        border: 1px solid rgba(241,196,15,.25);
-        color: #f1c40f;
-      }
+    /* ── Top bar ── */
+    .topbar{
+      position:sticky;top:0;z-index:20;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 28px;height:60px;
+      background:rgba(250,245,240,.75);backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(26,18,16,.06);
+    }
 
-      /* ── Tab underline animation ── */
-      .tab-active {
-        background: #fff;
-        color: #1a1210;
-        box-shadow: 0 2px 12px rgba(26,18,16,.12);
-        border: 1px solid #e8ddd8;
-      }
-      .tab-inactive {
-        color: rgba(74,56,48,.45);
-      }
+    /* ── Glass card ── */
+    .glass-card{
+      background:linear-gradient(160deg,#1f1410 0%,#1a1210 55%,#150f0c 100%);
+      border:1px solid rgba(255,255,255,.07);
+      box-shadow:0 28px 70px rgba(26,18,16,.28),0 0 0 1px rgba(184,150,62,.04) inset,0 1px 0 rgba(184,150,62,.12) inset;
+    }
+    .card-gold-line{
+      position:absolute;top:0;left:28px;right:28px;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(184,150,62,.45),transparent);
+    }
 
-      /* ── Button primary ── */
-      .btn-primary {
-        background: linear-gradient(135deg, #c0392b, #96281b);
-        box-shadow: 0 6px 24px rgba(192,57,43,.35);
-        transition: opacity .2s, transform .15s, box-shadow .2s;
-      }
-      .btn-primary:hover {
-        opacity: .92;
-        transform: translateY(-1px);
-        box-shadow: 0 10px 32px rgba(192,57,43,.45);
-      }
-      .btn-primary:active { transform: translateY(0); }
-      .btn-primary:disabled {
-        opacity: .4;
-        cursor: not-allowed;
-        transform: none;
-      }
+    /* ── Inputs ── */
+    .field-input{
+      width:100%;border-radius:13px;padding:13px 42px 13px 15px;
+      font-family:'Jost',sans-serif;font-size:13px;color:#fff;
+      background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);
+      outline:none;transition:border-color .2s,box-shadow .2s;
+    }
+    .field-input::placeholder{color:rgba(255,255,255,.2)}
+    .field-input:focus{border-color:rgba(192,57,43,.6);box-shadow:0 0 0 3px rgba(192,57,43,.1)}
+    .field-input.error{border-color:rgba(231,76,60,.6);box-shadow:0 0 0 3px rgba(231,76,60,.1)}
 
-      /* ── Divider line ── */
-      .accent-line {
-        position: absolute;
-        top: 0; left: 32px; right: 32px;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(184,150,62,.4), transparent);
-        border-radius: 99px;
-      }
+    /* ── Checkbox ── */
+    .custom-check{
+      appearance:none;-webkit-appearance:none;width:17px;height:17px;
+      border-radius:5px;border:1.5px solid rgba(255,255,255,.2);
+      background:transparent;cursor:pointer;flex-shrink:0;transition:all .2s;
+    }
+    .custom-check:checked{
+      background:#c0392b;border-color:#c0392b;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.3 4.3l-7 7-3.6-3.6 1.4-1.4 2.2 2.2 5.6-5.6 1.4 1.4z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:center;background-size:10px;
+    }
 
-      /* ── Form slide transition ── */
-      .form-panel {
-        transition: opacity .3s, transform .3s;
-      }
-      .form-panel.entering {
-        animation: fadeSlideUp .35s ease both;
-      }
+    /* ── Tab switcher ── */
+    .tab-active{background:#fff;color:#1a1210;box-shadow:0 2px 10px rgba(26,18,16,.1);border:1px solid #e8ddd8}
+    .tab-inactive{color:rgba(74,56,48,.4)}
 
-      /* ── Floating particles ── */
-      .particle {
-        position: absolute;
-        border-radius: 50%;
-        pointer-events: none;
-        opacity: .4;
-      }
-    </style>
-  </head>
+    /* ── Button primary ── */
+    .btn-primary{
+      background:linear-gradient(135deg,#c0392b,#96281b);
+      box-shadow:0 5px 20px rgba(192,57,43,.35);
+      transition:opacity .2s,transform .15s,box-shadow .2s;
+    }
+    .btn-primary:hover:not(:disabled){opacity:.9;transform:translateY(-1px);box-shadow:0 8px 28px rgba(192,57,43,.45)}
+    .btn-primary:active:not(:disabled){transform:translateY(0)}
+    .btn-primary:disabled{opacity:.4;cursor:not-allowed}
 
-  <body class="font-jost overflow-x-hidden min-h-screen" style="background: linear-gradient(160deg, #f5ede4 0%, #f0e4d8 40%, #e8d8cc 100%);">
+    /* ── Toast ── */
+    .toast{
+      position:fixed;top:18px;right:18px;z-index:9999;
+      padding:13px 16px;border-radius:13px;display:flex;align-items:center;gap:9px;
+      font-family:'Jost',sans-serif;font-size:12px;font-weight:600;min-width:250px;
+      transform:translateX(120%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+      box-shadow:0 8px 28px rgba(0,0,0,.28);
+    }
+    .toast.show{transform:translateX(0)}
+    .toast-success{background:linear-gradient(135deg,#0d3320,#0a2818);border:1px solid rgba(46,204,113,.25);color:#2ecc71}
+    .toast-error{background:linear-gradient(135deg,#3b0f0a,#2d0c08);border:1px solid rgba(231,76,60,.25);color:#e74c3c}
+    .toast-warning{background:linear-gradient(135deg,#2d1f05,#241804);border:1px solid rgba(241,196,15,.25);color:#f1c40f}
 
-    <!-- ── DECORATIVE BG ── -->
-    <div class="fixed inset-0 pointer-events-none overflow-hidden">
-      <!-- Red blob top-right -->
-      <div class="absolute rounded-full animate-float" style="top:-140px;right:-140px;width:640px;height:640px;background:radial-gradient(circle,rgba(192,57,43,.07) 0%,transparent 70%);animation-delay:0s"></div>
-      <!-- Gold blob bottom-left -->
-      <div class="absolute rounded-full animate-float" style="bottom:-100px;left:-100px;width:520px;height:520px;background:radial-gradient(circle,rgba(184,150,62,.08) 0%,transparent 70%);animation-delay:-2s"></div>
-      <!-- Mid accent -->
-      <div class="absolute rounded-full" style="top:40%;left:60%;width:300px;height:300px;background:radial-gradient(circle,rgba(192,57,43,.04) 0%,transparent 70%)"></div>
-      <!-- Grid pattern -->
-      <div class="absolute inset-0 opacity-[.018]" style="background-image:linear-gradient(rgba(26,18,16,.9) 1px,transparent 1px),linear-gradient(90deg,rgba(26,18,16,.9) 1px,transparent 1px);background-size:48px 48px;"></div>
-      <!-- Diagonal lines -->
-      <div class="absolute inset-0 opacity-[.012]" style="background-image:repeating-linear-gradient(45deg,rgba(26,18,16,1) 0,rgba(26,18,16,1) 1px,transparent 0,transparent 50%);background-size:24px 24px;"></div>
-    </div>
+    /* ── Credential cards ── */
+    .cred-card{
+      position:relative;overflow:hidden;padding:13px 14px 12px;border-radius:15px;
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+      transition:border-color .2s,background .2s;
+    }
+    .cred-card:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+    .cred-topbar{position:absolute;top:0;left:0;right:0;height:2px}
+    .cred-use-btn{
+      display:flex;align-items:center;justify-content:center;gap:5px;
+      width:100%;padding:6px 0;border-radius:9px;margin-top:10px;
+      font-family:'Jost',sans-serif;font-size:9px;font-weight:700;
+      text-transform:uppercase;letter-spacing:.14em;cursor:pointer;
+      transition:all .2s;border:1px solid transparent;
+    }
 
-    <!-- ── TOAST ── -->
-    <div id="toastEl" class="toast">
-      <i id="toastIcon" class="fa-solid fa-circle-check"></i>
-      <span id="toastMsg"></span>
-    </div>
+    /* ── Strength bar ── */
+    .form-panel{transition:opacity .3s}
+    .form-panel.entering{animation:fadeUp .35s ease both}
+  </style>
+</head>
+<body class="font-jost">
 
-    <!-- ── NAVBAR ── -->
-    <nav class="relative z-20 flex items-center justify-between px-5 sm:px-10 h-[72px] border-b border-textDark/[.06]" style="backdrop-filter:blur(8px);background:rgba(245,237,228,.6)">
-      <a href="index.html" class="flex flex-col leading-none group">
-        <span class="font-playfair text-[26px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition-colors duration-300">
-          Sav<span class="italic font-light text-redPrimary">o</span>ria
-        </span>
-        <span class="font-cormorant italic text-[9px] text-gold/70 tracking-[.35em] uppercase" style="margin-top:-2px">Fine Dining</span>
-      </a>
-      <div class="flex items-center gap-4">
-        <div class="hidden sm:flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[.2em] text-textMid/40">
-          <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-          Secure Connection
-        </div>
-        <a href="index.html" class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[.15em] text-textMid/60 hover:text-redPrimary transition-colors px-3 py-2 rounded-lg hover:bg-redPrimary/5">
-          <i class="fa-solid fa-arrow-left text-[9px]"></i> Home
+  <!-- Toast -->
+  <div id="toastEl" class="toast">
+    <i id="toastIcon" class="fa-solid fa-circle-check"></i>
+    <span id="toastMsg"></span>
+  </div>
+
+  <div class="split-wrap">
+
+    <!-- ═══════════════════════════════════════
+         LEFT BRAND PANEL
+    ═══════════════════════════════════════ -->
+  
+
+    <!-- ═══════════════════════════════════════
+         RIGHT FORM PANEL
+    ═══════════════════════════════════════ -->
+    <div class="rp">
+      <!-- bg blobs -->
+      <div class="rp-blob" style="top:-80px;right:-60px;width:440px;height:440px;background:radial-gradient(circle,rgba(192,57,43,.04) 0%,transparent 70%)"></div>
+      <div class="rp-blob" style="bottom:-40px;left:20%;width:380px;height:380px;background:radial-gradient(circle,rgba(184,150,62,.04) 0%,transparent 70%)"></div>
+
+      <!-- Top bar -->
+      <nav class="topbar">
+        <!-- Mobile logo -->
+        <a href="index.html" class="lg:hidden flex flex-col leading-none">
+          <span class="font-playfair text-[22px] font-black text-textDark">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
+          <span class="font-cormorant italic text-[8px] text-gold/60 tracking-[.35em] uppercase" style="margin-top:-1px">Fine Dining</span>
         </a>
-      </div>
-    </nav>
-
-    <!-- ── MAIN ── -->
-    <main class="relative z-10 min-h-[calc(100vh-72px)] flex items-center justify-center px-5 py-10">
-      <div class="w-full max-w-[460px]">
-
-        <!-- ── Logo + Heading ── -->
-        <div class="text-center mb-8 animate-a1">
-          <div class="relative w-[68px] h-[68px] mx-auto mb-5">
-            <div class="absolute inset-0 rounded-[20px] bg-redPrimary/15 animate-ping" style="animation-duration:2.8s"></div>
-            <div class="absolute inset-0 rounded-[20px] bg-redPrimary/8 animate-ping" style="animation-duration:2.8s;animation-delay:.4s"></div>
-            <div class="relative w-[68px] h-[68px] rounded-[20px] flex items-center justify-center btn-primary">
-              <i class="fa-solid fa-utensils text-white text-xl"></i>
-            </div>
+        <div class="hidden lg:block"></div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="hidden sm:flex items-center gap-1.5">
+            <div style="width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite"></div>
+            <span style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:rgba(74,56,48,.32)">Secure</span>
           </div>
-          <h1 id="formTitle" class="font-playfair text-[32px] font-black text-textDark mb-1 tracking-tight">
-            Welcome Back
-          </h1>
-          <p id="formSubtitle" class="font-cormorant italic text-textMid/60 text-[18px]">
-            Sign in to your Savoria account
-          </p>
+          <a href="index.html" style="display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(74,56,48,.45);padding:7px 12px;border-radius:10px;transition:background .2s;text-decoration:none" onmouseover="this.style.background='rgba(192,57,43,.07)'" onmouseout="this.style.background='transparent'">
+            <i class="fa-solid fa-arrow-left text-[8px]"></i> Home
+          </a>
         </div>
+      </nav>
 
-        <!-- ── Tab Switcher ── -->
-        <div class="flex gap-1.5 p-1.5 rounded-[16px] mb-6 animate-a2 border border-textDark/[.08]" style="background:rgba(26,18,16,.06)">
-          <button id="tabLogin" onclick="switchTab('login')"
-            class="flex-1 py-2.5 rounded-[11px] text-center text-[11px] font-bold tracking-[.12em] uppercase cursor-pointer transition-all tab-active">
-            <i class="fa-solid fa-lock text-[9px] mr-1.5 opacity-60"></i>Sign In
-          </button>
-          <button id="tabRegister" onclick="switchTab('register')"
-            class="flex-1 py-2.5 rounded-[11px] text-center text-[11px] font-bold tracking-[.12em] uppercase cursor-pointer transition-all tab-inactive">
-            <i class="fa-solid fa-user-plus text-[9px] mr-1.5 opacity-60"></i>Create Account
-          </button>
-        </div>
+      <!-- Main -->
+      <main style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px 20px;position:relative;z-index:10">
+        <div style="width:100%;max-width:432px">
 
-        <!-- ── CARD ── -->
-        <div class="relative rounded-[28px] p-7 animate-a3 glass-card">
-          <div class="accent-line"></div>
-          <div class="absolute inset-0 rounded-[28px] pointer-events-none" style="background:linear-gradient(135deg,rgba(184,150,62,.03) 0%,transparent 60%)"></div>
-
-          <!-- ══ LOGIN FORM ══ -->
-          <form id="loginForm" onsubmit="handleLogin(event)" novalidate class="relative z-10 form-panel">
-
-            <!-- Social logins -->
-            <div class="flex gap-2.5 mb-6">
-              <button type="button" onclick="socialLogin('Google')"
-                class="flex-1 flex items-center justify-center gap-2 py-3 rounded-[12px] text-[11px] font-semibold text-white/55 border border-white/[.07] transition-all duration-200 hover:bg-white/[.08] hover:border-white/20 hover:text-white/90 active:scale-95"
-                style="background:rgba(255,255,255,.04)">
-                <svg width="13" height="13" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                Google
-              </button>
-              <button type="button" onclick="socialLogin('Apple')"
-                class="flex-1 flex items-center justify-center gap-2 py-3 rounded-[12px] text-[11px] font-semibold text-white/55 border border-white/[.07] transition-all duration-200 hover:bg-white/[.08] hover:border-white/20 hover:text-white/90 active:scale-95"
-                style="background:rgba(255,255,255,.04)">
-                <i class="fa-brands fa-apple text-white text-[13px]"></i> Apple
-              </button>
-              <button type="button" onclick="socialLogin('Facebook')"
-                class="flex-1 flex items-center justify-center gap-2 py-3 rounded-[12px] text-[11px] font-semibold text-white/55 border border-white/[.07] transition-all duration-200 hover:bg-white/[.08] hover:border-white/20 hover:text-white/90 active:scale-95"
-                style="background:rgba(255,255,255,.04)">
-                <i class="fa-brands fa-facebook text-[#1877F2] text-[13px]"></i> Facebook
-              </button>
-            </div>
-
-            <!-- Divider -->
-            <div class="flex items-center gap-3 mb-5">
-              <div class="flex-1 h-px" style="background:rgba(255,255,255,.07)"></div>
-              <span class="text-[9px] font-bold uppercase tracking-[.25em] text-white/18">or continue with email</span>
-              <div class="flex-1 h-px" style="background:rgba(255,255,255,.07)"></div>
-            </div>
-
-            <!-- Email -->
-            <div class="mb-4">
-              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-white/35 mb-2">Email Address</label>
-              <div class="relative">
-                <input type="email" id="loginEmail" class="field-input" placeholder="your@email.com" autocomplete="email"/>
-                <i class="fa-regular fa-envelope absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[13px] pointer-events-none"></i>
+          <!-- Heading -->
+          <div class="text-center animate-a1" style="margin-bottom:24px">
+            <!-- mobile icon -->
+            <div class="lg:hidden" style="position:relative;width:56px;height:56px;margin:0 auto 18px">
+              <div style="position:absolute;inset:0;border-radius:16px;background:rgba(192,57,43,.12);animation:pulseRing 2.4s ease-out infinite"></div>
+              <div class="btn-primary" style="position:relative;width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center">
+                <i class="fa-solid fa-utensils text-white" style="font-size:18px"></i>
               </div>
-              <p class="hidden text-[11px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1" id="loginEmailErr">
-                <i class="fa-solid fa-circle-exclamation text-[9px]"></i> Please enter a valid email address.
-              </p>
             </div>
-
-            <!-- Password -->
-            <div class="mb-4">
-              <div class="flex items-center justify-between mb-2">
-                <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-white/35">Password</label>
-                <button type="button" onclick="showForgot()" class="text-[10px] text-gold/50 hover:text-gold transition font-semibold">Forgot password?</button>
-              </div>
-              <div class="relative">
-                <input type="password" id="loginPass" class="field-input" placeholder="Enter your password" autocomplete="current-password"/>
-                <i class="fa-regular fa-eye absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[13px] cursor-pointer hover:text-white/50 transition" id="toggleLoginPass" onclick="togglePass('loginPass','toggleLoginPass')"></i>
-              </div>
-              <p class="hidden text-[11px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1" id="loginPassErr">
-                <i class="fa-solid fa-circle-exclamation text-[9px]"></i> Password is required.
-              </p>
+            <!-- desktop icon -->
+            <div class="hidden lg:flex" style="width:52px;height:52px;margin:0 auto 16px;border-radius:15px;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(192,57,43,.12),rgba(184,150,62,.08));border:1px solid rgba(192,57,43,.16)">
+              <i class="fa-solid fa-lock" style="color:#c0392b;font-size:17px"></i>
             </div>
+            <h1 id="formTitle" class="font-playfair" style="font-size:29px;font-weight:900;color:#1a1210;margin-bottom:3px;tracking:tight">Welcome Back</h1>
+            <p id="formSubtitle" class="font-cormorant italic" style="font-size:17px;color:rgba(74,56,48,.5)">Sign in to your Savoria account</p>
+          </div>
 
-            <!-- Remember me — FIX: id="rememberMe" (was duplicate agreeTerms) -->
-            <div class="flex items-center gap-2.5 mb-6">
-              <input type="checkbox" id="rememberMe" class="custom-check mt-0.5"/>
-              <label for="rememberMe" class="text-[12px] text-white/35 cursor-pointer select-none">Keep me signed in</label>
-            </div>
-
-            <!-- Submit -->
-            <button type="submit" id="loginBtn" class="w-full py-4 rounded-[14px] text-white text-[12px] font-bold tracking-[.2em] uppercase btn-primary disabled:opacity-40">
-              <span id="loginBtnText"><i class="fa-solid fa-lock text-[10px] mr-2"></i>Sign In Securely</span>
-              <span id="loginBtnLoad" class="hidden"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Signing in…</span>
+          <!-- Tab switcher -->
+          <div class="animate-a2" style="display:flex;gap:6px;padding:6px;border-radius:13px;margin-bottom:18px;background:rgba(26,18,16,.05);border:1px solid rgba(26,18,16,.08)">
+            <button id="tabLogin" onclick="switchTab('login')" style="flex:1;padding:9px 0;border-radius:9px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .2s;border:none;font-family:'Jost',sans-serif" class="tab-active">
+              <i class="fa-solid fa-lock" style="font-size:8px;margin-right:5px;opacity:.6"></i>Sign In
             </button>
+            <button id="tabRegister" onclick="switchTab('register')" style="flex:1;padding:9px 0;border-radius:9px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .2s;border:none;font-family:'Jost',sans-serif;background:transparent" class="tab-inactive">
+              <i class="fa-solid fa-user-plus" style="font-size:8px;margin-right:5px;opacity:.6"></i>Create Account
+            </button>
+          </div>
 
-            <!-- Global error -->
-            <div id="loginGlobalErr" class="hidden mt-4 p-3.5 rounded-[12px] border border-red-500/20 flex items-start gap-2.5 text-[12px] text-red-300/90" style="background:rgba(127,29,29,.2)">
-              <i class="fa-solid fa-circle-exclamation flex-shrink-0 mt-0.5"></i>
-              <span id="loginGlobalErrMsg">Incorrect email or password. Please try again.</span>
-            </div>
+          <!-- ── GLASS CARD ── -->
+          <div class="glass-card animate-a3" style="position:relative;border-radius:24px;padding:26px">
+            <div class="card-gold-line"></div>
+            <div style="position:absolute;inset:0;border-radius:24px;background:linear-gradient(135deg,rgba(184,150,62,.03) 0%,transparent 55%);pointer-events:none"></div>
 
-            <!-- Demo hint -->
-            <div class="mt-4 p-3 rounded-[10px] border border-white/[.05] flex items-center gap-2.5" style="background:rgba(255,255,255,.03)">
-              <i class="fa-solid fa-circle-info text-white/20 text-[11px] flex-shrink-0"></i>
-              <p class="text-[10px] text-white/20">
-                Demo: <span class="text-white/35 font-semibold">demo@savoria.com</span> / <span class="text-white/35 font-semibold">demo123</span>
-              </p>
-            </div>
-          </form>
+            <!-- ══ LOGIN FORM ══ -->
+            <form id="loginForm" onsubmit="handleLogin(event)" novalidate class="form-panel" style="position:relative;z-index:1">
 
-          <!-- ══ REGISTER FORM ══ -->
-          <form id="registerForm" class="hidden relative z-10 form-panel" onsubmit="handleRegister(event)" novalidate>
+              <!-- Social buttons -->
+              <div style="display:flex;gap:8px;margin-bottom:18px">
+                <button type="button" onclick="socialLogin('Google')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 0;border-radius:10px;font-size:10px;font-weight:600;font-family:'Jost',sans-serif;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.42);cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.09)';this.style.color='rgba(255,255,255,.8)'" onmouseout="this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.42)'">
+                  <svg width="12" height="12" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                  Google
+                </button>
+                <button type="button" onclick="socialLogin('Apple')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 0;border-radius:10px;font-size:10px;font-weight:600;font-family:'Jost',sans-serif;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.42);cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.09)';this.style.color='rgba(255,255,255,.8)'" onmouseout="this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.42)'">
+                  <i class="fa-brands fa-apple" style="font-size:13px;color:#fff"></i> Apple
+                </button>
+                <button type="button" onclick="socialLogin('Facebook')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 0;border-radius:10px;font-size:10px;font-weight:600;font-family:'Jost',sans-serif;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.42);cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.09)';this.style.color='rgba(255,255,255,.8)'" onmouseout="this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.42)'">
+                  <i class="fa-brands fa-facebook" style="font-size:13px;color:#1877F2"></i> Facebook
+                </button>
+              </div>
 
-            <!-- Name row -->
-            <div class="grid grid-cols-2 gap-3 mb-4">
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-white/35 mb-2">First Name</label>
-                <div class="relative">
-                  <input type="text" id="regFirst" class="field-input" placeholder="John" autocomplete="given-name"/>
-                  <i class="fa-regular fa-user absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[13px] pointer-events-none"></i>
+              <!-- Divider -->
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+                <div style="flex:1;height:1px;background:rgba(255,255,255,.07)"></div>
+                <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.22em;color:rgba(255,255,255,.15);font-family:'Jost',sans-serif">or continue with email</span>
+                <div style="flex:1;height:1px;background:rgba(255,255,255,.07)"></div>
+              </div>
+
+              <!-- Email -->
+              <div style="margin-bottom:14px">
+                <label style="display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.28);margin-bottom:7px;font-family:'Jost',sans-serif">Email Address</label>
+                <div style="position:relative">
+                  <input type="email" id="loginEmail" class="field-input" placeholder="your@email.com" autocomplete="email"/>
+                  <i class="fa-regular fa-envelope" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.17);pointer-events:none"></i>
                 </div>
-                <p class="hidden text-[11px] text-red-400 mt-1.5 pl-0.5" id="regFirstErr">Required.</p>
+                <p id="loginEmailErr" class="hidden" style="font-size:10.5px;color:#f87171;margin-top:5px;font-family:'Jost',sans-serif">
+                  <i class="fa-solid fa-circle-exclamation" style="font-size:9px;margin-right:4px"></i>Please enter a valid email address.
+                </p>
               </div>
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-white/35 mb-2">Last Name</label>
-                <input type="text" id="regLast" class="field-input" placeholder="Doe" autocomplete="family-name"/>
-              </div>
-            </div>
 
-            <!-- Email -->
-            <div class="mb-4">
-              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-white/35 mb-2">Email Address</label>
-              <div class="relative">
-                <input type="email" id="regEmail" class="field-input" placeholder="your@email.com" autocomplete="email"/>
-                <i class="fa-regular fa-envelope absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[13px] pointer-events-none"></i>
+              <!-- Password -->
+              <div style="margin-bottom:14px">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+                  <label style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.28);font-family:'Jost',sans-serif">Password</label>
+                  <button type="button" onclick="showForgot()" style="font-size:10px;font-weight:600;color:rgba(184,150,62,.48);border:none;background:none;cursor:pointer;font-family:'Jost',sans-serif;transition:color .2s" onmouseover="this.style.color='#b8963e'" onmouseout="this.style.color='rgba(184,150,62,.48)'">Forgot password?</button>
+                </div>
+                <div style="position:relative">
+                  <input type="password" id="loginPass" class="field-input" placeholder="Enter your password" autocomplete="current-password"/>
+                  <i id="toggleLoginPass" class="fa-regular fa-eye" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.17);cursor:pointer;transition:color .2s" onclick="togglePass('loginPass','toggleLoginPass')" onmouseover="this.style.color='rgba(255,255,255,.45)'" onmouseout="this.style.color='rgba(255,255,255,.17)'"></i>
+                </div>
+                <p id="loginPassErr" class="hidden" style="font-size:10.5px;color:#f87171;margin-top:5px;font-family:'Jost',sans-serif">
+                  <i class="fa-solid fa-circle-exclamation" style="font-size:9px;margin-right:4px"></i>Password is required.
+                </p>
               </div>
-              <p class="hidden text-[11px] text-red-400 mt-1.5 pl-0.5" id="regEmailErr">Please enter a valid email.</p>
-            </div>
 
-            <!-- Phone -->
-            <div class="mb-4">
-              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-white/35 mb-2">
-                Phone <span class="opacity-40 normal-case tracking-normal">(optional)</span>
-              </label>
-              <div class="relative">
-                <input type="tel" id="regPhone" class="field-input" placeholder="+1 (555) 000-0000" autocomplete="tel"/>
-                <i class="fa-solid fa-phone absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[13px] pointer-events-none"></i>
+              <!-- Remember me -->
+              <div style="display:flex;align-items:center;gap:9px;margin-bottom:20px">
+                <input type="checkbox" id="rememberMe" class="custom-check"/>
+                <label for="rememberMe" style="font-size:12px;color:rgba(255,255,255,.28);cursor:pointer;user-select:none;font-family:'Jost',sans-serif">Keep me signed in</label>
               </div>
-            </div>
 
-            <!-- Password -->
-            <div class="mb-2">
-              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-white/35 mb-2">Password</label>
-              <div class="relative">
-                <input type="password" id="regPass" class="field-input" placeholder="Min. 8 characters" autocomplete="new-password" oninput="checkStrength(this.value)"/>
-                <i class="fa-regular fa-eye absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[13px] cursor-pointer hover:text-white/50 transition" id="toggleRegPass" onclick="togglePass('regPass','toggleRegPass')"></i>
+              <!-- Submit -->
+              <button type="submit" id="loginBtn" class="btn-primary" style="width:100%;padding:13px 0;border-radius:12px;color:#fff;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;font-family:'Jost',sans-serif">
+                <span id="loginBtnText"><i class="fa-solid fa-lock" style="font-size:9px;margin-right:7px"></i>Sign In Securely</span>
+                <span id="loginBtnLoad" class="hidden"><i class="fa-solid fa-spinner fa-spin" style="margin-right:7px"></i>Signing in…</span>
+              </button>
+
+              <!-- Global error -->
+              <div id="loginGlobalErr" class="hidden" style="margin-top:14px;padding:12px 14px;border-radius:11px;border:1px solid rgba(231,76,60,.2);display:flex;align-items:flex-start;gap:10px;font-size:12px;color:rgba(248,113,113,.9);background:rgba(127,29,29,.18)">
+                <i class="fa-solid fa-circle-exclamation" style="flex-shrink:0;margin-top:1px"></i>
+                <span id="loginGlobalErrMsg">Incorrect email or password.</span>
               </div>
-              <p class="hidden text-[11px] text-red-400 mt-1.5 pl-0.5" id="regPassErr">Password must be at least 8 characters.</p>
-              <!-- Strength bar -->
-              <div id="strengthBar" class="hidden h-[3px] rounded-full mt-2 overflow-hidden" style="background:rgba(255,255,255,.08)">
-                <div id="strengthFill" class="h-full rounded-full transition-all duration-400" style="width:0;background:#e74c3c"></div>
+
+              <!-- Demo hint -->
+              <div style="margin-top:14px;padding:11px 13px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:9px">
+                <i class="fa-solid fa-circle-info" style="font-size:11px;color:rgba(255,255,255,.17);flex-shrink:0"></i>
+                <p style="font-size:10px;color:rgba(255,255,255,.2);font-family:'Jost',sans-serif">
+                  Demo: <span style="color:rgba(255,255,255,.35);font-weight:600">demo@savoria.com</span> / <span style="color:rgba(255,255,255,.35);font-weight:600">demo123</span>
+                </p>
               </div>
-              <p id="strengthLabel" class="hidden text-[10px] mt-1" style="color:rgba(255,255,255,.3)"></p>
-            </div>
+            </form>
 
-            <!-- Confirm password -->
-            <div class="mb-5">
-              <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-white/35 mb-2">Confirm Password</label>
-              <div class="relative">
-                <input type="password" id="regConfirm" class="field-input" placeholder="Re-enter password" autocomplete="new-password"/>
-                <i class="fa-regular fa-eye absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[13px] cursor-pointer hover:text-white/50 transition" id="toggleRegConfirm" onclick="togglePass('regConfirm','toggleRegConfirm')"></i>
+            <!-- ══ REGISTER FORM ══ -->
+            <form id="registerForm" class="hidden form-panel" onsubmit="handleRegister(event)" novalidate style="position:relative;z-index:1">
+
+              <!-- Name row -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+                <div>
+                  <label style="display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.28);margin-bottom:7px;font-family:'Jost',sans-serif">First Name</label>
+                  <div style="position:relative">
+                    <input type="text" id="regFirst" class="field-input" placeholder="John" autocomplete="given-name"/>
+                    <i class="fa-regular fa-user" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.17);pointer-events:none"></i>
+                  </div>
+                  <p id="regFirstErr" class="hidden" style="font-size:10.5px;color:#f87171;margin-top:5px;font-family:'Jost',sans-serif">Required.</p>
+                </div>
+                <div>
+                  <label style="display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.28);margin-bottom:7px;font-family:'Jost',sans-serif">Last Name</label>
+                  <input type="text" id="regLast" class="field-input" placeholder="Doe" autocomplete="family-name"/>
+                </div>
               </div>
-              <p class="hidden text-[11px] text-red-400 mt-1.5 pl-0.5" id="regConfirmErr">Passwords do not match.</p>
-            </div>
 
-            <!-- Terms — FIX: unique id="agreeTermsReg" -->
-            <div class="flex items-start gap-2.5 mb-2">
-              <input type="checkbox" id="agreeTermsReg" class="custom-check mt-0.5"/>
-              <label for="agreeTermsReg" class="text-[12px] text-white/35 cursor-pointer select-none leading-relaxed">
-                I agree to Savoria's
-                <button type="button" onclick="showTermsInfo()" class="text-gold/60 hover:text-gold transition underline">Terms of Service</button>
-                and
-                <button type="button" onclick="showTermsInfo()" class="text-gold/60 hover:text-gold transition underline">Privacy Policy</button>
-              </label>
-            </div>
-            <p class="hidden text-[11px] text-red-400 mb-4 pl-0.5 flex items-center gap-1" id="regTermsErr">
-              <i class="fa-solid fa-circle-exclamation text-[9px]"></i> You must agree to the terms to continue.
-            </p>
+              <!-- Email -->
+              <div style="margin-bottom:14px">
+                <label style="display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.28);margin-bottom:7px;font-family:'Jost',sans-serif">Email Address</label>
+                <div style="position:relative">
+                  <input type="email" id="regEmail" class="field-input" placeholder="your@email.com" autocomplete="email"/>
+                  <i class="fa-regular fa-envelope" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.17);pointer-events:none"></i>
+                </div>
+                <p id="regEmailErr" class="hidden" style="font-size:10.5px;color:#f87171;margin-top:5px;font-family:'Jost',sans-serif">Please enter a valid email.</p>
+              </div>
 
-            <button type="submit" id="regBtn"
-              class="w-full py-4 rounded-[14px] text-white text-[12px] font-bold tracking-[.2em] uppercase btn-primary disabled:opacity-40">
-              <span id="regBtnText"><i class="fa-solid fa-user-plus text-[10px] mr-2"></i>Create My Account</span>
-              <span id="regBtnLoad" class="hidden"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Creating account…</span>
+              <!-- Phone -->
+              <div style="margin-bottom:14px">
+                <label style="display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.28);margin-bottom:7px;font-family:'Jost',sans-serif">
+                  Phone <span style="opacity:.38;text-transform:none;letter-spacing:normal">(optional)</span>
+                </label>
+                <div style="position:relative">
+                  <input type="tel" id="regPhone" class="field-input" placeholder="+1 (555) 000-0000" autocomplete="tel"/>
+                  <i class="fa-solid fa-phone" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.17);pointer-events:none"></i>
+                </div>
+              </div>
+
+              <!-- Password -->
+              <div style="margin-bottom:6px">
+                <label style="display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.28);margin-bottom:7px;font-family:'Jost',sans-serif">Password</label>
+                <div style="position:relative">
+                  <input type="password" id="regPass" class="field-input" placeholder="Min. 8 characters" autocomplete="new-password" oninput="checkStrength(this.value)"/>
+                  <i id="toggleRegPass" class="fa-regular fa-eye" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.17);cursor:pointer;transition:color .2s" onclick="togglePass('regPass','toggleRegPass')" onmouseover="this.style.color='rgba(255,255,255,.45)'" onmouseout="this.style.color='rgba(255,255,255,.17)'"></i>
+                </div>
+                <p id="regPassErr" class="hidden" style="font-size:10.5px;color:#f87171;margin-top:5px;font-family:'Jost',sans-serif">Password must be at least 8 characters.</p>
+                <div id="strengthBar" class="hidden" style="height:3px;border-radius:99px;margin-top:8px;overflow:hidden;background:rgba(255,255,255,.08)">
+                  <div id="strengthFill" style="height:100%;border-radius:99px;transition:all .4s;width:0;background:#e74c3c"></div>
+                </div>
+                <p id="strengthLabel" class="hidden" style="font-size:10px;margin-top:4px;color:rgba(255,255,255,.3);font-family:'Jost',sans-serif"></p>
+              </div>
+
+              <!-- Confirm -->
+              <div style="margin-bottom:18px">
+                <label style="display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.28);margin-bottom:7px;font-family:'Jost',sans-serif">Confirm Password</label>
+                <div style="position:relative">
+                  <input type="password" id="regConfirm" class="field-input" placeholder="Re-enter password" autocomplete="new-password"/>
+                  <i id="toggleRegConfirm" class="fa-regular fa-eye" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.17);cursor:pointer;transition:color .2s" onclick="togglePass('regConfirm','toggleRegConfirm')" onmouseover="this.style.color='rgba(255,255,255,.45)'" onmouseout="this.style.color='rgba(255,255,255,.17)'"></i>
+                </div>
+                <p id="regConfirmErr" class="hidden" style="font-size:10.5px;color:#f87171;margin-top:5px;font-family:'Jost',sans-serif">Passwords do not match.</p>
+              </div>
+
+              <!-- Terms -->
+              <div style="display:flex;align-items:flex-start;gap:9px;margin-bottom:6px">
+                <input type="checkbox" id="agreeTermsReg" class="custom-check" style="margin-top:1px"/>
+                <label for="agreeTermsReg" style="font-size:12px;color:rgba(255,255,255,.28);cursor:pointer;user-select:none;line-height:1.6;font-family:'Jost',sans-serif">
+                  I agree to Savoria's
+                  <button type="button" onclick="showTermsInfo()" style="color:rgba(184,150,62,.5);border:none;background:none;cursor:pointer;text-decoration:underline;font-family:'Jost',sans-serif;transition:color .2s" onmouseover="this.style.color='#b8963e'" onmouseout="this.style.color='rgba(184,150,62,.5)'">Terms</button>
+                  and
+                  <button type="button" onclick="showTermsInfo()" style="color:rgba(184,150,62,.5);border:none;background:none;cursor:pointer;text-decoration:underline;font-family:'Jost',sans-serif;transition:color .2s" onmouseover="this.style.color='#b8963e'" onmouseout="this.style.color='rgba(184,150,62,.5)'">Privacy Policy</button>
+                </label>
+              </div>
+              <p id="regTermsErr" class="hidden" style="font-size:10.5px;color:#f87171;margin-bottom:14px;font-family:'Jost',sans-serif">
+                <i class="fa-solid fa-circle-exclamation" style="font-size:9px;margin-right:4px"></i>You must agree to continue.
+              </p>
+
+              <button type="submit" id="regBtn" class="btn-primary" style="width:100%;padding:13px 0;border-radius:12px;color:#fff;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;font-family:'Jost',sans-serif">
+                <span id="regBtnText"><i class="fa-solid fa-user-plus" style="font-size:9px;margin-right:7px"></i>Create My Account</span>
+                <span id="regBtnLoad" class="hidden"><i class="fa-solid fa-spinner fa-spin" style="margin-right:7px"></i>Creating account…</span>
+              </button>
+
+              <div id="regGlobalErr" class="hidden" style="margin-top:14px;padding:12px 14px;border-radius:11px;border:1px solid rgba(231,76,60,.2);display:flex;align-items:flex-start;gap:10px;font-size:12px;color:rgba(248,113,113,.9);background:rgba(127,29,29,.18)">
+                <i class="fa-solid fa-circle-exclamation" style="flex-shrink:0;margin-top:1px"></i>
+                <span id="regGlobalErrMsg">An error occurred. Please try again.</span>
+              </div>
+            </form>
+
+          </div><!-- /glass-card -->
+
+          <!-- Security note -->
+          <p class="animate-a4 text-center" style="font-size:10px;color:rgba(74,56,48,.2);margin-top:14px;font-family:'Jost',sans-serif">
+            Protected by Savoria Security ·
+            <button type="button" onclick="showTermsInfo()" style="color:rgba(74,56,48,.32);border:none;background:none;cursor:pointer;font-family:'Jost',sans-serif;transition:color .2s" onmouseover="this.style.color='#b8963e'" onmouseout="this.style.color='rgba(74,56,48,.32)'">Terms</button>
+            &amp;
+            <button type="button" onclick="showTermsInfo()" style="color:rgba(74,56,48,.32);border:none;background:none;cursor:pointer;font-family:'Jost',sans-serif;transition:color .2s" onmouseover="this.style.color='#b8963e'" onmouseout="this.style.color='rgba(74,56,48,.32)'">Privacy</button>
+          </p>
+
+          <!-- ── STAFF / ADMIN PORTAL ── -->
+          <div class="animate-a4" style="margin-top:10px">
+            <button type="button" onclick="toggleStaffPanel()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(74,56,48,.22);padding:8px 0;border:none;background:none;cursor:pointer;font-family:'Jost',sans-serif;transition:color .25s" onmouseover="this.style.color='rgba(184,150,62,.6)'" onmouseout="this.style.color='rgba(74,56,48,.22)'">
+              <i class="fa-solid fa-shield-halved" style="font-size:9px"></i>
+              Staff &amp; Admin Portal
+              <i id="staffChevron" class="fa-solid fa-chevron-down" style="font-size:8px;transition:transform .25s"></i>
             </button>
 
-            <!-- Global register error -->
-            <div id="regGlobalErr" class="hidden mt-4 p-3.5 rounded-[12px] border border-red-500/20 flex items-start gap-2.5 text-[12px] text-red-300/90" style="background:rgba(127,29,29,.2)">
-              <i class="fa-solid fa-circle-exclamation flex-shrink-0 mt-0.5"></i>
-              <span id="regGlobalErrMsg">An error occurred. Please try again.</span>
+            <!-- Credentials panel -->
+            <div id="staffPortalPanel" class="hidden" style="margin-top:8px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.06);background:rgba(18,12,8,.68);backdrop-filter:blur(12px)">
+              <div style="padding:18px 18px 16px">
+                <!-- Panel header -->
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+                  <div style="flex:1;height:1px;background:rgba(184,150,62,.14)"></div>
+                  <span style="font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3em;color:rgba(184,150,62,.48);font-family:'Jost',sans-serif">
+                    <i class="fa-solid fa-flask" style="font-size:8px;margin-right:4px"></i>Demo Credentials
+                  </span>
+                  <div style="flex:1;height:1px;background:rgba(184,150,62,.14)"></div>
+                </div>
+
+                <!-- Credential cards grid -->
+                <div id="credentialCards" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+
+                <!-- Footer note -->
+                <p style="font-size:9px;text-align:center;color:rgba(255,255,255,.14);margin-top:12px;font-family:'Jost',sans-serif">For testing purposes only · Not real accounts</p>
+              </div>
             </div>
-          </form>
-
-        </div><!-- end card -->
-
-        <!-- Bottom note -->
-        <p class="text-center text-[11px] text-textMid/25 mt-5 animate-a4">
-          Protected by Savoria Security ·
-          <button type="button" onclick="showTermsInfo()" class="text-textMid/40 hover:text-gold transition">Terms</button> &amp;
-          <button type="button" onclick="showTermsInfo()" class="text-textMid/40 hover:text-gold transition">Privacy</button>
-        </p>
-
-        <!-- ── FORGOT PASSWORD PANEL ── -->
-        <div id="forgotPanel" class="hidden mt-4 relative rounded-[28px] p-7 border border-white/[.07] shadow-[0_32px_80px_rgba(26,18,16,.25)]"
-          style="background:linear-gradient(160deg,#1f1410 0%,#1a1210 60%,#150f0c 100%)">
-          <!-- FIX: accent line inside relative parent now works -->
-          <div class="accent-line"></div>
-
-          <button type="button" onclick="hideForgot()" class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.15em] text-white/30 hover:text-white/70 transition mb-5">
-            <i class="fa-solid fa-arrow-left text-[9px]"></i> Back to Sign In
-          </button>
-          <h3 class="font-playfair text-xl font-black text-white mb-1">Reset Password</h3>
-          <p class="font-cormorant italic text-white/40 text-base mb-5">Enter your email and we'll send a reset link.</p>
-
-          <div class="relative mb-4">
-            <input type="email" id="forgotEmail" class="field-input" placeholder="your@email.com"/>
-            <i class="fa-regular fa-envelope absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 text-[13px] pointer-events-none"></i>
           </div>
-          <p class="hidden text-[11px] text-red-400 mb-3 pl-0.5" id="forgotEmailErr">Please enter a valid email.</p>
 
-          <button type="button" onclick="sendReset()"
-            class="w-full py-4 rounded-[14px] text-white text-[12px] font-bold tracking-[.2em] uppercase btn-primary">
-            <i class="fa-regular fa-paper-plane text-[10px] mr-2"></i>Send Reset Link
-          </button>
-
-          <div id="forgotSuccess" class="hidden mt-4 p-3.5 rounded-[12px] border border-green-500/20 flex items-center gap-2.5 text-[12px] text-green-300" style="background:rgba(20,83,45,.2)">
-            <i class="fa-solid fa-circle-check flex-shrink-0"></i>
-            <span>Reset link sent! Check your inbox.</span>
+          <!-- ── FORGOT PASSWORD PANEL ── -->
+          <div id="forgotPanel" class="hidden" style="margin-top:14px;position:relative;border-radius:22px;padding:24px;border:1px solid rgba(255,255,255,.07);background:linear-gradient(160deg,#1f1410 0%,#1a1210 55%,#150f0c 100%);box-shadow:0 28px 70px rgba(26,18,16,.25)">
+            <div class="card-gold-line"></div>
+            <button type="button" onclick="hideForgot()" style="display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:rgba(255,255,255,.26);border:none;background:none;cursor:pointer;font-family:'Jost',sans-serif;margin-bottom:18px;transition:color .2s;padding:0" onmouseover="this.style.color='rgba(255,255,255,.65)'" onmouseout="this.style.color='rgba(255,255,255,.26)'">
+              <i class="fa-solid fa-arrow-left" style="font-size:8px"></i> Back to Sign In
+            </button>
+            <h3 class="font-playfair" style="font-size:20px;font-weight:900;color:#fff;margin-bottom:4px">Reset Password</h3>
+            <p class="font-cormorant italic" style="font-size:16px;color:rgba(255,255,255,.32);margin-bottom:18px">Enter your email and we'll send a reset link.</p>
+            <div style="position:relative;margin-bottom:12px">
+              <input type="email" id="forgotEmail" class="field-input" placeholder="your@email.com"/>
+              <i class="fa-regular fa-envelope" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.17);pointer-events:none"></i>
+            </div>
+            <p id="forgotEmailErr" class="hidden" style="font-size:10.5px;color:#f87171;margin-bottom:10px;font-family:'Jost',sans-serif">Please enter a valid email.</p>
+            <button type="button" onclick="sendReset()" class="btn-primary" style="width:100%;padding:13px 0;border-radius:12px;color:#fff;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;font-family:'Jost',sans-serif">
+              <i class="fa-regular fa-paper-plane" style="font-size:9px;margin-right:7px"></i>Send Reset Link
+            </button>
+            <div id="forgotSuccess" class="hidden" style="margin-top:12px;padding:12px 14px;border-radius:11px;border:1px solid rgba(46,204,113,.2);display:flex;align-items:center;gap:10px;font-size:12px;color:#86efac;background:rgba(20,83,45,.2)">
+              <i class="fa-solid fa-circle-check" style="flex-shrink:0"></i>
+              <span>Reset link sent! Check your inbox.</span>
+            </div>
           </div>
-        </div>
 
+          <!-- ── DASHBOARD PORTAL LINK ── -->
+          <div class="animate-a4" style="margin-top:22px;padding:14px 16px;border-radius:14px;background:rgba(26,18,16,.05);border:1px solid rgba(26,18,16,.07);display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,rgba(192,57,43,.15),rgba(184,150,62,.1));border:1px solid rgba(192,57,43,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <i class="fa-solid fa-gauge-high" style="font-size:13px;color:#c0392b"></i>
+              </div>
+              <div>
+                <p style="font-size:11px;font-weight:700;color:rgba(26,18,16,.65);font-family:'Jost',sans-serif;margin-bottom:1px">Staff &amp; Management Dashboard</p>
+                <p style="font-size:10px;color:rgba(74,56,48,.38);font-family:'Jost',sans-serif">Admin · Manager · Staff portals</p>
+              </div>
+            </div>
+            <a href="dashboard/login.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#c0392b;background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.2);text-decoration:none;font-family:'Jost',sans-serif;white-space:nowrap;transition:all .2s" onmouseover="this.style.background='rgba(192,57,43,.18)';this.style.borderColor='rgba(192,57,43,.35)'" onmouseout="this.style.background='rgba(192,57,43,.1)';this.style.borderColor='rgba(192,57,43,.2)'">
+              Go <i class="fa-solid fa-arrow-right" style="font-size:8px"></i>
+            </a>
+          </div>
+
+        </div><!-- /max-w -->
+      </main>
+
+      <!-- Footer -->
+      <div style="position:relative;z-index:10;text-align:center;padding-bottom:20px">
+        <p class="font-cormorant italic" style="font-size:14px;color:rgba(74,56,48,.18)">Where every dish tells a story</p>
       </div>
-    </main>
+    </div><!-- /right panel -->
+  </div><!-- /split-wrap -->
 
-    <!-- Footer -->
-    <div class="relative z-10 text-center pb-8">
-      <p class="font-cormorant italic text-textMid/20 text-[15px]">Where every dish tells a story</p>
-    </div>
+  <script>
+    /* ════════════════════════════════════════
+       AUTH
+    ════════════════════════════════════════ */
+    const Auth = {
+      _USERS_KEY: 'sv_users',
+      _USER_KEY:  'sv_user',
+      _DEMO_ACCOUNTS: [
+        { email:'demo@savoria.com',    password:'demo123',    name:'Demo User',       first:'Demo',      last:'User',   phone:'',                  joined:'March 2026',     avatar:'D', member:'Gold Member',    visits:12, orders:34, wishlist:3, role:'customer' },
+        { email:'admin@savoria.com',   password:'admin123',   name:'Alexandra Cole',  first:'Alexandra', last:'Cole',   phone:'+1 555 920 4200',    joined:'January 2023',   avatar:'A', member:'Administrator',  visits:0,  orders:0,  wishlist:0, role:'admin' },
+        { email:'manager@savoria.com', password:'manager123', name:'Marco Bianchi',   first:'Marco',     last:'Bianchi',phone:'+1 555 920 4201',    joined:'June 2023',      avatar:'M', member:'Manager',        visits:0,  orders:0,  wishlist:0, role:'manager' },
+        { email:'staff@savoria.com',   password:'staff123',   name:'Sophia Chen',     first:'Sophia',    last:'Chen',   phone:'+1 555 920 4202',    joined:'September 2023', avatar:'S', member:'Staff',          visits:0,  orders:0,  wishlist:0, role:'staff' },
+      ],
+      getUsers() { try { return JSON.parse(localStorage.getItem(this._USERS_KEY)) || []; } catch { return []; } },
+      saveUsers(u) { localStorage.setItem(this._USERS_KEY, JSON.stringify(u)); },
+      findUser(email) {
+        const e = email.toLowerCase().trim();
+        return this._DEMO_ACCOUNTS.find(u => u.email === e) || this.getUsers().find(u => u.email.toLowerCase() === e) || null;
+      },
+      getDashboardUrl(role) {
+        return { admin:'dashboard/admin/index.html', manager:'dashboard/manager/index.html', staff:'dashboard/staff/index.html' }[role] || 'dashboard/customer/profile_index.html';
+      },
+      getRoleLabel(role) {
+        return { admin:'Administrator', manager:'Manager', staff:'Staff', customer:'Customer' }[role] || 'Customer';
+      },
+      register({ first, last, email, password, phone }) {
+        if (this.findUser(email)) return { ok:false, message:'An account with this email already exists.' };
+        const users = this.getUsers();
+        const newUser = { email:email.toLowerCase().trim(), password, name:`${first} ${last}`.trim(), first, last, phone, joined:new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'}), avatar:first.charAt(0).toUpperCase(), member:'New Member', visits:0, orders:0, wishlist:0 };
+        users.push(newUser);
+        this.saveUsers(users);
+        return { ok:true, user:newUser };
+      },
+      login(email, password) {
+        const user = this.findUser(email);
+        if (!user) return { ok:false, message:'No account found with this email.' };
+        if (user.password !== password) return { ok:false, message:'Incorrect password. Please try again.' };
+        const session = { ...user }; delete session.password;
+        localStorage.setItem(this._USER_KEY, JSON.stringify(session));
+        return { ok:true, user:session };
+      },
+    };
 
-    <script>
-      /* ════════════════════════════════════════
-         USER STORE — localStorage auth system
-         Registered users: sv_users (array)
-         Logged in user:   sv_user  (object)
-      ════════════════════════════════════════ */
-      const Auth = {
-        _USERS_KEY: 'sv_users',
-        _USER_KEY:  'sv_user',
+    /* ════════════════════════════════════════
+       TOAST
+    ════════════════════════════════════════ */
+    let _toastTimer = null;
+    function loginToast(msg, type = 'success') {
+      const el = document.getElementById('toastEl');
+      el.className = `toast toast-${type}`;
+      document.getElementById('toastIcon').className = { success:'fa-solid fa-circle-check', error:'fa-solid fa-circle-exclamation', warning:'fa-solid fa-triangle-exclamation' }[type] || 'fa-solid fa-circle-check';
+      document.getElementById('toastMsg').textContent = msg;
+      el.classList.add('show');
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+    }
 
-        // Built-in demo account
-        _DEMO: {
-          email:    'demo@savoria.com',
-          password: 'demo123',
-          name:     'Demo User',
-          first:    'Demo',
-          last:     'User',
-          phone:    '',
-          joined:   'March 2026',
-          avatar:   'D',
-          member:   'Gold Member',
-          visits:   12,
-          orders:   34,
-          wishlist: 3,
-        },
+    /* ════════════════════════════════════════
+       TAB SWITCH
+    ════════════════════════════════════════ */
+    function switchTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('loginForm').classList.toggle('hidden', !isLogin);
+      document.getElementById('registerForm').classList.toggle('hidden', isLogin);
+      if (!isLogin) { document.getElementById('registerForm').classList.add('entering'); setTimeout(() => document.getElementById('registerForm').classList.remove('entering'), 400); }
+      const tl = document.getElementById('tabLogin'), tr = document.getElementById('tabRegister');
+      tl.className = isLogin ? 'tab-active' : 'tab-inactive';
+      tr.className = !isLogin ? 'tab-active' : 'tab-inactive';
+      // keep base styles
+      [tl, tr].forEach(b => { b.style.flex='1'; b.style.padding='9px 0'; b.style.borderRadius='9px'; b.style.fontSize='10px'; b.style.fontWeight='700'; b.style.letterSpacing='.12em'; b.style.textTransform='uppercase'; b.style.cursor='pointer'; b.style.transition='all .2s'; b.style.fontFamily="'Jost',sans-serif"; b.style.border='none'; });
+      tr.style.background = !isLogin ? '' : 'transparent';
+      document.getElementById('formTitle').textContent    = isLogin ? 'Welcome Back'     : 'Join Savoria';
+      document.getElementById('formSubtitle').textContent = isLogin ? 'Sign in to your Savoria account' : 'Create your fine dining account';
+      document.getElementById('forgotPanel').classList.add('hidden');
+      clearAllErrors();
+    }
 
-        getUsers() {
-          try { return JSON.parse(localStorage.getItem(this._USERS_KEY)) || []; }
-          catch { return []; }
-        },
+    /* ════════════════════════════════════════
+       HELPERS
+    ════════════════════════════════════════ */
+    const isValidEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+    function showErr(id, show = true) { const el = document.getElementById(id); if (el) el.classList.toggle('hidden', !show); }
+    function setInputError(id, has) { const el = document.getElementById(id); if (!el) return; has ? el.classList.add('error') : el.classList.remove('error'); }
+    function clearAllErrors() {
+      ['loginEmail','loginPass','regFirst','regEmail','regPass','regConfirm'].forEach(id => setInputError(id, false));
+      ['loginEmailErr','loginPassErr','loginGlobalErr','regFirstErr','regEmailErr','regPassErr','regConfirmErr','regTermsErr','regGlobalErr'].forEach(id => showErr(id, false));
+    }
 
-        saveUsers(users) {
-          localStorage.setItem(this._USERS_KEY, JSON.stringify(users));
-        },
+    /* ════════════════════════════════════════
+       TOGGLE PASSWORD VISIBILITY
+    ════════════════════════════════════════ */
+    function togglePass(inputId, iconId) {
+      const input = document.getElementById(inputId), icon = document.getElementById(iconId);
+      const isPass = input.type === 'password';
+      input.type = isPass ? 'text' : 'password';
+      icon.classList.toggle('fa-eye', !isPass);
+      icon.classList.toggle('fa-eye-slash', isPass);
+    }
 
-        // Find user by email (case-insensitive)
-        findUser(email) {
-          const e = email.toLowerCase().trim();
-          if (e === this._DEMO.email) return this._DEMO;
-          return this.getUsers().find(u => u.email.toLowerCase() === e) || null;
-        },
+    /* ════════════════════════════════════════
+       PASSWORD STRENGTH
+    ════════════════════════════════════════ */
+    function checkStrength(val) {
+      const bar = document.getElementById('strengthBar'), fill = document.getElementById('strengthFill'), label = document.getElementById('strengthLabel');
+      if (!val) { bar.classList.add('hidden'); label.classList.add('hidden'); return; }
+      bar.classList.remove('hidden'); label.classList.remove('hidden');
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+      const levels = [{w:'25%',bg:'#e74c3c',text:'Weak'},{w:'50%',bg:'#e67e22',text:'Fair'},{w:'75%',bg:'#f1c40f',text:'Good'},{w:'100%',bg:'#2ecc71',text:'Strong'}];
+      const l = levels[score - 1] || levels[0];
+      fill.style.width = l.w; fill.style.background = l.bg;
+      label.textContent = l.text; label.style.color = l.bg;
+    }
 
-        // Register — returns {ok, message}
-        register({ first, last, email, password, phone }) {
-          if (this.findUser(email)) {
-            return { ok: false, message: 'An account with this email already exists. Please sign in.' };
-          }
-          const users = this.getUsers();
-          const newUser = {
-            email:    email.toLowerCase().trim(),
-            password, // NOTE: in production, hash this server-side
-            name:     `${first} ${last}`.trim(),
-            first, last, phone,
-            joined:   new Date().toLocaleDateString('en-US', { month:'long', year:'numeric' }),
-            avatar:   first.charAt(0).toUpperCase(),
-            member:   'New Member',
-            visits:   0,
-            orders:   0,
-            wishlist: 0,
-          };
-          users.push(newUser);
-          this.saveUsers(users);
-          return { ok: true, user: newUser };
-        },
-
-        // Login — returns {ok, user, message}
-        login(email, password) {
-          const user = this.findUser(email);
-          if (!user)            return { ok: false, message: 'No account found with this email.' };
-          if (user.password !== password) return { ok: false, message: 'Incorrect password. Please try again.' };
-          // Save session (exclude password)
-          const session = { ...user };
-          delete session.password;
-          localStorage.setItem(this._USER_KEY, JSON.stringify(session));
-          return { ok: true, user: session };
-        },
-      };
-
-      /* ════════════════════════════════════════
-         TOAST
-      ════════════════════════════════════════ */
-      let _toastTimer = null;
-      function loginToast(msg, type = 'success') {
-        const el   = document.getElementById('toastEl');
-        const icon = document.getElementById('toastIcon');
-        const txt  = document.getElementById('toastMsg');
-        el.className = `toast toast-${type}`;
-        icon.className = {
-          success: 'fa-solid fa-circle-check',
-          error:   'fa-solid fa-circle-exclamation',
-          warning: 'fa-solid fa-triangle-exclamation',
-        }[type] || 'fa-solid fa-circle-check';
-        txt.textContent = msg;
-        el.classList.add('show');
-        clearTimeout(_toastTimer);
-        _toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
-      }
-
-      /* ════════════════════════════════════════
-         TAB SWITCH
-      ════════════════════════════════════════ */
-      function switchTab(tab) {
-        const isLogin = tab === 'login';
-        const lf = document.getElementById('loginForm');
-        const rf = document.getElementById('registerForm');
-
-        lf.classList.toggle('hidden', !isLogin);
-        rf.classList.toggle('hidden', isLogin);
-
-        if (!isLogin) rf.classList.add('entering');
-        setTimeout(() => rf.classList.remove('entering'), 400);
-
-        const tl = document.getElementById('tabLogin');
-        const tr = document.getElementById('tabRegister');
-        tl.className = `flex-1 py-2.5 rounded-[11px] text-center text-[11px] font-bold tracking-[.12em] uppercase cursor-pointer transition-all ${isLogin ? 'tab-active' : 'tab-inactive'}`;
-        tr.className = `flex-1 py-2.5 rounded-[11px] text-center text-[11px] font-bold tracking-[.12em] uppercase cursor-pointer transition-all ${!isLogin ? 'tab-active' : 'tab-inactive'}`;
-
-        document.getElementById('formTitle').textContent    = isLogin ? 'Welcome Back'     : 'Join Savoria';
-        document.getElementById('formSubtitle').textContent = isLogin ? 'Sign in to your Savoria account' : 'Create your fine dining account';
-
-        // Hide forgot panel when switching
-        document.getElementById('forgotPanel').classList.add('hidden');
-        if (isLogin) lf.classList.remove('hidden');
-
-        // Clear errors on switch
-        clearAllErrors();
-      }
-
-      /* ════════════════════════════════════════
-         HELPERS
-      ════════════════════════════════════════ */
-      function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
-
-      function showErr(id, show = true) {
-        const el = document.getElementById(id);
-        if (el) el.classList.toggle('hidden', !show);
-      }
-
-      function setInputError(id, hasError) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        if (hasError) {
-          el.classList.add('error');
+    /* ════════════════════════════════════════
+       LOGIN
+    ════════════════════════════════════════ */
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass  = document.getElementById('loginPass').value;
+      let ok = true;
+      showErr('loginGlobalErr', false);
+      const vEmail = isValidEmail(email);
+      setInputError('loginEmail', !vEmail); showErr('loginEmailErr', !vEmail);
+      if (!vEmail) ok = false;
+      const vPass = pass.length > 0;
+      setInputError('loginPass', !vPass); showErr('loginPassErr', !vPass);
+      if (!vPass) ok = false;
+      if (!ok) return;
+      document.getElementById('loginBtnText').classList.add('hidden');
+      document.getElementById('loginBtnLoad').classList.remove('hidden');
+      document.getElementById('loginBtn').disabled = true;
+      setTimeout(() => {
+        const result = Auth.login(email, pass);
+        if (result.ok) {
+          const role = result.user.role || 'customer';
+          loginToast(`Welcome back, ${result.user.name.split(' ')[0]}! Redirecting to ${Auth.getRoleLabel(role)} Portal…`, 'success');
+          setTimeout(() => { location.href = Auth.getDashboardUrl(role); }, 900);
         } else {
-          el.classList.remove('error');
-          el.style.borderColor = '';
+          document.getElementById('loginGlobalErrMsg').textContent = result.message;
+          showErr('loginGlobalErr', true);
+          document.getElementById('loginBtnText').classList.remove('hidden');
+          document.getElementById('loginBtnLoad').classList.add('hidden');
+          document.getElementById('loginBtn').disabled = false;
         }
-      }
+      }, 1400);
+    }
 
-      function clearAllErrors() {
-        ['loginEmail','loginPass','regFirst','regEmail','regPass','regConfirm'].forEach(id => setInputError(id, false));
-        ['loginEmailErr','loginPassErr','loginGlobalErr','regFirstErr','regEmailErr','regPassErr','regConfirmErr','regTermsErr','regGlobalErr'].forEach(id => showErr(id, false));
-      }
-
-      /* ════════════════════════════════════════
-         TOGGLE PASSWORD VISIBILITY
-      ════════════════════════════════════════ */
-      function togglePass(inputId, iconId) {
-        const input = document.getElementById(inputId);
-        const icon  = document.getElementById(iconId);
-        const isPass = input.type === 'password';
-        input.type = isPass ? 'text' : 'password';
-        icon.classList.toggle('fa-eye',       !isPass);
-        icon.classList.toggle('fa-eye-slash',  isPass);
-      }
-
-      /* ════════════════════════════════════════
-         PASSWORD STRENGTH
-      ════════════════════════════════════════ */
-      function checkStrength(val) {
-        const bar   = document.getElementById('strengthBar');
-        const fill  = document.getElementById('strengthFill');
-        const label = document.getElementById('strengthLabel');
-        if (!val) { bar.classList.add('hidden'); label.classList.add('hidden'); return; }
-        bar.classList.remove('hidden'); label.classList.remove('hidden');
-        let score = 0;
-        if (val.length >= 8)       score++;
-        if (/[A-Z]/.test(val))     score++;
-        if (/[0-9]/.test(val))     score++;
-        if (/[^A-Za-z0-9]/.test(val)) score++;
-        const levels = [
-          { w:'25%',  bg:'#e74c3c', text:'Weak'   },
-          { w:'50%',  bg:'#e67e22', text:'Fair'   },
-          { w:'75%',  bg:'#f1c40f', text:'Good'   },
-          { w:'100%', bg:'#2ecc71', text:'Strong' },
-        ];
-        const l = levels[score - 1] || levels[0];
-        fill.style.width      = l.w;
-        fill.style.background = l.bg;
-        label.textContent     = l.text;
-        label.style.color     = l.bg;
-      }
-
-      /* ════════════════════════════════════════
-         LOGIN
-      ════════════════════════════════════════ */
-      function handleLogin(e) {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value.trim();
-        const pass  = document.getElementById('loginPass').value;
-        let ok = true;
-
-        showErr('loginGlobalErr', false);
-
-        const vEmail = isValidEmail(email);
-        setInputError('loginEmail', !vEmail); showErr('loginEmailErr', !vEmail);
-        if (!vEmail) ok = false;
-
-        const vPass = pass.length > 0;
-        setInputError('loginPass', !vPass); showErr('loginPassErr', !vPass);
-        if (!vPass) ok = false;
-
-        if (!ok) return;
-
-        // Loading state
-        document.getElementById('loginBtnText').classList.add('hidden');
-        document.getElementById('loginBtnLoad').classList.remove('hidden');
-        document.getElementById('loginBtn').disabled = true;
-
-        setTimeout(() => {
-          const result = Auth.login(email, pass);
-          if (result.ok) {
-            loginToast(`Welcome back, ${result.user.name.split(' ')[0]}! 🍽️`, 'success');
-            setTimeout(() => { location.href = '/dashboard/customer/profile_index.html'; }, 800);
-          } else {
-            document.getElementById('loginGlobalErrMsg').textContent = result.message;
-            document.getElementById('loginGlobalErr').classList.remove('hidden');
-            document.getElementById('loginBtnText').classList.remove('hidden');
-            document.getElementById('loginBtnLoad').classList.add('hidden');
-            document.getElementById('loginBtn').disabled = false;
-          }
-        }, 1400);
-      }
-
-      /* ════════════════════════════════════════
-         REGISTER
-      ════════════════════════════════════════ */
-      function handleRegister(e) {
-        e.preventDefault();
-        const first   = document.getElementById('regFirst').value.trim();
-        const last    = document.getElementById('regLast').value.trim();
-        const email   = document.getElementById('regEmail').value.trim();
-        const pass    = document.getElementById('regPass').value;
-        const confirm = document.getElementById('regConfirm').value;
-        const agreed  = document.getElementById('agreeTermsReg').checked; // FIX: correct id
-        let ok = true;
-
-        showErr('regGlobalErr', false);
-
-        const vFirst = first.length > 0;
-        setInputError('regFirst', !vFirst); showErr('regFirstErr', !vFirst);
-        if (!vFirst) ok = false;
-
-        const vEmail = isValidEmail(email);
-        setInputError('regEmail', !vEmail); showErr('regEmailErr', !vEmail);
-        if (!vEmail) ok = false;
-
-        const vPass = pass.length >= 8;
-        setInputError('regPass', !vPass); showErr('regPassErr', !vPass);
-        if (!vPass) ok = false;
-
-        const vConfirm = confirm === pass && confirm.length > 0;
-        setInputError('regConfirm', !vConfirm); showErr('regConfirmErr', !vConfirm);
-        if (!vConfirm) ok = false;
-
-        showErr('regTermsErr', !agreed);
-        if (!agreed) ok = false;
-
-        if (!ok) return;
-
-        // Loading state
-        const btn = document.getElementById('regBtn');
-        document.getElementById('regBtnText').classList.add('hidden');
-        document.getElementById('regBtnLoad').classList.remove('hidden');
-        btn.disabled = true;
-
-        setTimeout(() => {
-          const result = Auth.register({ first, last, email, password: pass, phone: document.getElementById('regPhone').value.trim() });
-
-          if (result.ok) {
-            // Auto-login after registration
-            Auth.login(email, pass);
-            loginToast(`Account created! Welcome, ${first}! 🎉`, 'success');
-            setTimeout(() => { location.href = '/dashboard/customer/profile_index.html'; }, 900);
-          } else {
-            // FIX: reset button state on error
-            document.getElementById('regGlobalErrMsg').textContent = result.message;
-            document.getElementById('regGlobalErr').classList.remove('hidden');
-            document.getElementById('regBtnText').classList.remove('hidden');
-            document.getElementById('regBtnLoad').classList.add('hidden');
-            btn.disabled = false;
-          }
-        }, 1600);
-      }
-
-      /* ════════════════════════════════════════
-         FORGOT PASSWORD
-      ════════════════════════════════════════ */
-      function showForgot() {
-        document.getElementById('loginForm').classList.add('hidden');
-        document.getElementById('forgotPanel').classList.remove('hidden');
-        document.getElementById('forgotSuccess').classList.add('hidden');
-        document.getElementById('forgotEmail').value = '';
-        showErr('forgotEmailErr', false);
-      }
-
-      function hideForgot() {
-        document.getElementById('forgotPanel').classList.add('hidden');
-        document.getElementById('forgotSuccess').classList.add('hidden');
-        document.getElementById('loginForm').classList.remove('hidden');
-      }
-
-      function sendReset() {
-        const email = document.getElementById('forgotEmail').value.trim();
-        if (!isValidEmail(email)) {
-          showErr('forgotEmailErr', true);
-          return;
+    /* ════════════════════════════════════════
+       REGISTER
+    ════════════════════════════════════════ */
+    function handleRegister(e) {
+      e.preventDefault();
+      const first = document.getElementById('regFirst').value.trim(), last = document.getElementById('regLast').value.trim();
+      const email = document.getElementById('regEmail').value.trim(), pass = document.getElementById('regPass').value;
+      const confirm = document.getElementById('regConfirm').value, agreed = document.getElementById('agreeTermsReg').checked;
+      let ok = true;
+      showErr('regGlobalErr', false);
+      const vFirst = first.length > 0; setInputError('regFirst', !vFirst); showErr('regFirstErr', !vFirst); if (!vFirst) ok = false;
+      const vEmail = isValidEmail(email); setInputError('regEmail', !vEmail); showErr('regEmailErr', !vEmail); if (!vEmail) ok = false;
+      const vPass = pass.length >= 8; setInputError('regPass', !vPass); showErr('regPassErr', !vPass); if (!vPass) ok = false;
+      const vConfirm = confirm === pass && confirm.length > 0; setInputError('regConfirm', !vConfirm); showErr('regConfirmErr', !vConfirm); if (!vConfirm) ok = false;
+      showErr('regTermsErr', !agreed); if (!agreed) ok = false;
+      if (!ok) return;
+      const btn = document.getElementById('regBtn');
+      document.getElementById('regBtnText').classList.add('hidden');
+      document.getElementById('regBtnLoad').classList.remove('hidden');
+      btn.disabled = true;
+      setTimeout(() => {
+        const result = Auth.register({ first, last, email, password:pass, phone:document.getElementById('regPhone').value.trim() });
+        if (result.ok) {
+          Auth.login(email, pass);
+          loginToast(`Account created! Welcome, ${first}!`, 'success');
+          setTimeout(() => { location.href = 'dashboard/customer/profile_index.html'; }, 900);
+        } else {
+          document.getElementById('regGlobalErrMsg').textContent = result.message;
+          showErr('regGlobalErr', true);
+          document.getElementById('regBtnText').classList.remove('hidden');
+          document.getElementById('regBtnLoad').classList.add('hidden');
+          btn.disabled = false;
         }
-        showErr('forgotEmailErr', false);
-        document.getElementById('forgotSuccess').classList.remove('hidden');
-        loginToast('Reset link sent to your email!', 'success');
-      }
+      }, 1600);
+    }
 
-      /* ════════════════════════════════════════
-         SOCIAL LOGIN (demo)
-      ════════════════════════════════════════ */
-      function socialLogin(provider) {
-        loginToast(`${provider} login coming soon!`, 'warning');
-      }
+    /* ════════════════════════════════════════
+       FORGOT PASSWORD
+    ════════════════════════════════════════ */
+    function showForgot() {
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('forgotPanel').classList.remove('hidden');
+      document.getElementById('forgotSuccess').classList.add('hidden');
+      document.getElementById('forgotEmail').value = '';
+      showErr('forgotEmailErr', false);
+    }
+    function hideForgot() {
+      document.getElementById('forgotPanel').classList.add('hidden');
+      document.getElementById('loginForm').classList.remove('hidden');
+    }
+    function sendReset() {
+      const email = document.getElementById('forgotEmail').value.trim();
+      if (!isValidEmail(email)) { showErr('forgotEmailErr', true); return; }
+      showErr('forgotEmailErr', false);
+      document.getElementById('forgotSuccess').classList.remove('hidden');
+      loginToast('Reset link sent to your email!', 'success');
+    }
 
-      /* ════════════════════════════════════════
-         TERMS INFO (demo)
-      ════════════════════════════════════════ */
-      function showTermsInfo() {
-        loginToast('Terms & Privacy Policy — Coming soon!', 'warning');
-      }
+    /* ════════════════════════════════════════
+       SOCIAL / TERMS (demo)
+    ════════════════════════════════════════ */
+    function socialLogin(p) { loginToast(`${p} login coming soon!`, 'warning'); }
+    function showTermsInfo() { loginToast('Terms & Privacy — Coming soon!', 'warning'); }
 
-      /* ════════════════════════════════════════
-         LIVE INPUT VALIDATION (on blur)
-      ════════════════════════════════════════ */
-      document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('loginEmail').addEventListener('blur', function () {
-          const v = isValidEmail(this.value.trim());
-          if (this.value) { setInputError('loginEmail', !v); showErr('loginEmailErr', !v); }
-        });
-        document.getElementById('regEmail').addEventListener('blur', function () {
-          const v = isValidEmail(this.value.trim());
-          if (this.value) { setInputError('regEmail', !v); showErr('regEmailErr', !v); }
-        });
-        document.getElementById('regConfirm').addEventListener('input', function () {
-          const pass = document.getElementById('regPass').value;
-          if (this.value.length > 0) {
-            const match = this.value === pass;
-            setInputError('regConfirm', !match);
-            showErr('regConfirmErr', !match);
-          }
-        });
+    /* ════════════════════════════════════════
+       STAFF PANEL TOGGLE
+    ════════════════════════════════════════ */
+    function toggleStaffPanel() {
+      const panel = document.getElementById('staffPortalPanel'), chevron = document.getElementById('staffChevron');
+      const isHidden = panel.classList.contains('hidden');
+      panel.classList.toggle('hidden', !isHidden);
+      if (chevron) chevron.style.transform = isHidden ? 'rotate(180deg)' : '';
+    }
 
-        // Clear input error on focus
-        ['loginEmail','loginPass','regFirst','regEmail','regPass','regConfirm'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.addEventListener('focus', () => setInputError(id, false));
-        });
+    /* ════════════════════════════════════════
+       QUICK FILL
+    ════════════════════════════════════════ */
+    function quickFill(email, pass) {
+      switchTab('login');
+      const emailEl = document.getElementById('loginEmail'), passEl = document.getElementById('loginPass');
+      if (emailEl) { emailEl.value = email; setInputError('loginEmail', false); }
+      if (passEl)  { passEl.value  = pass;  setInputError('loginPass', false); }
+      loginToast('Credentials filled — click Sign In', 'success');
+    }
+
+    /* ════════════════════════════════════════
+       BUILD CREDENTIAL CARDS
+    ════════════════════════════════════════ */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Live validation on blur
+      document.getElementById('loginEmail').addEventListener('blur', function () {
+        if (this.value) { const v = isValidEmail(this.value.trim()); setInputError('loginEmail', !v); showErr('loginEmailErr', !v); }
       });
-    </script>
-    <script src="static/js/savoria-app.js"></script>
-  </body>
+      document.getElementById('regEmail').addEventListener('blur', function () {
+        if (this.value) { const v = isValidEmail(this.value.trim()); setInputError('regEmail', !v); showErr('regEmailErr', !v); }
+      });
+      document.getElementById('regConfirm').addEventListener('input', function () {
+        const pass = document.getElementById('regPass').value;
+        if (this.value.length > 0) { const match = this.value === pass; setInputError('regConfirm', !match); showErr('regConfirmErr', !match); }
+      });
+      ['loginEmail','loginPass','regFirst','regEmail','regPass','regConfirm'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('focus', () => setInputError(id, false));
+      });
+
+      // Build credential cards
+      const container = document.getElementById('credentialCards');
+      if (!container) return;
+      const roles = [
+        { label:'Admin',    email:'admin@savoria.com',   pass:'admin123',   icon:'fa-crown',      color:'#b8963e' },
+        { label:'Manager',  email:'manager@savoria.com', pass:'manager123', icon:'fa-chart-line', color:'#27ae60' },
+        { label:'Staff',    email:'staff@savoria.com',   pass:'staff123',   icon:'fa-utensils',   color:'#3498db' },
+        { label:'Customer', email:'demo@savoria.com',    pass:'demo123',    icon:'fa-user',       color:'#9b59b6' },
+      ];
+      container.innerHTML = roles.map(r => `
+        <div class="cred-card">
+          <div class="cred-topbar" style="background:linear-gradient(90deg,${r.color},transparent)"></div>
+          <!-- Role header -->
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
+            <div style="width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:${r.color}1a;border:1px solid ${r.color}33">
+              <i class="fa-solid ${r.icon}" style="color:${r.color};font-size:10px"></i>
+            </div>
+            <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,.65);font-family:'Jost',sans-serif">${r.label}</span>
+          </div>
+          <!-- Credentials -->
+          <div style="margin-bottom:9px">
+            <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px">
+              <i class="fa-regular fa-envelope" style="font-size:8px;color:rgba(255,255,255,.22);width:11px;text-align:center"></i>
+              <p style="font-size:9px;color:rgba(255,255,255,.3);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1">${r.email}</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:5px">
+              <i class="fa-solid fa-key" style="font-size:8px;width:11px;text-align:center;color:${r.color};opacity:.7"></i>
+              <p style="font-size:11px;font-weight:700;font-family:monospace;letter-spacing:.06em;color:${r.color}">${r.pass}</p>
+            </div>
+          </div>
+          <!-- Use button -->
+          <button type="button" onclick="quickFill('${r.email}','${r.pass}')"
+            class="cred-use-btn"
+            style="background:${r.color}18;color:${r.color};border-color:${r.color}30"
+            onmouseover="this.style.background='${r.color}2e';this.style.borderColor='${r.color}55'"
+            onmouseout="this.style.background='${r.color}18';this.style.borderColor='${r.color}30'">
+            Use This <i class="fa-solid fa-arrow-right" style="font-size:7px"></i>
+          </button>
+        </div>
+      `).join('');
+    });
+  </script>
+</body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            

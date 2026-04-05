@@ -248,107 +248,6 @@
 
 <body class="font-jost bg-white text-textDark overflow-x-hidden">
 
-<!-- ═══════════ OVERLAY ═══════════ -->
-<div id="overlay" class="fixed inset-0 z-[1050] bg-black/50 opacity-0 pointer-events-none backdrop-blur-[2px]" onclick="closeAll()"></div>
-
-<!-- ═══════════ MOBILE MENU ═══════════ -->
-<div id="mobileMenu" class="fixed inset-0 z-[1100] bg-[#1a1210] flex-col p-10 hidden" style="transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);">
-  <div class="flex justify-between items-center mb-10">
-    <div>
-      <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-      <p class="font-cormorant italic text-gold/70 text-xs tracking-[0.3em] uppercase mt-0.5">Fine Dining</p>
-    </div>
-    <button onclick="toggleMenu()" class="w-9 h-9 rounded-full border border-white/20 text-white/50 hover:border-gold hover:text-gold transition text-lg flex items-center justify-center">✕</button>
-  </div>
-  <div class="gold-line h-[1px] w-full mb-8"></div>
-  <ul class="flex flex-col gap-1 flex-1">
-    <li><a href="index.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Home</a></li>
-    <li><a href="menu.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Menu</a></li>
-    <li><a href="about.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">About</a></li>
-    <li><a href="reserve.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Reserve</a></li>
-    <li><a href="contact.html" onclick="toggleMenu()" class="block py-4 border-b border-white/10 text-2xl font-playfair font-bold text-white">Contact</a></li>
-  </ul>
-</div>
-
-<!-- ═══════════ CART MODAL ═══════════ -->
-<div id="cartModal" class="fixed inset-0 z-[1200] pointer-events-none">
-  <div id="cartBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 transition-opacity duration-300 hidden md:block" onclick="toggleCart()"></div>
-  <div id="cartPanel"
-       class="absolute bg-white flex flex-col bottom-0 left-0 right-0 h-[95vh] rounded-t-[24px] md:top-0 md:right-0 md:left-auto md:bottom-auto md:h-full md:w-[460px] md:rounded-none pointer-events-auto"
-       style="transform:translateY(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); box-shadow: -8px 0 40px rgba(0,0,0,0.12);">
-    <div class="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
-      <div class="w-10 h-[4px] rounded-full bg-borderSoft"></div>
-    </div>
-    <div class="flex items-center justify-between px-6 py-4 flex-shrink-0 border-b border-borderSoft">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-redPale flex items-center justify-center">
-          <i class="fa-solid fa-bag-shopping text-redPrimary text-sm"></i>
-        </div>
-        <div>
-          <h2 class="font-playfair text-lg font-bold text-textDark leading-tight">Your Order</h2>
-          <p class="text-[11px] text-textMid/50 mt-0.5">Table 7 · Dine In</p>
-        </div>
-      </div>
-      <button onclick="toggleCart()" class="w-9 h-9 rounded-full border border-borderSoft text-textMid/50 hover:border-redPrimary hover:text-redPrimary transition flex items-center justify-center text-sm">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-    <div class="flex-1 overflow-y-auto bg-white" id="cartScrollBody">
-      <div id="cartItemsContainer"></div>
-      <div id="cartEmpty" class="px-6 py-12 text-center">
-        <div class="text-5xl mb-4">🛒</div>
-        <p class="font-playfair text-lg font-bold text-textDark mb-1">Your cart is empty</p>
-        <p class="font-cormorant italic text-textMid/50">Add dishes from the menu to get started</p>
-      </div>
-    </div>
-    <div class="border-t border-borderSoft bg-white px-6 pt-4 pb-6 md:pb-5 flex-shrink-0">
-      <div class="space-y-2 mb-4" id="cartTotalsBlock"></div>
-      <button id="cartConfirmBtn" onclick="placeOrder()" class="book-btn w-full text-white py-4 rounded-xl text-[12px] font-bold tracking-[0.18em] uppercase flex items-center justify-center gap-2 mb-2 opacity-50 cursor-not-allowed" disabled>
-        <i class="fa-solid fa-lock text-[10px]"></i> Confirm & Place Order
-      </button>
-      <button onclick="toggleCart()" class="w-full text-center text-[11px] text-textMid/40 hover:text-textMid transition py-1">Continue Browsing</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ NAVBAR ═══════════ -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300" style="background:rgba(255,255,255,0)">
-  <div id="navInner" class="h-[76px] flex items-center justify-between px-5 sm:px-8 lg:px-14 transition-all duration-300">
-    <a href="index.html" class="flex flex-col leading-none group flex-shrink-0">
-      <span class="font-playfair text-[26px] sm:text-[28px] font-black text-textDark tracking-tight group-hover:text-redPrimary transition duration-300">
-        Sav<span class="italic font-light text-redPrimary">o</span>ria
-      </span>
-      <span class="font-cormorant italic text-[10px] text-gold/80 tracking-[0.35em] uppercase hidden sm:block" style="margin-top:-2px">Fine Dining</span>
-    </a>
-    <ul class="hidden md:flex items-center gap-7 lg:gap-9 text-[11.5px] font-medium uppercase tracking-[0.15em] text-textMid">
-      <li><a href="index.html" class="nav-link transition">Home</a></li>
-      <li><a href="menu.html" class="nav-link active transition">Menu</a></li>
-      <li><a href="about.html" class="nav-link transition">About</a></li>
-      <li><a href="reserve.html" class="nav-link transition">Reserve</a></li>
-      <li><a href="contact.html" class="nav-link transition">Contact</a></li>
-    </ul>
-    <div class="flex items-center gap-2 sm:gap-3">
-      <button onclick="toggleCart()" class="relative w-9 h-9 flex items-center justify-center rounded-full text-textMid hover:text-redPrimary transition p-2">
-        <i class="fa-solid fa-cart-shopping text-[20px]"></i>
-        <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-redPrimary text-white text-[9px] font-bold rounded-full items-center justify-center hidden">0</span>
-      </button>
-      <button class="hidden md:flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-textMid hover:text-gold transition pl-3 border-l border-borderSoft ml-1">
-        <i class="fa-regular fa-circle-user"></i>
-        <a href="login.html">Login</a>
-      </button>
-      <a href="reserve.html" class="hidden md:inline-flex book-btn items-center gap-2 text-white px-5 py-2.5 rounded text-[11px] font-semibold tracking-[0.18em] uppercase ml-1">
-        <i class="fa-regular fa-calendar-check text-[11px]"></i> Book a Table
-      </a>
-      <button onclick="toggleMenu()" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-redPale transition">
-        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-        <span class="w-[18px] h-[1.5px] bg-textDark block rounded-full"></span>
-        <span class="w-[12px] h-[1.5px] bg-textDark block rounded-full self-start ml-[3px]"></span>
-      </button>
-    </div>
-  </div>
-  <div class="h-px bg-borderSoft/80"></div>
-</nav>
-
 <main class="pt-[76px]">
 
   <!-- ══════════ HERO BANNER ══════════ -->
@@ -820,27 +719,6 @@
 </main>
 
 <!-- ══════════ MOBILE BOTTOM NAV ══════════ -->
-<nav class="mobile-bottom-nav md:hidden">
-  <div class="nav-item" onclick="location.href='index.html'">
-    <i class="fa-solid fa-house"></i><span>Home</span>
-  </div>
-  <div class="nav-item active">
-    <i class="fa-solid fa-utensils"></i><span>Menu</span>
-  </div>
-  <div onclick="toggleCart()">
-    <div class="cart-fab">
-      <i class="fa-solid fa-bag-shopping text-lg"></i>
-      <div class="badge" id="mobileBadge" style="display:none; position:absolute; top:-4px; right:-4px; background:#c0392b; color:#fff; width:18px; height:18px; border-radius:50%; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center;">0</div>
-    </div>
-  </div>
-  <div class="nav-item" onclick="location.href='reserve.html'">
-    <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
-  </div>
-  <div class="nav-item">
-    <i class="fa-regular fa-circle-user"></i><span><a href="login.html">Profile</a></span>
-  </div>
-</nav>
-
 <script>
   // ── Navbar scroll ──
   const navbar = document.getElementById('navbar');
