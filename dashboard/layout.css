@@ -1,23 +1,4 @@
-/* ============================================================
-   SAVORIA — SHARED LAYOUT SYSTEM
-   layout.css  |  v2.1
-   Use in: Admin Dashboard · Staff Manager · Any future panel
-   
-   Covers:
-     1. CSS Variables  (light + dark)
-     2. Main Content   (#mainContent · #pageArea)
-     3. Sidebar        (logo · nav · footer · collapse)
-     4. Topbar         (search · actions · notification bell)
-     5. Page Footer    (status bar)
-     6. Shared Animations
-     7. Scrollbar
-     8. Responsive     (mobile + tablet)
-   ============================================================ */
 
-
-/* ============================================================
-   1. CSS VARIABLES
-   ============================================================ */
 
 :root {
   --red:          #c0392b;

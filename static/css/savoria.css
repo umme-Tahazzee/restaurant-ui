@@ -198,6 +198,39 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .add-btn:hover  { transform: scale(1.08); box-shadow: 0 6px 18px rgba(192,57,43,0.4); }
 .add-btn:active { transform: scale(0.95); }
+.add-btn.hidden { display: none !important; }
+
+/* ── Inline Cart Counter (−  qty  +) ── */
+.cart-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  overflow: hidden;
+  background: var(--cream);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.cart-counter button {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 600;
+  color: var(--mid);
+  background: transparent;
+  border: none; cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.cart-counter button:first-child:hover { background: var(--red-pale); color: var(--red); }
+.cart-counter button:last-child:hover  { background: var(--red-pale); color: var(--red); }
+.cart-counter .qty {
+  min-width: 28px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dark);
+  user-select: none;
+}
+.cart-counter.hidden { display: none; }
 
 /* ─────────────────────────────────────────────────
    TAGS & BADGES

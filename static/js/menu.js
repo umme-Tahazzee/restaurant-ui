@@ -40,13 +40,13 @@ function sortMenu(val) {
     const cards = [...container.querySelectorAll('.menu-card')];
 
     cards.sort((a, b) => {
-      const pa = parseFloat(a.dataset.price)  || 0;
-      const pb = parseFloat(b.dataset.price)  || 0;
+      const pa = parseFloat(a.dataset.price) || 0;
+      const pb = parseFloat(b.dataset.price) || 0;
       const ra = parseFloat(a.dataset.rating) || 0;
       const rb = parseFloat(b.dataset.rating) || 0;
-      if (val === 'price-asc')  return pa - pb;
+      if (val === 'price-asc') return pa - pb;
       if (val === 'price-desc') return pb - pa;
-      if (val === 'rating')     return rb - ra;
+      if (val === 'rating') return rb - ra;
       return 0;
     });
 
@@ -62,15 +62,15 @@ let searchTimer = null;
 function handleSearch(val) {
   /* Sync both inputs */
   const deskInput = document.getElementById('deskSearch');
-  const mobInput  = document.getElementById('mobSearch');
+  const mobInput = document.getElementById('mobSearch');
   if (deskInput) deskInput.value = val;
-  if (mobInput)  mobInput.value  = val;
+  if (mobInput) mobInput.value = val;
 
   /* Toggle clear button visibility */
   const deskWrap = document.getElementById('deskSearchWrap');
-  const mobBar   = document.getElementById('mobSearchBar');
+  const mobBar = document.getElementById('mobSearchBar');
   deskWrap?.classList.toggle('has-value', !!val.trim());
-  mobBar?.classList.toggle('has-value',  !!val.trim());
+  mobBar?.classList.toggle('has-value', !!val.trim());
 
   clearTimeout(searchTimer);
   if (!val.trim()) {
@@ -100,9 +100,9 @@ function runSearch(query) {
     sec.style.display = sectionHasMatch ? 'block' : 'none';
   });
 
-  const bar     = document.getElementById('searchResultBar');
-  const txt     = document.getElementById('searchResultText');
-  const noRes   = document.getElementById('noResults');
+  const bar = document.getElementById('searchResultBar');
+  const txt = document.getElementById('searchResultText');
+  const noRes = document.getElementById('noResults');
   const noLabel = document.getElementById('noResultsLabel');
 
   if (bar) bar.classList.add('visible');
@@ -110,20 +110,20 @@ function runSearch(query) {
     ? `${count} dish${count !== 1 ? 'es' : ''} found for "${query}"`
     : `No results for "${query}"`;
 
-  if (noRes)   noRes.classList.toggle('visible', count === 0);
+  if (noRes) noRes.classList.toggle('visible', count === 0);
   if (noLabel) noLabel.textContent = `No dishes match "${query}"`;
 }
 
 function clearSearch(silent) {
   const deskInput = document.getElementById('deskSearch');
-  const mobInput  = document.getElementById('mobSearch');
-  const deskWrap  = document.getElementById('deskSearchWrap');
-  const mobBar    = document.getElementById('mobSearchBar');
-  const bar       = document.getElementById('searchResultBar');
-  const noRes     = document.getElementById('noResults');
+  const mobInput = document.getElementById('mobSearch');
+  const deskWrap = document.getElementById('deskSearchWrap');
+  const mobBar = document.getElementById('mobSearchBar');
+  const bar = document.getElementById('searchResultBar');
+  const noRes = document.getElementById('noResults');
 
   if (deskInput) deskInput.value = '';
-  if (mobInput)  mobInput.value  = '';
+  if (mobInput) mobInput.value = '';
   deskWrap?.classList.remove('has-value');
   mobBar?.classList.remove('has-value');
   bar?.classList.remove('visible');
@@ -168,11 +168,11 @@ function toggleMobSearch() {
    QUICK VIEW MODAL
 ───────────────────────────────────────────────── */
 function openQuick(card) {
-  const name   = card.querySelector('h3')?.textContent || '';
-  const desc   = card.querySelector('p.font-cormorant')?.textContent || '';
-  const price  = parseFloat(card.dataset.price) || 0;
+  const name = card.querySelector('h3')?.textContent || '';
+  const desc = card.querySelector('p.font-cormorant')?.textContent || '';
+  const price = parseFloat(card.dataset.price) || 0;
   const rating = card.dataset.rating || '—';
-  const img    = card.querySelector('img')?.src || 'assets/thai.png';
+  const img = card.querySelector('img')?.src || 'assets/thai.png';
 
   /* Allergens */
   const allergenEls = [...card.querySelectorAll('.allergen')];
@@ -245,14 +245,8 @@ function openQuick(card) {
         <span class="flex items-center gap-1.5"><i class="fa-regular fa-star text-gold/70"></i> ${rating}</span>
       </div>
 
-      <!-- Add to Order -->
-      <div class="flex items-center justify-between">
-        <p class="font-playfair text-3xl font-black text-textDark">${formatPrice(price)}</p>
-        <button onclick="addToCart('${name}', ${price}, '${img}'); closeQuick();"
-                class="book-btn text-white px-8 py-3.5 rounded-xl text-[11px] font-bold tracking-[0.18em] uppercase flex items-center gap-2">
-          <i class="fa-solid fa-plus text-[10px]"></i> Add to Order
-        </button>
-      </div>
+      
+      
     </div>
   `;
 

@@ -130,24 +130,7 @@
     #mobileMenu{ transform:translateX(100%); transition:transform 0.45s cubic-bezier(0.4,0,0.2,1); pointer-events:none; }
     #mobileMenu.open{ transform:translateX(0); pointer-events:all; }
 
-    /* ── overlay ── */
-    #overlay{ transition:opacity 0.3s; }
-
-    /* ── footer ── */
-    .footer-bg{ background:linear-gradient(160deg,#1a0f0d,#0f0806); }
-
-    /* ── sidebar sticky ── */
-    .sidebar-sticky{ position:sticky; top:88px; }
-
-    /* ── mobile sticky bar ── */
-    .mob-bar{ position:fixed; bottom:0; left:0; right:0; z-index:900; background:#fff; border-top:1px solid var(--border); padding:12px 16px max(12px,env(safe-area-inset-bottom)); box-shadow:0 -8px 30px rgba(0,0,0,0.08); }
-
-    /* ── mobile bottom nav ── */
-    .mob-nav{ position:fixed; left:0; right:0; z-index:800; background:#fff; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-around; padding:7px 0 max(7px,env(safe-area-inset-bottom)); box-shadow:0 -3px 16px rgba(0,0,0,0.05); }
-    .mob-nav .ni{ display:flex; flex-direction:column; align-items:center; gap:3px; font-size:9px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#9a8880; cursor:pointer; padding:3px 6px; transition:color 0.2s; }
-    .mob-nav .ni i{ font-size:18px; }
-    .mob-nav .ni.active{ color:var(--red); }
-    .cart-fab{ width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#c0392b,#96281b); display:flex; align-items:center; justify-content:center; color:#fff; box-shadow:0 4px 16px rgba(192,57,43,0.4); margin-top:-16px; cursor:pointer; }
+   
   </style>
 </head>
 
@@ -204,16 +187,7 @@
   <!-- ── CONTENT ── -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-14 mt-4 sm:mt-6">
 
-    <!-- Breadcrumb -->
-    <nav class="hidden sm:flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-textMid/40 mb-4">
-      <a href="index.html" class="hover:text-gold transition">Home</a>
-      <i class="fa-solid fa-chevron-right text-[8px]"></i>
-      <a href="menu.html" class="hover:text-gold transition">Menu</a>
-      <i class="fa-solid fa-chevron-right text-[8px]"></i>
-      <a href="category.html" class="hover:text-gold transition" id="breadcrumbCat">Italian</a>
-      <i class="fa-solid fa-chevron-right text-[8px]"></i>
-      <span class="text-textDark truncate max-w-[180px]" id="breadcrumbDish">Bistecca Fiorentina</span>
-    </nav>
+   
 
     <!-- ── GRID: left content + right sidebar ── -->
     <div class="lg:grid lg:grid-cols-[1fr_352px] xl:grid-cols-[1fr_390px] lg:gap-8 xl:gap-10">
@@ -431,77 +405,7 @@
   </div><!-- end content -->
 </main>
 
-<!-- ══ FOOTER ══ -->
-<footer class="footer-bg hidden md:block">
-  <div class="max-w-7xl mx-auto px-6 lg:px-14 py-14">
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-12">
-      <div class="col-span-2 lg:col-span-1">
-        <span class="font-playfair text-2xl font-black text-white">Sav<span class="italic font-light text-redPrimary">o</span>ria</span>
-        <p class="font-cormorant italic text-gold/60 text-xs tracking-[0.3em] uppercase mt-0.5 mb-4">Fine Dining</p>
-        <p class="text-white/40 text-sm leading-relaxed">Where every dish tells a story of passion, craft, and the finest ingredients.</p>
-        <div class="flex gap-3 mt-5">
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-gold hover:text-gold transition text-xs"><i class="fa-brands fa-x-twitter"></i></a>
-        </div>
-      </div>
-      <div>
-        <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Navigation</p>
-        <ul class="space-y-3">
-          <li><a href="index.html" class="text-white/40 text-sm hover:text-gold transition">Home</a></li>
-          <li><a href="menu.html" class="text-white/40 text-sm hover:text-gold transition">Menu</a></li>
-          <li><a href="reserve.html" class="text-white/40 text-sm hover:text-gold transition">Reserve</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Hours</p>
-        <ul class="space-y-2">
-          <li class="text-white/40 text-sm">Mon–Fri · 12pm–10pm</li>
-          <li class="text-white/40 text-sm">Sat–Sun · 11am–11pm</li>
-        </ul>
-      </div>
-      <div>
-        <p class="text-white/70 text-[10px] uppercase tracking-[0.25em] font-semibold mb-5">Contact</p>
-        <ul class="space-y-3">
-          <li class="text-white/40 text-sm">📍 42 West 58th St, New York</li>
-          <li class="text-white/40 text-sm">📞 +1 (555) 920-4200</li>
-          <li class="text-white/40 text-sm">✉️ hello@savoria.com</li>
-        </ul>
-      </div>
-    </div>
-    <div class="gold-line h-px mb-6 opacity-20"></div>
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
-      <p class="text-white/30 text-xs">© 2025 Savoria Fine Dining. All rights reserved.</p>
-      <p class="font-cormorant italic text-gold/40 text-sm">Where every dish tells a story</p>
-    </div>
-  </div>
-</footer>
 
-<!-- ══ MOBILE: bottom add bar ══ -->
-<div class="mob-bar lg:hidden">
-  <div class="flex items-center gap-3 max-w-lg mx-auto">
-    <div class="qty-ctrl flex-shrink-0">
-      <button class="qty-btn" onclick="changeQty(-1)">−</button>
-      <span class="qty-num" id="qtyMob">1</span>
-      <button class="qty-btn" onclick="changeQty(1)">+</button>
-    </div>
-    <button id="addBtnMob" onclick="addToOrder()" class="add-btn flex-1 py-4 rounded-2xl">
-      <i class="fa-solid fa-bag-shopping text-[10px]"></i>
-      <span>Add to Order</span>
-      <span class="opacity-50">·</span>
-      <span id="btnTotalMob">$48</span>
-    </button>
-  </div>
-</div>
-
-<!-- ══ MOBILE BOTTOM NAV ══ -->
-<nav class="mob-nav lg:hidden" style="bottom:76px;">
-  <div class="ni" onclick="location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></div>
-  <div class="ni active"><i class="fa-solid fa-utensils"></i><span>Menu</span></div>
-  <div><div class="cart-fab"><i class="fa-solid fa-bag-shopping text-lg"></i></div></div>
-  <div class="ni" onclick="location.href='reserve.html'"><i class="fa-regular fa-calendar-check"></i><span>Reserve</span></div>
-  <div class="ni"><i class="fa-regular fa-circle-user"></i><span><a href="login.html">Profile</a></span></div>
-</nav>
 
 <!-- ══ SCRIPTS ══ -->
  <script src="static/js/savoria-app.js"></script>

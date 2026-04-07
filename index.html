@@ -13,7 +13,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="static/css/savoria.css">
 
-
   <script>
     tailwind.config = {
       theme: {
@@ -57,11 +56,13 @@
         <div class="anim-1">
           <h1 class="font-playfair text-5xl lg:text-7xl font-black text-textDark leading-[1.05] mb-6">
             The Art of<br />
-            <em class="text-redPrimary not-italic" style="font-style:italic">Fine Dining</em><br />
+            <em class="text-redPrimary not-italic" 
+            style="font-style:italic">Fine Dining</em><br />
             Redefined
           </h1>
           <p class="font-cormorant italic text-xl text-textMid/60 tracking-wide mb-8 leading-relaxed">
-            Where every dish is a canvas, every meal a memory worth keeping — crafted by Chef Marco with 20 years of
+            Where every dish is a canvas, every meal a memory worth keeping — crafted
+             by Chef Marco with 20 years of
             passion.
           </p>
           <div class="flex items-center gap-4 mb-10">
@@ -138,7 +139,8 @@
             <p class="font-playfair text-xl font-black text-white leading-tight">30% Off<br />Weekend Brunch</p>
             <p class="text-white/50 text-[11px] font-cormorant italic mt-1">Valid Sat & Sun · 11am–3pm</p>
             <button onclick="location.href='reserve.html'"
-              class="mt-3 bg-gold text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2 rounded-full">Claim
+              class="mt-3 bg-gold text-white text-[10px] font-bold 
+              uppercase tracking-[0.15em] px-4 py-2 rounded-full">Claim
               Offer</button>
           </div>
           <div class="text-6xl relative z-10 flex-shrink-0">🍽️</div>
@@ -204,8 +206,14 @@
             </div>
             <div class="flex flex-col items-end gap-2">
               <p class="font-playfair text-xl font-black text-white">$48</p>
-              <button onclick="addToCart('Bistecca Fiorentina', 48)"
-                class="w-9 h-9 bg-redPrimary rounded-full flex items-center justify-center text-white text-lg shadow-lg">+</button>
+              <div id="cart-MBistecca" class="cart-counter hidden" data-item-name="Bistecca Fiorentina">
+                <button onclick="changeQty('Bistecca Fiorentina', 48, -1, 'cart-MBistecca')">−</button>
+                <span class="qty">1</span>
+                <button onclick="changeQty('Bistecca Fiorentina', 48, 1, 'cart-MBistecca')">+</button>
+              </div>
+              <button class="w-9 h-9 bg-redPrimary rounded-full flex items-center justify-center text-white text-lg shadow-lg" id="btn-MBistecca"
+                data-item-name="Bistecca Fiorentina"
+                onclick="firstAdd('Bistecca Fiorentina', 48, 'cart-MBistecca', 'btn-MBistecca')">+</button>
             </div>
           </div>
         </div>
@@ -217,10 +225,11 @@
           <p class="mobile-section-title">Most Popular</p>
           <a href="menu.html" class="text-[10px] font-bold uppercase tracking-widest text-redPrimary">See All</a>
         </div>
-        <div class="flex gap-3 overflow-x-auto scroll-hide pl-5 pr-5 pb-2" style="-webkit-overflow-scrolling:touch;"
+        <div class="flex gap-3 overflow-x-auto scroll-hide pl-5 pr-5 pb-2"
+         style="-webkit-overflow-scrolling:touch;"
           id="dishScroll">
           <div class="app-dish-card w-[155px]">
-            <div class="relative overflow-hidden h-[130px]"><img src="./assets/thai.png" alt="Dish"
+            <div class="relative overflow-hidden h-[130px]"><img src="./assets/f5.png" alt="Dish"
                 class="w-full h-full object-cover" />
               <div class="absolute top-2 left-2"><span class="tag tag-gold">Popular</span></div>
             </div>
@@ -229,7 +238,14 @@
               <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">House-made pasta</p>
               <div class="flex items-center justify-between mt-2.5">
                 <p class="font-bold text-textDark text-sm">$28</p>
-                <button class="add-btn" onclick="addToCart('Tagliatelle al Ragù', 28)"><span
+                <div id="cart-MTagliatelle" class="cart-counter hidden" data-item-name="Tagliatelle al Ragù">
+                  <button onclick="changeQty('Tagliatelle al Ragù', 28, -1, 'cart-MTagliatelle')">−</button>
+                  <span class="qty">1</span>
+                  <button onclick="changeQty('Tagliatelle al Ragù', 28, 1, 'cart-MTagliatelle')">+</button>
+                </div>
+                <button class="add-btn" id="btn-MTagliatelle" data-item-name="Tagliatelle al Ragù"
+                  onclick="firstAdd('Tagliatelle al Ragù', 28, 'cart-MTagliatelle',
+                   'btn-MTagliatelle','assets/f5.png')"><span
                     class="text-lg leading-none">+</span></button>
               </div>
             </div>
@@ -244,7 +260,13 @@
               <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Vanilla · berry coulis</p>
               <div class="flex items-center justify-between mt-2.5">
                 <p class="font-bold text-textDark text-sm">$14</p>
-                <button class="add-btn" onclick="addToCart('Panna Cotta', 14)"><span
+                <div id="cart-MPannaCotta" class="cart-counter hidden" data-item-name="Panna Cotta">
+                  <button onclick="changeQty('Panna Cotta', 14, -1, 'cart-MPannaCotta')">−</button>
+                  <span class="qty">1</span>
+                  <button onclick="changeQty('Panna Cotta', 14, 1, 'cart-MPannaCotta')">+</button>
+                </div>
+                <button class="add-btn" id="btn-MPannaCotta" data-item-name="Panna Cotta"
+                  onclick="firstAdd('Panna Cotta', 14, 'cart-MPannaCotta', 'btn-MPannaCotta')"><span
                     class="text-lg leading-none">+</span></button>
               </div>
             </div>
@@ -257,7 +279,13 @@
               <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Spicy lemongrass</p>
               <div class="flex items-center justify-between mt-2.5">
                 <p class="font-bold text-textDark text-sm">$18</p>
-                <button class="add-btn" onclick="addToCart('Tom Yum Soup', 18)"><span
+                <div id="cart-MTomYum" class="cart-counter hidden" data-item-name="Tom Yum Soup">
+                  <button onclick="changeQty('Tom Yum Soup', 18, -1, 'cart-MTomYum')">−</button>
+                  <span class="qty">1</span>
+                  <button onclick="changeQty('Tom Yum Soup', 18, 1, 'cart-MTomYum')">+</button>
+                </div>
+                <button class="add-btn" id="btn-MTomYum" data-item-name="Tom Yum Soup"
+                  onclick="firstAdd('Tom Yum Soup', 18, 'cart-MTomYum', 'btn-MTomYum')"><span
                     class="text-lg leading-none">+</span></button>
               </div>
             </div>
@@ -270,7 +298,13 @@
               <p class="font-cormorant italic text-[11px] text-textMid/50 mt-0.5">Sesame · avocado</p>
               <div class="flex items-center justify-between mt-2.5">
                 <p class="font-bold text-textDark text-sm">$32</p>
-                <button class="add-btn" onclick="addToCart('Tuna Tartare', 32)"><span
+                <div id="cart-MTunaTartare" class="cart-counter hidden" data-item-name="Tuna Tartare">
+                  <button onclick="changeQty('Tuna Tartare', 32, -1, 'cart-MTunaTartare')">−</button>
+                  <span class="qty">1</span>
+                  <button onclick="changeQty('Tuna Tartare', 32, 1, 'cart-MTunaTartare')">+</button>
+                </div>
+                <button class="add-btn" id="btn-MTunaTartare" data-item-name="Tuna Tartare"
+                  onclick="firstAdd('Tuna Tartare', 32, 'cart-MTunaTartare', 'btn-MTunaTartare')"><span
                     class="text-lg leading-none">+</span></button>
               </div>
             </div>
@@ -381,7 +415,7 @@
         <!-- Dish card 1 -->
         <div class="dish-card">
           <div class="relative overflow-hidden h-[200px]">
-            <img src="./assets/thai.png" alt="Dish"
+            <img src="./assets/f2.png" alt="Dish"
               class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
             <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
           </div>
@@ -395,9 +429,15 @@
             </div>
             <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
               <p class="font-playfair text-xl font-black text-textDark">$28</p>
-              <button onclick="addToCart('Tagliatelle al Ragù', 28)"
-                class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
-                <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
+              <div id="cart-Tagliatelle" class="cart-counter hidden" data-item-name="Tagliatelle al Ragù">
+                <button onclick="changeQty('Tagliatelle al Ragù', 28, -1, 'cart-Tagliatelle')">−</button>
+                <span class="qty">1</span>
+                <button onclick="changeQty('Tagliatelle al Ragù', 28, 1, 'cart-Tagliatelle')">+</button>
+              </div>
+              <button class="add-btn" id="btn-Tagliatelle" data-item-name="Tagliatelle al Ragù"
+                onclick="firstAdd('Tagliatelle al Ragù', 28, 'cart-Tagliatelle', 
+                'btn-Tagliatelle','assets/f2.png')">
+                <span class="text-lg leading-none">+</span>
               </button>
             </div>
           </div>
@@ -405,7 +445,7 @@
         <!-- Dish card 2 -->
         <div class="dish-card">
           <div class="relative overflow-hidden h-[200px]">
-            <img src="./assets/thai.png" alt="Dish"
+            <img src="./assets/f3.png" alt="Dish"
               class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
             <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
           </div>
@@ -419,9 +459,14 @@
             </div>
             <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
               <p class="font-playfair text-xl font-black text-textDark">$48</p>
-              <button onclick="addToCart('Bistecca Fiorentina', 48)"
-                class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
-                <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
+              <div id="cart-Bistecca" class="cart-counter hidden" data-item-name="Bistecca Fiorentina">
+                <button onclick="changeQty('Bistecca Fiorentina', 48, -1, 'cart-Bistecca')">−</button>
+                <span class="qty">1</span>
+                <button onclick="changeQty('Bistecca Fiorentina', 48, 1, 'cart-Bistecca')">+</button>
+              </div>
+              <button class="add-btn" id="btn-Bistecca" data-item-name="Bistecca Fiorentina"
+                onclick="firstAdd('Bistecca Fiorentina', 48, 'cart-Bistecca', 'btn-Bistecca', 'assets/f3.png')">
+                <span class="text-lg leading-none">+</span>
               </button>
             </div>
           </div>
@@ -443,9 +488,14 @@
             </div>
             <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
               <p class="font-playfair text-xl font-black text-textDark">$14</p>
-              <button onclick="addToCart('Panna Cotta', 14)"
-                class="book-btn text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2.5 rounded-lg flex items-center gap-2">
-                <i class="fa-solid fa-plus text-[9px]"></i> Add to Order
+              <div id="cart-PannaCotta" class="cart-counter hidden" data-item-name="Panna Cotta">
+                <button onclick="changeQty('Panna Cotta', 14, -1, 'cart-PannaCotta')">−</button>
+                <span class="qty">1</span>
+                <button onclick="changeQty('Panna Cotta', 14, 1, 'cart-PannaCotta')">+</button>
+              </div>
+              <button class="add-btn" id="btn-PannaCotta" data-item-name="Panna Cotta"
+                onclick="firstAdd('Panna Cotta', 14, 'cart-PannaCotta', 'btn-PannaCotta' ,'assets/thai.png')">
+                <span class="text-lg leading-none">+</span>
               </button>
             </div>
           </div>
@@ -555,13 +605,16 @@
 
   <!-- ══════════ MOBILE BOTTOM NAV ══════════ -->
   <script src="static/js/savoria-app.js"></script>
+  <script src="static/js/cart.js"></script>
   <script>
+   
+
 function mobileIndexSearch(val) {
   if (val.trim().length > 1) {
     window.location.href = 'menu.html?search=' + encodeURIComponent(val.trim());
   }
 }
-</script>
+  </script>
 </body>
 
 </html>

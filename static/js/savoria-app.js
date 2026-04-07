@@ -170,6 +170,7 @@ function renderCart() {
     if (totalsBlock) totalsBlock.innerHTML = '';
     if (cartBody)    cartBody.innerHTML = _emptyCartHTML();
     if (cartTotals)  cartTotals.innerHTML = '';
+    syncMenuCounters();
     return;
   }
 
@@ -245,6 +246,33 @@ function renderCart() {
 
   if (totalsBlock) totalsBlock.innerHTML = totalsHTML;
   if (cartTotals)  cartTotals.innerHTML  = totalsHTML;
+
+  syncMenuCounters();
+}
+
+
+function syncMenuCounters() {
+ 
+  document.querySelectorAll('.cart-counter[data-item-name]').forEach(counter => {
+    const itemName = counter.getAttribute('data-item-name');
+    const cartItem = cart.find(i => i.name === itemName);
+
+   
+    const btnId = counter.id.replace('cart-', 'btn-');
+    const btn   = document.getElementById(btnId);
+    const qtyEl = counter.querySelector('.qty');
+
+    if (cartItem) {
+      
+      counter.classList.remove('hidden');
+      if (qtyEl) qtyEl.textContent = cartItem.qty;
+      if (btn)   btn.classList.add('hidden');
+    } else {
+     
+      counter.classList.add('hidden');
+      if (btn) btn.classList.remove('hidden');
+    }
+  });
 }
 
 function _emptyCartHTML() {
@@ -944,36 +972,12 @@ function injectCartModal() {
         </button>
       </div>
       <!-- Progress steps -->
-      <div class="px-6 py-4 flex-shrink-0 border-b border-borderSoft bg-white">
-        <div class="flex items-center gap-0">
-          <div class="flex flex-col items-center gap-1.5 flex-1">
-            <div class="w-7 h-7 rounded-full bg-redPrimary flex items-center justify-center"><i class="fa-solid fa-check text-white text-[10px]"></i></div>
-            <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-redPrimary">Cart</span>
-          </div>
-          <div class="flex-1 h-[2px] bg-borderSoft mb-4 mx-1"><div class="h-full bg-redPrimary w-1/2 rounded-full"></div></div>
-          <div class="flex flex-col items-center gap-1.5 flex-1">
-            <div class="w-7 h-7 rounded-full border-2 border-borderSoft flex items-center justify-center"><span class="text-[10px] font-bold text-textMid/40">2</span></div>
-            <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-textMid/40">Payment</span>
-          </div>
-          <div class="flex-1 h-[2px] bg-borderSoft mb-4 mx-1"></div>
-          <div class="flex flex-col items-center gap-1.5 flex-1">
-            <div class="w-7 h-7 rounded-full border-2 border-borderSoft flex items-center justify-center"><span class="text-[10px] font-bold text-textMid/40">3</span></div>
-            <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-textMid/40">Confirm</span>
-          </div>
-        </div>
-      </div>
+      
       <!-- Scrollable body -->
       <div class="flex-1 overflow-y-auto bg-white" id="cartScrollBody">
         <!-- Dine in / Takeout -->
         <div class="px-6 pt-5 pb-4">
-          <div class="flex gap-2 p-1 bg-cream rounded-xl">
-            <button id="dineBtn" onclick="setOrderType('dine')" class="flex-1 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.12em] transition-all bg-white text-textDark shadow-sm">
-              <i class="fa-solid fa-utensils mr-1.5 text-[10px]"></i> Dine In
-            </button>
-            <button id="takeBtn" onclick="setOrderType('take')" class="flex-1 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.12em] transition-all text-textMid/50">
-              <i class="fa-solid fa-box mr-1.5 text-[10px]"></i> Takeout
-            </button>
-          </div>
+          
         </div>
         <!-- Items label -->
         <div class="px-6 pb-3 flex items-center justify-between">
@@ -1008,15 +1012,8 @@ function injectCartModal() {
             </button>
           </div>
         </div>
-        <!-- Kitchen note -->
-        <div id="cartNote" class="px-6 py-4 border-b border-borderSoft/50 hidden">
-          <p class="text-[10px] uppercase tracking-[0.25em] font-bold text-textMid/40 mb-2.5">Special Instructions</p>
-          <div class="flex items-start gap-2.5 bg-white border border-borderSoft rounded-xl px-3 py-2.5 focus-within:border-gold transition">
-            <i class="fa-regular fa-note-sticky text-gold/60 mt-0.5 flex-shrink-0"></i>
-            <textarea rows="2" placeholder="Allergies, preferences, or notes for the kitchen…"
-              class="bg-transparent flex-1 outline-none placeholder-textMid/35 text-[12px] text-textDark resize-none leading-relaxed"></textarea>
-          </div>
-        </div>
+      
+        
         <!-- Est. time & table -->
         <div id="cartMeta" class="px-6 py-4 hidden">
           <div class="flex items-center justify-between gap-4">
@@ -1077,6 +1074,7 @@ function injectNavbar() {
         <li><a href="index.html"   class="nav-link transition">Home</a></li>
         <li><a href="menu.html"    class="nav-link transition">Menu</a></li>
         <li><a href="about.html"   class="nav-link transition">About</a></li>
+        <li><a href="gallery.html"   class="nav-link transition">Gallery</a></li>
         <li><a href="reserve.html" class="nav-link transition">Reserve</a></li>
         <li><a href="contact.html" class="nav-link transition">Contact</a></li>
       </ul>
@@ -1141,10 +1139,12 @@ function injectMobileBottomNav() {
         <div class="badge" id="mobileBadge" style="display:none">0</div>
       </div>
     </div>
-    <div class="nav-item${isActive('reserve.html') ? ' active' : ''}" onclick="location.href='reserve.html'">
+    <div class="nav-item${isActive('reserve.html') ? ' active' : ''}" 
+    onclick="location.href='reserve.html'">
       <i class="fa-regular fa-calendar-check"></i><span>Reserve</span>
     </div>
-    <div class="nav-item${isActive('contact.html') ? ' active' : ''}" onclick="location.href='contact.html'">
+    <div class="nav-item${isActive('contact.html') ? ' active' : ''}"
+     onclick="location.href='contact.html'">
       <i class="fa-regular fa-heart"></i><span>Contact</span>
     </div>
   `;

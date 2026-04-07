@@ -1,249 +1,390 @@
+/* ═══════════════════════════════════════════
+   RESERVE.JS — Savoria Table Booking Wizard
+   ═══════════════════════════════════════════ */
 
+'use strict';
 
-// ═══ STATE ═══
+/* ── State ── */
 const state = {
-  step:1, date:null, time:null, guests:2,
-  occasion:'None', area:'main', areaLabel:'Main Dining',
+  step: 1,
+  date: null,
+  time: null,
+  guests: 2,
+  occasion: 'None',
+  area: 'main',
+  areaLabel: 'Main Dining',
 };
 
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
 const TIME_SLOTS = [
-  {t:"12:00 PM",full:false},{t:"12:30 PM",full:false},{t:"1:00 PM",full:false},
-  {t:"1:30 PM",full:false}, {t:"2:00 PM",full:false}, {t:"2:30 PM",full:false},
-  {t:"4:00 PM",full:false}, {t:"4:30 PM",full:false}, {t:"5:00 PM",full:false},
-  {t:"6:00 PM",full:false}, {t:"6:30 PM",full:true},  {t:"7:00 PM",full:false},
-  {t:"7:30 PM",full:true},  {t:"8:00 PM",full:false}, {t:"8:30 PM",full:false},
-  {t:"9:00 PM",full:false}, {t:"9:30 PM",full:true},  {t:"10:00 PM",full:false},
+  {t:'12:00 PM',full:false},{t:'12:30 PM',full:false},{t:'1:00 PM',full:false},
+  {t:'1:30 PM', full:false},{t:'2:00 PM', full:false},{t:'2:30 PM', full:false},
+  {t:'4:00 PM', full:false},{t:'4:30 PM', full:false},{t:'5:00 PM', full:false},
+  {t:'6:00 PM', full:false},{t:'6:30 PM', full:true}, {t:'7:00 PM', full:false},
+  {t:'7:30 PM', full:true}, {t:'8:00 PM', full:false},{t:'8:30 PM', full:false},
+  {t:'9:00 PM', full:false},{t:'9:30 PM', full:true}, {t:'10:00 PM',full:false},
 ];
+
+const AREA_LABELS = {
+  main:    'Main Dining',
+  terrace: 'Garden Terrace',
+  bar:     'Bar Lounge',
+  private: 'Private Room',
+};
+
 let calOffset = 0;
 
-const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const DAYS   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded', () => {
+  renderCalendar();
+  renderTimeSlots();
+  updateSummary();
+  initReveal();
+});
 
-// ═══ CALENDAR ═══
+/* ── Scroll reveal ── */
+function initReveal() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
+
+/* ══════════════════════════════════════
+   CALENDAR
+══════════════════════════════════════ */
 function renderCalendar() {
   const strip = document.getElementById('calStrip');
   const today = new Date();
-  const base  = new Date(today); base.setDate(today.getDate() + calOffset * 7);
-  const days  = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(base); d.setDate(base.getDate() + i); days.push(d);
-  }
-  const firstM = days[0], lastM = days[6];
-  document.getElementById('calMonth').textContent =
-    firstM.getMonth() === lastM.getMonth()
-      ? `${MONTHS[firstM.getMonth()]} ${firstM.getFullYear()}`
-      : `${MONTHS[firstM.getMonth()].slice(0,3)} – ${MONTHS[lastM.getMonth()].slice(0,3)} ${lastM.getFullYear()}`;
+  const base  = new Date(today);
+  base.setDate(today.getDate() + calOffset * 7);
 
-  strip.innerHTML = days.map(d => {
+  // Start from Sunday of the week
+  const start = new Date(base);
+  start.setDate(base.getDate() - base.getDay());
+
+  // Month label
+  const end = new Date(start);
+  end.setDate(start.getDate() + 6);
+  const calMonth = document.getElementById('calMonth');
+  if (calMonth) {
+    calMonth.textContent = start.getMonth() === end.getMonth()
+      ? `${MONTHS[start.getMonth()]} ${start.getFullYear()}`
+      : `${MONTHS[start.getMonth()].slice(0,3)} – ${MONTHS[end.getMonth()].slice(0,3)} ${end.getFullYear()}`;
+  }
+
+  strip.innerHTML = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+
     const isToday  = d.toDateString() === today.toDateString();
     const isPast   = d < today && !isToday;
     const isActive = state.date && d.toDateString() === state.date.toDateString();
+
     let cls = 'cal-day';
-    if (isPast) cls += ' disabled';
+    if (isPast)     cls += ' disabled';
     else if (isActive) cls += ' active';
-    else if (isToday) cls += ' today';
+    else if (isToday)  cls += ' today';
+
     const ds = d.toDateString();
-    return `<div class="${cls}" onclick="selectDate('${ds}')">
-      <span class="text-[9px] font-bold uppercase tracking-[.08em] ${isActive?'text-white/70':isToday?'text-gold/70':'text-textMid/40'}">${DAYS[d.getDay()]}</span>
-      <span class="text-base font-black leading-none ${isActive?'text-white':isToday?'text-redPrimary':'text-textDark'}">${d.getDate()}</span>
-      <span class="text-[9px] ${isActive?'text-white/50':'text-textMid/30'}">${MONTHS[d.getMonth()].slice(0,3)}</span>
-    </div>`;
-  }).join('');
+
+    const el = document.createElement('div');
+    el.className = cls;
+    el.innerHTML = `
+      <span class="text-[9px] font-bold uppercase tracking-[.08em] ${isActive ? 'text-white/70' : isToday ? 'text-gold/70' : 'text-textMid/40'}">${DAYS[d.getDay()]}</span>
+      <span class="text-base font-black leading-none ${isActive ? 'text-white' : isToday ? 'text-redPrimary' : 'text-textDark'}">${d.getDate()}</span>
+      <span class="text-[9px] ${isActive ? 'text-white/50' : 'text-textMid/30'}">${MONTHS[d.getMonth()].slice(0,3)}</span>
+    `;
+    if (!isPast) el.onclick = () => selectDate(ds);
+    strip.appendChild(el);
+  }
 }
 
 function prevWeek() { if (calOffset > 0) { calOffset--; renderCalendar(); } }
 function nextWeek() { calOffset++; renderCalendar(); }
+
 function selectDate(ds) {
-  state.date = new Date(ds); renderCalendar(); updateSummary();
-  state.time = null; renderTimeSlots();
-  document.getElementById('errDate').classList.remove('show');
+  state.date = new Date(ds);
+  state.time = null;
+  renderCalendar();
+  renderTimeSlots();
+  updateSummary();
+  hideErr('errDate');
 }
 
-// ═══ TIME SLOTS ═══
+/* ══════════════════════════════════════
+   TIME SLOTS
+══════════════════════════════════════ */
 function renderTimeSlots() {
-  document.getElementById('timeSlots').innerHTML = TIME_SLOTS.map(s => {
+  const container = document.getElementById('timeSlots');
+  container.innerHTML = TIME_SLOTS.map(s => {
     let cls = 'time-slot';
-    if (s.full) cls += ' full';
+    if (s.full)              cls += ' full';
     else if (state.time === s.t) cls += ' active';
-    return `<div class="${cls}" ${s.full?'title="Fully booked"':''} onclick="${s.full?'':` selectTime('${s.t}')`}">${s.t}${s.full?'<br><span style="font-size:9px;opacity:.6">Full</span>':''}</div>`;
+
+    return `<div class="${cls}" onclick="${s.full ? '' : `selectTime('${s.t}')`}">
+      ${s.t}${s.full ? '<br><span style="font-size:9px;opacity:.6">Full</span>' : ''}
+    </div>`;
   }).join('');
 }
+
 function selectTime(t) {
-  state.time = t; renderTimeSlots(); updateSummary();
-  document.getElementById('errTime').classList.remove('show');
+  state.time = t;
+  renderTimeSlots();
+  updateSummary();
+  hideErr('errTime');
 }
 
-// ═══ GUESTS ═══
+/* ══════════════════════════════════════
+   GUESTS
+══════════════════════════════════════ */
 function changeGuests(delta) {
   state.guests = Math.max(1, Math.min(9, state.guests + delta));
-  document.getElementById('guestVal').textContent = state.guests;
-  document.getElementById('guestMinus').disabled = state.guests <= 1;
-  document.getElementById('guestPlus').disabled  = state.guests >= 9;
+  const val   = document.getElementById('guestVal');
+  const minus = document.getElementById('guestMinus');
+  const plus  = document.getElementById('guestPlus');
+  if (val)   val.textContent = state.guests;
+  if (minus) minus.disabled  = state.guests <= 1;
+  if (plus)  plus.disabled   = state.guests >= 9;
   updateSummary();
 }
 
-// ═══ OCCASION ═══
+/* ══════════════════════════════════════
+   OCCASION
+══════════════════════════════════════ */
 function selectOccasion(el, val) {
   document.querySelectorAll('.occ-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
-  state.occasion = val === 'none' ? 'None' : el.querySelector('span').textContent;
+  state.occasion = val === 'none'
+    ? 'None'
+    : el.querySelector('span').textContent.trim();
   updateSummary();
 }
 
-// ═══ AREA ═══
-const AREA_LABELS = { main:'Main Dining', terrace:'Garden Terrace', bar:'Bar Lounge', private:'Private Room' };
+/* ══════════════════════════════════════
+   AREA
+══════════════════════════════════════ */
 function selectArea(el, key) {
-  document.querySelectorAll('.area-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.area-card').forEach(c => {
+    c.classList.remove('active');
+    const chk = c.querySelector('.area-check');
+    if (chk) { chk.classList.remove('bg-redPrimary', 'border-redPrimary'); }
+  });
   el.classList.add('active');
-  state.area = key; state.areaLabel = AREA_LABELS[key];
+  const chk = el.querySelector('.area-check');
+  if (chk) { chk.classList.add('bg-redPrimary', 'border-redPrimary'); }
+  state.area      = key;
+  state.areaLabel = AREA_LABELS[key] || key;
   updateSummary();
 }
 
-// ═══ DIETARY ═══
+/* ══════════════════════════════════════
+   DIETARY
+══════════════════════════════════════ */
 function toggleDiet(el) { el.classList.toggle('active'); }
 
-// ═══ SUMMARY ═══
+/* ══════════════════════════════════════
+   SUMMARY
+══════════════════════════════════════ */
 function updateSummary() {
-  const fmt = d => d ? `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()}` : 'Not selected';
-  // Desktop sidebar
-  const sd = document.getElementById('sumDate');
-  const st = document.getElementById('sumTime');
-  const sg = document.getElementById('sumGuests');
-  const sa = document.getElementById('sumArea');
-  const so = document.getElementById('sumOccasion');
-  if(sd) sd.textContent = fmt(state.date);
-  if(st) st.textContent = state.time || 'Not selected';
-  if(sg) sg.textContent = state.guests + (state.guests===1?' Guest':' Guests');
-  if(sa) sa.textContent = state.areaLabel;
-  if(so) so.textContent = state.occasion;
+  const fmt = d => d
+    ? `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()}`
+    : 'Not selected';
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+  set('sumDate',     fmt(state.date));
+  set('sumTime',     state.time || 'Not selected');
+  set('sumGuests',   state.guests + (state.guests === 1 ? ' Guest' : ' Guests'));
+  set('sumArea',     state.areaLabel);
+  set('sumOccasion', state.occasion);
+
   // Mobile strip
-  const md = document.getElementById('mobSumDate');
-  const mt = document.getElementById('mobSumTime');
-  const mg = document.getElementById('mobSumGuests');
-  if(md) md.textContent = state.date ? fmt(state.date) : 'No date';
-  if(mt) mt.textContent = state.time || 'No time';
-  if(mg) mg.textContent = state.guests + ' Guest' + (state.guests!==1?'s':'');
+  set('mobSumDate',   state.date ? fmt(state.date) : 'No date');
+  set('mobSumTime',   state.time || 'No time');
+  set('mobSumGuests', state.guests + ' Guest' + (state.guests !== 1 ? 's' : ''));
+  set('mobSumArea',   state.areaLabel);
 }
 
-// ═══ STEP NAV ═══
+/* ══════════════════════════════════════
+   STEP NAVIGATION
+══════════════════════════════════════ */
 function goStep(n) {
-  if (n > state.step) {
-    if (state.step === 1) {
-      let ok = true;
-      if (!state.date) { document.getElementById('errDate').classList.add('show'); ok = false; }
-      if (!state.time) { document.getElementById('errTime').classList.add('show'); ok = false; }
-      if (!ok) return;
-    }
-    if (state.step === 4 && n === 5) return;
+  // Validate step 1 before proceeding
+  if (n > state.step && state.step === 1) {
+    let ok = true;
+    if (!state.date) { showErr('errDate'); ok = false; }
+    if (!state.time) { showErr('errTime'); ok = false; }
+    if (!ok) return;
   }
+
   state.step = n;
 
-  document.querySelectorAll('.step-panel').forEach((p,i) => p.classList.toggle('active', i+1===n));
+  // Show/hide panels
+  document.querySelectorAll('.step-panel').forEach((p, i) => {
+    p.classList.toggle('active', i + 1 === n);
+  });
 
+  // Update step circles
   for (let i = 1; i <= 4; i++) {
-    const c = document.getElementById('sc'+i);
-    const l = document.getElementById('sl'+i);
-    if (i < n)       { c.className='step-circle done';   l.className='step-label done'; }
-    else if (i === n){ c.className='step-circle active'; l.className='step-label active'; }
-    else             { c.className='step-circle';         l.className='step-label'; }
-    if (i < 4) document.getElementById('con'+i).className = 'step-connector'+(i<n?' done':'');
+    const sc = document.getElementById('sc' + i);
+    const sl = document.getElementById('sl' + i);
+    if (!sc) continue;
+
+    sc.className = 'step-circle';
+    if (i < n)        sc.className += ' done';
+    else if (i === n) sc.className += ' active';
+
+    if (sl) {
+      sl.className = 'step-label';
+      if (i <= n) sl.className += ' active';
+      if (i < n)  sl.className += ' done';
+    }
+
+    // Connector
+    if (i < 4) {
+      const con = document.getElementById('con' + i);
+      if (con) { con.className = 'step-connector' + (i < n ? ' done' : ''); }
+    }
   }
 
-  const pcts = {1:25,2:50,3:75,4:100,5:100};
-  document.getElementById('progressBar').style.width = pcts[n]+'%';
-  document.getElementById('stepPct').textContent = n<=4?`Step ${n} of 4`:'Complete!';
+  // Progress
+  const pcts = {1:25, 2:50, 3:75, 4:100, 5:100};
+  const pb   = document.getElementById('progressBar');
+  const sp   = document.getElementById('stepPct');
+  if (pb) pb.style.width = (pcts[n] || 25) + '%';
+  if (sp) sp.textContent = n <= 4 ? `Step ${n} of 4` : 'Complete!';
 
-  const sc = document.getElementById('summaryCol');
-  const sb = document.getElementById('stepBar');
-  const ms = document.getElementById('mobileSummaryStrip');
-  if(sc) sc.style.display = n===5?'none':'';
-  if(sb) sb.style.display = n===5?'none':'';
-  if(ms) ms.style.display = n===5?'none':'';
+  // Hide sidebar & strip on step 5
+  const sc5 = document.getElementById('summaryCol');
+  const sb5 = document.getElementById('stepBar');
+  const ms5 = document.getElementById('mobileSummaryStrip');
+  if (sc5) sc5.style.display = n === 5 ? 'none' : '';
+  if (sb5) sb5.style.display = n === 5 ? 'none' : '';
+  if (ms5) ms5.style.display = n === 5 ? 'none' : '';
 
-  const target = document.getElementById('step'+n);
-  if(target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 90, behavior:'smooth' });
+  // Animate tick on success
+  if (n === 5) {
+    setTimeout(() => {
+      const tp = document.getElementById('tickPath');
+      if (tp) tp.style.strokeDashoffset = '0';
+    }, 200);
+  }
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ═══ FORM SUBMIT ═══
+/* ══════════════════════════════════════
+   CONFIRM RESERVATION
+══════════════════════════════════════ */
 function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-function setE(fId, eId, show) {
-  document.getElementById(fId)?.classList.toggle('err', show);
-  document.getElementById(eId)?.classList.toggle('show', show);
-}
 
 function confirmReservation(e) {
   e.preventDefault();
-  const first = document.getElementById('rfFirst').value.trim();
-  const email = document.getElementById('rfEmail').value.trim();
-  const phone = document.getElementById('rfPhone').value.trim();
-  const terms = document.getElementById('rfTerms').checked;
-  let ok = true;
-  setE('rfFirst','errFirst',!first);          if(!first) ok=false;
-  setE('rfEmail','errEmail',!isEmail(email)); if(!isEmail(email)) ok=false;
-  setE('rfPhone','errPhone',!phone);          if(!phone) ok=false;
-  if(!terms){ document.getElementById('errTerms').classList.add('show'); ok=false; }
-  else { document.getElementById('errTerms').classList.remove('show'); }
-  if(!ok) return;
 
-  document.getElementById('confirmLabel').classList.add('hidden');
-  document.getElementById('confirmSpinner').classList.remove('hidden');
-  document.getElementById('confirmBtn').disabled = true;
+  const first  = document.getElementById('rfFirst')?.value.trim()  || '';
+  const email  = document.getElementById('rfEmail')?.value.trim()  || '';
+  const phone  = document.getElementById('rfPhone')?.value.trim()  || '';
+  const terms  = document.getElementById('rfTerms')?.checked       || false;
+
+  let ok = true;
+
+  const setFE = (fId, eId, bad) => {
+    document.getElementById(fId)?.classList.toggle('err', bad);
+    bad ? showErr(eId) : hideErr(eId);
+    if (bad) ok = false;
+  };
+
+  setFE('rfFirst', 'errFirst', !first);
+  setFE('rfEmail', 'errEmail', !isEmail(email));
+  setFE('rfPhone', 'errPhone', !phone);
+  terms ? hideErr('errTerms') : (showErr('errTerms'), ok = false);
+
+  if (!ok) return;
+
+  const btn     = document.getElementById('confirmBtn');
+  const label   = document.getElementById('confirmLabel');
+  const spinner = document.getElementById('confirmSpinner');
+
+  if (btn)     btn.disabled = true;
+  if (label)   label.classList.add('hidden');
+  if (spinner) { spinner.classList.remove('hidden'); spinner.classList.add('flex'); }
 
   setTimeout(() => {
-    const ref = 'SVR-'+Math.floor(10000+Math.random()*90000);
+    const ref = 'SVR-' + Math.floor(10000 + Math.random() * 90000);
     const d   = state.date;
-    const dateStr = d?`${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`:'—';
-    const lastName = document.getElementById('rfLast').value.trim();
-    document.getElementById('bookRef').textContent    = ref;
-    document.getElementById('bookDate').textContent   = dateStr;
-    document.getElementById('bookTime').textContent   = state.time;
-    document.getElementById('bookGuests').textContent = state.guests+(state.guests===1?' Guest':' Guests');
-    document.getElementById('bookArea').textContent   = state.areaLabel;
-    document.getElementById('bookName').textContent   = first+(lastName?' '+lastName:'');
-    document.getElementById('bookEmail').textContent  = email;
+    const dateStr = d
+      ? `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
+      : '—';
+
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set('bookRef',    ref);
+    set('bookDate',   dateStr);
+    set('bookTime',   state.time || '—');
+    set('bookGuests', state.guests + (state.guests === 1 ? ' Guest' : ' Guests'));
+    set('bookArea',   state.areaLabel);
+    set('bookName',   first + (document.getElementById('rfLast')?.value.trim() ? ' ' + document.getElementById('rfLast').value.trim() : ''));
+    set('bookEmail',  email);
+
+    if (btn)     btn.disabled = false;
+    if (label)   label.classList.remove('hidden');
+    if (spinner) { spinner.classList.add('hidden'); spinner.classList.remove('flex'); }
+
     goStep(5);
-  }, 2000);
+  }, 1800);
 }
 
+/* ══════════════════════════════════════
+   NEW BOOKING
+══════════════════════════════════════ */
 function newBooking() {
-  state.step=1;state.date=null;state.time=null;state.guests=2;
-  state.occasion='None';state.area='main';state.areaLabel='Main Dining';
-  calOffset=0;
-  document.getElementById('detailsForm').reset();
-  document.getElementById('confirmLabel').classList.remove('hidden');
-  document.getElementById('confirmSpinner').classList.add('hidden');
-  document.getElementById('confirmBtn').disabled=false;
-  document.querySelectorAll('.occ-pill').forEach(p=>p.classList.remove('active'));
-  selectArea(document.getElementById('area-main'),'main');
-  updateSummary(); renderCalendar(); renderTimeSlots(); goStep(1);
-}
+  state.step     = 1;
+  state.date     = null;
+  state.time     = null;
+  state.guests   = 2;
+  state.occasion = 'None';
+  state.area     = 'main';
+  state.areaLabel = 'Main Dining';
+  calOffset = 0;
 
-// ═══ INIT ═══
-document.addEventListener('DOMContentLoaded', () => {
-  renderCalendar(); renderTimeSlots(); updateSummary();
+  // Reset form
+  const form = document.getElementById('detailsForm');
+  if (form) form.reset();
 
-  window.addEventListener('scroll', () => {
-    const nav = document.getElementById('navbar');
-    nav.style.boxShadow = window.scrollY > 60 ? '0 2px 20px rgba(0,0,0,.06)' : 'none';
+  // Reset dietary pills
+  document.querySelectorAll('.topic-pill').forEach(p => p.classList.remove('active'));
+
+  // Reset occasion pills
+  document.querySelectorAll('.occ-pill').forEach(p => p.classList.remove('active'));
+
+  // Reset area cards
+  document.querySelectorAll('.area-card').forEach(c => {
+    c.classList.remove('active');
+    const chk = c.querySelector('.area-check');
+    if (chk) chk.classList.remove('bg-redPrimary', 'border-redPrimary');
   });
+  const mainCard = document.getElementById('area-main');
+  if (mainCard) selectArea(mainCard, 'main');
 
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold:0.05 });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-});
+  // Guest counter
+  const gv = document.getElementById('guestVal');
+  const gm = document.getElementById('guestMinus');
+  if (gv) gv.textContent = '2';
+  if (gm) gm.disabled = true;
 
-function toggleMenu() {
-  const m=document.getElementById('mobileMenu'), ov=document.getElementById('overlay');
-  const open = m.style.transform==='translateX(0%)';
-  m.classList.remove('hidden');
-  m.style.display='flex';
-  m.style.transform = open?'translateX(100%)':'translateX(0%)';
-  ov.style.opacity  = open?'0':'1';
-  ov.style.pointerEvents = open?'none':'auto';
+  // Rebuild
+  renderCalendar();
+  renderTimeSlots();
+  updateSummary();
+  goStep(1);
 }
-function closeAll() {
-  const m=document.getElementById('mobileMenu'), ov=document.getElementById('overlay');
-  if(m) m.style.transform='translateX(100%)';
-  if(ov){ ov.style.opacity='0'; ov.style.pointerEvents='none'; }
-}
+
+/* ══════════════════════════════════════
+   ERROR HELPERS
+══════════════════════════════════════ */
+function showErr(id) { const el = document.getElementById(id); if (el) el.classList.add('show'); }
+function hideErr(id) { const el = document.getElementById(id); if (el) el.classList.remove('show'); }

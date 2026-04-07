@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Savoria — Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            redPrimary:"#c0392b",redDeep:"#96281b",redPale:"#fdf0ee",
+            cream:"#f5f0eb",textDark:"#1a1210",textMid:"#4a3830",
+            borderSoft:"#e8ddd8",gold:"#b8963e",goldLight:"#d4af6a",
+          },
+          fontFamily: {
+            playfair:["Playfair Display","serif"],
+            jost:["Jost","sans-serif"],
+            cormorant:["Cormorant Garamond","serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="static/css/savoria.css"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+
+    /* ── Masonry grid ── */
+    .masonry {
+      columns: 3;
+      column-gap: 16px;
+    }
+    @media(max-width:1024px){ .masonry{ columns:2; } }
+    @media(max-width:580px){  .masonry{ columns:1; } }
+
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 16px;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      background: #f5f0eb;
+      display: block;
+    }
+
+    .masonry-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform .45s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── Hover overlay ── */
+    .masonry-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26,18,16,.75) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity .3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 18px;
+    }
+    .masonry-item:hover .masonry-overlay { opacity: 1; }
+    .masonry-item:hover img { transform: scale(1.04); }
+
+    /* ── Filter tabs ── */
+    .filter-tab {
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      border: 1.5px solid #e8ddd8;
+      background: #fff;
+      color: #4a3830;
+      cursor: pointer;
+      transition: all .18s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .filter-tab:hover { border-color: #c0392b; color: #c0392b; background: #fdf0ee; }
+    .filter-tab.active {
+      background: #c0392b;
+      border-color: #c0392b;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(192,57,43,.25);
+    }
+
+    /* ── Item hide/show animation ── */
+    .masonry-item {
+      animation: fadeIn .35s ease both;
+    }
+    @keyframes fadeIn {
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .masonry-item.hidden-item {
+      display: none;
+    }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(10,6,4,.92);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .lightbox-img-wrap {
+      position: relative;
+      max-width: min(900px, 92vw);
+      max-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox-img-wrap img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 16px;
+      object-fit: contain;
+      box-shadow: 0 32px 80px rgba(0,0,0,.6);
+      transform: scale(.94);
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .lightbox.open .lightbox-img-wrap img {
+      transform: scale(1);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.15);
+      color: #fff;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .18s;
+      z-index: 10;
+    }
+    .lightbox-close:hover { background: rgba(192,57,43,.8); border-color: rgba(192,57,43,.6); }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.15);
+      color: #fff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .18s;
+      z-index: 10;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,.2); }
+    .lightbox-nav.prev { left: -60px; }
+    .lightbox-nav.next { right: -60px; }
+    @media(max-width:640px) {
+      .lightbox-nav.prev { left: 8px; }
+      .lightbox-nav.next { right: 8px; }
+    }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: -52px;
+      left: 0; right: 0;
+      text-align: center;
+    }
+
+    .lightbox-counter {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,.45);
+      letter-spacing: .12em;
+    }
+
+    /* ── Zoom icon ── */
+    .zoom-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%) scale(0);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 16px;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .masonry-item:hover .zoom-icon { transform: translate(-50%,-50%) scale(1); }
+
+    /* ── Category badge ── */
+    .cat-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    /* ── Animations ── */
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .anim-1{animation:slideUp .6s .05s both;}
+    .anim-2{animation:slideUp .6s .15s both;}
+    .anim-3{animation:slideUp .6s .25s both;}
+
+    /* ── No results ── */
+    #noResults { display:none; }
+
+    /* ── Book btn ── */
+    .book-btn {
+      background: linear-gradient(135deg,#c0392b,#96281b);
+      box-shadow: 0 4px 15px rgba(192,57,43,.35);
+      transition: all .25s;
+    }
+    .book-btn:hover { transform: translateY(-1px); box-shadow: 0 7px 22px rgba(192,57,43,.45); }
+
+    /* scroll hide */
+    .scroll-hide { scrollbar-width:none; -ms-overflow-style:none; }
+    .scroll-hide::-webkit-scrollbar { display:none; }
+
+    @media(max-width:767px){ main{ padding-bottom:84px; } }
+  </style>
+</head>
+<body class="font-jost bg-white text-textDark overflow-x-hidden">
+
+<!-- ── LIGHTBOX ── -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <div class="lightbox-img-wrap" id="lightboxWrap">
+    <button class="lightbox-nav prev" onclick="lightboxNav(-1)" aria-label="Previous">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <img id="lightboxImg" src="" alt="" />
+    <button class="lightbox-nav next" onclick="lightboxNav(1)" aria-label="Next">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+    <div class="lightbox-caption">
+      <p id="lightboxTitle" class="font-playfair text-white font-bold text-base"></p>
+      <p id="lightboxCat" class="text-white/45 text-xs mt-1 font-jost uppercase tracking-[.15em]"></p>
+    </div>
+  </div>
+
+  <div class="lightbox-counter" id="lightboxCounter">1 / 24</div>
+</div>
+
+<main>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section class="pt-[72px] relative overflow-hidden" style="background:linear-gradient(160deg,#fdf6f0 0%,#f5ede4 55%,#f0e4d8 100%)">
+  <!-- decorative circles -->
+  <div class="absolute pointer-events-none" style="top:-120px;right:-80px;width:min(520px,90vw);height:min(520px,90vw);border-radius:50%;background:radial-gradient(circle,rgba(192,57,43,.07) 0%,transparent 65%)"></div>
+  <div class="absolute pointer-events-none" style="bottom:-80px;left:-40px;width:min(380px,80vw);height:min(380px,80vw);border-radius:50%;background:radial-gradient(circle,rgba(184,150,62,.06) 0%,transparent 65%)"></div>
+  <!-- grid texture -->
+  <div class="absolute inset-0 pointer-events-none opacity-[0.025]" style="background-image:linear-gradient(#4a3830 1px,transparent 1px),linear-gradient(90deg,#4a3830 1px,transparent 1px);background-size:40px 40px;"></div>
+
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 lg:py-20 relative z-10">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 mb-7 anim-1">
+      <a href="index.html" class="text-[10px] font-bold tracking-[.28em] uppercase text-gold/70 hover:text-redPrimary transition">
+        <i class="fa-solid fa-house text-[9px] mr-1"></i>Home
+      </a>
+      <i class="fa-solid fa-chevron-right text-borderSoft text-[8px]"></i>
+      <span class="text-[10px] font-bold tracking-[.28em] uppercase text-redPrimary">Gallery</span>
+    </div>
+
+    <div class="max-w-2xl">
+      <div class="flex items-center gap-3 mb-5 anim-1">
+        <span class="w-7 h-px flex-shrink-0" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+        <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">Visual Story</span>
+        <span class="w-7 h-px flex-shrink-0" style="background:linear-gradient(90deg,#b8963e,transparent)"></span>
+      </div>
+      <h1 class="font-playfair text-4xl sm:text-5xl lg:text-[64px] font-black text-textDark leading-[1.04] mb-4 anim-2">
+        Every Dish<br/>Tells a <em class="italic" style="color:#c0392b">Story</em>
+      </h1>
+      <p class="font-cormorant italic text-lg lg:text-xl text-textMid/55 anim-3">
+        A curated glimpse into the world of Savoria — from the art on the plate to the ambiance that surrounds it.
+      </p>
+
+      <!-- Stats -->
+      <div class="flex gap-6 sm:gap-10 mt-8 pt-8 border-t border-borderSoft anim-3 flex-wrap">
+        <div>
+          <p class="font-playfair text-2xl font-black text-textDark">120+</p>
+          <p class="text-[10px] uppercase tracking-[.2em] text-textMid/50 font-semibold mt-0.5">Photos</p>
+        </div>
+        <div class="w-px bg-borderSoft"></div>
+        <div>
+          <p class="font-playfair text-2xl font-black text-textDark">6</p>
+          <p class="text-[10px] uppercase tracking-[.2em] text-textMid/50 font-semibold mt-0.5">Categories</p>
+        </div>
+        <div class="w-px bg-borderSoft"></div>
+        <div>
+          <p class="font-playfair text-2xl font-black text-textDark">★ 4.9</p>
+          <p class="text-[10px] uppercase tracking-[.2em] text-textMid/50 font-semibold mt-0.5">Rated</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     GALLERY
+══════════════════════════════════════ -->
+<section class="py-10 lg:py-16 px-5 sm:px-8 lg:px-14 bg-white">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- ── Filter bar ── -->
+    <div class="sticky top-[72px] z-40 bg-white/90 backdrop-blur-md pb-4 pt-2 mb-8 border-b border-borderSoft">
+      <div class="flex items-center justify-between gap-4">
+
+        <!-- Filter tabs — scrollable on mobile -->
+        <div class="flex items-center gap-2 overflow-x-auto scroll-hide flex-1 py-1">
+          <button class="filter-tab active" onclick="filterGallery('all', this)" data-count="24">
+            All <span class="ml-1 opacity-60 font-normal" id="countAll">24</span>
+          </button>
+          <button class="filter-tab" onclick="filterGallery('food', this)" data-count="8">
+            <i class="fa-solid fa-utensils mr-1.5 text-[9px]"></i>Food &amp; Dishes
+            <span class="ml-1 opacity-60 font-normal" id="countFood">8</span>
+          </button>
+          <button class="filter-tab" onclick="filterGallery('ambiance', this)" data-count="6">
+            <i class="fa-solid fa-wine-glass mr-1.5 text-[9px]"></i>Ambiance
+            <span class="ml-1 opacity-60 font-normal" id="countAmbiance">6</span>
+          </button>
+          <button class="filter-tab" onclick="filterGallery('bar', this)" data-count="4">
+            <i class="fa-solid fa-martini-glass mr-1.5 text-[9px]"></i>Bar &amp; Drinks
+            <span class="ml-1 opacity-60 font-normal" id="countBar">4</span>
+          </button>
+          <button class="filter-tab" onclick="filterGallery('events', this)" data-count="3">
+            <i class="fa-solid fa-champagne-glasses mr-1.5 text-[9px]"></i>Events
+            <span class="ml-1 opacity-60 font-normal" id="countEvents">3</span>
+          </button>
+          <button class="filter-tab" onclick="filterGallery('chef', this)" data-count="3">
+            <i class="fa-solid fa-hat-chef mr-1.5 text-[9px]"></i>Chef &amp; Kitchen
+            <span class="ml-1 opacity-60 font-normal" id="countChef">3</span>
+          </button>
+        </div>
+
+        <!-- View count -->
+        <div class="hidden sm:flex items-center gap-1.5 text-[11px] text-textMid/40 font-semibold flex-shrink-0">
+          <i class="fa-solid fa-image text-[10px]"></i>
+          <span id="visibleCount">24</span> photos
+        </div>
+      </div>
+    </div>
+
+    <!-- ── No results ── -->
+    <div id="noResults" class="text-center py-20">
+      <div class="text-5xl mb-4">📷</div>
+      <p class="font-playfair text-2xl font-black text-textDark mb-2">No photos found</p>
+      <p class="font-cormorant italic text-textMid/50">Try a different category</p>
+    </div>
+
+    <!-- ── Masonry grid ── -->
+    <div class="masonry" id="masonryGrid">
+
+      <!-- ── FOOD & DISHES ── -->
+      <div class="masonry-item" data-cat="food" data-title="Wagyu Tenderloin" onclick="openLightbox(0)">
+        <img src="assets/f1.png" alt="Wagyu Tenderloin" style="aspect-ratio:4/5"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Food &amp; Dishes</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Wagyu Tenderloin with Truffle Jus</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="ambiance" data-title="Main Dining Room" onclick="openLightbox(1)">
+        <img src="assets/f2.png" alt="Dining Room" style="aspect-ratio:3/4"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(184,150,62,.85);color:#fff">Ambiance</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Main Dining Room at Dusk</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="food" data-title="Burrata & Heirloom Tomatoes" onclick="openLightbox(2)">
+        <img src="assets/f3.png" alt="Burrata" style="aspect-ratio:1/1"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Food &amp; Dishes</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Burrata &amp; Heirloom Tomatoes</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="bar" data-title="Aperol Spritz" onclick="openLightbox(3)">
+        <img src="assets/f4.png" alt="Cocktail" style="aspect-ratio:3/4"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(184,150,62,.85);color:#fff">Bar &amp; Drinks</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Signature Aperol Spritz</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="food" data-title="Tom Yum Soup" onclick="openLightbox(4)">
+        <img src="assets/f5.png" alt="Tom Yum" style="aspect-ratio:4/3"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Food &amp; Dishes</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Tom Yum Tiger Prawn Soup</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="food" data-title="Tagliatelle al Ragù" onclick="openLightbox(5)">
+        <img src="assets/f6.png" alt="Tagliatelle" style="aspect-ratio:4/5"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Food &amp; Dishes</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Tagliatelle al Ragù</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="ambiance" data-title="Garden Terrace" onclick="openLightbox(6)">
+        <img src="assets/thai.png" alt="Terrace" style="aspect-ratio:16/9"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(184,150,62,.85);color:#fff">Ambiance</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Garden Terrace by Evening</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="chef" data-title="Chef Marco at Work" onclick="openLightbox(7)">
+        <img src="assets/f1.png" alt="Chef" style="aspect-ratio:3/4"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(26,18,16,.85);color:#fff">Chef &amp; Kitchen</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Chef Marco — Plating the Special</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="bar" data-title="Classic Negroni" onclick="openLightbox(8)">
+        <img src="assets/f2.png" alt="Negroni" style="aspect-ratio:1/1"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(184,150,62,.85);color:#fff">Bar &amp; Drinks</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Classic Negroni — Bar Lounge</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="events" data-title="Private Dining Setup" onclick="openLightbox(9)">
+        <img src="assets/f3.png" alt="Private Dining" style="aspect-ratio:4/3"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Events</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Private Dining — Anniversary Setup</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="food" data-title="Chocolate Soufflé" onclick="openLightbox(10)">
+        <img src="assets/f4.png" alt="Soufflé" style="aspect-ratio:4/5"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Food &amp; Dishes</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Valrhona Chocolate Soufflé</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="ambiance" data-title="Bar Lounge Interiors" onclick="openLightbox(11)">
+        <img src="assets/f5.png" alt="Bar Interior" style="aspect-ratio:3/4"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(184,150,62,.85);color:#fff">Ambiance</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Bar Lounge — Friday Night</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="food" data-title="Bistecca Fiorentina" onclick="openLightbox(12)">
+        <img src="assets/f6.png" alt="Bistecca" style="aspect-ratio:1/1"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Food &amp; Dishes</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Bistecca Fiorentina</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="chef" data-title="Kitchen In Action" onclick="openLightbox(13)">
+        <img src="assets/thai.png" alt="Kitchen" style="aspect-ratio:16/9"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(26,18,16,.85);color:#fff">Chef &amp; Kitchen</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Open Kitchen — Dinner Service</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="bar" data-title="Wine Cellar" onclick="openLightbox(14)">
+        <img src="assets/f1.png" alt="Wine" style="aspect-ratio:3/4"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(184,150,62,.85);color:#fff">Bar &amp; Drinks</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Chianti Classico — Wine Cellar</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="events" data-title="Birthday Celebration" onclick="openLightbox(15)">
+        <img src="assets/f2.png" alt="Birthday" style="aspect-ratio:4/5"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Events</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Birthday Celebration — Table 12</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="ambiance" data-title="Private Dining Room" onclick="openLightbox(16)">
+        <img src="assets/f3.png" alt="Private Room" style="aspect-ratio:4/3"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(184,150,62,.85);color:#fff">Ambiance</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Private Dining Room</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="food" data-title="Black Truffle Risotto" onclick="openLightbox(17)">
+        <img src="assets/f4.png" alt="Risotto" style="aspect-ratio:1/1"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Food &amp; Dishes</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Black Truffle Risotto</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="ambiance" data-title="Table Setting" onclick="openLightbox(18)">
+        <img src="assets/f5.png" alt="Table" style="aspect-ratio:4/5"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(184,150,62,.85);color:#fff">Ambiance</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Candlelit Table Setting</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="bar" data-title="Aperol Selection" onclick="openLightbox(19)">
+        <img src="assets/f6.png" alt="Aperol" style="aspect-ratio:3/4"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(184,150,62,.85);color:#fff">Bar &amp; Drinks</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Premium Spirits Selection</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="food" data-title="Seared Scallops" onclick="openLightbox(20)">
+        <img src="assets/thai.png" alt="Scallops" style="aspect-ratio:4/3"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Food &amp; Dishes</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Seared Diver Scallops</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="chef" data-title="Pastry Station" onclick="openLightbox(21)">
+        <img src="assets/f1.png" alt="Pastry" style="aspect-ratio:4/5"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(26,18,16,.85);color:#fff">Chef &amp; Kitchen</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Pastry Station — Dessert Prep</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="events" data-title="Corporate Dinner" onclick="openLightbox(22)">
+        <img src="assets/f2.png" alt="Corporate" style="aspect-ratio:16/9"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(192,57,43,.85);color:#fff">Events</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Corporate Dinner — 30 Guests</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+      <div class="masonry-item" data-cat="ambiance" data-title="Reception Area" onclick="openLightbox(23)">
+        <img src="assets/f3.png" alt="Reception" style="aspect-ratio:3/4"/>
+        <div class="masonry-overlay">
+          <span class="cat-badge mb-2" style="background:rgba(184,150,62,.85);color:#fff">Ambiance</span>
+          <p class="font-playfair font-bold text-white text-sm leading-tight">Reception &amp; Entrance</p>
+        </div>
+        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+      </div>
+
+    </div><!-- /masonry -->
+
+    <!-- ── Instagram CTA ── -->
+    <div class="mt-16 text-center">
+      <div class="inline-flex items-center gap-3 px-6 py-4 rounded-2xl border border-borderSoft bg-cream">
+        <i class="fa-brands fa-instagram text-2xl text-textMid/60"></i>
+        <div class="text-left">
+          <p class="font-playfair font-bold text-textDark text-sm">Follow us on Instagram</p>
+          <p class="text-xs text-textMid/50 mt-0.5">@savoria.nyc · Daily stories from our kitchen</p>
+        </div>
+        <a href="#" class="ml-4 text-[10px] font-bold uppercase tracking-[.15em] text-redPrimary border border-redPrimary/30 px-4 py-2 rounded-full hover:bg-redPrimary hover:text-white transition flex-shrink-0">
+          Follow
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Reserve CTA ── -->
+    <div class="mt-10 bg-cream rounded-2xl border border-borderSoft p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div>
+        <div class="flex items-center gap-3 mb-3">
+          <span class="w-6 h-px" style="background:linear-gradient(90deg,transparent,#b8963e)"></span>
+          <span class="text-[10px] font-bold tracking-[.3em] uppercase text-gold">Dine With Us</span>
+        </div>
+        <h2 class="font-playfair text-2xl sm:text-3xl font-black text-textDark mb-1">Experience It in Person</h2>
+        <p class="font-cormorant italic text-textMid/55 text-lg">Mon–Sun · 12pm–11pm &nbsp;·&nbsp; +1 (555) 920-4200</p>
+      </div>
+      <div class="flex flex-col gap-3 w-full md:w-auto flex-shrink-0">
+        <a href="reserve.html" class="book-btn text-white px-10 py-4 rounded text-[11px] font-bold tracking-[.2em] uppercase flex items-center gap-2 justify-center">
+          <i class="fa-regular fa-calendar-check text-[11px]"></i> Reserve a Table
+        </a>
+        <a href="menu.html" class="border border-textDark/20 text-textDark px-10 py-4 rounded text-[11px] font-semibold tracking-[.2em] uppercase hover:border-gold hover:text-gold transition text-center">
+          <i class="fa-solid fa-utensils text-[10px] mr-1.5"></i> Browse Menu
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<script src="static/js/savoria-app.js"></script>
+<script>
+/* ═══════════════════════════════
+   GALLERY DATA
+═══════════════════════════════ */
+const galleryData = [];
+let currentIndex  = 0;
+let visibleItems  = [];
+
+/* Build galleryData from DOM on load */
+document.addEventListener('DOMContentLoaded', () => {
+  const items = document.querySelectorAll('.masonry-item');
+  items.forEach((el, i) => {
+    const img = el.querySelector('img');
+    galleryData.push({
+      src:   img ? img.src   : '',
+      alt:   img ? img.alt   : '',
+      title: el.dataset.title || '',
+      cat:   el.dataset.cat  || 'all',
+      index: i,
+    });
+  });
+  visibleItems = [...galleryData];
+  updateCount();
+});
+
+/* ═══════════════════════════════
+   FILTER
+═══════════════════════════════ */
+function filterGallery(cat, btn) {
+  /* Update active tab */
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+
+  const items = document.querySelectorAll('.masonry-item');
+  visibleItems = [];
+
+  items.forEach(el => {
+    const match = cat === 'all' || el.dataset.cat === cat;
+    el.classList.toggle('hidden-item', !match);
+    if (match) {
+      const idx = parseInt(el.dataset.index || el.getAttribute('onclick').match(/\d+/) || 0);
+      visibleItems.push(galleryData[idx] || { src:'', title:'', cat:'' });
+    }
+  });
+
+  /* Re-index onclick for lightbox */
+  let vi = 0;
+  items.forEach(el => {
+    if (!el.classList.contains('hidden-item')) {
+      el.setAttribute('onclick', `openLightbox(${vi})`);
+      vi++;
+    }
+  });
+
+  updateCount();
+
+  const noRes = document.getElementById('noResults');
+  if (noRes) noRes.style.display = visibleItems.length === 0 ? 'block' : 'none';
+}
+
+function updateCount() {
+  const cnt = document.getElementById('visibleCount');
+  if (cnt) cnt.textContent = visibleItems.length;
+}
+
+/* ═══════════════════════════════
+   LIGHTBOX
+═══════════════════════════════ */
+function openLightbox(idx) {
+  currentIndex = idx;
+  renderLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeLightboxOutside(e) {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+}
+
+function lightboxNav(dir) {
+  currentIndex = (currentIndex + dir + visibleItems.length) % visibleItems.length;
+  renderLightbox();
+}
+
+function renderLightbox() {
+  const item  = visibleItems[currentIndex];
+  if (!item) return;
+
+  const img   = document.getElementById('lightboxImg');
+  const title = document.getElementById('lightboxTitle');
+  const cat   = document.getElementById('lightboxCat');
+  const count = document.getElementById('lightboxCounter');
+
+  if (img)   { img.src = item.src; img.alt = item.title || item.alt || ''; }
+  if (title) title.textContent = item.title || '';
+  if (cat)   cat.textContent   = (item.cat || '').replace('-',' ');
+  if (count) count.textContent = `${currentIndex + 1} / ${visibleItems.length}`;
+}
+
+/* Keyboard nav */
+document.addEventListener('keydown', e => {
+  const lb = document.getElementById('lightbox');
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape')     closeLightbox();
+  if (e.key === 'ArrowRight') lightboxNav(1);
+  if (e.key === 'ArrowLeft')  lightboxNav(-1);
+});
+
+/* Touch swipe for lightbox */
+let touchStartX = 0;
+document.getElementById('lightbox').addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+}, { passive: true });
+document.getElementById('lightbox').addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) lightboxNav(diff > 0 ? 1 : -1);
+});
+</script>
+</body>
+</html>

@@ -4,14 +4,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Explore Savoria's curated menu — from hand-made pasta and dry-aged steaks to exquisite desserts. Award-winning fine dining in New York." />
+  <meta name="description"
+    content="Explore Savoria's curated menu — from hand-made pasta and dry-aged steaks to exquisite desserts. Award-winning fine dining in New York." />
   <title>Savoria — Menu</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <link rel="stylesheet" href="static/css/menu.css">
   <link rel="stylesheet" href="static/css/savoria.css">
   <script>
@@ -45,7 +46,7 @@
     </div>
   </div>
 
- <main>
+  <main>
 
     <!-- ══════════════════════════════════════
        HERO
@@ -102,7 +103,7 @@
           <button class="filter-tab" onclick="filterMenu('mains', this)">Main Courses</button>
           <button class="filter-tab" onclick="filterMenu('seafood', this)">Seafood</button>
           <button class="filter-tab" onclick="filterMenu('desserts', this)">Desserts</button>
-          <button class="filter-tab" onclick="filterMenu('drinks', this)">Drinks</button>
+         
 
           <!-- search bar pushed to right -->
           <div class="ml-auto flex items-center gap-3 flex-shrink-0">
@@ -113,40 +114,39 @@
               <div class="s-clear" onclick="clearSearch()" title="Clear"><i class="fa-solid fa-xmark"
                   style="font-size:8px"></i></div>
             </div>
-            <span class="text-[10px] uppercase tracking-[0.2em] text-textMid/40 font-bold">Sort:</span>
-            <select
-              class="text-[11px] font-semibold text-textMid border border-borderSoft rounded-full px-3 py-2 outline-none bg-white cursor-pointer"
-              onchange="sortMenu(this.value)">
-              <option value="default">Featured</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="rating">Top Rated</option>
-            </select>
+            
           </div>
         </div>
 
-        <!-- ── MOBILE: filter pills row with search icon ── -->
-        <div class="md:hidden flex items-center gap-2 py-3 overflow-x-auto scroll-hide">
-          <!-- search toggle -->
-          <button class="m-search-btn" id="mobSearchBtn" onclick="toggleMobSearch()" title="Search">
-            <i class="fa-solid fa-magnifying-glass" style="font-size:11px"></i>
-          </button>
-          <button class="m-filter active" onclick="filterMenu('all', this)">All</button>
-          <button class="m-filter" onclick="filterMenu('starters', this)">Starters</button>
-          <button class="m-filter" onclick="filterMenu('pasta', this)">Pasta</button>
-          <button class="m-filter" onclick="filterMenu('mains', this)">Mains</button>
-          <button class="m-filter" onclick="filterMenu('seafood', this)">Seafood</button>
-          <button class="m-filter" onclick="filterMenu('desserts', this)">Desserts</button>
-          <button class="m-filter" onclick="filterMenu('drinks', this)">Drinks</button>
-        </div>
-
         <!-- ── MOBILE: slide-down search input ── -->
-        <div class="mob-search-bar md:hidden" id="mobSearchBar">
-          <div class="mob-search-inner">
-            <i class="fa-solid fa-magnifying-glass ms-icon"></i>
-            <input id="mobSearch" type="text" placeholder="Search dishes, ingredients…"
-              oninput="handleSearch(this.value)" autocomplete="off" />
-            <div class="ms-clear" onclick="clearSearch()"><i class="fa-solid fa-xmark" style="font-size:8px"></i></div>
+        <div class="md:hidden" style="background:#fff;border-bottom:0.5px solid #e8ddd8;">
+
+          <!-- Search — সবসময় দেখা যাবে, toggle নেই -->
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:0.5px solid #e8ddd8;">
+            <i class="fa-solid fa-magnifying-glass" style="color:#a09890;font-size:13px;flex-shrink:0;"></i>
+            <input id="mobSearch" type="text" placeholder="Search dishes…" oninput="handleSearch(this.value)"
+              autocomplete="off"
+              style="flex:1;border:none;outline:none;font-size:13px;background:transparent;color:#1a1210;" />
+            <div id="ms-clear-btn" onclick="clearSearch()"
+              style="display:none;cursor:pointer;color:#a09890;font-size:11px;">✕</div>
+          </div>
+
+          <!-- Filter chips — শুধু এই অংশ scroll -->
+          <div style="position:relative;">
+            <div id="mobFilterScroll"
+              style="display:flex;gap:6px;overflow-x:auto;padding:10px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
+              <button class="m-filter active" style="flex-shrink:0;" onclick="filterMenu('all',this)">All</button>
+              <button class="m-filter" style="flex-shrink:0;" onclick="filterMenu('starters',this)">Starters</button>
+              <button class="m-filter" style="flex-shrink:0;" onclick="filterMenu('pasta',this)">Pasta</button>
+              <button class="m-filter" style="flex-shrink:0;" onclick="filterMenu('mains',this)">Mains</button>
+              <button class="m-filter" style="flex-shrink:0;" onclick="filterMenu('seafood',this)">Seafood</button>
+              <button class="m-filter" style="flex-shrink:0;" onclick="filterMenu('desserts',this)">Desserts</button>
+            
+            </div>
+            <!-- right fade hint — আরো আছে বোঝানোর জন্য -->
+            <div style="position:absolute;right:0;top:0;bottom:0;width:40px;
+                background:linear-gradient(to right,transparent,#fff);
+                pointer-events:none;"></div>
           </div>
         </div>
 
@@ -160,7 +160,6 @@
 
       </div>
     </div>
-
 
     <!-- ══ CHEF'S SPECIAL ══ -->
     <section class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 py-10 anim-3">
@@ -207,10 +206,11 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
 
+          <!-- Burrata -->
           <div class="menu-card" data-price="18" data-rating="4.7"
             data-search="burrata heirloom tomatoes fresh basil oil vegetarian dairy" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assets/thai.png" alt="Burrata" class="w-full h-full object-cover" />
+              <img src="./assets/f3.png" alt="Burrata" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-veg">Vegetarian</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.7</div>
@@ -231,17 +231,26 @@
               </div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$18</p>
-                <button class="add-btn"
-                  onclick="event.stopPropagation(); addToCart('Burrata & Heirloom Tomatoes', 18)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Burrata" class="cart-counter hidden" data-item-name="Burrata & Heirloom Tomatoes">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Burrata & Heirloom Tomatoes', 18, -1, 'cart-Burrata')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Burrata & Heirloom Tomatoes', 18, 1, 'cart-Burrata')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Burrata"
+                  onclick="event.stopPropagation(); firstAdd('Burrata & Heirloom Tomatoes', 18, 'cart-Burrata', 'btn-Burrata')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Tuna Tartare -->
           <div class="menu-card" data-price="24" data-rating="4.8"
             data-search="tuna tartare yellowfin sesame avocado ponzu fish" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assets/thai.png" alt="Tartare" class="w-full h-full object-cover" />
+              <img src="./assets/f3.png" alt="Tartare" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
@@ -257,16 +266,26 @@
               </div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$24</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tuna Tartare', 24)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-TunaTartare" class="cart-counter hidden" data-item-name="Tuna Tartare">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Tuna Tartare', 24, -1, 'cart-TunaTartare')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Tuna Tartare', 24, 1, 'cart-TunaTartare')">+</button>
+                </div>
+                <button class="add-btn" id="btn-TunaTartare"
+                  onclick="event.stopPropagation(); firstAdd('Tuna Tartare', 24, 'cart-TunaTartare', 'btn-TunaTartare')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Tom Yum Soup -->
           <div class="menu-card" data-price="16" data-rating="4.6"
             data-search="tom yum soup lemongrass galangal tiger prawns spicy shellfish" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assets/thai.png" alt="Soup" class="w-full h-full object-cover" />
+              <img src="./assets/f5.png" alt="Soup" class="w-full h-full object-cover" />
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.6</div>
               </div>
@@ -283,8 +302,15 @@
               </div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$16</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tom Yum Soup', 16)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-TomYum" class="cart-counter hidden" data-item-name="Tom Yum Soup">
+                  <button onclick="event.stopPropagation(); changeQty('Tom Yum Soup', 16, -1, 'cart-TomYum')">−</button>
+                  <span class="qty">1</span>
+                  <button onclick="event.stopPropagation(); changeQty('Tom Yum Soup', 16, 1, 'cart-TomYum')">+</button>
+                </div>
+                <button class="add-btn" id="btn-TomYum"
+                  onclick="event.stopPropagation(); firstAdd('Tom Yum Soup', 16, 'cart-TomYum', 'btn-TomYum')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
@@ -299,10 +325,11 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
 
+          <!-- Tagliatelle -->
           <div class="menu-card" data-price="28" data-rating="4.8"
             data-search="tagliatelle ragu pasta beef parmigiano italian gluten dairy" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assets/thai.png" alt="Tagliatelle" class="w-full h-full object-cover" />
+              <img src="./assets/f6.png" alt="Tagliatelle" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-gold">Popular</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.8</div>
@@ -316,16 +343,26 @@
                   Dairy</span></div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$28</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tagliatelle al Ragù', 28)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Tagliatelle" class="cart-counter hidden" data-item-name="Tagliatelle al Ragù">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Tagliatelle al Ragù', 28, -1, 'cart-Tagliatelle')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Tagliatelle al Ragù', 28, 1, 'cart-Tagliatelle')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Tagliatelle"
+                  onclick="event.stopPropagation(); firstAdd('Tagliatelle al Ragù', 28, 'cart-Tagliatelle', 'btn-Tagliatelle')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Black Truffle Risotto -->
           <div class="menu-card" data-price="32" data-rating="4.9"
             data-search="black truffle risotto carnaroli rice parmigiano vegetarian dairy" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
-              <img src="./assets/thai.png" alt="Truffle Risotto" class="w-full h-full object-cover" />
+              <img src="./assets/f2.png" alt="Truffle Risotto" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3"><span class="tag tag-red">Chef's Pick</span></div>
               <div class="absolute top-3 right-3">
                 <div class="rating-badge bg-white/90"><i class="fa-solid fa-star text-[9px]"></i> 4.9</div>
@@ -339,12 +376,22 @@
                   style="background:#edf7f0;color:#2d7a47">🌿 Veg</span></div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$32</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Black Truffle Risotto', 32)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Risotto" class="cart-counter hidden" data-item-name="Black Truffle Risotto">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Black Truffle Risotto', 32, -1, 'cart-Risotto')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Black Truffle Risotto', 32, 1, 'cart-Risotto')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Risotto"
+                  onclick="event.stopPropagation(); firstAdd('Black Truffle Risotto', 32, 'cart-Risotto', 'btn-Risotto')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Carbonara -->
           <div class="menu-card" data-price="26" data-rating="4.7"
             data-search="spaghetti carbonara guanciale egg yolk pecorino black pepper gluten" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
@@ -361,9 +408,17 @@
                   Eggs</span></div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$26</p>
-                <button class="add-btn"
-                  onclick="event.stopPropagation(); addToCart('Spaghetti alla Carbonara', 26)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Carbonara" class="cart-counter hidden" data-item-name="Spaghetti alla Carbonara">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Spaghetti alla Carbonara', 26, -1, 'cart-Carbonara')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Spaghetti alla Carbonara', 26, 1, 'cart-Carbonara')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Carbonara"
+                  onclick="event.stopPropagation(); firstAdd('Spaghetti alla Carbonara', 26, 'cart-Carbonara', 'btn-Carbonara')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
@@ -378,6 +433,7 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
 
+          <!-- Bistecca -->
           <div class="menu-card" data-price="48" data-rating="4.9"
             data-search="bistecca fiorentina t-bone steak rosemary butter garlic beef italian"
             onclick="openQuick(this)">
@@ -399,12 +455,22 @@
               </div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$48</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Bistecca Fiorentina', 48)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Bistecca" class="cart-counter hidden" data-item-name="Bistecca Fiorentina">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Bistecca Fiorentina', 48, -1, 'cart-Bistecca')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Bistecca Fiorentina', 48, 1, 'cart-Bistecca')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Bistecca"
+                  onclick="event.stopPropagation(); firstAdd('Bistecca Fiorentina', 48, 'cart-Bistecca', 'btn-Bistecca')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Confit Duck -->
           <div class="menu-card" data-price="38" data-rating="4.8"
             data-search="confit duck leg cherry jus celeriac puree poultry french" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
@@ -420,12 +486,21 @@
               <div class="flex gap-1.5 mt-2"><span class="allergen">🦆 Poultry</span></div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$38</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Confit Duck Leg', 38)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Duck" class="cart-counter hidden" data-item-name="Confit Duck Leg">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Confit Duck Leg', 38, -1, 'cart-Duck')">−</button>
+                  <span class="qty">1</span>
+                  <button onclick="event.stopPropagation(); changeQty('Confit Duck Leg', 38, 1, 'cart-Duck')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Duck"
+                  onclick="event.stopPropagation(); firstAdd('Confit Duck Leg', 38, 'cart-Duck', 'btn-Duck')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Rack of Lamb -->
           <div class="menu-card" data-price="42" data-rating="4.7"
             data-search="rack lamb provencal herb crusted ratatouille jus gluten" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
@@ -443,8 +518,17 @@
                   Gluten</span></div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$42</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Rack of Lamb Provençal', 42)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Lamb" class="cart-counter hidden" data-item-name="Rack of Lamb Provençal">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Rack of Lamb Provençal', 42, -1, 'cart-Lamb')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Rack of Lamb Provençal', 42, 1, 'cart-Lamb')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Lamb"
+                  onclick="event.stopPropagation(); firstAdd('Rack of Lamb Provençal', 42, 'cart-Lamb', 'btn-Lamb')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
@@ -459,6 +543,7 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
 
+          <!-- Lobster -->
           <div class="menu-card" data-price="44" data-rating="4.9"
             data-search="butter poached lobster maine beurre blanc tarragon asparagus crustacean dairy"
             onclick="openQuick(this)">
@@ -477,12 +562,22 @@
                   Dairy</span></div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$44</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Butter-Poached Lobster', 44)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Lobster" class="cart-counter hidden" data-item-name="Butter-Poached Lobster">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Butter-Poached Lobster', 44, -1, 'cart-Lobster')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Butter-Poached Lobster', 44, 1, 'cart-Lobster')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Lobster"
+                  onclick="event.stopPropagation(); firstAdd('Butter-Poached Lobster', 44, 'cart-Lobster', 'btn-Lobster')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Sea Bass -->
           <div class="menu-card" data-price="36" data-rating="4.8"
             data-search="pan seared sea bass chilean lemon beurre blanc fennel fish dairy" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
@@ -499,12 +594,22 @@
               </div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$36</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Pan-Seared Sea Bass', 36)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-SeaBass" class="cart-counter hidden" data-item-name="Pan-Seared Sea Bass">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Pan-Seared Sea Bass', 36, -1, 'cart-SeaBass')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Pan-Seared Sea Bass', 36, 1, 'cart-SeaBass')">+</button>
+                </div>
+                <button class="add-btn" id="btn-SeaBass"
+                  onclick="event.stopPropagation(); firstAdd('Pan-Seared Sea Bass', 36, 'cart-SeaBass', 'btn-SeaBass')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Scallops -->
           <div class="menu-card" data-price="22" data-rating="4.6"
             data-search="seared scallops diver cauliflower capers molluscs seafood" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
@@ -521,8 +626,17 @@
               <div class="flex gap-1.5 mt-2"><span class="allergen">🦪 Molluscs</span></div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$22</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Seared Scallops', 22)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Scallops" class="cart-counter hidden" data-item-name="Seared Scallops">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Seared Scallops', 22, -1, 'cart-Scallops')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Seared Scallops', 22, 1, 'cart-Scallops')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Scallops"
+                  onclick="event.stopPropagation(); firstAdd('Seared Scallops', 22, 'cart-Scallops', 'btn-Scallops')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
@@ -537,6 +651,7 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
 
+          <!-- Panna Cotta -->
           <div class="menu-card" data-price="14" data-rating="4.7"
             data-search="panna cotta vanilla bean wild berry coulis mint dairy vegetarian" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
@@ -553,12 +668,22 @@
                   style="background:#edf7f0;color:#2d7a47">🌿 Veg</span></div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$14</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Panna Cotta', 14)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-PannaCotta" class="cart-counter hidden" data-item-name="Panna Cotta">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Panna Cotta', 14, -1, 'cart-PannaCotta')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Panna Cotta', 14, 1, 'cart-PannaCotta')">+</button>
+                </div>
+                <button class="add-btn" id="btn-PannaCotta"
+                  onclick="event.stopPropagation(); firstAdd('Panna Cotta', 14, 'cart-PannaCotta', 'btn-PannaCotta')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Chocolate Souffle -->
           <div class="menu-card" data-price="16" data-rating="4.9"
             data-search="chocolate souffle valrhona dark creme anglaise dairy eggs gluten" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
@@ -576,12 +701,22 @@
                   Eggs</span><span class="allergen">🌾 Gluten</span></div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$16</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Chocolate Soufflé', 16)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Souffle" class="cart-counter hidden" data-item-name="Chocolate Soufflé">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Chocolate Soufflé', 16, -1, 'cart-Souffle')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Chocolate Soufflé', 16, 1, 'cart-Souffle')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Souffle"
+                  onclick="event.stopPropagation(); firstAdd('Chocolate Soufflé', 16, 'cart-Souffle', 'btn-Souffle')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Tiramisu -->
           <div class="menu-card" data-price="12" data-rating="4.6"
             data-search="tiramisu savoiardi espresso mascarpone cocoa dairy eggs italian" onclick="openQuick(this)">
             <div class="relative overflow-hidden h-[200px] bg-cream">
@@ -598,8 +733,17 @@
               </div>
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-borderSoft/60">
                 <p class="font-playfair text-xl font-black text-textDark">$12</p>
-                <button class="add-btn" onclick="event.stopPropagation(); addToCart('Classic Tiramisù', 12)"><span
-                    class="text-lg leading-none">+</span></button>
+                <div id="cart-Tiramisu" class="cart-counter hidden" data-item-name="Classic Tiramisù">
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Classic Tiramisù', 12, -1, 'cart-Tiramisu')">−</button>
+                  <span class="qty">1</span>
+                  <button
+                    onclick="event.stopPropagation(); changeQty('Classic Tiramisù', 12, 1, 'cart-Tiramisu')">+</button>
+                </div>
+                <button class="add-btn" id="btn-Tiramisu"
+                  onclick="event.stopPropagation(); firstAdd('Classic Tiramisù', 12, 'cart-Tiramisu', 'btn-Tiramisu')">
+                  <span class="text-lg leading-none">+</span>
+                </button>
               </div>
             </div>
           </div>
@@ -607,63 +751,7 @@
         </div>
       </div>
 
-      <!-- ── DRINKS ── -->
-      <div class="menu-section" data-category="drinks">
-        <div class="menu-section-divider">
-          <h3>Drinks</h3>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
-
-          <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer"
-            onclick="addToCart('Chianti Classico 2018', 18)">
-            <div class="text-4xl mb-3">🍷</div>
-            <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Chianti Classico</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">2018 · Tuscany · 750ml</p>
-            <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
-              <p class="font-playfair text-lg font-black text-textDark">$18</p>
-              <button
-                class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer"
-            onclick="addToCart('Aperol Spritz', 14)">
-            <div class="text-4xl mb-3">🍊</div>
-            <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Aperol Spritz</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Prosecco · Aperol · orange · ice</p>
-            <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
-              <p class="font-playfair text-lg font-black text-textDark">$14</p>
-              <button
-                class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer"
-            onclick="addToCart('Negroni', 16)">
-            <div class="text-4xl mb-3">🍸</div>
-            <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Classic Negroni</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">Gin · Campari · sweet vermouth</p>
-            <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
-              <p class="font-playfair text-lg font-black text-textDark">$16</p>
-              <button
-                class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-2xl border border-borderSoft p-5 hover:shadow-lg transition cursor-pointer"
-            onclick="addToCart('Still Water (500ml)', 4)">
-            <div class="text-4xl mb-3">💧</div>
-            <h3 class="font-playfair text-base font-bold text-textDark leading-tight">Still / Sparkling Water</h3>
-            <p class="font-cormorant italic text-textMid/60 text-sm mt-1">San Pellegrino · Acqua Panna · 500ml</p>
-            <div class="flex items-center justify-between mt-4 pt-3 border-t border-borderSoft/60">
-              <p class="font-playfair text-lg font-black text-textDark">$4</p>
-              <button
-                class="text-[10px] font-bold text-redPrimary border border-redPrimary/30 px-3 py-1.5 rounded-full hover:bg-redPrimary hover:text-white transition">Add</button>
-            </div>
-          </div>
-
-        </div>
-      </div>
+      
 
     </section>
 
@@ -751,6 +839,7 @@
 
   <!-- ══ MOBILE BOTTOM NAV ══ -->
   <script src="static/js/savoria-app.js"></script>
+  <script src="static/js/cart.js"></script>
   <script src="static/js/menu.js"></script>
 </body>
 
